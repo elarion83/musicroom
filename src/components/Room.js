@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { db } from "../services/firebase";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -51,13 +51,17 @@ const Room = ({ roomId }) => {
     const [mediaSearchResultDailyMotion, setMediaSearchResultDailyMotion] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [addingUrl, setAddingUrl] = useState('');
-    const [OpenInvitePeopleToRoomModal, setOpenInvitePeopleToRoomModal] = useState(true);
+    const [OpenInvitePeopleToRoomModal, setOpenInvitePeopleToRoomModal] = useState(false);
     const [OpenAddToPlaylistModal, setOpenAddToPlaylistModal] = useState(false);
     const [roomUrl, setRoomUrl]= useState(document.URL);
     const [copiedToClipboard, setCopiedToClipboard] = useState(false);
-    const [tabSearchMediaResultActiveTab, setTabSearchMediaResultActiveTab] = useState('1');
 	const roomRef = db.collection("rooms").doc(roomId);
     const delay = ms => new Promise(res => setTimeout(res, ms));
+
+
+    const ref = player => {
+      player = player
+    }
 
     const getRoomData = (roomId) => {
 		roomRef.get().then((doc) => {
@@ -69,7 +73,7 @@ const Room = ({ roomId }) => {
                     playing:0,
                     mediaActuallyPlayingAlreadyPlayed:0,
                     actuallyPlaying:false,
-					playlistUrls: Array(),
+					playlistUrls: [],
 					playlistEmpty: true,
 					creationTimeStamp	: Date.now()
 				};
@@ -105,7 +109,7 @@ const Room = ({ roomId }) => {
     }
 
     function handleSearchForMedia() {
-        if(searchTerm != '') {
+        if(searchTerm !== '') {
             YTSearch({key: 'AIzaSyAcFecOONJZvjwMnTB9Fv9x753KWsVUvWM', term: searchTerm}, (videos) => {
                 setMediaSearchResultYoutube(videos);
             });
@@ -144,10 +148,6 @@ const Room = ({ roomId }) => {
     function handleProgress(event) {
         setPercentagePlayed(event.played*100);
     }
-
-    const ref = player => {
-      player = player
-    }
   return (
     <div className="flex flex-col w-full gap-0 h-screen relative lg:mx-auto lg:my-0 ">
       
@@ -179,8 +179,6 @@ const Room = ({ roomId }) => {
                                     className='react-player'
                                     width='100%'
                                     height='100%'
-                                    onPlay={e => handlePlay(true)}
-                                    onPause={e => handlePlay(false)}
                                     onProgress={e => handleProgress(e)}
                                     url={room.playlistUrls[room.playing]}
                                     pip={true}
@@ -220,18 +218,24 @@ const Room = ({ roomId }) => {
             </div>
             } 
             <List >
-                {loaded && room.playlistUrls.map(function(d, idx){
-                return (
-                    
-                <ListItemButton selected={room.playing === idx}>
-                    <ListItemIcon>
-                            {idx !== room.playing && <PlayCircleOutlineIcon onClick={e => handleChangeActuallyPlaying(idx)} />}
-                            {idx === room.playing && room.actuallyPlaying && <PauseCircleOutlineIcon onClick={e => handlePlay(false)} />}
-                            {idx === room.playing && !room.actuallyPlaying && <PlayCircleOutlineIcon onClick={e => handlePlay(true)} />}
-                    </ListItemIcon>
-                    { d }
-                </ListItemButton> )
-                }) }
+                {loaded && room.playlistUrls.length > 0 && <Grid container spacing={2}>
+                  <Grid item>
+                    <h3>Playlist</h3>
+                    <hr />
+                    {loaded && room.playlistUrls.map(function(d, idx){
+                    return (
+                        
+                        <ListItemButton  xs={12} sx={{ ml:0, mt: 1.5 }} selected={room.playing === idx}>
+                            <ListItemIcon>
+                                    {idx !== room.playing && <PlayCircleOutlineIcon onClick={e => handleChangeActuallyPlaying(idx)} />}
+                                    {idx === room.playing && room.actuallyPlaying && <PauseCircleOutlineIcon onClick={e => handlePlay(false)} />}
+                                    {idx === room.playing && !room.actuallyPlaying && <PlayCircleOutlineIcon onClick={e => handlePlay(true)} />}
+                            </ListItemIcon>
+                            { d }
+                        </ListItemButton>)
+                    }) }
+                  </Grid>
+                </Grid>}
             </List>
         </Container>
         <Dialog onClose={(e) => setOpenAddToPlaylistModal(false)} open={OpenAddToPlaylistModal}>
@@ -301,7 +305,7 @@ const Room = ({ roomId }) => {
                 <CopyToClipboard onCopy={(e) => setCopiedToClipboardToTrueAndFalse()} text={( roomUrl +'?rid='+roomId)}>
                     <Button variant="contained"> Click to copy url ! </Button> 
                 </CopyToClipboard>
-                {copiedToClipboard && <Alert severity="success"> Copié dans le presse papier !</Alert>}
+                {copiedToClipboard && <Alert severity="success"  sx={{ mt: 1.5 }} > Copié dans le presse papier !</Alert>}
             </DialogContentText>
             </DialogContent>
         </Dialog>
