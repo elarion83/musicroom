@@ -3,7 +3,6 @@ import Room from './components/Room';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
-import { redirect } from "react-router-dom";
 import { v4 as uuid } from 'uuid';
 
 function App() {
@@ -12,13 +11,11 @@ function App() {
 	const queryParameters = new URLSearchParams(window.location.search)
 	const rid = queryParameters.get("rid");
 
-  // It is to determine that the is user already logged in or not if yes then set the user
-  useEffect(() => {
-    
+  useEffect(() => {    
     if(rid) {
       setRoomId(rid);
     }
-  });
+  }, [rid]);
 
   function createNewRoom() {
     var unique_id = uuid();
@@ -28,8 +25,9 @@ function App() {
   }
 
   return (
-      <Container maxWidth="sm">
-        {!roomId && <Box sx={{ bgcolor: '#cfe8fc', height: '100vh' }} >
+      <Container maxWidth="sm" sx={{ bgcolor: '#f1ede2'}}>
+        {!roomId && <Box sx={{ bgcolor: '#f1ede2', height: '100vh' }} >
+          <img src="img/logo.png" alt="MusicRoom logo"/>
           <Button variant="contained" onClick={createNewRoom}> Créer une Room </Button> 
         </Box>
         }

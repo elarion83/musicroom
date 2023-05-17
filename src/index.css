@@ -21,6 +21,10 @@ pre {
   word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
 
+body > iframe {
+  pointer-events: none;
+}
+
 @layer components {
   .message {
     @apply flex items-end mb-0.5 text-xs sm:text-base;

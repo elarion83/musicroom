@@ -87,7 +87,7 @@ const Room = ({ roomId }) => {
 	useEffect(() => {
 		getRoomData(roomId);
         document.title = 'Room n°' + roomId + ' - MusicRoom';
-	}, [room]);
+	}, [room, roomId]);
     
 
     function handlePlay(playStatus) {
@@ -96,7 +96,6 @@ const Room = ({ roomId }) => {
   
     function handleChangeActuallyPlaying(numberToPlay) {
         roomRef.set({playing: numberToPlay}, { merge: true });
-        handlePlay(true);
     }
 
     function handleAddToPlaylist() {
@@ -173,7 +172,7 @@ const Room = ({ roomId }) => {
                 { !room.playlistEmpty && 
                     <Box>
                         <Grid container spacing={2}>
-                            <Grid sm={4}>
+                            <Grid item sm={4}>
                                 <ReactPlayer
                                     ref={ref}
                                     className='react-player'
@@ -187,7 +186,7 @@ const Room = ({ roomId }) => {
                                     light="false"
                                 />
                             </Grid>
-                            <Grid sm={8}>
+                            <Grid item sm={8}>
                                 <Typography sx={{ ml:2, mb: 1.5 }} color="text.secondary">
                                     { room.playlistUrls[room.playing]}
                                 </Typography>
@@ -208,7 +207,7 @@ const Room = ({ roomId }) => {
                                     { <RestartAltIcon fontSize="large" onClick={e => handleChangeActuallyPlaying(0)} />}
                                 </IconButton>
                             </Grid>
-                            <Grid sm={12}>
+                            <Grid item sm={12}>
                                 <LinearProgress variant="determinate" value={room.mediaActuallyPlayingAlreadyPlayed} />
                             </Grid>
                         </Grid>
@@ -219,13 +218,12 @@ const Room = ({ roomId }) => {
             } 
             <List >
                 {loaded && room.playlistUrls.length > 0 && <Grid container spacing={2}>
-                  <Grid item>
+                  <Grid sx={{ mt: 1.5 }} >
                     <h3>Playlist</h3>
                     <hr />
                     {loaded && room.playlistUrls.map(function(d, idx){
                     return (
-                        
-                        <ListItemButton  xs={12} sx={{ ml:0, mt: 1.5 }} selected={room.playing === idx}>
+                        <ListItemButton xs={12} sx={{ ml:0, mt: 1.5 }} selected={room.playing === idx}>
                             <ListItemIcon>
                                     {idx !== room.playing && <PlayCircleOutlineIcon onClick={e => handleChangeActuallyPlaying(idx)} />}
                                     {idx === room.playing && room.actuallyPlaying && <PauseCircleOutlineIcon onClick={e => handlePlay(false)} />}
