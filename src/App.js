@@ -25,7 +25,7 @@ function App() {
   }
 
   return (
-      <Container maxWidth="sm" sx={{ bgcolor: '#f1ede2'}}>
+      <Container maxWidth="sm" sx={{ bgcolor: '#f1ede2', paddingLeft: '0px !important' ,paddingRight: '0px !important' }}>
         {!roomId && <Box sx={{ bgcolor: '#f1ede2', height: '100vh' }} >
           <img src="img/logo.png" alt="MusicRoom logo"/>
           <Button variant="contained" onClick={createNewRoom}> Créer une Room </Button> 

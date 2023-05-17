@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { db } from "../services/firebase";
+
+import SwipeableViews from 'react-swipeable-views';
+
 import AppBar from '@mui/material/AppBar';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -16,6 +21,7 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import Alert from '@mui/material/Alert';
 import Fab from '@mui/material/Fab';
+import Stack from '@mui/material/Stack';
 
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -51,13 +57,13 @@ const Room = ({ roomId }) => {
     const [mediaSearchResultDailyMotion, setMediaSearchResultDailyMotion] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [addingUrl, setAddingUrl] = useState('');
+    var addingUrlObject = {source:'',url:''};
     const [OpenInvitePeopleToRoomModal, setOpenInvitePeopleToRoomModal] = useState(false);
     const [OpenAddToPlaylistModal, setOpenAddToPlaylistModal] = useState(false);
     const [roomUrl, setRoomUrl]= useState(document.URL);
     const [copiedToClipboard, setCopiedToClipboard] = useState(false);
 	const roomRef = db.collection("rooms").doc(roomId);
     const delay = ms => new Promise(res => setTimeout(res, ms));
-
 
     const ref = player => {
       player = player
@@ -88,7 +94,6 @@ const Room = ({ roomId }) => {
 		getRoomData(roomId);
         document.title = 'Room n°' + roomId + ' - MusicRoom';
 	}, [room, roomId]);
-    
 
     function handlePlay(playStatus) {
         roomRef.set({actuallyPlaying: playStatus}, { merge: true });
@@ -100,11 +105,23 @@ const Room = ({ roomId }) => {
 
     function handleAddToPlaylist() {
         if (validator.isURL(addingUrl)) {
-            room.playlistUrls.push(addingUrl);
+            if(addingUrl.includes('youtube')) {
+                addingUrlObject.source = "youtube";
+            }
+            if(addingUrl.includes('dailymotion')) {
+                addingUrlObject.source = "dailymotion";
+            }
+            if(addingUrl.includes('soundcloud')) {
+                addingUrlObject.source = "soundcloud";
+            }
+
+            addingUrlObject.url = addingUrl;
+            room.playlistUrls.push(addingUrlObject);
             roomRef.set({playlistUrls: room.playlistUrls, playlistEmpty: false}, { merge: true });
             setOpenAddToPlaylistModal(false);
         }
         setAddingUrl('');
+        addingUrlObject = {source:'', url:'', title:''};
     }
 
     function handleSearchForMedia() {
@@ -148,26 +165,24 @@ const Room = ({ roomId }) => {
         setPercentagePlayed(event.played*100);
     }
   return (
-    <div className="flex flex-col w-full gap-0 h-screen relative lg:mx-auto lg:my-0 ">
+    <div className="flex flex-col w-full gap-0 h-screen relative ">
       
         <AppBar position="static">
-            <Toolbar>
-                <IconButton
-                    size="large"
-                    edge="start"
-                    color="inherit"
-                    aria-label="menu"
-                >
-                    <LibraryMusicIcon />
-                </IconButton>
-                <h1 sx={{ flexGrow: 1}}> Room n° <b>{ roomId } </b> </h1> -- <span> { loaded && room.playlistUrls.length } médias en playlist</span>
+            <Toolbar sx={{ justifyContent: 'space-between', display: 'flex', bgcolor: '#b79f6e' }}>
+                <div>
+                    <h1 sx={{ flexGrow: 1}}> Room n° <b>{ roomId } </b> </h1> 
+                </div>
+                <div>
+                     <span> { loaded && room.playlistUrls.length } médias en playlist</span>
+                </div>
             </Toolbar>
         </AppBar>
 
-        <Container maxWidth="sm" sx={{ padding: '2em 0' }} >
+
+        <Container maxWidth="sm" sx={{ padding: '2em 0', fontFamily: 'Monospace'}} >
             {loaded && <div> 
                 { room.playlistEmpty && 
-                    <Alert severity="success"> Bienvenue dans la room ! Ajoutez quelque chose dans la playlist !</Alert>
+                    <Alert severity="success"> Bienvenue dans la room ! <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} >Ajoutez quelque chose dans la playlist !</a></Alert>
                 }
                 { !room.playlistEmpty && 
                     <Box>
@@ -179,7 +194,7 @@ const Room = ({ roomId }) => {
                                     width='100%'
                                     height='100%'
                                     onProgress={e => handleProgress(e)}
-                                    url={room.playlistUrls[room.playing]}
+                                    url={room.playlistUrls[room.playing].url}
                                     pip={true}
                                     playing={room.actuallyPlaying}
                                     controls={false}
@@ -188,7 +203,10 @@ const Room = ({ roomId }) => {
                             </Grid>
                             <Grid item sm={8}>
                                 <Typography sx={{ ml:2, mb: 1.5 }} color="text.secondary">
-                                    { room.playlistUrls[room.playing]}
+                                    
+                                    { room.playlistUrls[room.playing].title && <ListItemText primary={room.playlistUrls[room.playing].title} />}
+                                    { room.playlistUrls[room.playing].title && room.playlistUrls[room.playing].title.length == 0 || !room.playlistUrls[room.playing].title && <ListItemText primary={room.playlistUrls[room.playing].url} />}
+
                                 </Typography>
                                 <IconButton  color="secondary">
                                     {room.playing > 0 && <SkipPreviousIcon fontSize="large" onClick={e => handleChangeActuallyPlaying(room.playing - 1)} />}
@@ -218,18 +236,19 @@ const Room = ({ roomId }) => {
             } 
             <List >
                 {loaded && room.playlistUrls.length > 0 && <Grid container spacing={2}>
-                  <Grid sx={{ mt: 1.5 }} >
-                    <h3>Playlist</h3>
-                    <hr />
+                  <Grid xs={12} sx={{ mt: 2 }} >
+                    <h3 sx={{ textTransform: 'uppercase', fontWeight: 'bold', }}>Playlist</h3>
                     {loaded && room.playlistUrls.map(function(d, idx){
                     return (
-                        <ListItemButton xs={12} sx={{ ml:0, mt: 1.5 }} selected={room.playing === idx}>
+                        <ListItemButton xs={12} sx={{ ml:0, mt: 1.5, mr:0 }} selected={room.playing === idx}>
                             <ListItemIcon>
                                     {idx !== room.playing && <PlayCircleOutlineIcon onClick={e => handleChangeActuallyPlaying(idx)} />}
                                     {idx === room.playing && room.actuallyPlaying && <PauseCircleOutlineIcon onClick={e => handlePlay(false)} />}
                                     {idx === room.playing && !room.actuallyPlaying && <PlayCircleOutlineIcon onClick={e => handlePlay(true)} />}
                             </ListItemIcon>
-                            { d }
+
+                            { d.title && <ListItemText primary={d.title} />}
+                            { d.title && d.title.length == 0 || !d.title && <ListItemText primary={d.url} />}
                         </ListItemButton>)
                     }) }
                   </Grid>
@@ -262,7 +281,6 @@ const Room = ({ roomId }) => {
                     <Button variant="contained" onClick={handleSearchForMedia}>Rechercher</Button>
                   </Grid>
 
-
                   {mediaSearchResultYoutube.length > 1 && <Grid item xs={12}>
                     <List component="nav"
                     subheader={
@@ -272,7 +290,7 @@ const Room = ({ roomId }) => {
                     }
                     >
                         { mediaSearchResultYoutube.map(function(media, idx){
-                            return (<ListItemButton onClick={(e) => handleAddToPlaylistFromUrl('https://www.youtube.com/watch?v='+media.id.videoId)}><ListItemIcon><LibraryMusicIcon /></ListItemIcon><ListItemText primary={media.snippet.title} /></ListItemButton>)
+                            return (<ListItemButton onClick={(e) => handleAddToPlaylistFromUrl({title:media.snippet.title, source:'youtube', url:'https://www.youtube.com/watch?v='+media.id.videoId})}><ListItemIcon><LibraryMusicIcon /></ListItemIcon><ListItemText primary={media.snippet.title} /></ListItemButton>)
                         }) }
                     </List>
                     
@@ -288,7 +306,7 @@ const Room = ({ roomId }) => {
                     }
                     >
                         { mediaSearchResultDailyMotion.map(function(media, idx){
-                            return (<ListItemButton onClick={(e) => handleAddToPlaylistFromUrl('https://www.dailymotion.com/video/'+media.id)}><ListItemIcon><LibraryMusicIcon /></ListItemIcon><ListItemText primary={media.title} /></ListItemButton>)
+                            return (<ListItemButton onClick={(e) => handleAddToPlaylistFromUrl({title:media.snippet.title, source:'dailymotion', url:'https://www.dailymotion.com/video/'+media.id})}><ListItemIcon><LibraryMusicIcon /></ListItemIcon><ListItemText primary={media.title} /></ListItemButton>)
                         }) }
                     </List>
                   </Grid>}
@@ -308,10 +326,23 @@ const Room = ({ roomId }) => {
             </DialogContent>
         </Dialog>
 
-        <Fab variant="extended" onClick={(e) => setOpenAddToPlaylistModal(true)}>
-            <SpeedDialIcon sx={{ mr: 1 }} />
-            Ajouter à la playlist
-        </Fab>
+        <Grid
+        container
+        spacing={0}
+        direction="column"
+        alignItems="center"
+        justify="center"
+        style={{ minHeight: '100vh' }}
+        >
+            <Grid item xs={3}>
+                <Stack direction="row" spacing={2}>
+                    <Fab variant="extended" onClick={(e) => setOpenAddToPlaylistModal(true)}>
+                        <SpeedDialIcon sx={{ mr: 1 }} />
+                        Ajouter à la playlist
+                    </Fab>
+                </Stack>
+            </Grid>   
+        </Grid> 
         <SpeedDial
             ariaLabel="SpeedDial basic example"
             sx={{ position: 'absolute', bottom: 36, right: 16 }}
