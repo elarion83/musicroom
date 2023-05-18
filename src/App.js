@@ -28,6 +28,11 @@ function App() {
       <Container maxWidth="sm" sx={{ bgcolor: '#f1ede2', paddingLeft: '0px !important' ,paddingRight: '0px !important' }}>
         {!roomId && <Box sx={{ bgcolor: '#f1ede2', height: '100vh' }} >
           <img src="img/logo.png" alt="MusicRoom logo"/>
+          <ul>
+            <li> Fini d'attendre 2heures pour mettre ta musique en soirée !</li>
+            <li> Fini de faire tourner ton téléphone car tu es le seul connecté au Bluetooth !</li>
+            <li> Crée une room, invite tes amis et créez ensemble une playlist ensemble qui sera lu sur ton téléphone !</li>
+          </ul>
           <Button variant="contained" onClick={createNewRoom}> Créer une Room </Button> 
         </Box>
         }
