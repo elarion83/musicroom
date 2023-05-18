@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { db } from "../services/firebase";
+import { findDOMNode } from 'react-dom'
 
 import AppBar from '@mui/material/AppBar';
 import Tabs from '@mui/material/Tabs';
@@ -55,8 +56,13 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import AddIcon from '@mui/icons-material/Add';
 import FastForwardIcon from '@mui/icons-material/FastForward';
 
+import Slider from '@mui/material/Slider';
+import VolumeDown from '@mui/icons-material/VolumeDown';
+import VolumeUp from '@mui/icons-material/VolumeUp';
+
 const Room = ({ roomId }) => {
 
+    const [localData, setLocalData] = useState({volume:0.5});
 	const [loaded, setLoaded] = useState(false);
 	const [room, setRoom] = useState({});
     const [mediaSearchResultYoutube, setMediaSearchResultYoutube] = useState([]);
@@ -118,6 +124,14 @@ const Room = ({ roomId }) => {
 //        playerRef.current.played = room.mediaActuallyPlayingAlreadyPlayed;
         setIsPlayerAtLeastStarted(true);
     }
+
+    function handleMediaEnd() {
+        if(room.playlistUrls[room.playing+1]) {
+            handleChangeActuallyPlaying(room.playing+1);
+        } else {
+            handlePlay(false);
+        }
+    }
   
     function handleChangeActuallyPlaying(numberToPlay) {
         roomRef.set({playing: numberToPlay}, { merge: true });
@@ -142,7 +156,7 @@ const Room = ({ roomId }) => {
             setOpenAddToPlaylistModal(false);
 
             setRecentlyAdded(true);
-            await delay(5000);
+            await delay(3000);
             setRecentlyAdded(false);
         }
         setAddingUrl('');
@@ -156,7 +170,7 @@ const Room = ({ roomId }) => {
         roomRef.set({playlistUrls: room.playlistUrls, playlistEmpty: false}, { merge: true });
         setOpenAddToPlaylistModal(false);
             setRecentlyAdded(true);
-            await delay(5000);
+            await delay(3000);
             setRecentlyAdded(false);
     }
 
@@ -176,9 +190,12 @@ const Room = ({ roomId }) => {
     }
     
     function handleQuitRoom() {
+
         if(localStorage.getItem("MusicRoom_RoomId")) {
             localStorage.removeItem("MusicRoom_RoomId");
-        }
+            window.location.reload(false);
+        } 
+        window.location.href = "/";
     }
 
 
@@ -196,6 +213,9 @@ const Room = ({ roomId }) => {
             roomRef.set({mediaActuallyPlayingAlreadyPlayed: event.played*100}, { merge: true });
     }
 
+    function handleVolumeChange(e) {
+        setLocalData({volume: e.target.value});
+    }
     async function fastForward(timeToGo) {
      /*   setPlayerSeeking(true);
         roomRef.set({mediaActuallyPlayingAlreadyPlayed: timeToGo}, { merge: true });
@@ -219,132 +239,163 @@ const Room = ({ roomId }) => {
     <div className="flex flex-col w-full gap-0 h-screen relative ">
       
         <AppBar position="static">
-            <Toolbar sx={{ bgcolor: '#b79f6e' }}>
-                <Tooltip title="Copy room URL" >
+            <Toolbar sx={{ bgcolor: '#b79f6e', fontFamily: 'Monospace' }}>
+                
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                    Room n° <b>{ roomId } </b>
+                </Typography>
+                <Tooltip title="Partager la room" >
                     <IconButton
+                        onClick={e => setOpenInvitePeopleToRoomModal(true)}
                         size="large"
                         edge="start"
                         color="inherit"
                         aria-label="menu"
                         sx={{ mr: 2 }}
                     >
-                        <LinkIcon />
+                        <ShareIcon />
                     </IconButton>
                 </Tooltip>
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    Room n° <b>{ roomId } </b>
-                </Typography>
-                <div>
-                     <span> { loaded && room.playlistUrls && room.playlistUrls.length } médias en playlist</span>
-                </div>
+                <Tooltip title='Quitter la room' >
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{ mr: '-15px' }}
+                        onClick={e => handleQuitRoom()}
+                    >
+                        <ExitToAppIcon />
+                    </IconButton>
+                </Tooltip>
+                
             </Toolbar>
         </AppBar>
 
-        <Container maxWidth="sm" sx={{ padding: '0 !important', fontFamily: 'Monospace'}} >
-            <Typography sx={{bgcolor:'#645a47', color:'white', padding:'0.5em'}}> Lecture en cours </Typography>
+        <Container maxWidth="sm" sx={{ padding: '0 !important'}} >
+            { !room.playlistEmpty && <Typography sx={{bgcolor:'#645a47', color:'white', padding:'0.5em'}}> Lecture en cours </Typography>}
             {loaded && <div> 
-                { room.playlistEmpty && 
-                    <Alert severity="success"> Bienvenue dans la room ! <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} >Ajoutez quelque chose dans la playlist !</a></Alert>
-                }
                 { !room.playlistEmpty && 
-                    <Box sx={{bgcolor:'#c8b795', padding:"0.5em 2em"}}>
-                        <Grid container spacing={2}>
+                    <Box sx={{bgcolor:'#c8b795', padding:"0px 0em"}}>
+                        <Grid container spacing={0}>
                             <Grid item sm={4} sx={{ pl:0,ml:0, pt: 0}}>
                                
                                 {loaded && room.playlistUrls &&<ReactPlayer sx={{ padding:0, bgcolor:"red"}}
                                     ref={playerRef}
                                     className='react-player'
                                     width='100%'
+                                    pip={true}
                                     height='100%'
+                                    volume={localData.volume}
                                     onProgress={e => handleProgress(e)}
                                     onStart={e => handlePlayerStart()}
                                     onPlay={e => handlePlay(true)}
                                     onPause={e => handlePlay(false)}
-                                    onEnded={() => console.log('onEnded')}
+                                    onEnded={e => handleMediaEnd()}
                                     url={room.playlistUrls[room.playing].url}
                                     pip={true}
-                                    playing={room.actuallyPlaying}
+                                    playing={room.actuallyPlaying} // is player actually playing
                                     controls={false}
                                     light="false"
                                 />}
                             </Grid>
-                            <Grid item sm={8} sx={{ paddingTop:0,ml:0, mb: 1.5 }}>
-                                <Typography component={'span'}  >
-                                    
-                                    { room.playlistUrls[room.playing].title && <ListItemText primary={room.playlistUrls[room.playing].title} />}
-                                    { room.playlistUrls[room.playing].title && room.playlistUrls[room.playing].title.length == 0 || !room.playlistUrls[room.playing].title && <ListItemText primary={room.playlistUrls[room.playing].url.substring(0, 50)+'...'} />}
+                            <Grid item sm={8} sx={{ padding:0,pl:0,ml:0, mb: 0 }}>
+                                <Grid item sm={12} sx={{ padding:0,pl:1.5,ml:0, mb: 0 }}>
+                                    <Typography component={'span'} sm={12} >
+                                        
+                                        { room.playlistUrls[room.playing].title && <ListItemText primary={room.playlistUrls[room.playing].title} />}
+                                        { room.playlistUrls[room.playing].title && room.playlistUrls[room.playing].title.length == 0 || !room.playlistUrls[room.playing].title && <ListItemText primary={room.playlistUrls[room.playing].url.substring(0, 50)+'...'} />}
 
-                                </Typography>
-                                <Typography sx={{ ml:0, mb: 1.5, fontSize: '10px', textTransform:'uppercase' }}>
-                                    Source : { room.playlistUrls[room.playing].source }
-                                </Typography>
-                                <IconButton  color="secondary">
-                                    {room.playing > 0 && <SkipPreviousIcon fontSize="large" onClick={e => handleChangeActuallyPlaying(room.playing - 1)} />}
-                                </IconButton>
-                                <IconButton  color="secondary" variant="contained">
-                                    { room.actuallyPlaying && <PauseCircleOutlineIcon fontSize="large" onClick={e => handlePlay(false)} />}
-                                    { !room.actuallyPlaying && <PlayCircleOutlineIcon fontSize="large" onClick={e => handlePlay(true)} />}
-                                </IconButton>
-                                <IconButton  color="secondary">
-                                    {(room.playlistUrls.length -1) !== room.playing && <SkipNextIcon fontSize="large" onClick={e => handleChangeActuallyPlaying(room.playing + 1)} />}
-                                </IconButton>
-                                <IconButton color="secondary">
-                                    <SettingsBackupRestoreIcon fontSize="large" onClick={e => setPercentagePlayed(0)} ></SettingsBackupRestoreIcon>
-                                </IconButton>
-                                <IconButton color="secondary">
-                                    <FastForwardIcon fontSize="large" onClick={e => fastForward(room.mediaActuallyPlayingAlreadyPlayed+20)} ></FastForwardIcon>
-                                </IconButton>
-                                <IconButton  color="secondary">
-                                    { <RestartAltIcon fontSize="large" onClick={e => handleChangeActuallyPlaying(0)} />}
-                                </IconButton>
+                                    </Typography>
+                                    
+                                    <Typography sx={{ ml:0, mb: 1.5, fontSize: '10px', textTransform:'uppercase' }}>
+                                        Source : { room.playlistUrls[room.playing].source }
+                                    </Typography>
+                                </Grid>
+                                <LinearProgress sx={{height:'10px'}} variant="determinate" value={room.mediaActuallyPlayingAlreadyPlayed} />
+                                <Grid item sm={12} sx={{bgcolor:'#aa9c7f', padding:0,pl:1.5,ml:0, mb: 0 }}>
+                                    <Grid item sm={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:2, mb: 1.5 }}>
+                                        {room.playing > 0 && <IconButton onClick={e => handleChangeActuallyPlaying(room.playing - 1)}>
+                                            <SkipPreviousIcon fontSize="large"  />
+                                        </IconButton>}
+                                        { room.actuallyPlaying && <IconButton variant="contained" onClick={e => handlePlay(false)} >
+                                            <PauseCircleOutlineIcon fontSize="large"/>
+                                        </IconButton>}
+                                        { !room.actuallyPlaying && <IconButton variant="contained" onClick={e => handlePlay(true)} >
+                                            <PlayCircleOutlineIcon fontSize="large"/>
+                                        </IconButton>}
+                                        {(room.playlistUrls.length -1) !== room.playing && <IconButton onClick={e => handleChangeActuallyPlaying(room.playing + 1)}>
+                                            <SkipNextIcon fontSize="large"  />
+                                        </IconButton>}
+                                        <IconButton onClick={e => setPercentagePlayed(0)} >
+                                            <SettingsBackupRestoreIcon fontSize="large" />
+                                        </IconButton>
+                                        {<IconButton onClick={e => handleChangeActuallyPlaying(0)}>
+                                             <RestartAltIcon fontSize="large" />
+                                        </IconButton>}
+                                    </Grid>
+                                    
+                                    <Grid item sm={12} sx={{ pt:0,pl:2,pr:2,ml:0, mb: 0, pb:1 }}>
+                                        <Stack spacing={2} sm={8} direction="row" sx={{ mb: 1, mr:2 }} alignItems="center">
+                                            <VolumeDown />
+                                            <Slider step={0.01} min={0.1}  max={1} aria-label="Volume" value={localData.volume} onChange={e => handleVolumeChange(e)} />
+                                            <VolumeUp />
+                                        </Stack>
+                                    </Grid>
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Box>
                 }
-                
-            </div>
-            } 
-            <Typography sx={{bgcolor:'#645a47', color:'white', padding:'0.5em'}}> Playlist </Typography>
-            <Box sx={{ padding:"0.5em 2em"}}>
-                <List>
-                    {loaded && room.playlistUrls && room.playlistUrls.length > 0 && <Grid container spacing={2}>
+                <Typography sx={{bgcolor:'#645a47', color:'white', padding:'0.5em'}}> Playlist <span> ({ loaded && room.playlistUrls && room.playlistUrls.length } médias en playlist)</span>
+                </Typography>
+            { room.playlistEmpty && 
+                <Alert severity="success"> Bienvenue dans la room ! <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} >Ajoutez quelque chose dans la playlist !</a></Alert>
+            }
+            <Box sx={{ padding:"0em",marginBottom:2, paddingLeft:0}}>
+                <List sx={{padding:0}}>
+                    {loaded && room.playlistUrls && room.playlistUrls.length > 0 && <Grid item xs={12}>
                         {loaded && room.playlistUrls.map(function(d, idx){
                         return (
 
-                            <Fade in={true} xs={12}>
-                                <Grid sx={{ width:'100%', padding:0}}>
-                                    <ListItemButton key={idx} xs={12} sx={{ width:'100%', pl:0,ml:0, mt: 0.5, mr:0 }} selected={room.playing === idx}>
-                                        <ListItemIcon sx={{ pl:0.5}}>
-                                                {idx !== room.playing && <PlayCircleOutlineIcon onClick={e => handleChangeActuallyPlaying(idx)} />}
-                                                {idx === room.playing && room.actuallyPlaying && <PauseCircleOutlineIcon onClick={e => handlePlay(false)} />}
-                                                {idx === room.playing && !room.actuallyPlaying && <PlayCircleOutlineIcon onClick={e => handlePlay(true)} />}
+                            <Fade in={true} xs={12} sx={{ width:'100%', padding:0, margin:0}}>
+                                <Grid item sx={{ width:'100%', padding:0,pl:2, margin:0}}>
+                                    
+                                    <ListItemButton onClick={e => handleChangeActuallyPlaying(idx)} key={idx} xs={12} sx={{ width:'100%', padding:0,pl:0,margin:0 }} selected={room.playing === idx}>
+                                    
+                                        <ListItemIcon sx={{ pl:2, zIndex:2}}>
+                                                {idx !== room.playing && <PlayCircleOutlineIcon />}
+                                                {idx === room.playing && room.actuallyPlaying && <PauseCircleOutlineIcon  />}
+                                                {idx === room.playing && !room.actuallyPlaying && <PlayCircleOutlineIcon />}
                                         </ListItemIcon>
-                                        <Typography sx={{display:'block'}}>
+                                        <Grid item sx={{display:'block', zIndex:2}}>
                                             { d.title && <ListItemText sx={{ pl:0}} primary={d.title} />}
                                             { d.title && d.title.length == 0 || !d.title && <ListItemText sx={{ pl:0}} primary={d.url.substring(0, 50)+'...'} />}
                                             <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1.5, fontSize: '10px', textTransform:'uppercase' }}>
                                                 Source : { room.playlistUrls[room.playing].source }
                                             </Typography>
                                             {idx === room.playing && room.actuallyPlaying && isPlayerAtLeastStarted && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1.5, fontSize: '10px', textTransform:'uppercase' }}>
-                                                En écoute actuellement
+                                                En lecture actuellement
                                             </Typography>}
                                             
-                                            {idx === room.playing && !room.actuallyPlaying && isPlayerAtLeastStarted && <Typography sx={{ display:'inline', width:'100%',ml:1, mb: 1.5, fontSize: '10px', textTransform:'uppercase' }}>
-                                                En écoute actuellement mais le Lecteur est en pause
+                                            {idx === room.playing && !room.actuallyPlaying && isPlayerAtLeastStarted && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1.5, fontSize: '10px', textTransform:'uppercase' }}>
+                                                En lecture actuellement mais le Lecteur est en pause
                                             </Typography>}
-                                            {idx === room.playing && !isPlayerAtLeastStarted && <Typography sx={{ display:'inline', width:'100%',ml:0.5, mb: 1.5, fontSize: '10px', textTransform:'uppercase' }}>
-                                                En écoute actuellement mais le Lecteur est éteint.
+                                            {idx === room.playing && !isPlayerAtLeastStarted && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1.5, fontSize: '10px', textTransform:'uppercase' }}>
+                                                En lecture actuellement mais le Lecteur est éteint.
                                             </Typography>}
-                                        </Typography>
+                                        </Grid>
                                             
+                                        {idx === room.playing && <LinearProgress sx={{height:'10px', position:'absolute', width:'100%', height:'100%', zIndex:1, opacity:0.5}} variant="determinate" value={room.mediaActuallyPlayingAlreadyPlayed} />}
                                     </ListItemButton>
-                                    {idx === room.playing && <LinearProgress sx={{height:'10px'}} variant="determinate" value={room.mediaActuallyPlayingAlreadyPlayed} />}
                                 </Grid>
                             </Fade>)
                         }) }
                     </Grid>}
                 </List>
             </Box>
+            </div>
+            } 
         </Container>
         <Dialog onClose={(e) => setOpenAddToPlaylistModal(false)} open={OpenAddToPlaylistModal}>
             <Box sx={{ padding: '1em 2em 1em 1em' }}>
@@ -362,7 +413,7 @@ const Room = ({ roomId }) => {
                         helperText="Effectuez une recherche sur Youtube ou DailyMotion url youtube, soundcloud ou dailymotion (Ex : Vald, Lomepal, Rammstein, Dua Lipa, ..)"
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
-                        sx={{ width: '100%', borderColor: "purple", paddingRight:'0', "& .MuiOutlinedInput-root": {
+                        sx={{ width: '100%', paddingRight:'0', "& .MuiOutlinedInput-root": {
                             paddingRight: 0
                         } }}
                         InputProps={{
@@ -434,7 +485,7 @@ const Room = ({ roomId }) => {
                         helperText="Insérez une url youtube, soundcloud ou dailymotion (Ex : https://www.youtube.com/watch?v=vslZZLpQZz0)"
                         value={addingUrl}
                         onChange={e => setAddingUrl(e.target.value)}
-                        sx={{ width: '100%', borderColor: "purple", paddingRight:'0', "& .MuiOutlinedInput-root": {
+                        sx={{ width: '100%', paddingRight:'0', "& .MuiOutlinedInput-root": {
                             paddingRight: 0
                         } }}
                         InputProps={{
@@ -450,9 +501,6 @@ const Room = ({ roomId }) => {
                         }}
                     />
                   </Grid>
-                  
-                  
-
                 </Grid>
             </Box>
         </Dialog>
@@ -477,7 +525,7 @@ const Room = ({ roomId }) => {
         justify="center"
         style={{ minHeight: '100vh' }}
         >
-            <Grid item xs={3}>
+            <Grid item xs={3} sx={{mt:2}}>
                 <Stack direction="row" spacing={2}>
                     {!recentlyAdded && <Fab variant="extended" onClick={(e) => setOpenAddToPlaylistModal(true)}>
                         <SpeedDialIcon sx={{ mr: 1 }} />
