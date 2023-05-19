@@ -8,13 +8,20 @@ import InputAdornment from '@mui/material/InputAdornment';
 import AddIcon from '@mui/icons-material/Add';
 import { v4 as uuid } from 'uuid';
 
+import SearchIcon from '@mui/icons-material/Search';
+import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+
 function App() {
   const [roomId, setRoomId] = useState(localStorage.getItem("MusicRoom_RoomId"));
+  const [userInfoPseudo, setUserInfoPseudo] = useState(localStorage.getItem("MusicRoom_UserInfoPseudo"));
   const [joinRoomRoomId, setJoinRoomRoomId] = useState('');
+  const [userInfoPseudoInput, setUserInfoPseudoInput] = useState('');
 
 	const queryParameters = new URLSearchParams(window.location.search)
 	const rid = queryParameters.get("rid");
-
   useEffect(() => {    
     if(rid) {
       setRoomId(rid);
@@ -30,6 +37,13 @@ function App() {
 
   function handleJoinRoomByRoomId() {
     window.location.href = "/?rid="+joinRoomRoomId;
+  }
+
+  function checkForNewPseudo() {
+    if(userInfoPseudoInput.length > 5) {
+      setUserInfoPseudo(userInfoPseudoInput);
+      localStorage.setItem("MusicRoom_UserInfoPseudo", userInfoPseudoInput);
+    }
   }
 
   return (
@@ -68,6 +82,37 @@ function App() {
         </Box>
         }
         {roomId && <Room roomId={roomId}></Room>}
+        {!userInfoPseudo && 
+        <Dialog open={true}>
+            <DialogTitle>Hey ! Choisis toi un pseudo temporaire ! </DialogTitle>  
+            <DialogContent>
+            <DialogContentText>
+              <TextField
+                  id="UserChoosePseudoInput"
+                  type="text"
+                  label="Créez votre pseudo !"
+                  helperText="Bien qu'anonyme, il est nécessaire d'avoir un pseudo !"
+                  value={userInfoPseudoInput}
+                  onChange={e => setUserInfoPseudoInput(e.target.value)}
+                  sx={{ width: '100%', paddingRight:'0', "& .MuiOutlinedInput-root": {
+                      paddingRight: 0
+                  } }}
+                  InputProps={{
+                      endAdornment: (
+                          <InputAdornment  sx={{
+                          padding: "27.5px 14px",
+                          backgroundColor: "#b79f6e",
+                          color:'white',
+                          cursor:'pointer',
+                          }} position="end" onClick={e=> checkForNewPseudo()}>
+                          <SearchIcon  />
+                          </InputAdornment>
+                      ),
+                  }}
+              />
+            </DialogContentText>
+            </DialogContent>
+        </Dialog>}
       </Container>
   );
 }
