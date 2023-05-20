@@ -4,10 +4,7 @@ import { db } from "../services/firebase";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import Toolbar from '@mui/material/Toolbar';
 import ReactPlayer from 'react-player';
 import Container from '@mui/material/Container';
@@ -19,17 +16,12 @@ import Alert from '@mui/material/Alert';
 import Fab from '@mui/material/Fab';
 import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
-import Fade from '@mui/material/Fade';
 import Snackbar from '@mui/material/Snackbar';
 
-import Button from '@mui/material/Button';
 
 import LinearProgress from '@mui/material/LinearProgress';
 
 import ListItemText from '@mui/material/ListItemText';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import Typography from '@mui/material/Typography';
 
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
@@ -41,7 +33,6 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Settings from '@mui/icons-material/Settings';
 import ShareIcon from '@mui/icons-material/Share';
-import CopyToClipboard from "react-copy-to-clipboard";
 
 import Slider from '@mui/material/Slider';
 import VolumeDown from '@mui/icons-material/VolumeDown';
@@ -49,6 +40,8 @@ import VolumeUp from '@mui/icons-material/VolumeUp';
 
 import ActuallyPlaying from '../components/rooms/ActuallyPlaying'
 import RoomModalAddMedia from '../components/rooms/ModalAddMedia'
+import ModalShareRoom from '../components/rooms/ModalShareRoom'
+import RoomPlaylist from "./rooms/RoomPlaylist";
 
 const Room = ({ roomId }) => {
 
@@ -57,15 +50,9 @@ const Room = ({ roomId }) => {
 	const [room, setRoom] = useState({});
     const [OpenInvitePeopleToRoomModal, setOpenInvitePeopleToRoomModal] = useState(false);
     const [OpenAddToPlaylistModal, setOpenAddToPlaylistModal] = useState(false);
-    const [roomUrl, setRoomUrl]= useState(document.URL);
     const [recentlyAdded, setRecentlyAdded]= useState(false);
-    const [copiedToClipboard, setCopiedToClipboard] = useState(false);
-    const [isPlayerAtLeastStarted, setIsPlayerAtLeastStarted] = useState(false);
 	const roomRef = db.collection("rooms").doc(roomId);
     const playerRef = useRef();
-
-
-    const delay = ms => new Promise(res => setTimeout(res, ms));
 
     const getRoomData = (roomId) => {
 		roomRef.get().then((doc) => {
@@ -122,13 +109,6 @@ const Room = ({ roomId }) => {
         window.location.href = "/";
     }
 
-
-    async function setCopiedToClipboardToTrueAndFalse() {
-        setCopiedToClipboard(true);
-        await delay(2000);
-        setCopiedToClipboard(false);
-    }
-
     function setPercentagePlayed(percentagePlayed) {
         roomRef.set({mediaActuallyPlayingAlreadyPlayed: percentagePlayed}, { merge: true });
     }
@@ -140,7 +120,7 @@ const Room = ({ roomId }) => {
     function handleVolumeChange(e) {
         var localDataTemps = localData;
         console.log(localDataTemps);
-        localDataTemps.volume = e.tarder.value;
+        localDataTemps.volume = e.target.value;
         setLocalData(localDataTemps);
     }
 
@@ -150,6 +130,10 @@ const Room = ({ roomId }) => {
         roomRef.set({playlistUrls: room.playlistUrls, playlistEmpty: false}, { merge: true });
         
         setOpenAddToPlaylistModal(false);
+    }
+
+    function handleChangeIdActuallyPlaying(newIdToPlay) {
+        roomRef.set({playing: newIdToPlay, mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });
     }
 
     async function fastForward(timeToGo) {
@@ -297,51 +281,9 @@ const Room = ({ roomId }) => {
                 { room.playlistEmpty && 
                     <Alert severity="success"> Bienvenue dans la room ! <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} >Ajoutez quelque chose dans la playlist !</a></Alert>
                 }
-                <Box sx={{ padding:"0em",marginBottom:2, paddingLeft:0}}>
-                    <List sx={{padding:0}}>
-                        {loaded && room.playlistUrls && room.playlistUrls.length > 0 && <Grid item xs={12}>
-                            {loaded && room.playlistUrls.map(function(d, idx){
-                            return (
-
-                                <Fade in={true} xs={12} sx={{ width:'100%', padding:0, margin:0}}>
-                                    <Grid item sx={{ width:'100%', padding:0,pl:2, margin:0}}>
-                                        
-                                        <ListItemButton onClick={e => handleChangeActuallyPlaying(idx)} key={idx} xs={12} sx={{ width:'100%', padding:0,pl:0,margin:0 }} selected={room.playing === idx}>
-                                        
-                                            <ListItemIcon sx={{ pl:2, zIndex:2}}>
-                                                    {idx !== room.playing && <PlayCircleOutlineIcon />}
-                                                    {idx === room.playing && room.actuallyPlaying && <PauseCircleOutlineIcon  />}
-                                                    {idx === room.playing && !room.actuallyPlaying && <PlayCircleOutlineIcon />}
-                                            </ListItemIcon>
-                                            <Grid item sx={{display:'block', zIndex:2}}>
-                                                { d.title && <ListItemText sx={{ pl:0}} primary={d.title} />}
-                                                { d.title && d.title.length == 0 || !d.title && <ListItemText sx={{ pl:0}} primary={d.url.substring(0, 50)+'...'} />}
-                                                <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
-                                                    Ajouté par : <b>{ room.playlistUrls[idx].addedBy }</b>
-                                                </Typography>
-                                                <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1, fontSize: '10px', textTransform:'uppercase' }}>
-                                                    Source : { room.playlistUrls[room.playing].source } 
-                                                </Typography>
-                                                {idx === room.playing && room.actuallyPlaying && isPlayerAtLeastStarted && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1.5, fontSize: '10px', textTransform:'uppercase' }}>
-                                                    En lecture actuellement
-                                                </Typography>}
-                                                
-                                                {idx === room.playing && !room.actuallyPlaying && isPlayerAtLeastStarted && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1.5, fontSize: '10px', textTransform:'uppercase' }}>
-                                                    En lecture actuellement mais le Lecteur est en pause
-                                                </Typography>}
-                                                {idx === room.playing && !isPlayerAtLeastStarted && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1.5, fontSize: '10px', textTransform:'uppercase' }}>
-                                                    En lecture actuellement mais le Lecteur est éteint.
-                                                </Typography>}
-                                            </Grid>
-                                                
-                                            {idx === room.playing && <LinearProgress sx={{height:'10px', position:'absolute', width:'100%', height:'100%', zIndex:1, opacity:0.5}} variant="determinate" value={room.mediaActuallyPlayingAlreadyPlayed} />}
-                                        </ListItemButton>
-                                    </Grid>
-                                </Fade>)
-                            }) }
-                        </Grid>}
-                    </List>
-                </Box>
+                {loaded && room.playlistUrls && room.playlistUrls.length > 0 &&<Box sx={{ padding:"0em",marginBottom:2, paddingLeft:0}}>
+                    <RoomPlaylist roomPlaylist={room.playlistUrls} roomIdActuallyPlaying={room.playing} handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying} roomIsActuallyPlaying={room.actuallyPlaying} roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayed} />
+                </Box>}
                 { room.playlistUrls[0] && <Snackbar 
                     severity="success"
                     open={recentlyAdded}
@@ -356,15 +298,7 @@ const Room = ({ roomId }) => {
         </Dialog>
         
         <Dialog onClose={(e) => setOpenInvitePeopleToRoomModal(false)} open={OpenInvitePeopleToRoomModal}>
-            <DialogTitle>Invitez des gens à rejoindre cette room ! </DialogTitle>  
-            <DialogContent>
-            <DialogContentText>
-                <CopyToClipboard onCopy={(e) => setCopiedToClipboardToTrueAndFalse()} text={( roomUrl +'?rid='+roomId)}>
-                    <Button variant="contained"> Click to copy url ! </Button> 
-                </CopyToClipboard>
-                {copiedToClipboard && <Alert severity="success"  sx={{ mt: 1.5 }} > Copié dans le presse papier !</Alert>}
-            </DialogContentText>
-            </DialogContent>
+            <ModalShareRoom roomUrl={ document.URL +'?rid='+roomId}/>
         </Dialog>
 
         <Grid

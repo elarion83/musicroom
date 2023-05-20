@@ -47,11 +47,17 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                 addingObject.source = "soundcloud";
             }
             validatedObjectToAdd(addingObject);
+            addingObject.title='';
+            addingObject.source='';
+            addingObject.url='';
         }
     }
 
     function handleCheckAndAddObjectToPlaylistFromObject(objectFormatted) {
         validatedObjectToAdd(objectFormatted);
+        addingObject.title='';
+        addingObject.source='';
+        addingObject.url='';
     }
         
 
