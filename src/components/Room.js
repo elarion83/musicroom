@@ -47,7 +47,6 @@ import RoomTopBar from "./rooms/RoomTopBar";
 
 const Room = ({ roomId }) => {
 
-
     const [localData, setLocalData] = useState({synchro:false,volume:0, currentUserInfo: useState(localStorage.getItem("MusicRoom_UserInfoPseudo")) });
 	const [loaded, setLoaded] = useState(false);
 	const [room, setRoom] = useState({});
@@ -106,6 +105,7 @@ const Room = ({ roomId }) => {
             setIsActuallyAdmin(true);
         }
     });
+
     async function handlePlay(playStatus) {
         if(isActuallyAdmin) {
             roomRef.set({actuallyPlaying: playStatus, mediaActuallyPlayingAlreadyPlayed:room.mediaActuallyPlayingAlreadyPlayed}, { merge: true });
@@ -179,7 +179,9 @@ const Room = ({ roomId }) => {
     }
 
     function handleChangeIdActuallyPlaying(newIdToPlay) {
-        roomRef.set({playing: newIdToPlay, mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });
+        if(isActuallyAdmin) {
+            roomRef.set({playing: newIdToPlay, mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });
+        }
     }
 
     function handleOpenShareModal(ShareModalIsOpen) {
@@ -219,6 +221,23 @@ const Room = ({ roomId }) => {
                                         }
                                     }}
                                 />}
+                                {room.playlistUrls && !isActuallyAdmin && <ReactPlayer sx={{ padding:0}}
+                                    ref={playerRef}
+                                    className='react-player'
+                                    width='100%'
+                                    pip={true}
+                                    height='100%'
+                                    volume={localData.volume}
+                                    url={room.playlistUrls[room.playing].url}
+                                    playing={room.actuallyPlaying} // is player actually playing
+                                    controls={false}
+                                    light={false}
+                                    config={{
+                                        youtube: {
+                                            playerVars: { showinfo: 0, preload:1 }
+                                        }
+                                    }}
+                                />}
                                 <div style={{width:'100%',height:'100%',opacity:0,top:0,position:'absolute'}}></div>
                             </Grid>
                             <Grid item sm={8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0.5, color:'white' }}>
@@ -246,19 +265,10 @@ const Room = ({ roomId }) => {
                                         </IconButton>}
                                         
                                     </Grid>}
-                                    
-                                    {!isActuallyAdmin && <Grid item sm={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:2, mb: 1.5 }}>
-                                        { !localData.synchro && 
-                                            <Tooltip title="Se Synchroniser" >
-                                                <IconButton variant="contained" onClick={e => handleNonAdminPlayerReady()} >
-                                                    <SyncIcon fontSize="large" sx={{color:'#f0f1f0'}} />
-                                                </IconButton>
-                                            </Tooltip>}
-                                    </Grid>}
                                     <Grid item sm={12} sx={{ pt:0,pl:2,pr:2,ml:0, mb: 0, pb:1 }}>
                                         <Stack spacing={2} sm={8} direction="row" sx={{ mb: 1, mr:2 }} alignItems="center">
                                             <VolumeDown />
-                                            <Slider step={0.01} min={0.1}  max={1} aria-label="Volume" value={localData.volume} onChange={e => handleVolumeChange(e)} />
+                                            <Slider step={0.01} min={0}  max={1} aria-label="Volume" value={localData.volume} onChange={e => handleVolumeChange(e)} />
                                             <VolumeUp />
                                         </Stack>
                                     </Grid>
@@ -309,25 +319,6 @@ const Room = ({ roomId }) => {
                 </Stack>
             </Grid>   
         </Grid> 
-        <SpeedDial
-            ariaLabel="SpeedDial basic example"
-            sx={{ position: 'absolute', bottom: 36, right: 16 }}
-            icon={<Settings />}
-        >
-            <SpeedDialAction
-                onClick={e => handleQuitRoom()}
-                key='LeaveRoom'
-                icon={<ExitToAppIcon />}
-                tooltipTitle='Quitter la room'
-            />
-            
-            <SpeedDialAction
-                onClick={e => setOpenInvitePeopleToRoomModal(true)}
-                key='ShareRoom'
-                icon={<ShareIcon />}
-                tooltipTitle='Partager la room'
-            />
-        </SpeedDial>
     </div>
   );
 };
