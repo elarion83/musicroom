@@ -53,14 +53,15 @@ const Room = ({ roomId }) => {
     const [OpenInvitePeopleToRoomModal, setOpenInvitePeopleToRoomModal] = useState(false);
     const [OpenAddToPlaylistModal, setOpenAddToPlaylistModal] = useState(false);
     const [recentlyAdded, setRecentlyAdded]= useState(false);
-	const roomRef = db.collection("rooms").doc(roomId);
+    const [localVolume, setLocalVolume] = useState(0);
+	const roomRef = db.collection("rooms").doc(roomId.toLowerCase());
     const playerRef = useRef({
         url: null,
         pip: false,
         playing: true,
         controls: false,
         light: false,
-        volume: 0.8,
+        volume: 0,
         muted: false,
         played: 0,
         loaded: 0,
@@ -70,7 +71,6 @@ const Room = ({ roomId }) => {
     });
     const playerState = useState(playerRef);
     const [isActuallyAdmin, setIsActuallyAdmin] = useState(false);
-    if(isActuallyAdmin) { localData.volume = 0.5;}
     const delay = ms => new Promise(res => setTimeout(res, ms));
 
     const getRoomData = (roomId) => {
@@ -99,7 +99,7 @@ const Room = ({ roomId }) => {
 		getRoomData(roomId); // A REPOSITIONNER
         document.title = 'Room n°' + roomId + ' - MusicRoom';
 	}, [room, roomId]);
-
+    
 	useEffect(() => {
         if(room.admin == localData.currentUserInfo[0]) {
             setIsActuallyAdmin(true);
@@ -155,15 +155,14 @@ const Room = ({ roomId }) => {
     function handleProgress(event) {
         if(room.actuallyPlaying) {
             if(isActuallyAdmin) {
-                room.mediaActuallyPlayingAlreadyPlayed = event.played*100;
-                roomRef.set({mediaActuallyPlayingAlreadyPlayed: room.mediaActuallyPlayingAlreadyPlayed }, { merge: true });
+            //    room.mediaActuallyPlayingAlreadyPlayed = ;
+                roomRef.set({mediaActuallyPlayingAlreadyPlayed: event.played*100 }, { merge: true });
             } 
         }
     }
 
     function handleVolumeChange(e) {
-        var localDataTemps = localData;
-        localDataTemps.volume = e.target.value;
+        setLocalVolume(e.target.value)
     }
 
     function handleNonAdminPlayerReady() {
@@ -194,9 +193,9 @@ const Room = ({ roomId }) => {
         <Container maxWidth="sm" sx={{ padding: '0 !important'}} >
             { !room.playlistEmpty && <ActuallyPlaying roomRef={roomRef}/>}
             {loaded && <div> 
-                { !room.playlistEmpty && 
+                { !room.playlistEmpty && room.playlistUrls.length > 0 && room.playing !== null && 
                     <Box sx={{bgcolor:'#303030', padding:"0px 0em"}}>
-                        <Grid container spacing={0}>
+                        <Grid container spacing={0} sx={{alignItems:'stretch'}}>
                             <Grid item sm={4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
                                 {room.playlistUrls && isActuallyAdmin && <ReactPlayer sx={{ padding:0}}
                                     ref={playerRef}
@@ -204,7 +203,7 @@ const Room = ({ roomId }) => {
                                     width='100%'
                                     pip={true}
                                     height='100%'
-                                    volume={localData.volume}
+                                    volume={localVolume}
                                     onProgress={e => handleProgress(e)}
                                     //onStart={e => handlePlay(true)}
                                     onReady={e => handleReady()}
@@ -227,7 +226,7 @@ const Room = ({ roomId }) => {
                                     width='100%'
                                     pip={true}
                                     height='100%'
-                                    volume={localData.volume}
+                                    volume={localVolume}
                                     url={room.playlistUrls[room.playing].url}
                                     playing={room.actuallyPlaying} // is player actually playing
                                     controls={false}
@@ -240,8 +239,7 @@ const Room = ({ roomId }) => {
                                 />}
                                 <div style={{width:'100%',height:'100%',opacity:0,top:0,position:'absolute'}}></div>
                             </Grid>
-                            <Grid item sm={8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0.5, color:'white' }}>
-                                <LinearProgress sx={{height:'10px',color:"red"}} variant="determinate" value={room.mediaActuallyPlayingAlreadyPlayed} />
+                            <Grid item sm={8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }}>
                                 <Grid item sm={12} sx={{bgcolor:'#262626', padding:0,pl:1.5,ml:0, mb: 0 , fill:'#f0f1f0'}}>
                                     
                                     {isActuallyAdmin && <Grid item sm={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:2, mb: 1.5 }}>
@@ -268,7 +266,7 @@ const Room = ({ roomId }) => {
                                     <Grid item sm={12} sx={{ pt:0,pl:2,pr:2,ml:0, mb: 0, pb:1 }}>
                                         <Stack spacing={2} sm={8} direction="row" sx={{ mb: 1, mr:2 }} alignItems="center">
                                             <VolumeDown />
-                                            <Slider step={0.01} min={0}  max={1} aria-label="Volume" value={localData.volume} onChange={e => handleVolumeChange(e)} />
+                                            <Slider step={0.01} min={0}  max={1} aria-label="Volume" value={localVolume} onChange={e => handleVolumeChange(e)} />
                                             <VolumeUp />
                                         </Stack>
                                     </Grid>

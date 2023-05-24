@@ -62,19 +62,22 @@ function App() {
 
   function createNewRoom() {
     var unique_id = uuid();
-    var small_id = unique_id.slice(0,8)
+    var small_id = unique_id.slice(0,5)
     setRoomId(small_id);
     localStorage.setItem("MusicRoom_RoomId", small_id);
+    window.scrollTo(0, 0);
   }
 
   function handleJoinRoomByRoomId() {
     window.location.href = "/?rid="+joinRoomRoomId.replace(/\s/g,'');
+    window.scrollTo(0, 0);
   }
 
   function checkForNewPseudo() {
     if(userInfoPseudoInput.length > 1) {
       setUserInfoPseudo(userInfoPseudoInput);
       localStorage.setItem("MusicRoom_UserInfoPseudo", userInfoPseudoInput);
+      window.scrollTo(0, 0);
     }
   }
 
@@ -114,7 +117,7 @@ function App() {
                 <IconButton
                   onClick={e => handleClickMenu(e)}
                   size="small"
-                  sx={{ ml: 2 , borderRadius:2}}
+                  sx={{ ml: 2 , borderRadius:2, color:'white', fontSize:'12px', textTransform:'uppercase'}}
                   aria-controls={open ? 'account-menu' : undefined}
                   aria-haspopup="true"
                   aria-expanded={open ? 'true' : undefined}
@@ -167,7 +170,7 @@ function App() {
               </MenuItem>
             </Menu>
         </Grid>}
-        {!roomId && <Box sx={{ bgcolor: '#f1ede2', height: '100vh' }} >
+        {!roomId && <Box sx={{ bgcolor: '#f1ede2', height: '100vh', pl:2 }} >
           <Grid container sx={{display:'flex', justifyContent:'center', pt:3,mb:5}}>
             <img src="img/logo.png" style={{ width: '250px'}} alt="MusicRoom logo"/>
           </Grid>
