@@ -62,7 +62,7 @@ function App() {
 
   function createNewRoom() {
     var unique_id = uuid();
-    var small_id = unique_id.slice(0,5)
+    var small_id = unique_id.slice(0,5).toLowerCase()
     setRoomId(small_id);
     localStorage.setItem("MusicRoom_RoomId", small_id);
     window.scrollTo(0, 0);
@@ -110,20 +110,20 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Container maxWidth="sm" sx={{ bgcolor: '#f1ede2', paddingLeft: '0px !important' ,paddingRight: '0px !important' }}>
+      <Container maxWidth="sm" sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(234, 228, 211, 0.69) !important', borderRadius:'15px' }}>
         {userInfoPseudo && <Grid container sx={{display:'flex', justifyContent:'flex-end', padding:'5px 10px', bgcolor:'#3e464d'}}>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', textAlign: 'center' }}>
               <Tooltip title="Paramètres du compte" sx={{ bgColor:'30363c'}}>
                 <IconButton
                   onClick={e => handleClickMenu(e)}
                   size="small"
-                  sx={{ ml: 2 , borderRadius:2, color:'white', fontSize:'12px', textTransform:'uppercase'}}
+                  sx={{ padding:'2px 10px', ml: 2 , bgcolor:'#23282d', borderRadius:2, color:'white', fontSize:'12px', textTransform:'uppercase'}}
                   aria-controls={open ? 'account-menu' : undefined}
                   aria-haspopup="true"
                   aria-expanded={open ? 'true' : undefined}
                 >
                   { userInfoPseudo }
-                  <AccountCircleIcon sx={{ ml:2,width: 32, height: 32 }}></AccountCircleIcon>
+                  <AccountCircleIcon sx={{ ml:2,width: 20, height: 20 }}></AccountCircleIcon>
                 </IconButton>
               </Tooltip>
             </Box>
@@ -170,7 +170,7 @@ function App() {
               </MenuItem>
             </Menu>
         </Grid>}
-        {!roomId && <Box sx={{ bgcolor: '#f1ede2', height: '100vh', pl:2 }} >
+        {!roomId && <Box sx={{  paddingBottom:'10px !important',height: 'auto', pl:2, pr:2 }} >
           <Grid container sx={{display:'flex', justifyContent:'center', pt:3,mb:5}}>
             <img src="img/logo.png" style={{ width: '250px'}} alt="MusicRoom logo"/>
           </Grid>
@@ -212,7 +212,7 @@ function App() {
             </Step>
         </Stepper>
           <Button variant="outlined" sx={{width:'100%',border:'2px solid #1976d2 !important', height:'50px', mt:'2em', mb:'2em'}} onClick={createNewRoom}> Créer une Room </Button> 
-          <Typography>Rejoindre une room </Typography>
+          <Typography sx={{mb:2}}>Rejoindre une room </Typography>
           <TextField
                 id="joinRoomIdField"
                 type="text"
