@@ -148,7 +148,8 @@ const Room = ({ roomId }) => {
     }
 
     function setPercentagePlayed(percentagePlayed) {
-    //    roomRef.set({mediaActuallyPlayingAlreadyPlayed: percentagePlayed}, { merge: true });
+        roomRef.set({mediaActuallyPlayingAlreadyPlayed: percentagePlayed}, { merge: true });
+        playerRef.current.seekTo(0, 'seconds');
     }
 
     function handleProgress(event) {
