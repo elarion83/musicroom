@@ -54,7 +54,7 @@ function App() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  useEffect(() => {    
+  useEffect(() => {   
     if(rid) {
       setRoomId(rid);
     }
@@ -238,9 +238,9 @@ function App() {
         </Box>
         }
         {roomId && <Room roomId={roomId}></Room>}
-        {!userInfoPseudo || userInfoPseudo == 'null' &&
+        {(!userInfoPseudo || userInfoPseudo === '' || userInfoPseudo.length === 0 || userInfoPseudo == 'null') && 
         <Dialog open={true}>
-            <DialogTitle>Hey ! Choisis toi un pseudo temporaire ! </DialogTitle>  
+            <DialogTitle>Hey ! Choisis toi un pseudo ! </DialogTitle>  
             <DialogContent>
               <DialogContentText>
                 <TextField
