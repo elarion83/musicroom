@@ -63,15 +63,32 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
 
     function handleSearchForMedia() {
         if(searchTerm !== '') {
-            YTSearch({key: 'AIzaSyAcFecOONJZvjwMnTB9Fv9x753KWsVUvWM', term: searchTerm}, (videos) => {
-                setMediaSearchResultYoutube(videos);
-            });
+            if (validator.isURL(searchTerm)) {
+                addingObject.url = searchTerm;
+                if(addingObject.url.includes('youtube')) {
+                    addingObject.source = "youtube";
+                }
+                if(addingObject.url.includes('dailymotion')) {
+                    addingObject.source = "dailymotion";
+                }
+                if(addingObject.url.includes('soundcloud')) {
+                    addingObject.source = "soundcloud";
+                }
+                validatedObjectToAdd(addingObject);
+                addingObject.title='';
+                addingObject.source='';
+                addingObject.url='';
+            } else {
+                YTSearch({key: 'AIzaSyAcFecOONJZvjwMnTB9Fv9x753KWsVUvWM', term: searchTerm}, (videos) => {
+                    setMediaSearchResultYoutube(videos);
+                });
 
-            fetch('https://api.dailymotion.com/videos?fields=id,thumbnail_url%2Ctitle&country=fr&search='+searchTerm+'&limit=5')
-                .then((response) => response.json())
-                .then((responseJson) => {
-                    setMediaSearchResultDailyMotion(responseJson.list);
-            })
+                fetch('https://api.dailymotion.com/videos?fields=id,thumbnail_url%2Ctitle&country=fr&search='+searchTerm+'&limit=5')
+                    .then((response) => response.json())
+                    .then((responseJson) => {
+                        setMediaSearchResultDailyMotion(responseJson.list);
+                })
+            }
         }
         
     }
@@ -87,8 +104,8 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                     <TextField
                         id="addMediaSearchInput"
                         type="text"
-                        label="Recherche sur Youtube"
-                        helperText="Effectuez une recherche sur Youtube ou DailyMotion url youtube, soundcloud ou dailymotion (Ex : Vald, Lomepal, Rammstein, Dua Lipa, ..)"
+                        label="Recherche ou URL"
+                        helperText="URL : (Ex: https://www.youtube.com/watch?v=vslZZLpQZz0) || Recherche : (Ex : Vald, Lomepal, Rammstein, Dua Lipa, ..)"
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
                         sx={{ width: '100%', paddingRight:'0', "& .MuiOutlinedInput-root": {
@@ -151,35 +168,6 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                         )}
                     </Box>
                   </Grid>}
-                <Grid item xs={12}>
-                    <h3>Depuis une URL</h3>
-                <hr />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        id="addMediaFromUrlInput"
-                        type="text"
-                        label="Url du lien"
-                        helperText="Insérez une url youtube, soundcloud ou dailymotion (Ex : https://www.youtube.com/watch?v=vslZZLpQZz0)"
-                        value={addingUrl}
-                        onChange={e => setAddingUrl(e.target.value)}
-                        sx={{ width: '100%', paddingRight:'0', "& .MuiOutlinedInput-root": {
-                            paddingRight: 0
-                        } }}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment  sx={{
-                                padding: "27.5px 14px",
-                                backgroundColor: "#b79f6e",
-                                color:'white',
-                                cursor:'pointer'}} position="end" onClick={e => handleCheckAndAddObjectToPlaylistFromUrl(addingUrl)}>
-                                <AddIcon />
-                                </InputAdornment>
-                            ),
-                        }}
-                    />
-                </Grid>
-
             </Grid>
         </Box>
     )

@@ -19,9 +19,9 @@ const RoomTopBar = ({roomId, handleOpenShareModal }) => {
     }
   return (
     <AppBar position="static">
-            <Toolbar xs={12} sx={{ bgcolor: '#262626', minHeight: '45px !important', fontFamily: 'Monospace', pl:'5px', pr:'25 px' }}>
+            <Toolbar xs={12} sx={{ bgcolor: '#262626',borderBottom: '2px solid #3e464d', minHeight: '45px !important', fontFamily: 'Monospace', pl:'5px', pr:'25 px' }}>
                 
-                <Typography  component="div" sx={{ flexGrow: 1 }}>
+                <Typography  component="div" sx={{ flexGrow: 1 , textTransform:'uppercase', fontSize:'12px',}}>
                     Room n° <b>{ roomId } </b>
                 </Typography>
                 <Tooltip title="Partager la room" >
