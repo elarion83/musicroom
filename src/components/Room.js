@@ -108,14 +108,22 @@ const Room = ({ roomId }) => {
     async function handlePlay(playStatus) {
         if(isActuallyAdmin) {
             roomRef.set({actuallyPlaying: playStatus, mediaActuallyPlayingAlreadyPlayed:room.mediaActuallyPlayingAlreadyPlayed}, { merge: true });
+
             setLocalVolume(0.5);
         } else {
+            if(!localData.synchro) { // if pas synchro et lance la lecture et lecture en cours synchro
+                playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayed, 'portion');
+                localData.synchro = true;
+            }
         }
     }
+    
+    async function handleNonAdminPlay() {
+    }
 
-    function handleReady() {
+
+    async function handleReady() {
         playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayed, 'seconds');
-        handlePlay(true);
      //   room.mediaActuallyPlayingAlreadyPlayed = 40;
 //        room.set({actuallyPlaying:true});
     //    console.log(playerRef.current.getSecondsLoaded());
@@ -151,9 +159,6 @@ const Room = ({ roomId }) => {
 
     function handleVolumeChange(e) {
         setLocalVolume(e.target.value);
-    }
-
-    function handleNonAdminPlayerReady() {
     }
 
 
@@ -216,9 +221,10 @@ const Room = ({ roomId }) => {
                                     pip={true}
                                     height='100%'
                                     volume={localVolume}
+                                    onPlay={e => handleNonAdminPlay()}
                                     onReady={e => handleReady()}
                                     url={room.playlistUrls[room.playing].url}
-                                    playing={roomRef.actuallyPlaying} // is player actually playing
+                                    playing={room.actuallyPlaying} // is player actually playing
                                     controls={false}
                                     light={false}
                                     config={{
@@ -230,6 +236,20 @@ const Room = ({ roomId }) => {
                                 {isActuallyAdmin && <div style={{width:'100%',height:'100%',opacity:0,top:0,position:'absolute'}}></div>}
                             </Grid>
                             <Grid item sm={8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }}>
+                                <Grid item sm={12} sx={{ padding:0,pl:1.5,ml:0, mb: 0 , mt:1, fill:'#f0f1f0'}}>
+                                    { room.playlistUrls[room.playing].title && <Typography component={'span'} sm={12} >
+                                       {room.playlistUrls[room.playing].title}
+                                    </Typography>}
+                                    { room.playlistUrls[room.playing].url && room.playlistUrls[room.playing].url.length == 0 || !room.playlistUrls[room.playing].title && <Typography component={'span'} sm={12} >
+                                        {room.playlistUrls[room.playing].url.substring(0, 50)+'...'} 
+                                    </Typography>}
+                                    <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
+                                        Source : { room.playlistUrls[room.playing].source }
+                                    </Typography>
+                                    <Typography sx={{ ml:0, mb: 1.5, fontSize: '10px', textTransform:'uppercase' }}>
+                                        Ajouté par : { room.playlistUrls[room.playing].addedBy }
+                                    </Typography>
+                                </Grid>
                                 <Grid item sm={12} sx={{ padding:0,pl:1.5,ml:0, mb: 0 , mt:1, fill:'#f0f1f0'}}>
                                     {isActuallyAdmin && <Grid item sm={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:2, mb: 1.5 }}>
                                         {room.playing > 0 && <IconButton onClick={e => handleChangeActuallyPlaying(room.playing - 1)}>
