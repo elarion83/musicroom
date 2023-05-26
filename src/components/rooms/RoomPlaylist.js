@@ -64,7 +64,9 @@ const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleChangeIdActua
                                         </Typography>}
                                     </Grid>
 
-                                   {idx === roomIdActuallyPlaying && <LinearProgress sx={{height:'10px', position:'absolute', width:'100%', height:'100%', zIndex:1, opacity:0.5}} variant="determinate" value={roomPlayedActuallyPlayed} /> }
+                                   {idx === roomIdActuallyPlaying && <LinearProgress sx={{height:'10px', position:'absolute', width:'100%', height:'100%', zIndex:1, opacity:0.5, "& .MuiLinearProgress-barColorPrimary": {
+                                        backgroundColor: "#262626",
+                                    }}} variant="determinate" value={roomPlayedActuallyPlayed} /> }
                                 </ListItemButton>
                                 
                             </Grid>

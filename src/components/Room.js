@@ -85,7 +85,7 @@ const Room = ({ roomId }) => {
 	useEffect(() => {
 		getRoomData(roomId); // A REPOSITIONNER
 
-        document.title = 'Room n°' + roomId + ' - MusicRoom';
+        document.title = 'Room ID:' + roomId + ' - MusicRoom';
 	}, [roomId]);
     
 	useEffect(() => {
@@ -93,9 +93,9 @@ const Room = ({ roomId }) => {
             setIsActuallyAdmin(true);
         }
         if(room.actuallyPlaying) {
-            document.title = 'En lecture - Room n°' + roomId + ' - MusicRoom';
+            document.title = 'En lecture - Room ID:' + roomId + ' - MusicRoom';
         } else {
-            document.title = 'Room n°' + roomId + ' - MusicRoom';
+            document.title = 'Room ID:' + roomId + ' - MusicRoom';
         }
 		getRoomData(roomId); // A REPOSITIONNER
     }, [loaded, localData,room]);
