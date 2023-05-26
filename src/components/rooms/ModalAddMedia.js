@@ -62,6 +62,7 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                     addingObject.source = "soundcloud";
                 }
                 handleCheckAndAddObjectToPlaylistFromObject(addingObject);
+                setSearchTerm('');
             } else {
                 YTSearch({key: 'AIzaSyAcFecOONJZvjwMnTB9Fv9x753KWsVUvWM', term: searchTerm}, (videos) => {
                     setMediaSearchResultYoutube(videos);
