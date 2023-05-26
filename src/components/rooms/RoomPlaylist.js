@@ -32,14 +32,14 @@ const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleChangeIdActua
                         <Fade in={true} xs={12} sx={{ width:'100%', padding:0, margin:0}}>
                             <Grid item sx={{ width:'100%', padding:0,pl:2, margin:0}}> 
                                 
-                                <ListItemButton sx={{ width:'100%', padding:0,pl:0,margin:0, bgcolor:'#4f4f4f', color:'white', "&.Mui-selected": {
-                                    backgroundColor: "#F27C24"
+                                <ListItemButton sx={{ width:'100%', padding:0,pl:0,margin:0, backgroundColor:'#4f4f4f',borderBottom: '2px solid #3e464d', color:'white', "&.Mui-selected": {
+                                    backgroundColor: "#cda389"
                                     },
                                     "&.Mui-focusVisible": {
-                                    backgroundColor: "#F27C24"
+                                    backgroundColor: "#cda389"
                                     },
                                     ":hover": {
-                                    backgroundColor: "#F27C24"
+                                    backgroundColor: "#cda389"
                                     } }} onClick={e => handleChangeIdActuallyPlaying(idx)} key={'playlist_'+idx} xs={12} selected={roomIdActuallyPlaying === idx}>
                                 
                                     <ListItemIcon sx={{ pl:2,color:'white', zIndex:2}}>
@@ -47,21 +47,20 @@ const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleChangeIdActua
                                             {idx === roomIdActuallyPlaying && roomIsActuallyPlaying && <PauseCircleOutlineIcon  />}
                                             {idx === roomIdActuallyPlaying && !roomIsActuallyPlaying && <PlayCircleOutlineIcon />}
                                     </ListItemIcon>
-                                    <Grid item sx={{display:'block', zIndex:2}}>
-                                        { d.title && <ListItemText sx={{ pl:0,  wordBreak: 'break-all'}} primary={d.title.substring(0, 50)+'...'} />}
-                                        { (d.title && d.title.length === 0) || !d.title && <ListItemText sx={{ pl:0, wordBreak: 'break-all'}} primary={d.url.substring(0, 40)+'...'} />}
+                                    <Grid item sx={{display:'block', zIndex:2, pb:0.5}}>
+                                        { d.title && <ListItemText sx={{ pl:0, mb:0, wordBreak: 'break-all'}} primary={d.title.substring(0, 50)+'...'} />}
+                                        { (d.title && d.title.length === 0) || !d.title && <ListItemText sx={{ pl:0,mb:0, wordBreak: 'break-all'}} primary={d.url.substring(0, 40)+'...'} />}
                                         <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
                                             Ajouté par : <b>{ roomPlaylist[idx].addedBy }</b>
                                         </Typography>
-                                        <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1, fontSize: '8px', textTransform:'uppercase' }}>
+                                        {idx === roomIdActuallyPlaying && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1, fontSize: '8px', textTransform:'uppercase' }}>
                                             Source : { roomPlaylist[idx].source } 
-                                        </Typography>
-                                        {idx === roomIdActuallyPlaying && roomIsActuallyPlaying && <Typography sx={{ display:'block', width:'100%',ml:0, mb: .5, fontSize: '10px', textTransform:'uppercase' }}>
-                                            En lecture actuellement
                                         </Typography>}
-                                        
+                                        {idx === roomIdActuallyPlaying && roomIsActuallyPlaying && <Typography sx={{ display:'block', width:'100%',ml:0, mb: .5, fontSize: '10px', textTransform:'uppercase' }}>
+                                            En lecture
+                                        </Typography>}
                                         {idx === roomIdActuallyPlaying && !roomIsActuallyPlaying && <Typography sx={{ display:'block', width:'100%',ml:0, mb: .5, fontSize: '10px', textTransform:'uppercase' }}>
-                                            En lecture actuellement mais le Lecteur est en pause
+                                            En pause
                                         </Typography>}
                                     </Grid>
 

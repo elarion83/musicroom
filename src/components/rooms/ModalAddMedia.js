@@ -88,7 +88,7 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                     <TextField
                         id="addMediaSearchInput"
                         type="text"
-                        label="Recherche ou URL"
+                        label="Votre recherche (les URL directes sont aussi acceptées)"
                         helperText="URL : (Ex: https://www.youtube.com/watch?v=vslZZLpQZz0) || Recherche : (Ex : Vald, Lomepal, Rammstein, Dua Lipa, ..)"
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
