@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import Alert from '@mui/material/Alert';
 
 import InputAdornment from '@mui/material/InputAdornment';
 import AddIcon from '@mui/icons-material/Add';
@@ -25,6 +26,8 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
     const [mediaSearchResultDailyMotion, setMediaSearchResultDailyMotion] = useState([]);
     const [addingUrl, setAddingUrl] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
+    const [recentlyAdded, setRecentlyAdded]= useState(false);
+    const delay = ms => new Promise(res => setTimeout(res, ms));
     
     const [addingObject, setAddingObject] = useState({title:'',source:'',url:'', addedBy: localStorage.getItem("MusicRoom_UserInfoPseudo")})
 
@@ -34,30 +37,14 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
 
     const [tabIndex, setTabIndex] = useState(0);
 
-    function handleCheckAndAddObjectToPlaylistFromUrl(url) {
-        if (validator.isURL(url)) {
-            addingObject.url = url;
-            if(url.includes('youtube')) {
-                addingObject.source = "youtube";
-            }
-            if(url.includes('dailymotion')) {
-                addingObject.source = "dailymotion";
-            }
-            if(url.includes('soundcloud')) {
-                addingObject.source = "soundcloud";
-            }
-            validatedObjectToAdd(addingObject);
-            addingObject.title='';
-            addingObject.source='';
-            addingObject.url='';
-        }
-    }
-
-    function handleCheckAndAddObjectToPlaylistFromObject(objectFormatted) {
+    async function handleCheckAndAddObjectToPlaylistFromObject(objectFormatted) {
         validatedObjectToAdd(objectFormatted);
         addingObject.title='';
         addingObject.source='';
         addingObject.url='';
+        setRecentlyAdded(true);
+        await delay(2000);
+        setRecentlyAdded(false);
     }
         
 
@@ -74,10 +61,7 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                 if(addingObject.url.includes('soundcloud')) {
                     addingObject.source = "soundcloud";
                 }
-                validatedObjectToAdd(addingObject);
-                addingObject.title='';
-                addingObject.source='';
-                addingObject.url='';
+                handleCheckAndAddObjectToPlaylistFromObject(addingObject);
             } else {
                 YTSearch({key: 'AIzaSyAcFecOONJZvjwMnTB9Fv9x753KWsVUvWM', term: searchTerm}, (videos) => {
                     setMediaSearchResultYoutube(videos);
@@ -125,7 +109,6 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                         }}
                     />
                   </Grid>
-
                   {mediaSearchResultYoutube.length > 1 && <Grid item xs={12}>
                     <Tabs value={tabIndex} onChange={handleTabChange}>
                         {mediaSearchResultYoutube.length > 1  && <Tab label="Youtube" />}
@@ -168,6 +151,8 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                         )}
                     </Box>
                   </Grid>}
+                  {recentlyAdded && <Alert severity="success" sx={{margin:2}}> Bien ajouté à la playlist !</Alert>}
+
             </Grid>
         </Box>
     )

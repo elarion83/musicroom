@@ -23,15 +23,31 @@
         background-image:url('https://garticphone.com/images/textura.png');
         background-size: cover;
         background-position: 50% 50%;
-        padding-top: 7vw;
+        padding-top: 0vw;
       }
 
-      #root > div {
+      .main_container {
         height: auto;
-        overflow: hidden;
-        border: 4px rgba(29,29,27,.15) solid;
-        box-shadow: inset 0px 2px 0px 0px rgba(255,255,255,.15),0px 3px 0px 0px rgba(255,255,255,0.15);
-        border-radius: 12px;
+      }
+      @media (min-width: 500px) { 
+            #root > div {
+              height: auto;
+              overflow: hidden;
+              border: 4px rgba(29,29,27,.15) solid;
+              box-shadow: inset 0px 2px 0px 0px rgba(255,255,255,.15),0px 3px 0px 0px rgba(255,255,255,0.15);
+              border-radius: 12px;
+            }
+            #root {
+              padding-top: 7vw;
+            }
+
+            .main_container {
+              height: 70vh;
+            }
+      }
+      .scroll  {
+        scrollbar-width:thin !important;
+        scroll-behavior: smooth;
       }
     </style>
   </head>

@@ -110,7 +110,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Container maxWidth="sm" sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(234, 228, 211, 0.69) !important', borderRadius:'15px', height:'70vh' }}>
+      <Container maxWidth="sm" className='main_container' sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
         {userInfoPseudo && <Grid container sx={{display:'flex', justifyContent:'flex-end', padding:'5px 10px', bgcolor:'#3e464d'}}>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', textAlign: 'center' }}>
               <Tooltip title="Paramètres du compte" sx={{ bgColor:'30363c'}}>
@@ -175,43 +175,8 @@ function App() {
             <img src="img/logo.png" style={{ width: '250px'}} alt="MusicRoom logo"/>
           </Grid>
           
-        <Stepper alternativeLabel activeStep={4} >
-            <Step>
-              <StepLabel>
-                <Card>
-                  <CardContent>
-                    <Typography variant="h5" component="div">
-                      Créé une Room
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </StepLabel>
-            </Step>
-            <Step>
-              <StepLabel>
-                <Card>
-                  <CardContent>
-                    <Typography variant="h5" component="div">
-                      Invite tes potes
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </StepLabel>
-            </Step>
-            <Step>
-              <StepLabel>
-                <Card>
-                  <CardContent>
-                    <Typography variant="h5" component="div">
-                      Créez une playlist ensemble !
-                    </Typography>
-                    <p> Ajoutez des sons depuis youtube, spotify ou dailymotion depuis votre mobile </p>
-                  </CardContent>
-                </Card>
-              </StepLabel>
-            </Step>
-        </Stepper>
-          <Button variant="outlined" sx={{width:'100%',border:'2px solid #1976d2 !important', height:'50px', mt:'2em', mb:'2em'}} onClick={createNewRoom}> Créer une Room </Button> 
+    
+          <Button variant="filled" sx={{width:'100%',bgcolor:'#b79f6e',color:'white', height:'50px', mt:'2em', mb:'2em'}} onClick={createNewRoom}> Créer une Room </Button> 
           <Typography sx={{mb:2}}>Rejoindre une room </Typography>
           <TextField
                 id="joinRoomIdField"
@@ -235,6 +200,7 @@ function App() {
                     ),
                 }}
             />
+             
         </Box>
         }
         {roomId && <Room roomId={roomId}></Room>}

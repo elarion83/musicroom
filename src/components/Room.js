@@ -41,9 +41,9 @@ const Room = ({ roomId }) => {
 	const [room, setRoom] = useState({});
     const [OpenInvitePeopleToRoomModal, setOpenInvitePeopleToRoomModal] = useState(false);
     const [OpenAddToPlaylistModal, setOpenAddToPlaylistModal] = useState(false);
-    const [recentlyAdded, setRecentlyAdded]= useState(false);
     const [localVolume, setLocalVolume] = useState(0);
 	const roomRef = db.collection("rooms").doc(roomId);
+    const [roomRefUsed, setRoomRefUsed]= useState(false);
     const playerRef = useRef({
         url: null,
         pip: false,
@@ -62,45 +62,49 @@ const Room = ({ roomId }) => {
     const delay = ms => new Promise(res => setTimeout(res, ms));
 
     const getRoomData = (roomId) => {
-		roomRef.get().then((doc) => {
-			if (doc.exists) {
-				setRoom(doc.data());
-			} else {
-				var docData = {
-					id: roomId,
-                    admin:localStorage.getItem("MusicRoom_UserInfoPseudo"),
-                    playing:0,
-                    mediaActuallyPlayingAlreadyPlayed:0,
-                    actuallyPlaying:false,
-					playlistUrls: [],
-					playlistEmpty: true,
-					creationTimeStamp	: Date.now()
-				};
-				db.collection("rooms").doc(roomId).set(docData).then(() => {});
-				setRoom(docData);
-			}
-		});
+            roomRef.get().then((doc) => {
+                if (doc.exists) {
+                    setRoom(doc.data());
+                } else {
+                    var docData = {
+                        id: roomId,
+                        admin:localStorage.getItem("MusicRoom_UserInfoPseudo"),
+                        playing:0,
+                        mediaActuallyPlayingAlreadyPlayed:0,
+                        actuallyPlaying:false,
+                        playlistUrls: [],
+                        playlistEmpty: true,
+                        creationTimeStamp	: Date.now()
+                    };
+                    db.collection("rooms").doc(roomId).set(docData).then(() => {});
+                    setRoom(docData);
+                }
+            });
             setLoaded(true);
 	};
-	
+
 	useEffect(() => {
 		getRoomData(roomId); // A REPOSITIONNER
 
+        document.title = 'Room n°' + roomId + ' - MusicRoom';
+	}, [roomId]);
+    
+	useEffect(() => {
         if(localData.currentUserInfo[0] === room.admin || localData.currentUserInfo === room.admin) {
             setIsActuallyAdmin(true);
         }
-        document.title = 'Room n°' + roomId + ' - MusicRoom';
         if(room.actuallyPlaying) {
             document.title = 'En lecture - Room n°' + roomId + ' - MusicRoom';
+        } else {
+            document.title = 'Room n°' + roomId + ' - MusicRoom';
         }
-	}, [room, roomId]);
-    
+		getRoomData(roomId); // A REPOSITIONNER
+    }, [loaded, localData,room]);
+
 
     async function handlePlay(playStatus) {
         if(isActuallyAdmin) {
             roomRef.set({actuallyPlaying: playStatus, mediaActuallyPlayingAlreadyPlayed:room.mediaActuallyPlayingAlreadyPlayed}, { merge: true });
-
-            setLocalVolume(0.5);
         } else {
             if(!localData.synchro) { // if pas synchro et lance la lecture et lecture en cours synchro
                 playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayed, 'portion');
@@ -115,6 +119,9 @@ const Room = ({ roomId }) => {
 
     async function handleReady() {
         playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayed, 'seconds');
+        if(isActuallyAdmin) {
+            setLocalVolume(0.5);
+        }
      //   room.mediaActuallyPlayingAlreadyPlayed = 40;
 //        room.set({actuallyPlaying:true});
     //    console.log(playerRef.current.getSecondsLoaded());
@@ -130,7 +137,8 @@ const Room = ({ roomId }) => {
   
     function handleChangeActuallyPlaying(numberToPlay) {
         if(isActuallyAdmin) {
-            roomRef.set({playing: numberToPlay}, { merge: true });
+            roomRef.set({playing: numberToPlay, actuallyPlaying:true,mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });
+            
         }
     }
 
@@ -156,13 +164,13 @@ const Room = ({ roomId }) => {
 // NEW FUNCTIONS FROM CHILD COMP
     function handleAddValidatedObjectToPlaylist(validatedObjectToAdd) {
         room.playlistUrls.push(validatedObjectToAdd);
+        room.playlistEmpty = false;
         roomRef.set({playlistUrls: room.playlistUrls, playlistEmpty: false}, { merge: true });
-        
-        setOpenAddToPlaylistModal(false);
     }
 
     function handleChangeIdActuallyPlaying(newIdToPlay) {
         if(isActuallyAdmin) {
+            room.mediaActuallyPlayingAlreadyPlayed = 0;
             roomRef.set({playing: newIdToPlay, mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });
         }
     }
@@ -172,7 +180,7 @@ const Room = ({ roomId }) => {
     }
   
   return (
-    <div className="flex flex-col w-full gap-0 h-screen relative ">
+    <div className="flex flex-col w-full gap-0 relative " style={{height:'calc(100vh - 10em)'}}>
         <RoomTopBar localData={localData} roomId={roomId} handleOpenShareModal={handleOpenShareModal} />
         <Container maxWidth="sm" sx={{ padding: '0 !important'}} >
             { !<ActuallyPlaying roomRef={roomRef}/>}
@@ -223,7 +231,7 @@ const Room = ({ roomId }) => {
                                             playerVars: { showinfo: 0, preload:1 }
                                         }
                                     }}
-                                />}bs
+                                />}
                                 {isActuallyAdmin && <div style={{width:'100%',height:'100%',opacity:0,top:0,position:'absolute'}}></div>}
                             </Grid>
                             <Grid item sm={8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }}>
@@ -271,7 +279,7 @@ const Room = ({ roomId }) => {
                                         </Stack>
                                     </Grid>
                                 </Grid>
-                            </Grid>f
+                            </Grid>
                         </Grid>
                     </Box>
                 }
@@ -280,28 +288,27 @@ const Room = ({ roomId }) => {
                 </Typography>
                 </Toolbar>
                 { room.playlistEmpty && 
-                    <Alert severity="success"> Bienvenue dans la room ! <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} >Ajoutez quelque chose dans la playlist !</a></Alert>
+                    <Alert severity="success" sx={{margin:2, border:'1px solid #F27C24'}}> Bienvenue dans la room ! <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} ><b>Ajoutez quelque chose dans la playlist !</b></a></Alert>
                 }
                 {typeof(room.playlistUrls) !== 'undefined' && room.playlistUrls && room.playlistUrls.length > 0 && <Box sx={{ padding:"0em",marginBottom:2, paddingLeft:0}}>
                     <RoomPlaylist roomPlaylist={room.playlistUrls} roomIdActuallyPlaying={room.playing} handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying} roomIsActuallyPlaying={room.actuallyPlaying} roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayed} />
                 </Box>}
+                <Grid item xs={3} sx={{position:'fixed', width:'250px', left:'calc(50% - 125px)', bottom:'20px', zIndex:3}}>
+                    <Fab variant="extended" style={{justifyContent: 'center'}} onClick={(e) => setOpenAddToPlaylistModal(true)}>
+                        <SpeedDialIcon sx={{ mr: 1 }} />
+                        Ajouter à la playlist
+                    </Fab>
+                </Grid>  
             </div>
             } 
         </Container>
         <Dialog onClose={(e) => setOpenAddToPlaylistModal(false)} open={OpenAddToPlaylistModal}>
-            <RoomModalAddMedia validatedObjectToAdd={handleAddValidatedObjectToPlaylist} /> 
+            <RoomModalAddMedia validatedObjectToAdd={handleAddValidatedObjectToPlaylist}  /> 
         </Dialog>
         
         <Dialog onClose={(e) => setOpenInvitePeopleToRoomModal(false)} open={OpenInvitePeopleToRoomModal}>
-            <ModalShareRoom roomUrl={ document.URL +'?rid='+roomId}/>
+            <ModalShareRoom roomUrl={ location.hostname +'/?rid='+roomId}/>
         </Dialog>
-
-            <Grid item xs={3} sx={{position:'fixed', justifyContent: 'center', bgColor:'grey', display:'flex', bottom:'20px', zIndex:3}}>
-                {!recentlyAdded && <Fab variant="extended" style={{justifyContent: 'center'}} onClick={(e) => setOpenAddToPlaylistModal(true)}>
-                    <SpeedDialIcon sx={{ mr: 1 }} />
-                    Ajouter à la playlist
-                </Fab>}
-            </Grid>  
     </div>
   );
 };

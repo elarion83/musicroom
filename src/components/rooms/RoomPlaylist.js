@@ -1,3 +1,5 @@
+import React, { useEffect, useRef } from "react";
+
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 
@@ -10,11 +12,19 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import LinearProgress from '@mui/material/LinearProgress';
+import { Diversity1TwoTone } from '@mui/icons-material';
+
 const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleChangeIdActuallyPlaying, roomIsActuallyPlaying, roomPlayedActuallyPlayed}) => {
-    
+
+    const scrollRef = useRef(null);
+    useEffect(() => {
+        // 👇️ scroll to bottom every time messages change
+//        scrollRef.current?.scrollTo(0 , scrollRef.current?.scrollHeight);
+    }, [roomIdActuallyPlaying]);
+
     return (
-        <Paper style={{maxHeight: '550px', height:'auto', overflow: 'scroll'}}>
-            <List sx={{height: '100%', overflow: 'scroll', padding:0}}>
+        <Paper ref={scrollRef} className={'scroll'} style={{maxHeight: '500px', overflowY: 'scroll', overflowX: 'hidden',borderRadius:0}}>
+            <List sx={{height: '100%', padding:0}}>
                 <Grid item xs={12}>
                     
                     {roomPlaylist.map(function(d, idx){
@@ -38,8 +48,8 @@ const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleChangeIdActua
                                             {idx === roomIdActuallyPlaying && !roomIsActuallyPlaying && <PlayCircleOutlineIcon />}
                                     </ListItemIcon>
                                     <Grid item sx={{display:'block', zIndex:2}}>
-                                        { d.title && <ListItemText sx={{ pl:0}} primary={d.title} />}
-                                        { d.title && d.title.length === 0 || !d.title && <ListItemText sx={{ pl:0}} primary={d.url.substring(0, 50)+'...'} />}
+                                        { d.title && <ListItemText sx={{ pl:0,  wordBreak: 'break-all'}} primary={d.title.substring(0, 50)+'...'} />}
+                                        { (d.title && d.title.length === 0) || !d.title && <ListItemText sx={{ pl:0, wordBreak: 'break-all'}} primary={d.url.substring(0, 40)+'...'} />}
                                         <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
                                             Ajouté par : <b>{ roomPlaylist[idx].addedBy }</b>
                                         </Typography>
@@ -54,8 +64,8 @@ const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleChangeIdActua
                                             En lecture actuellement mais le Lecteur est en pause
                                         </Typography>}
                                     </Grid>
-                                        
-                                    {idx === roomIdActuallyPlaying && <LinearProgress sx={{height:'10px', position:'absolute', width:'100%', height:'100%', zIndex:1, opacity:0.5}} variant="determinate" value={roomPlayedActuallyPlayed} /> }
+
+                                   {idx === roomIdActuallyPlaying && <LinearProgress sx={{height:'10px', position:'absolute', width:'100%', height:'100%', zIndex:1, opacity:0.5}} variant="determinate" value={roomPlayedActuallyPlayed} /> }
                                 </ListItemButton>
                                 
                             </Grid>
