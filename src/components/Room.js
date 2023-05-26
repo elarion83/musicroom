@@ -38,16 +38,7 @@ const Room = ({ roomId }) => {
 
     const [localData, setLocalData] = useState({synchro:false, currentUserInfo: useState(localStorage.getItem("MusicRoom_UserInfoPseudo")) });
 	const [loaded, setLoaded] = useState(false);
-	const [room, setRoom] = useState({
-					id: roomId,
-                    admin:'',
-                    playing:0,
-                    mediaActuallyPlayingAlreadyPlayed:0,
-                    actuallyPlaying:false,
-					playlistUrls: [],
-					playlistEmpty: true,
-					creationTimeStamp	: Date.now()
-				});
+	const [room, setRoom] = useState({});
     const [OpenInvitePeopleToRoomModal, setOpenInvitePeopleToRoomModal] = useState(false);
     const [OpenAddToPlaylistModal, setOpenAddToPlaylistModal] = useState(false);
     const [recentlyAdded, setRecentlyAdded]= useState(false);
@@ -185,7 +176,7 @@ const Room = ({ roomId }) => {
         <RoomTopBar localData={localData} roomId={roomId} handleOpenShareModal={handleOpenShareModal} />
         <Container maxWidth="sm" sx={{ padding: '0 !important'}} >
             { !<ActuallyPlaying roomRef={roomRef}/>}
-            {loaded && <div> 
+            {loaded && room.playlistUrls && <div> 
                 {!room.playlistEmpty && room.playlistUrls.length > 0 && room.playing !== null && 
                     <Box sx={{bgcolor:'#303030',borderBottom: '2px solid #3e464d', padding:"0px 0em"}}>
                         <Grid container spacing={0} sx={{ bgcolor:'#262626',}}>
@@ -232,7 +223,7 @@ const Room = ({ roomId }) => {
                                             playerVars: { showinfo: 0, preload:1 }
                                         }
                                     }}
-                                />}
+                                />}bs
                                 {isActuallyAdmin && <div style={{width:'100%',height:'100%',opacity:0,top:0,position:'absolute'}}></div>}
                             </Grid>
                             <Grid item sm={8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }}>
@@ -280,7 +271,7 @@ const Room = ({ roomId }) => {
                                         </Stack>
                                     </Grid>
                                 </Grid>
-                            </Grid>
+                            </Grid>f
                         </Grid>
                     </Box>
                 }
@@ -294,12 +285,6 @@ const Room = ({ roomId }) => {
                 {typeof(room.playlistUrls) !== 'undefined' && room.playlistUrls && room.playlistUrls.length > 0 && <Box sx={{ padding:"0em",marginBottom:2, paddingLeft:0}}>
                     <RoomPlaylist roomPlaylist={room.playlistUrls} roomIdActuallyPlaying={room.playing} handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying} roomIsActuallyPlaying={room.actuallyPlaying} roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayed} />
                 </Box>}
-                { room.playlistUrls[0] && <Snackbar 
-                    severity="success"
-                    open={recentlyAdded}
-                    autoHideDuration={6000}
-                    message={room.playlistUrls[room.playlistUrls.length-1].addedBy+' a ajouté un lien '+room.playlistUrls[room.playlistUrls.length-1].source}
-                />}
             </div>
             } 
         </Container>

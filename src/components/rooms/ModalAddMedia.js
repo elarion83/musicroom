@@ -63,7 +63,7 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
 
     function handleSearchForMedia() {
         if(searchTerm !== '') {
-            if (validator.isURL(searchTerm)) {
+            if (validator.isURL(searchTerm?.trim())) {
                 addingObject.url = searchTerm;
                 if(addingObject.url.includes('youtube')) {
                     addingObject.source = "youtube";

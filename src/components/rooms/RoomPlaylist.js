@@ -13,7 +13,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleChangeIdActuallyPlaying, roomIsActuallyPlaying, roomPlayedActuallyPlayed}) => {
     
     return (
-        <Paper style={{maxHeight: '550px', overflow: 'scroll'}}>
+        <Paper style={{maxHeight: '550px', height:'auto', overflow: 'scroll'}}>
             <List sx={{height: '100%', overflow: 'scroll', padding:0}}>
                 <Grid item xs={12}>
                     
@@ -39,7 +39,7 @@ const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleChangeIdActua
                                     </ListItemIcon>
                                     <Grid item sx={{display:'block', zIndex:2}}>
                                         { d.title && <ListItemText sx={{ pl:0}} primary={d.title} />}
-                                        { d.title && d.title.length == 0 || !d.title && <ListItemText sx={{ pl:0}} primary={d.url.substring(0, 50)+'...'} />}
+                                        { d.title && d.title.length === 0 || !d.title && <ListItemText sx={{ pl:0}} primary={d.url.substring(0, 50)+'...'} />}
                                         <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
                                             Ajouté par : <b>{ roomPlaylist[idx].addedBy }</b>
                                         </Typography>

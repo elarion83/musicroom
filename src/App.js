@@ -110,7 +110,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Container maxWidth="sm" sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(234, 228, 211, 0.69) !important', borderRadius:'15px' }}>
+      <Container maxWidth="sm" sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(234, 228, 211, 0.69) !important', borderRadius:'15px', height:'70vh' }}>
         {userInfoPseudo && <Grid container sx={{display:'flex', justifyContent:'flex-end', padding:'5px 10px', bgcolor:'#3e464d'}}>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', textAlign: 'center' }}>
               <Tooltip title="Paramètres du compte" sx={{ bgColor:'30363c'}}>
@@ -170,7 +170,7 @@ function App() {
               </MenuItem>
             </Menu>
         </Grid>}
-        {!roomId && <Box sx={{  paddingBottom:'10px !important',height: 'auto', pl:2, pr:2 }} >
+        {!roomId && <Box sx={{  paddingBottom:'10px !important', bgcolor:'rgba(48, 48, 48, 0)',height: 'auto', pl:2, pr:2 }} >
           <Grid container sx={{display:'flex', justifyContent:'center', pt:3,mb:5}}>
             <img src="img/logo.png" style={{ width: '250px'}} alt="MusicRoom logo"/>
           </Grid>
