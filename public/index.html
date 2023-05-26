@@ -29,10 +29,14 @@
       .main_container {
         height: auto;
       }
+      #root > div {
+          max-height: 80vh;
+          overflow: scroll;
+          scrollbar-width:thin !important;
+          scroll-behavior: smooth;
+      }
       @media (min-width: 500px) { 
             #root > div {
-              height: auto;
-              overflow: hidden;
               border: 4px rgba(29,29,27,.15) solid;
               box-shadow: inset 0px 2px 0px 0px rgba(255,255,255,.15),0px 3px 0px 0px rgba(255,255,255,0.15);
               border-radius: 12px;
