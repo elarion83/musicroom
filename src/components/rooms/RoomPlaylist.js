@@ -23,8 +23,8 @@ const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleChangeIdActua
     }, [roomIdActuallyPlaying]);
 
     return (
-        <Paper ref={scrollRef} className={'scroll'} style={{maxHeight: '500px', overflowY: 'scroll', overflowX: 'hidden',borderRadius:0}}>
-            <List sx={{height: '100%', padding:0}}>
+        <Paper ref={scrollRef} className={'scroll'} style={{borderRadius:0}}>
+            <List sx={{height: '100%', padding:0, mb:0}}>
                 <Grid item xs={12}>
                     
                     {roomPlaylist.map(function(d, idx){
@@ -33,13 +33,13 @@ const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleChangeIdActua
                             <Grid item sx={{ width:'100%', padding:0,pl:2, margin:0}}> 
                                 
                                 <ListItemButton sx={{ width:'100%', padding:0,pl:0,margin:0, backgroundColor:'#4f4f4f',borderBottom: '2px solid #3e464d', color:'white', "&.Mui-selected": {
-                                    backgroundColor: "#cda389"
+                                    backgroundColor: "#262626"
                                     },
                                     "&.Mui-focusVisible": {
-                                    backgroundColor: "#cda389"
+                                    backgroundColor: "#262626"
                                     },
                                     ":hover": {
-                                    backgroundColor: "#cda389"
+                                    backgroundColor: "#262626"
                                     } }} onClick={e => handleChangeIdActuallyPlaying(idx)} key={'playlist_'+idx} xs={12} selected={roomIdActuallyPlaying === idx}>
                                 
                                     <ListItemIcon sx={{ pl:2,color:'white', zIndex:2}}>
