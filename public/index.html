@@ -19,7 +19,6 @@
         overflow: hidden;
         width: 100vw;
         background-size: cover;
-        padding-bottom: 5em;
         background-image:url('https://garticphone.com/images/textura.png');
         background-size: cover;
         background-position: 50% 50%;
@@ -27,11 +26,10 @@
       }
 
       .main_container {
-        height: auto;
-        max-height: 80vh;
+        height: 100vh;
       }
       #root > div {
-          overflow: scroll;
+          overflow-y: scroll;
           scrollbar-width:thin !important;
           scroll-behavior: smooth;
           border-radius: 0px;
@@ -46,6 +44,10 @@
               padding-top: 7vw;
             }
 
+            .main_container {
+              height: auto;
+              max-height: 80vh;
+            }
       }
       .scroll  {
         scrollbar-width:thin !important;
