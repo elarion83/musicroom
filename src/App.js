@@ -112,7 +112,9 @@ function App() {
       <CssBaseline />
       <Container maxWidth="sm" className='main_container' sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
         {userInfoPseudo && <Grid container sx={{display:'flex', justifyContent:'flex-end', padding:'5px 10px', bgcolor:'#3e464d'}}>
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', textAlign: 'center' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', textAlign: 'center', width:'100%' }}>
+              
+            <img src="img/logo.png" style={{ width: '50px'}} alt="MusicRoom logo"/>
               <Tooltip title="Paramètres du compte" sx={{ bgColor:'30363c'}}>
                 <IconButton
                   onClick={e => handleClickMenu(e)}

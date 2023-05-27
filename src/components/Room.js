@@ -13,6 +13,7 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import Alert from '@mui/material/Alert';
 import Fab from '@mui/material/Fab';
 import Stack from '@mui/material/Stack';
+//import screenfull from 'screenfull'
 import Snackbar from '@mui/material/Snackbar';
 
 import Typography from '@mui/material/Typography';
@@ -159,6 +160,9 @@ const Room = ({ roomId }) => {
         setLocalVolume(e.target.value);
     }
 
+    function handleFullScreen() {
+        //findDOMNode(playerRef).requestFullscreen();
+    }
 
 // NEW FUNCTIONS FROM CHILD COMP
     function handleAddValidatedObjectToPlaylist(validatedObjectToAdd) {
@@ -178,9 +182,10 @@ const Room = ({ roomId }) => {
         setOpenInvitePeopleToRoomModal(ShareModalIsOpen);
     }
   
+
   return (
     <div className="flex flex-col w-full gap-0 relative " style={{height:'calc(100vh - 10em)'}}>
-        <RoomTopBar localData={localData} roomId={roomId} handleOpenShareModal={handleOpenShareModal} />
+        <RoomTopBar localData={localData} roomId={roomId} handleOpenShareModal={handleOpenShareModal} roomAdmin={room.admin}/>
         <Container maxWidth="sm" sx={{ padding: '0 !important'}} >
             { !<ActuallyPlaying roomRef={roomRef}/>}
             {loaded && room.playlistUrls && <div> 

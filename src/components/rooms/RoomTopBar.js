@@ -7,7 +7,7 @@ import Tooltip from '@mui/material/Tooltip';
 import ShareIcon from '@mui/icons-material/Share';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
-const RoomTopBar = ({roomId, handleOpenShareModal }) => {
+const RoomTopBar = ({roomId, handleOpenShareModal, roomAdmin }) => {
     
     function handleQuitRoom() {
 
@@ -22,7 +22,7 @@ const RoomTopBar = ({roomId, handleOpenShareModal }) => {
             <Toolbar xs={12} sx={{ bgcolor: '#262626',borderBottom: '2px solid #3e464d', minHeight: '45px !important', fontFamily: 'Monospace', pl:'5px', pr:'25 px' }}>
                 
                 <Typography  component="div" sx={{ flexGrow: 1 , textTransform:'uppercase', fontSize:'12px',}}>
-                    Room ID <b>{ roomId } </b>
+                    Room : <b>{ roomId } </b> | Hosté par <b>{roomAdmin}</b><i class="fi fi-ro-square-right"></i>
                 </Typography>
                 <Tooltip title="Partager la room" >
                     <IconButton

@@ -6,6 +6,7 @@
     "@craco/craco": "^6.4.5",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@flaticon/flaticon-uicons": "^2.2.0",
     "@heroicons/react": "^1.0.4",
     "@material-ui/lab": "^4.0.0-alpha.61",
     "@mui/icons-material": "^5.11.11",
