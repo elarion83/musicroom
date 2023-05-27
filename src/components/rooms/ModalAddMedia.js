@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import axios from "axios";
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -47,13 +47,33 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
         setRecentlyAdded(false);
     }
         
+    async function getYoutubeVideoInfosFromId(videoId, addingObject) {
 
-    function handleSearchForMedia() {
+                    var params = {
+                        part: 'snippet',
+                        key: 'AIzaSyAcFecOONJZvjwMnTB9Fv9x753KWsVUvWM',
+                        id: videoId,
+                    }; 
+                    
+                    await axios.get('https://www.googleapis.com/youtube/v3/videos', { params: params })
+                    .then(function(response) {
+                        addingObject.title = response.data.items[0].snippet.title;
+                    })
+                    .catch(function(error) {
+                    });
+    }
+
+    async function handleSearchForMedia() {
         if(searchTerm !== '') {
-            if (validator.isURL(searchTerm?.trim())) {
-                addingObject.url = searchTerm;
+            if (validator.isURL(searchTerm.trim())) {
+                addingObject.url = searchTerm.trim();
                 if(addingObject.url.includes('youtube')) {
                     addingObject.source = "youtube";
+                    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+                    var match = addingObject.url.match(regExp);
+
+                    await getYoutubeVideoInfosFromId(match[7], addingObject);
+
                 }
                 if(addingObject.url.includes('dailymotion')) {
                     addingObject.source = "dailymotion";
