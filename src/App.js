@@ -114,7 +114,7 @@ function App() {
         {userInfoPseudo && <Grid container sx={{display:'flex', justifyContent:'flex-end', padding:'5px 10px', bgcolor:'#3e464d'}}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', textAlign: 'center', width:'100%' }}>
               
-            <img src="img/logo.png" style={{ width: '50px'}} alt="MusicRoom logo"/>
+            <img src="img/logo_small.png" style={{ width: '50px'}} alt="MusicRoom logo"/>
               <Tooltip title="Paramètres du compte" sx={{ bgColor:'30363c'}}>
                 <IconButton
                   onClick={e => handleClickMenu(e)}
@@ -205,7 +205,7 @@ function App() {
              
         </Box>
         }
-        {roomId && <Room roomId={roomId}></Room>}
+        {roomId && <Room className='room_bloc' roomId={roomId}></Room>}
         {(!userInfoPseudo || userInfoPseudo === '' || userInfoPseudo.length === 0 || userInfoPseudo == 'null') && 
         <Dialog open={true}>
             <DialogTitle>Hey ! Choisis toi un pseudo ! </DialogTitle>  
@@ -214,6 +214,9 @@ function App() {
                 <TextField
                     id="UserChoosePseudoInput"
                     type="text"
+                    onKeyPress={(ev) => {
+                      if (ev.key === 'Enter')  { checkForNewPseudo()}
+                    }}
                     label="Créez votre pseudo !"
                     helperText="Bien qu'anonyme, il est nécessaire d'avoir un pseudo !"
                     value={userInfoPseudoInput}
@@ -229,7 +232,7 @@ function App() {
                             color:'white',
                             cursor:'pointer',
                             }} position="end" onClick={e=> checkForNewPseudo()}>
-                            <SearchIcon  />
+                            <DoubleArrowIcon  />
                             </InputAdornment>
                         ),
                     }}

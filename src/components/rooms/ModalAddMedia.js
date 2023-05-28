@@ -81,6 +81,8 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                 if(addingObject.url.includes('soundcloud')) {
                     addingObject.source = "soundcloud";
                 }
+
+                addingObject.vote= {'up':0,'down':0};
                 handleCheckAndAddObjectToPlaylistFromObject(addingObject);
                 setSearchTerm('');
             } else {
@@ -109,12 +111,16 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                     <TextField
                         id="addMediaSearchInput"
                         type="text"
-                        label="Votre recherche (les URL directes sont aussi acceptées)"
-                        helperText="URL : (Ex: https://www.youtube.com/watch?v=vslZZLpQZz0) || Recherche : (Ex : Vald, Lomepal, Rammstein, Dua Lipa, ..)"
+                        onKeyPress={(ev) => {
+                        if (ev.key === 'Enter')  { handleSearchForMedia()}
+                        }}
+                        label="Votre recherche "
+                        helperText="https://www.youtube.com/watch?v=vslZZLpQZz0, Vald, Lomepal, Rammstein, Dua Lipa, .."
                         value={searchTerm}
                         onChange={e => setSearchTerm(e.target.value)}
                         sx={{ width: '100%', paddingRight:'0', "& .MuiOutlinedInput-root": {
-                            paddingRight: 0
+                            paddingRight: 0,
+                            wordBreak: 'break-all'
                         } }}
                         InputProps={{
                             endAdornment: (
@@ -147,7 +153,7 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                                     }
                                 >
                                     { mediaSearchResultYoutube.map(function(media, idx){
-                                        return (<ListItemButton sx={{margin:0, padding:0}}  key={idx} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.snippet.title, source:'youtube', url:'https://www.youtube.com/watch?v='+media.id.videoId, addedBy: addingObject.addedBy})}><ListItemIcon><LibraryMusicIcon /></ListItemIcon><ListItemText primary={media.snippet.title} /></ListItemButton>)
+                                        return (<ListItemButton sx={{margin:0, padding:0}}  key={idx} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.snippet.title, source:'youtube', url:'https://www.youtube.com/watch?v='+media.id.videoId, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}})}><ListItemIcon><LibraryMusicIcon /></ListItemIcon><ListItemText primary={media.snippet.title} /></ListItemButton>)
                                     }) }
                                 </List>
                             </Grid>}
@@ -164,7 +170,7 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                                 }
                             >
                                 { mediaSearchResultDailyMotion.map(function(media, idx){
-                                    return (<ListItemButton sx={{margin:0, padding:0}} key={idx} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.title, source:'dailymotion', url:'https://www.dailymotion.com/video/'+media.id, addedBy: addingObject.addedBy})}><ListItemIcon><LibraryMusicIcon /></ListItemIcon><ListItemText primary={media.title} /></ListItemButton>)
+                                    return (<ListItemButton sx={{margin:0, padding:0}} key={idx} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.title, source:'dailymotion', url:'https://www.dailymotion.com/video/'+media.id, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}})}><ListItemIcon><LibraryMusicIcon /></ListItemIcon><ListItemText primary={media.title} /></ListItemButton>)
                                 }) }
                             </List>
                         </Grid>}
