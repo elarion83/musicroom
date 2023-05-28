@@ -13,10 +13,27 @@
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>Music Room</title>
     <style>
+      
+      .playlist_bloc {
+        position:relative;
+      }
+
+      .playlist_bloc .votebuttons {
+        opacity: 0.5;
+        z-index: 5; 
+      }
+      .playlist_bloc:hover .votebuttons, .playlist_bloc:has(.Mui-selected) .votebuttons{
+        opacity: 1;
+      }
+
+      .votebuttons > button {
+        padding: 2px !important;
+        min-width: 50px;
+      }
+
       #root {
         background:#f1ede2;
         height: 100vh;
-        overflow: hidden;
         width: 100vw;
         background-size: cover;
         background-image:url('https://garticphone.com/images/textura.png');
@@ -25,14 +42,26 @@
         padding-top: 0vw;
       }
 
-      .main_container {
-        height: 100vh;
-      }
-      #root > div {
-          overflow-y: scroll;
-          scrollbar-width:thin !important;
-          scroll-behavior: smooth;
-          border-radius: 0px;
+        #root > div {
+            overflow-y: scroll;
+            scrollbar-width:thin !important;
+            scroll-behavior: smooth;
+            border-radius: 0px;
+        }
+      @media (max-width: 500px) { 
+
+        .main_container {
+          height: 100vh;
+        }
+
+        .player_button_container {
+          margin-top: 0 !important;
+        }
+
+        .player_button_container>div {
+          margin: 0 !important;
+          padding: 0 !important;
+        }
       }
       @media (min-width: 500px) { 
             #root > div {
