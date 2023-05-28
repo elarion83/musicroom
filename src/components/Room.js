@@ -147,6 +147,11 @@ const Room = ({ roomId }) => {
         playerRef.current.seekTo(percentagePlayed, 'seconds');
     }
 
+    function handleFastForward(percentagePlayed, room) {
+   //     room.mediaActuallyPlayingAlreadyPlayed = percentagePlayed;
+  //      setPercentagePlayed(room.mediaActuallyPlayingAlreadyPlayed);
+    }
+
     function handleProgress(event) {
         if(room.actuallyPlaying) {
             if(isActuallyAdmin) {
@@ -176,6 +181,11 @@ const Room = ({ roomId }) => {
             room.mediaActuallyPlayingAlreadyPlayed = 0;
             roomRef.set({playing: newIdToPlay, mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });
         }
+    }
+
+    function handleVoteChange(idMedia, NewValue) {
+        room.playlistUrls[idMedia].vote = NewValue;
+        roomRef.set({playlistUrls: room.playlistUrls}, { merge: true });
     }
 
     function handleOpenShareModal(ShareModalIsOpen) {
@@ -253,7 +263,7 @@ const Room = ({ roomId }) => {
                                         Ajouté par : { room.playlistUrls[room.playing].addedBy }
                                     </Typography>
                                 </Grid>
-                                <Grid item sm={12} sx={{ padding:0,pl:1.5,ml:0, mb: 0 , mt:1, fill:'#f0f1f0'}}>
+                                <Grid className='player_button_container' item sm={12} sx={{ padding:0,pl:1.5,ml:0, mb: 0 , mt:1, fill:'#f0f1f0'}}>
                                     {isActuallyAdmin && <Grid item sm={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:2, mb: 1.5 }}>
                                         {room.playing > 0 && <IconButton onClick={e => handleChangeActuallyPlaying(room.playing - 1)}>
                                             <SkipPreviousIcon fontSize="large" sx={{color:'#f0f1f0'}} />
@@ -267,6 +277,7 @@ const Room = ({ roomId }) => {
                                         {(room.playlistUrls.length -1) !== room.playing && <IconButton onClick={e => handleChangeActuallyPlaying(room.playing + 1)}>
                                             <SkipNextIcon fontSize="large" sx={{color:'#f0f1f0'}} />
                                         </IconButton>}
+                                       
                                         <IconButton onClick={e => setPercentagePlayed(0)} >
                                             <SettingsBackupRestoreIcon fontSize="large" sx={{color:'#f0f1f0'}} />
                                         </IconButton>
@@ -294,8 +305,8 @@ const Room = ({ roomId }) => {
                 { room.playlistEmpty && 
                     <Alert severity="success" sx={{margin:2, border:'1px solid #F27C24'}}> Bienvenue dans la room ! <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} ><b>Ajoutez quelque chose dans la playlist !</b></a></Alert>
                 }
-                {typeof(room.playlistUrls) !== 'undefined' && room.playlistUrls && room.playlistUrls.length > 0 && <Box sx={{ padding:"0em",marginBottom:2, paddingLeft:0}}>
-                    <RoomPlaylist roomPlaylist={room.playlistUrls} roomIdActuallyPlaying={room.playing} handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying} roomIsActuallyPlaying={room.actuallyPlaying} roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayed} />
+                {typeof(room.playlistUrls) !== 'undefined' && room.playlistUrls && room.playlistUrls.length > 0 && <Box sx={{ padding:"0em",marginBottom:0, paddingLeft:0}}>
+                    <RoomPlaylist roomPlaylist={room.playlistUrls} roomIdActuallyPlaying={room.playing} handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying}  handleVoteChange={handleVoteChange} roomIsActuallyPlaying={room.actuallyPlaying} roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayed} />
                 </Box>}
             </div>
             } 

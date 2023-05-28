@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
 
 import Fade from '@mui/material/Fade';
 import ListItemText from '@mui/material/ListItemText';
@@ -12,15 +13,30 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import LinearProgress from '@mui/material/LinearProgress';
-import { Diversity1TwoTone } from '@mui/icons-material';
 
-const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleChangeIdActuallyPlaying, roomIsActuallyPlaying, roomPlayedActuallyPlayed}) => {
+import IconButton from '@mui/material/IconButton';
+import { Diversity1TwoTone } from '@mui/icons-material';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+
+const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleVoteChange, handleChangeIdActuallyPlaying, roomIsActuallyPlaying, roomPlayedActuallyPlayed}) => {
+
 
     const scrollRef = useRef(null);
     useEffect(() => {
         // 👇️ scroll to bottom every time messages change
 //        scrollRef.current?.scrollTo(0 , scrollRef.current?.scrollHeight);
     }, [roomIdActuallyPlaying]);
+
+    function handleVotePositif(idMedia) {
+        roomPlaylist[idMedia].vote.up++;
+        handleVoteChange(idMedia, roomPlaylist[idMedia].vote);
+    }
+
+    function handleVoteNegatif(idMedia) {
+        roomPlaylist[idMedia].vote.down++;
+        handleVoteChange(idMedia, roomPlaylist[idMedia].vote);
+    }
 
     return (
         <Paper ref={scrollRef} className={'scroll'} style={{borderRadius:0}}>
@@ -29,10 +45,10 @@ const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleChangeIdActua
                     
                     {roomPlaylist.map(function(d, idx){
                     return (
-                        <Fade in={true} xs={12} sx={{ width:'100%', padding:0, margin:0}}>
-                            <Grid item sx={{ width:'100%', padding:0,pl:2, margin:0}}> 
+                        <Fade in={true} xs={12} sx={{  width:'100%', padding:0, margin:0}}>
+                            <Grid item sx={{width:'100%', padding:0,pl:2, margin:0}} className='playlist_bloc'> 
                                 
-                                <ListItemButton sx={{ width:'100%', padding:0,pl:0,margin:0, backgroundColor:'#4f4f4f',borderBottom: '2px solid #3e464d', color:'white', "&.Mui-selected": {
+                                <ListItemButton sx={{ position:'relative',width:'100%', padding:0,pl:0,margin:0, backgroundColor:'#4f4f4f',borderBottom: '2px solid #3e464d', color:'white', "&.Mui-selected": {
                                     backgroundColor: "#262626"
                                     },
                                     "&.Mui-focusVisible": {
@@ -47,7 +63,7 @@ const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleChangeIdActua
                                             {idx === roomIdActuallyPlaying && roomIsActuallyPlaying && <PauseCircleOutlineIcon  />}
                                             {idx === roomIdActuallyPlaying && !roomIsActuallyPlaying && <PlayCircleOutlineIcon />}
                                     </ListItemIcon>
-                                    <Grid item sx={{display:'block', zIndex:2, pb:0.5}}>
+                                    <Grid item sx={{display:'block', zIndex:2, pb:0.5, flexGrow:1}}>
                                         { d.title && <ListItemText sx={{ pl:0, mb:0, wordBreak: 'break-all'}} primary={d.title.substring(0, 50)+'...'} />}
                                         { (d.title && d.title.length === 0) || !d.title && <ListItemText sx={{ pl:0,mb:0, wordBreak: 'break-all'}} primary={d.url.substring(0, 40)+'...'} />}
                                         <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
@@ -63,12 +79,21 @@ const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleChangeIdActua
                                             En pause
                                         </Typography>}
                                     </Grid>
-
                                    {idx === roomIdActuallyPlaying && <LinearProgress sx={{height:'10px', position:'absolute', width:'100%', height:'100%', zIndex:1, opacity:0.5, "& .MuiLinearProgress-barColorPrimary": {
                                         backgroundColor: "#262626",
                                     }}} variant="determinate" value={roomPlayedActuallyPlayed} /> }
                                 </ListItemButton>
                                 
+                                <Grid className='votebuttons' sx={{position:'absolute', right:'5px', bottom:'10px'}}>
+                                    <Button size="small" variant="contained" sx={{zIndex:5,mr:2, fontSize:'0.8em', color:'white', bgcolor:'#262626'}}  onClick={e => handleVotePositif(idx)}>
+                                        <ThumbUpIcon  fontSize="small" sx={{mr:1}}/>
+                                        {roomPlaylist[idx].vote.up }
+                                    </Button>
+                                    <Button size="small" variant="contained" sx={{zIndex:5, fontSize:'0.8em',  color:'white', bgcolor:'#262626'}}  onClick={e => handleVoteNegatif(idx)}>
+                                    <ThumbDownAltIcon fontSize="small"  sx={{mr:1}}/>
+                                        {roomPlaylist[idx].vote.down }
+                                    </Button>
+                                </Grid>
                             </Grid>
                         </Fade>)
                     }) }
