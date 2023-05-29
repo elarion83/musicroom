@@ -22,7 +22,7 @@ const RoomTopBar = ({roomId, handleOpenShareModal, roomAdmin }) => {
             <Toolbar xs={12} sx={{ bgcolor: '#262626',borderBottom: '2px solid #3e464d', minHeight: '45px !important', fontFamily: 'Monospace', pl:'5px', pr:'25 px' }}>
                 
                 <Typography  component="div" sx={{ flexGrow: 1 , textTransform:'uppercase', fontSize:'12px',}}>
-                    Room : <b>{ roomId } </b> | Hosté par <b>{roomAdmin}</b><i class="fi fi-ro-square-right"></i>
+                    Room : <b>{ roomId } </b> | Hosté par <b>{roomAdmin}</b>
                 </Typography>
                 <Tooltip title="Partager la room" >
                     <IconButton

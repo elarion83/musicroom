@@ -37,12 +37,13 @@ import RoomTopBar from "./rooms/RoomTopBar";
 
 const Room = ({ roomId }) => {
 
-    const [localData, setLocalData] = useState({domain:window.location.hostname,synchro:false, currentUserInfo: useState(localStorage.getItem("MusicRoom_UserInfoPseudo")) });
+    const [localData, setLocalData] = useState({domain:window.location.hostname, synchro:false, currentUserVotes:{up:[], down:[]}, currentUserInfo: useState(localStorage.getItem("MusicRoom_UserInfoPseudo")) });
 	const [loaded, setLoaded] = useState(false);
 	const [room, setRoom] = useState({});
     const [OpenInvitePeopleToRoomModal, setOpenInvitePeopleToRoomModal] = useState(false);
     const [OpenAddToPlaylistModal, setOpenAddToPlaylistModal] = useState(false);
     const [localVolume, setLocalVolume] = useState(0);
+    const [pip, setPip] = useState(true);
 	const roomRef = db.collection("rooms").doc(roomId.toLowerCase());
     const [roomRefUsed, setRoomRefUsed]= useState(false);
     const playerRef = useRef({
@@ -84,7 +85,12 @@ const Room = ({ roomId }) => {
 	};
 
 	useEffect(() => {
-		getRoomData(roomId); // A REPOSITIONNER
+		getRoomData(roomId); 
+        if(null === localStorage.getItem("MusicRoom_UserInfoVotes")) {
+            localStorage.setItem("MusicRoom_UserInfoVotes", JSON.stringify({up:[], down:[]}));
+        } else {
+            localData.currentUserVotes = JSON.parse(localStorage.getItem("MusicRoom_UserInfoVotes"));
+        }
 
         document.title = 'Room ID:' + roomId + ' - MusicRoom';
 	}, [roomId]);
@@ -98,7 +104,7 @@ const Room = ({ roomId }) => {
         } else {
             document.title = 'Room ID:' + roomId + ' - MusicRoom';
         }
-		getRoomData(roomId); // A REPOSITIONNER
+		getRoomData(roomId); 
     }, [loaded, localData,room]);
 
 
@@ -122,9 +128,6 @@ const Room = ({ roomId }) => {
         if(isActuallyAdmin) {
             setLocalVolume(0.5);
         }
-     //   room.mediaActuallyPlayingAlreadyPlayed = 40;
-//        room.set({actuallyPlaying:true});
-    //    console.log(playerRef.current.getSecondsLoaded());
     }
 
     function handleMediaEnd() {
@@ -155,7 +158,6 @@ const Room = ({ roomId }) => {
     function handleProgress(event) {
         if(room.actuallyPlaying) {
             if(isActuallyAdmin) {
-            //    room.mediaActuallyPlayingAlreadyPlayed = ;
                 roomRef.set({mediaActuallyPlayingAlreadyPlayed: Math.round(event.played*100) }, { merge: true });
             } 
         }
@@ -183,9 +185,23 @@ const Room = ({ roomId }) => {
         }
     }
 
-    function handleVoteChange(idMedia, NewValue) {
+    function handleVoteChange(idMedia, NewValue, mediaHashId, voteType) {
         room.playlistUrls[idMedia].vote = NewValue;
-        roomRef.set({playlistUrls: room.playlistUrls}, { merge: true });
+
+        if('up' == voteType) {
+            if(!localData.currentUserVotes.up.includes(mediaHashId)) {
+                localData.currentUserVotes.up.push(mediaHashId);
+                roomRef.set({playlistUrls: room.playlistUrls}, { merge: true });
+                localStorage.setItem("MusicRoom_UserInfoVotes",  JSON.stringify(localData.currentUserVotes));
+            }
+        }
+        else {
+            if(!localData.currentUserVotes.down.includes(mediaHashId)) {
+                localData.currentUserVotes.down.push(mediaHashId);
+                roomRef.set({playlistUrls: room.playlistUrls}, { merge: true });
+                localStorage.setItem("MusicRoom_UserInfoVotes",  JSON.stringify(localData.currentUserVotes));
+            }
+        }
     }
 
     function handleOpenShareModal(ShareModalIsOpen) {
@@ -196,7 +212,7 @@ const Room = ({ roomId }) => {
   return (
     <div className="flex flex-col w-full gap-0 relative " style={{height:'calc(100vh - 10em)'}}>
         <RoomTopBar localData={localData} roomId={roomId} handleOpenShareModal={handleOpenShareModal} roomAdmin={room.admin}/>
-        <Container maxWidth="sm" sx={{ padding: '0 !important'}} >
+        <Container maxWidth={false} sx={{ padding: '0 !important'}} >
             { !<ActuallyPlaying roomRef={roomRef}/>}
             {loaded && room.playlistUrls && <div> 
                 {!room.playlistEmpty && room.playlistUrls.length > 0 && room.playing !== null && 
@@ -207,7 +223,7 @@ const Room = ({ roomId }) => {
                                     ref={playerRef}
                                     className='react-player'
                                     width='100%'
-                                    pip={true}
+                                    pip={pip}
                                     height='100%'
                                     volume={localVolume}
                                     onProgress={e => handleProgress(e)}
@@ -231,7 +247,7 @@ const Room = ({ roomId }) => {
                                     ref={playerRef}
                                     className='react-player'
                                     width='100%'
-                                    pip={true}
+                                    pip={pip}
                                     height='100%'
                                     volume={localVolume}
                                     onPlay={e => handleNonAdminPlay()}
@@ -249,6 +265,7 @@ const Room = ({ roomId }) => {
                                 {isActuallyAdmin && <div style={{width:'100%',height:'100%',opacity:0,top:0,position:'absolute'}}></div>}
                             </Grid>
                             <Grid item sm={8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }}>
+                                { /* pip ? 'Disable PiP' : 'Enable PiP' */ }
                                 <Grid item sm={12} sx={{ padding:0,pl:1.5,ml:0, mb: 0 , mt:1, fill:'#f0f1f0'}}>
                                     { room.playlistUrls[room.playing].title && <Typography component={'span'} sm={12} >
                                        {room.playlistUrls[room.playing].title}
@@ -306,7 +323,7 @@ const Room = ({ roomId }) => {
                     <Alert severity="success" sx={{margin:2, border:'1px solid #F27C24'}}> Bienvenue dans la room ! <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} ><b>Ajoutez quelque chose dans la playlist !</b></a></Alert>
                 }
                 {typeof(room.playlistUrls) !== 'undefined' && room.playlistUrls && room.playlistUrls.length > 0 && <Box sx={{ padding:"0em",marginBottom:0, paddingLeft:0}}>
-                    <RoomPlaylist roomPlaylist={room.playlistUrls} roomIdActuallyPlaying={room.playing} handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying}  handleVoteChange={handleVoteChange} roomIsActuallyPlaying={room.actuallyPlaying} roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayed} />
+                    <RoomPlaylist roomPlaylist={room.playlistUrls} roomIdActuallyPlaying={room.playing} userVoteArray={localData.currentUserVotes} handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying}  handleVoteChange={handleVoteChange} roomIsActuallyPlaying={room.actuallyPlaying} roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayed} />
                 </Box>}
             </div>
             } 

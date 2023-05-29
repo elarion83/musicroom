@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
@@ -19,33 +19,25 @@ import { Diversity1TwoTone } from '@mui/icons-material';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 
-const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleVoteChange, handleChangeIdActuallyPlaying, roomIsActuallyPlaying, roomPlayedActuallyPlayed}) => {
+const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleVoteChange, userVoteArray, handleChangeIdActuallyPlaying, roomIsActuallyPlaying, roomPlayedActuallyPlayed}) => {
 
-
-    const scrollRef = useRef(null);
-    useEffect(() => {
-        // 👇️ scroll to bottom every time messages change
-//        scrollRef.current?.scrollTo(0 , scrollRef.current?.scrollHeight);
-    }, [roomIdActuallyPlaying]);
-
-    function handleVotePositif(idMedia) {
+    function handleVotePositif(idMedia, mediaHashId) {
         roomPlaylist[idMedia].vote.up++;
-        handleVoteChange(idMedia, roomPlaylist[idMedia].vote);
+        handleVoteChange(idMedia, roomPlaylist[idMedia].vote, mediaHashId, 'up');
     }
 
-    function handleVoteNegatif(idMedia) {
+    function handleVoteNegatif(idMedia, mediaHashId) {
         roomPlaylist[idMedia].vote.down++;
-        handleVoteChange(idMedia, roomPlaylist[idMedia].vote);
+        handleVoteChange(idMedia, roomPlaylist[idMedia].vote, mediaHashId, 'down');
     }
 
     return (
-        <Paper ref={scrollRef} className={'scroll'} style={{borderRadius:0}}>
+        <Paper className={'scroll'} style={{borderRadius:0}}>
             <List sx={{height: '100%', padding:0, mb:0}}>
-                <Grid item xs={12}>
                     
                     {roomPlaylist.map(function(d, idx){
                     return (
-                        <Fade in={true} xs={12} sx={{  width:'100%', padding:0, margin:0}}>
+                        <Fade key={idx} in={true} xs={12} sx={{  width:'100%', padding:0, margin:0}}>
                             <Grid item sx={{width:'100%', padding:0,pl:2, margin:0}} className='playlist_bloc'> 
                                 
                                 <ListItemButton sx={{ position:'relative',width:'100%', padding:0,pl:0,margin:0, backgroundColor:'#4f4f4f',borderBottom: '2px solid #3e464d', color:'white', "&.Mui-selected": {
@@ -84,20 +76,36 @@ const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleVoteChange, h
                                     }}} variant="determinate" value={roomPlayedActuallyPlayed} /> }
                                 </ListItemButton>
                                 
-                                <Grid className='votebuttons' sx={{position:'absolute', right:'5px', bottom:'10px'}}>
-                                    <Button size="small" variant="contained" sx={{zIndex:5,mr:2, fontSize:'0.8em', color:'white', bgcolor:'#262626'}}  onClick={e => handleVotePositif(idx)}>
-                                        <ThumbUpIcon  fontSize="small" sx={{mr:1}}/>
-                                        {roomPlaylist[idx].vote.up }
-                                    </Button>
-                                    <Button size="small" variant="contained" sx={{zIndex:5, fontSize:'0.8em',  color:'white', bgcolor:'#262626'}}  onClick={e => handleVoteNegatif(idx)}>
-                                    <ThumbDownAltIcon fontSize="small"  sx={{mr:1}}/>
-                                        {roomPlaylist[idx].vote.down }
-                                    </Button>
-                                </Grid>
+                                    
+                                    <Grid className='votebuttons' sx={{position:'absolute', right:'5px', bottom:'10px'}}>
+                                        {!userVoteArray.up.includes(roomPlaylist[idx].hashId) && 
+                                            <Button size="small" variant="contained" sx={{zIndex:5,mr:2, fontSize:'0.8em', color:'white', bgcolor:'#262626'}}  onClick={e => handleVotePositif(idx, roomPlaylist[idx].hashId)}>
+                                                <ThumbUpIcon  fontSize="small" sx={{mr:1}}/>
+                                                {roomPlaylist[idx].vote.up }
+                                            </Button>
+                                        }
+                                        {userVoteArray.up.includes(roomPlaylist[idx].hashId) && 
+                                            <Button size="small" variant="contained" sx={{zIndex:5,mr:2, fontSize:'0.8em', color:'white', bgcolor:'#262626'}}>
+                                                <ThumbUpIcon  fontSize="small" sx={{mr:1, color:'#66BB6A'}}/>
+                                                {roomPlaylist[idx].vote.up }
+                                            </Button>
+                                        }
+                                        {!userVoteArray.down.includes(roomPlaylist[idx].hashId) &&
+                                                <Button size="small" variant="contained" sx={{zIndex:5, fontSize:'0.8em',  color:'white', bgcolor:'#262626'}}  onClick={e => handleVoteNegatif(idx, roomPlaylist[idx].hashId)}>
+                                                    <ThumbDownAltIcon fontSize="small"  sx={{mr:1}}/>
+                                                    {roomPlaylist[idx].vote.down }
+                                                </Button>
+                                        }
+                                        {userVoteArray.down.includes(roomPlaylist[idx].hashId) &&
+                                                <Button size="small" variant="contained" sx={{zIndex:5, fontSize:'0.8em',  color:'white', bgcolor:'#262626'}}>
+                                                    <ThumbDownAltIcon fontSize="small"  sx={{mr:1,color:'#E91E63'}}/>
+                                                    {roomPlaylist[idx].vote.down }
+                                                </Button>
+                                        }
+                                    </Grid>
                             </Grid>
                         </Fade>)
                     }) }
-                </Grid>
             </List>
         </Paper>
     )

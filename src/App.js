@@ -110,11 +110,11 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Container maxWidth="sm" className='main_container' sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
+      <Container maxWidth={false} className='main_container' sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
         {userInfoPseudo && <Grid container sx={{display:'flex', justifyContent:'flex-end', padding:'5px 10px', bgcolor:'#3e464d'}}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', textAlign: 'center', width:'100%' }}>
               
-            <img src="img/logo_small.png" style={{ width: '50px'}} alt="MusicRoom logo"/>
+              <img src="img/logo_small.png" style={{ maxHeight: '25px', ml:2}} alt="MusicRoom logo"/>
               <Tooltip title="Paramètres du compte" sx={{ bgColor:'30363c'}}>
                 <IconButton
                   onClick={e => handleClickMenu(e)}
@@ -178,7 +178,7 @@ function App() {
           </Grid>
           
     
-          <Button variant="filled" sx={{width:'100%',bgcolor:'#b79f6e',color:'white', height:'50px', mt:'2em', mb:'2em'}} onClick={createNewRoom}> Créer une Room </Button> 
+          <Button variant="filled" sx={{width:'100%',bgcolor:'#23282d !important',color:'white', height:'50px', mt:'2em', mb:'2em'}} onClick={createNewRoom}> Créer une Room </Button> 
           <Typography sx={{mb:2}}>Rejoindre une room </Typography>
           <TextField
                 id="joinRoomIdField"
@@ -186,6 +186,9 @@ function App() {
                 label="ID de la room"
                 helperText="Insérez l'id d'une room"
                 value={joinRoomRoomId}
+                onKeyPress={(ev) => {
+                if (ev.key === 'Enter')  { handleJoinRoomByRoomId()}
+                }}
                 onChange={e => setJoinRoomRoomId(e.target.value)}
                 sx={{ width: '100%', paddingRight:'0', "& .MuiOutlinedInput-root": {
                     paddingRight: 0
@@ -194,7 +197,7 @@ function App() {
                     endAdornment: (
                         <InputAdornment  sx={{
                         padding: "27.5px 14px",
-                        backgroundColor: "#b79f6e",
+                        backgroundColor: "#23282d",
                         color:'white',
                         cursor:'pointer'}} position="end" onClick={e => handleJoinRoomByRoomId()}>
                         <DoubleArrowIcon />
@@ -228,7 +231,7 @@ function App() {
                         endAdornment: (
                             <InputAdornment  sx={{
                             padding: "27.5px 14px",
-                            backgroundColor: "#b79f6e",
+                            backgroundColor: "#23282d",
                             color:'white',
                             cursor:'pointer',
                             }} position="end" onClick={e=> checkForNewPseudo()}>

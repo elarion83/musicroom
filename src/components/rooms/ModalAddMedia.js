@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
 
+import { v4 as uuid } from 'uuid';
 import InputAdornment from '@mui/material/InputAdornment';
 import AddIcon from '@mui/icons-material/Add';
 
@@ -83,6 +84,7 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                 }
 
                 addingObject.vote= {'up':0,'down':0};
+                addingObject.hashId = uuid().slice(0,10).toLowerCase()
                 handleCheckAndAddObjectToPlaylistFromObject(addingObject);
                 setSearchTerm('');
             } else {
@@ -126,7 +128,7 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                             endAdornment: (
                                 <InputAdornment  sx={{
                                 padding: "27.5px 14px",
-                                backgroundColor: "#b79f6e",
+                                backgroundColor: "#23282d",
                                 color:'white',
                                 cursor:'pointer',
                                 }} position="end" onClick={handleSearchForMedia}>
@@ -153,7 +155,9 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                                     }
                                 >
                                     { mediaSearchResultYoutube.map(function(media, idx){
-                                        return (<ListItemButton sx={{margin:0, padding:0}}  key={idx} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.snippet.title, source:'youtube', url:'https://www.youtube.com/watch?v='+media.id.videoId, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}})}><ListItemIcon><LibraryMusicIcon /></ListItemIcon><ListItemText primary={media.snippet.title} /></ListItemButton>)
+                                        return (<ListItemButton sx={{margin:0,mb:1, padding:0, pr:1}}  key={idx} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.snippet.title, source:'youtube', url:'https://www.youtube.com/watch?v='+media.id.videoId, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
+                                            <img src={media.snippet.thumbnails.default.url} />
+                                            <ListItemText primary={media.snippet.title.substring(0, 50)} sx={{ml:2, mt:0, fontSize:'0.9em'}}/></ListItemButton>)
                                     }) }
                                 </List>
                             </Grid>}
@@ -170,7 +174,9 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                                 }
                             >
                                 { mediaSearchResultDailyMotion.map(function(media, idx){
-                                    return (<ListItemButton sx={{margin:0, padding:0}} key={idx} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.title, source:'dailymotion', url:'https://www.dailymotion.com/video/'+media.id, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}})}><ListItemIcon><LibraryMusicIcon /></ListItemIcon><ListItemText primary={media.title} /></ListItemButton>)
+                                    return (<ListItemButton sx={{margin:0,mb:1, padding:0, pr:1}} key={idx} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.title, source:'dailymotion', url:'https://www.dailymotion.com/video/'+media.id, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
+                                        <img src={media.thumbnail_url} style={{width:'120px', height:'90px'}}/>
+                                        <ListItemText primary={media.title} sx={{ml:2, mt:0, fontSize:'0.9em'}}/></ListItemButton>)
                                 }) }
                             </List>
                         </Grid>}
