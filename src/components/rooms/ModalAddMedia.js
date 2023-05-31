@@ -20,6 +20,9 @@ import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import validator from 'validator';
 import YTSearch from 'youtube-api-search';
 import SearchIcon from '@mui/icons-material/Search';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
 
 const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
 
@@ -105,10 +108,11 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
     return(
         <Box sx={{ padding: '1em 2em 1em 1em' }}>
             <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <h3>Recherche</h3>
-                    <hr />
-                  </Grid>
+                
+                <DialogTitle sx={{pb:0}}>Ajouter dans la playlist</DialogTitle>
+                <DialogContentText sx={{ml:3}}>
+                    Ajoutez un média en insérant sont url ou en effectuant une recherche sur Youtube et autres depuis le champs ci dessous.
+                </DialogContentText>
                   <Grid item xs={12}>
                     <TextField
                         id="addMediaSearchInput"

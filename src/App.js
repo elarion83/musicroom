@@ -8,6 +8,10 @@ import InputAdornment from '@mui/material/InputAdornment';
 import AddIcon from '@mui/icons-material/Add';
 import { v4 as uuid } from 'uuid';
 
+import AwesomeSlider from 'react-awesome-slider';
+import withAutoplay from 'react-awesome-slider/dist/autoplay';
+import 'react-awesome-slider/dist/styles.css';
+
 import SearchIcon from '@mui/icons-material/Search';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
@@ -49,6 +53,7 @@ function App() {
   const [joinRoomRoomId, setJoinRoomRoomId] = useState('');
   const [userInfoPseudoInput, setUserInfoPseudoInput] = useState('');
 
+  const AutoplaySlider = withAutoplay(AwesomeSlider);
 	const queryParameters = new URLSearchParams(window.location.search)
 	const rid = queryParameters.get("rid");
   const [anchorEl, setAnchorEl] = useState(null);
@@ -112,20 +117,18 @@ function App() {
       <CssBaseline />
       <Container maxWidth={false} className='main_container' sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
         {userInfoPseudo && <Grid container sx={{display:'flex', justifyContent:'flex-end', padding:'5px 10px', bgcolor:'#3e464d'}}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', textAlign: 'center', width:'100%' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', textAlign: 'center', width:'100%' }}>
               
-              <img src="img/logo_small.png" style={{ maxHeight: '25px', ml:2}} alt="MusicRoom logo"/>
               <Tooltip title="Paramètres du compte" sx={{ bgColor:'30363c'}}>
                 <IconButton
                   onClick={e => handleClickMenu(e)}
                   size="small"
-                  sx={{ padding:'2px 10px', ml: 2 , bgcolor:'#23282d', borderRadius:2, color:'white', fontSize:'12px', textTransform:'uppercase'}}
+                  sx={{  color:'white', }}
                   aria-controls={open ? 'account-menu' : undefined}
                   aria-haspopup="true"
                   aria-expanded={open ? 'true' : undefined}
                 >
-                  { userInfoPseudo }
-                  <AccountCircleIcon sx={{ ml:2,width: 20, height: 20 }}></AccountCircleIcon>
+                  <AccountCircleIcon  fontSize="medium"></AccountCircleIcon>
                 </IconButton>
               </Tooltip>
             </Box>
@@ -164,6 +167,15 @@ function App() {
               transformOrigin={{ horizontal: 'right', vertical: 'top' }}
               anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
+              <MenuItem>
+                <ListItemIcon>
+                  <AccountCircleIcon fontSize="small" />
+                </ListItemIcon>
+                <Typography>
+                  { userInfoPseudo }
+                </Typography>
+              </MenuItem>
+              <Divider />
               <MenuItem onClick={e => handleLogout()}>
                 <ListItemIcon>
                   <Logout fontSize="small" />
@@ -173,38 +185,70 @@ function App() {
             </Menu>
         </Grid>}
         {!roomId && <Box sx={{  paddingBottom:'10px !important', bgcolor:'rgba(48, 48, 48, 0)',height: 'auto', pl:2, pr:2 }} >
-          <Grid container sx={{display:'flex', justifyContent:'center', pt:3,mb:5}}>
-            <img src="img/logo.png" style={{ width: '250px'}} alt="MusicRoom logo"/>
-          </Grid>
-          
-    
-          <Button variant="filled" sx={{width:'100%',bgcolor:'#23282d !important',color:'white', height:'50px', mt:'2em', mb:'2em'}} onClick={createNewRoom}> Créer une Room </Button> 
-          <Typography sx={{mb:2}}>Rejoindre une room </Typography>
-          <TextField
-                id="joinRoomIdField"
-                type="text"
-                label="ID de la room"
-                helperText="Insérez l'id d'une room"
-                value={joinRoomRoomId}
-                onKeyPress={(ev) => {
-                if (ev.key === 'Enter')  { handleJoinRoomByRoomId()}
-                }}
-                onChange={e => setJoinRoomRoomId(e.target.value)}
-                sx={{ width: '100%', paddingRight:'0', "& .MuiOutlinedInput-root": {
-                    paddingRight: 0
-                } }}
-                InputProps={{
-                    endAdornment: (
-                        <InputAdornment  sx={{
-                        padding: "27.5px 14px",
-                        backgroundColor: "#23282d",
-                        color:'white',
-                        cursor:'pointer'}} position="end" onClick={e => handleJoinRoomByRoomId()}>
-                        <DoubleArrowIcon />
-                        </InputAdornment>
-                    ),
-                }}
-            />
+          <Container maxWidth="sm">
+            <Grid container sx={{display:'flex', justifyContent:'center', pt:3,mb:5}}>
+              <img src="img/logo.png" style={{ width: '250px'}} alt="MusicRoom logo"/>
+            </Grid>
+            <Grid container sx={{display:'flex', justifyContent:'center', pt:3,mb:5}}>
+              <AutoplaySlider
+                  play={true}
+                  interval={6000}
+                  organicArrows={false}
+                >
+                  <Box> 
+                    <Typography  sx={{pl:2,pr:2, color:'white'}} variant="h5" gutterBottom>
+                      Crée ta room ou rejoins en une !
+                    </Typography>
+                    <Typography sx={{pl:2,pr:2, color:'white'}} >
+                      Tous les membres d'une room peuvent ajouter une musique ou une vidéo à la playlist quand ils le désirent depuis leur téléphone ! 
+                      La playlist est partagée entre tout le monde en temps réel et l'hôte de la room est maître de la soirée !
+                    </Typography>
+                  </Box>
+                  <Box> 
+                    <Typography variant="h5"  sx={{ color:'white'}} gutterBottom>
+                      Soyez tous synchronisés !
+                    </Typography>
+                    <Typography sx={{ color:'white'}} >
+                      La playlist est partagée en temps réel entre tous les utilisateurs, vous pouvez ainsi regarder la même chose, en même temps a des endroits différents !
+                    </Typography>
+                  </Box>
+              </AutoplaySlider>
+            </Grid>
+            
+            <Button variant="filled" sx={{width:'100%',bgcolor:'#23282d !important',color:'white', height:'50px', mt:'2em', mb:'2em'}} onClick={createNewRoom}> Créer une Room </Button> 
+            <Typography sx={{mb:2}}></Typography>
+            <Typography variant="h5" gutterBottom>
+              Rejoindre une room 
+            </Typography>
+            <Typography variant="subtitle1" gutterBottom>
+              Tu as l'ID d'une room qui existe déjà ? <br /> Renseignes-le ici pour la rejoindre !
+            </Typography>
+            <TextField
+                  id="joinRoomIdField"
+                  type="text"
+                  label="ID de la room"
+                  helperText="Insérez l'id d'une room"
+                  value={joinRoomRoomId}
+                  onKeyPress={(ev) => {
+                  if (ev.key === 'Enter')  { handleJoinRoomByRoomId()}
+                  }}
+                  onChange={e => setJoinRoomRoomId(e.target.value)}
+                  sx={{ width: '100%', paddingRight:'0', "& .MuiOutlinedInput-root": {
+                      paddingRight: 0
+                  } }}
+                  InputProps={{
+                      endAdornment: (
+                          <InputAdornment  sx={{
+                          padding: "27.5px 14px",
+                          backgroundColor: "#23282d",
+                          color:'white',
+                          cursor:'pointer'}} position="end" onClick={e => handleJoinRoomByRoomId()}>
+                          <DoubleArrowIcon />
+                          </InputAdornment>
+                      ),
+                  }}
+              />
+            </Container>
              
         </Box>
         }

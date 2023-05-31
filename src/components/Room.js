@@ -264,7 +264,7 @@ const Room = ({ roomId }) => {
                                 />}
                                 {isActuallyAdmin && <div style={{width:'100%',height:'100%',opacity:0,top:0,position:'absolute'}}></div>}
                             </Grid>
-                            <Grid item sm={8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }}>
+                            <Grid item sm={8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }} className='player_right_side_container'>
                                 { /* pip ? 'Disable PiP' : 'Enable PiP' */ }
                                 <Grid item sm={12} sx={{ padding:0,pl:1.5,ml:0, mb: 0 , mt:1, fill:'#f0f1f0'}}>
                                     { room.playlistUrls[room.playing].title && <Typography component={'span'} sm={12} >
@@ -285,6 +285,9 @@ const Room = ({ roomId }) => {
                                         {room.playing > 0 && <IconButton onClick={e => handleChangeActuallyPlaying(room.playing - 1)}>
                                             <SkipPreviousIcon fontSize="large" sx={{color:'#f0f1f0'}} />
                                         </IconButton>}
+                                        {room.playing == 0 &&<IconButton>
+                                            <SkipPreviousIcon fontSize="large" sx={{color:'#303134'}} />
+                                        </IconButton>}
                                         { room.actuallyPlaying && <IconButton variant="contained" onClick={e => handlePlay(false)} >
                                             <PauseCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />
                                         </IconButton>}
@@ -295,6 +298,9 @@ const Room = ({ roomId }) => {
                                             <SkipNextIcon fontSize="large" sx={{color:'#f0f1f0'}} />
                                         </IconButton>}
                                        
+                                        {(room.playlistUrls.length -1) == room.playing && <IconButton>
+                                            <SkipNextIcon fontSize="large" sx={{color:'#303134'}} />
+                                        </IconButton>}
                                         <IconButton onClick={e => setPercentagePlayed(0)} >
                                             <SettingsBackupRestoreIcon fontSize="large" sx={{color:'#f0f1f0'}} />
                                         </IconButton>
