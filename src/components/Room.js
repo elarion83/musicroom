@@ -339,7 +339,7 @@ const Room = ({ roomId }) => {
         </Dialog>
         
         <Dialog onClose={(e) => setOpenInvitePeopleToRoomModal(false)} open={OpenInvitePeopleToRoomModal}>
-            <ModalShareRoom roomUrl={ localData.domain +'/?rid='+roomId}/>
+            <ModalShareRoom roomUrl={ localData.domain +'/?rid='+roomId} />
         </Dialog>
         <Grid item xs={3} sx={{position:'fixed', width:'250px', left:'calc(50% - 125px)', bottom:'20px', zIndex:3}}>
             <Fab variant="extended" style={{justifyContent: 'center'}} onClick={(e) => setOpenAddToPlaylistModal(true)}>

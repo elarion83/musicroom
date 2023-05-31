@@ -6,22 +6,31 @@ import Box from '@mui/material/Box';
 import {ShareSocial} from 'react-share-social' 
 
 import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 const ModalShareRoom = ({ roomUrl }) => {
 
-    return(
-        <Box sx={{ padding: '1em 2em 1em 1em' }}>
-            <DialogTitle sx={{pb:0}}>Invitez des gens dans la room ! </DialogTitle>  
-            <DialogContentText sx={{ml:3}}>
-                Invitez vos guests en leur partagant cette room !
+    const [copiedToClipboard, setCopiedToClipboard] = useState(false);
 
-                <ShareSocial 
-                    url ={roomUrl}
-                    socialTypes={['facebook','twitter','reddit','linkedin']}
-                />
-            </DialogContentText>
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+    async function setCopiedToClipboardToTrueAndFalse() {
+        setCopiedToClipboard(true);
+        await delay(2000);
+        setCopiedToClipboard(false);
+    }
+
+    return(
+        <Box sx={{ padding: '1em 2em 1em 1em' }} className='modal_share_room'>
+            <DialogTitle sx={{padding:0}}>Invitez des gens dans la room ! </DialogTitle>  
+
+            <ShareSocial sx={{margin:0, padding:0,maxHeight:'none'}}
+                url ={roomUrl}
+                socialTypes={['facebook','whatsapp','twitter','reddit','email']}
+            ></ShareSocial>
+            <CopyToClipboard onCopy={(e) => setCopiedToClipboardToTrueAndFalse()} text={( roomUrl)}>
+                    <Button variant="contained"><ContentCopyIcon sx={{ mr: 1.5 }} /> Copier l'url </Button> 
+            </CopyToClipboard>
+            {copiedToClipboard && <Alert severity="success" sx={{ mt: 1.5 }} > Copié dans le presse papier </Alert>}
         </Box>
     )
 };
