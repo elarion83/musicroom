@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Room from './components/Room';
+import UserTopBar from './components/general_template/userTopBar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
@@ -12,7 +13,6 @@ import AwesomeSlider from 'react-awesome-slider';
 import withAutoplay from 'react-awesome-slider/dist/autoplay';
 import 'react-awesome-slider/dist/styles.css';
 
-import SearchIcon from '@mui/icons-material/Search';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -20,32 +20,13 @@ import DialogContentText from '@mui/material/DialogContentText';
 import Typography from '@mui/material/Typography';
 
 
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 
 
-import Avatar from '@mui/material/Avatar';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
-import Logout from '@mui/icons-material/Logout';
 
 import CssBaseline from '@mui/material/CssBaseline';
-import SettingsIcon from '@mui/icons-material/Settings';
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import Grid from '@mui/material/Grid';
-import CardContent from '@mui/material/CardContent';
 
 function App() {
   const [roomId, setRoomId] = useState(localStorage.getItem("MusicRoom_RoomId"));
@@ -56,8 +37,6 @@ function App() {
   const AutoplaySlider = withAutoplay(AwesomeSlider);
 	const queryParameters = new URLSearchParams(window.location.search)
 	const rid = queryParameters.get("rid");
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
 
   useEffect(() => {   
     if(rid) {
@@ -86,18 +65,6 @@ function App() {
     }
   }
 
-  function handleClickMenu(event) {
-    setAnchorEl(event.currentTarget);
-  };
-
-  function handleLogout() {
-      localStorage.setItem("MusicRoom_UserInfoPseudo", userInfoPseudoInput);
-      window.location.reload();
-  }
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   // App.js
   const font =  "'Quicksand', sans-serif";
   const theme = createTheme({
@@ -116,74 +83,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container maxWidth={false} className='main_container' sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
-        {userInfoPseudo && <Grid container sx={{display:'flex', justifyContent:'flex-end', padding:'5px 10px', bgcolor:'#3e464d'}}>
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', textAlign: 'center', width:'100%' }}>
-              
-              <Tooltip title="Paramètres du compte" sx={{ bgColor:'30363c'}}>
-                <IconButton
-                  onClick={e => handleClickMenu(e)}
-                  size="small"
-                  sx={{  color:'white', }}
-                  aria-controls={open ? 'account-menu' : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? 'true' : undefined}
-                >
-                  <AccountCircleIcon  fontSize="medium"></AccountCircleIcon>
-                </IconButton>
-              </Tooltip>
-            </Box>
-            <Menu
-              anchorEl={anchorEl}
-              id="account-menu"
-              open={open}
-              onClose={handleClose}
-              onClick={handleClose}
-              PaperProps={{
-                elevation: 0,
-                sx: {
-                  overflow: 'visible',
-                  filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                  mt: 1.5,
-                  '& .MuiAvatar-root': {
-                    width: 32,
-                    height: 32,
-                    ml: -0.5,
-                    mr: 1,
-                  },
-                  '&:before': {
-                    content: '""',
-                    display: 'block',
-                    position: 'absolute',
-                    top: 0,
-                    right: 14,
-                    width: 10,
-                    height: 10,
-                    bgcolor: 'background.paper',
-                    transform: 'translateY(-50%) rotate(45deg)',
-                    zIndex: 0,
-                  },
-                },
-              }}
-              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-            >
-              <MenuItem>
-                <ListItemIcon>
-                  <AccountCircleIcon fontSize="small" />
-                </ListItemIcon>
-                <Typography>
-                  { userInfoPseudo }
-                </Typography>
-              </MenuItem>
-              <Divider />
-              <MenuItem onClick={e => handleLogout()}>
-                <ListItemIcon>
-                  <Logout fontSize="small" />
-                </ListItemIcon>
-                Déconnexion
-              </MenuItem>
-            </Menu>
-        </Grid>}
+        {userInfoPseudo && <UserTopBar userInfoPseudo={userInfoPseudo} roomId={roomId} />}
         {!roomId && <Box sx={{  paddingBottom:'10px !important', bgcolor:'rgba(48, 48, 48, 0)',height: 'auto', pl:2, pr:2 }} >
           <Container maxWidth="sm">
             <Grid container sx={{display:'flex', justifyContent:'center', pt:3,mb:5}}>
