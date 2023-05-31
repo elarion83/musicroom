@@ -14,7 +14,8 @@ import Alert from '@mui/material/Alert';
 import Fab from '@mui/material/Fab';
 import Stack from '@mui/material/Stack';
 //import screenfull from 'screenfull'
-import Snackbar from '@mui/material/Snackbar';
+
+import Notifications from './rooms/Notifications';
 
 import Typography from '@mui/material/Typography';
 
@@ -33,8 +34,9 @@ import ActuallyPlaying from '../components/rooms/ActuallyPlaying'
 import RoomModalAddMedia from '../components/rooms/ModalAddMedia'
 import ModalShareRoom from '../components/rooms/ModalShareRoom'
 import RoomPlaylist from "./rooms/RoomPlaylist";
-import RoomTopBar from "./rooms/RoomTopBar";
+import RoomTopBar from "./general_template/RoomTopBar";
 
+import Slide from '@mui/material/Slide';
 const Room = ({ roomId }) => {
 
     const [localData, setLocalData] = useState({domain:window.location.hostname, synchro:false, currentUserVotes:{up:[], down:[]}, currentUserInfo: useState(localStorage.getItem("MusicRoom_UserInfoPseudo")) });
@@ -75,6 +77,7 @@ const Room = ({ roomId }) => {
                         actuallyPlaying:false,
                         playlistUrls: [],
                         playlistEmpty: true,
+                        notifsArray:[],
                         creationTimeStamp	: Date.now()
                     };
                     db.collection("rooms").doc(roomId.toLowerCase()).set(docData).then(() => {});
@@ -119,6 +122,7 @@ const Room = ({ roomId }) => {
         }
     }
     
+
     async function handleNonAdminPlay() {
     }
 
@@ -208,6 +212,7 @@ const Room = ({ roomId }) => {
         setOpenInvitePeopleToRoomModal(ShareModalIsOpen);
     }
   
+  // transitions
 
   return (
     <div className="flex flex-col w-full gap-0 relative " style={{height:'calc(100vh - 10em)'}}>
@@ -322,7 +327,7 @@ const Room = ({ roomId }) => {
                     </Box>
                 }
                 <Toolbar xs={12} sx={{ bgcolor: '#262626',borderBottom: '2px solid #3e464d', minHeight: '45px !important', fontFamily: 'Monospace', pl:'5px', pr:'25 px' }}>
-                <Typography component="div" sx={{ flexGrow: 1, textTransform:'uppercase', fontSize:'12px', color:'white' }}> Playlist <span> ({ room.playlistUrls && room.playlistUrls.length } médias en playlist)</span>
+                <Typography component="div" sx={{ flexGrow: 1, textTransform:'uppercase', fontSize:'12px', color:'white' }}> Playlist <b><span> ({ room.playlistUrls && room.playlistUrls.length } médias en playlist)</span></b>
                 </Typography>
                 </Toolbar>
                 { room.playlistEmpty && 
@@ -334,9 +339,7 @@ const Room = ({ roomId }) => {
             </div>
             } 
         </Container>
-        <Dialog onClose={(e) => setOpenAddToPlaylistModal(false)} open={OpenAddToPlaylistModal}>
-            <RoomModalAddMedia validatedObjectToAdd={handleAddValidatedObjectToPlaylist}  /> 
-        </Dialog>
+        <RoomModalAddMedia validatedObjectToAdd={handleAddValidatedObjectToPlaylist} isOpen={OpenAddToPlaylistModal} handleIsOpen={setOpenAddToPlaylistModal} /> 
         
         <Dialog onClose={(e) => setOpenInvitePeopleToRoomModal(false)} open={OpenInvitePeopleToRoomModal}>
             <ModalShareRoom roomUrl={ localData.domain +'/?rid='+roomId} />

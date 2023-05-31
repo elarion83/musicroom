@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import Room from './components/Room';
 import UserTopBar from './components/general_template/userTopBar';
+
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
-import AddIcon from '@mui/icons-material/Add';
 import { v4 as uuid } from 'uuid';
 
 import AwesomeSlider from 'react-awesome-slider';
@@ -17,7 +20,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import Typography from '@mui/material/Typography';
 
 
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
@@ -83,20 +85,25 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container maxWidth={false} className='main_container' sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
-        {userInfoPseudo && <UserTopBar userInfoPseudo={userInfoPseudo} roomId={roomId} />}
+         <AppBar position="static" sx={{bgcolor: '#202124'}}>
+            <Toolbar>
+              <img src="img/logo_small.png" style={{ width: '250px', 'max-width':'50%'}} alt="MusicRoom logo"/>
+              {userInfoPseudo && (
+                <UserTopBar userInfoPseudo={userInfoPseudo} />
+              )}
+            </Toolbar>
+          </AppBar>
         {!roomId && <Box sx={{  paddingBottom:'10px !important', bgcolor:'rgba(48, 48, 48, 0)',height: 'auto', pl:2, pr:2 }} >
           <Container maxWidth="sm">
             <Grid container sx={{display:'flex', justifyContent:'center', pt:3,mb:5}}>
-              <img src="img/logo.png" style={{ width: '250px'}} alt="MusicRoom logo"/>
-            </Grid>
-            <Grid container sx={{display:'flex', justifyContent:'center', pt:3,mb:5}}>
               <AutoplaySlider
+              fillParent={false}
                   play={true}
                   interval={6000}
                   organicArrows={false}
                 >
                   <Box> 
-                    <Typography  sx={{pl:2,pr:2, color:'white'}} variant="h5" gutterBottom>
+                    <Typography  sx={{pl:2,pr:2}} variant="h5" gutterBottom>
                       Crée ta room ou rejoins en une !
                     </Typography>
                     <Typography sx={{pl:2,pr:2, color:'white'}} >
@@ -104,18 +111,18 @@ function App() {
                       La playlist est partagée entre tout le monde en temps réel et l'hôte de la room est maître de la soirée !
                     </Typography>
                   </Box>
-                  <Box> 
-                    <Typography variant="h5"  sx={{ color:'white'}} gutterBottom>
+                  <Box > 
+                    <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
                       Soyez tous synchronisés !
                     </Typography>
-                    <Typography sx={{ color:'white'}} >
+                    <Typography sx={{pl:2,pr:2, color:'white'}} >
                       La playlist est partagée en temps réel entre tous les utilisateurs, vous pouvez ainsi regarder la même chose, en même temps a des endroits différents !
                     </Typography>
                   </Box>
               </AutoplaySlider>
             </Grid>
             
-            <Button variant="filled" sx={{width:'100%',bgcolor:'#23282d !important',color:'white', height:'50px', mt:'2em', mb:'2em'}} onClick={createNewRoom}> Créer une Room </Button> 
+            <Button variant="filled" className='main_bg_color' sx={{width:'100%',color:'white', height:'50px', mt:'2em', mb:'2em'}} onClick={createNewRoom}> Créer une Room </Button> 
             <Typography sx={{mb:2}}></Typography>
             <Typography variant="h5" gutterBottom>
               Rejoindre une room 
@@ -165,7 +172,7 @@ function App() {
                       if (ev.key === 'Enter')  { checkForNewPseudo()}
                     }}
                     label="Créez votre pseudo !"
-                    helperText="Bien qu'anonyme, il est nécessaire d'avoir un pseudo !"
+                    helperText="Bien qu'anonyme, il est nécessaire d'avoir un pseudo pour utiliser les rooms!"
                     value={userInfoPseudoInput}
                     onChange={e => setUserInfoPseudoInput(e.target.value)}
                     sx={{ width: '100%', paddingRight:'0', "& .MuiOutlinedInput-root": {
