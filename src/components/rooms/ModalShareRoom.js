@@ -21,7 +21,7 @@ const ModalShareRoom = ({ roomUrl }) => {
 
     return(
         <Box sx={{ padding: '1em 2em 1em 1em' }} className='modal_share_room'>
-            <DialogTitle sx={{padding:0}}>Invitez des gens dans la room ! </DialogTitle>  
+            <DialogTitle sx={{padding:0}}>Invites des gens dans la room ! </DialogTitle>  
 
             <ShareSocial sx={{margin:0, padding:0,maxHeight:'none'}}
                 url ={roomUrl}

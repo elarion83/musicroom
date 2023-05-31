@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
 
+import Dialog from '@mui/material/Dialog';
 import { v4 as uuid } from 'uuid';
 import InputAdornment from '@mui/material/InputAdornment';
 import AddIcon from '@mui/icons-material/Add';
@@ -22,10 +23,12 @@ import YTSearch from 'youtube-api-search';
 import SearchIcon from '@mui/icons-material/Search';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { Typography } from "@mui/material";
 
 
-const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
+const RoomModalAddMedia = ({ validatedObjectToAdd, isOpen }) => {
 
+    const [OpenAddToPlaylistModal, setOpenAddToPlaylistModal] = useState(isOpen);
     const [mediaSearchResultYoutube, setMediaSearchResultYoutube] = useState([]);
     const [mediaSearchResultDailyMotion, setMediaSearchResultDailyMotion] = useState([]);
     const [addingUrl, setAddingUrl] = useState('');
@@ -93,11 +96,13 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
             } else {
                 YTSearch({key: 'AIzaSyAcFecOONJZvjwMnTB9Fv9x753KWsVUvWM', term: searchTerm}, (videos) => {
                     setMediaSearchResultYoutube(videos);
+                    console.log(videos);
                 });
 
                 fetch('https://api.dailymotion.com/videos?fields=id,thumbnail_url%2Ctitle&country=fr&search='+searchTerm+'&limit=5')
                     .then((response) => response.json())
                     .then((responseJson) => {
+                        console.log(responseJson.list);
                         setMediaSearchResultDailyMotion(responseJson.list);
                 })
             }
@@ -106,13 +111,9 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
     }
 
     return(
-        <Box sx={{ padding: '1em 2em 1em 1em' }}>
-            <Grid container spacing={2}>
-                
+        
+        <Dialog fullScreen open={isOpen} onClose={(e) => setOpenAddToPlaylistModal(false)} >
                 <DialogTitle sx={{pb:0}}>Ajouter dans la playlist</DialogTitle>
-                <DialogContentText sx={{ml:3}}>
-                    Ajoutez un média en insérant sont url ou en effectuant une recherche sur Youtube et autres depuis le champs ci dessous.
-                </DialogContentText>
                   <Grid item xs={12}>
                     <TextField
                         id="addMediaSearchInput"
@@ -151,17 +152,15 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                         {tabIndex === 0 && (
                         <Box >  
                             {mediaSearchResultYoutube.length > 1 && <Grid item xs={12}>
-                                <List component="nav"
-                                    subheader={
-                                        <ListSubheader component="div" id="nested-list-subheader" sx={{lineHeight:"15px", padding:0, mb:3}}>
-                                        Résultats de recherche Youtube, cliquez sur un lien pour l'ajouter
-                                        </ListSubheader>
-                                    }
-                                >
+                                <List component="nav">
                                     { mediaSearchResultYoutube.map(function(media, idx){
                                         return (<ListItemButton sx={{margin:0,mb:1, padding:0, pr:1}}  key={idx} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.snippet.title, source:'youtube', url:'https://www.youtube.com/watch?v='+media.id.videoId, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
                                             <img src={media.snippet.thumbnails.default.url} />
-                                            <ListItemText primary={media.snippet.title.substring(0, 50)} sx={{ml:2, mt:0, fontSize:'0.9em'}}/></ListItemButton>)
+                                            <Grid sx={{display:'flex',flexDirection:'column',pl:2}}>
+                                                <ListItemText primary={media.snippet.title.substring(0, 50)} sx={{ mt:0, fontSize:'0.9em'}}/>
+                                                <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>Publié par <b>{media.snippet.channelTitle}</b></Typography>
+                                            </Grid>
+                                            </ListItemButton>)
                                     }) }
                                 </List>
                             </Grid>}
@@ -170,13 +169,7 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                         {tabIndex === 1 && (
                         <Box>
                             {mediaSearchResultDailyMotion.length > 1 && <Grid item xs={12}>
-                            <List component="nav"
-                                subheader={
-                                    <ListSubheader component="div" id="nested-list-subheader" sx={{lineHeight:"15px", padding:0, mb:3}}>
-                                    Résultats de recherche DailyMotion, cliquez sur un lien pour l'ajouter
-                                    </ListSubheader>
-                                }
-                            >
+                            <List component="nav">
                                 { mediaSearchResultDailyMotion.map(function(media, idx){
                                     return (<ListItemButton sx={{margin:0,mb:1, padding:0, pr:1}} key={idx} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.title, source:'dailymotion', url:'https://www.dailymotion.com/video/'+media.id, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
                                         <img src={media.thumbnail_url} style={{width:'120px', height:'90px'}}/>
@@ -189,9 +182,7 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                     </Box>
                   </Grid>}
                   {recentlyAdded && <Alert severity="success" sx={{margin:2}}> Bien ajouté à la playlist !</Alert>}
-
-            </Grid>
-        </Box>
+        </Dialog>
     )
 };
 
