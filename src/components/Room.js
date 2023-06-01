@@ -345,7 +345,7 @@ const Room = ({ roomId }) => {
         </Container>
         <Dialog fullScreen open={OpenAddToPlaylistModal} keepMounted onClose={(e) => setOpenAddToPlaylistModal(false)} className='black_style_dialog' >
             
-            <Grid sx={{bgcolor:'#202124', pb:0}} container>
+            <Grid sx={{bgcolor:'#202124', pb:0 , flexFlow: 'nowrap'}} container>
                 <Button 
                     className='modal_full_screen_close_left'
                     onClick={(e) => setOpenAddToPlaylistModal(false)}
