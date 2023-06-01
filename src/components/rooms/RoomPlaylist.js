@@ -50,13 +50,13 @@ const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleVoteChange, u
                                     backgroundColor: "#262626"
                                     } }} onClick={e => handleChangeIdActuallyPlaying(idx)} key={'playlist_'+idx} xs={12} selected={roomIdActuallyPlaying === idx}>
                                 
-                                    <ListItemIcon sx={{ pl:2,color:'white', zIndex:2}}>
+                                    <ListItemIcon sx={{ pl:2,color:'white', zIndex:2}} className="hidden-xs">
                                             {idx !== roomIdActuallyPlaying && <PlayCircleOutlineIcon />}
                                             {idx === roomIdActuallyPlaying && roomIsActuallyPlaying && <PauseCircleOutlineIcon  />}
                                             {idx === roomIdActuallyPlaying && !roomIsActuallyPlaying && <PlayCircleOutlineIcon />}
                                     </ListItemIcon>
-                                    <Grid item sx={{display:'block', zIndex:2, pb:0.5, flexGrow:1}}>
-                                        { d.title && <ListItemText sx={{ pl:0, mb:0, wordBreak: 'break-all'}} primary={d.title.substring(0, 50)+'...'} />}
+                                    <Grid item sx={{display:'block', zIndex:2, pl: 2, pb:0.5, flexGrow:1}}>
+                                        { d.title && <ListItemText sx={{ pl:0, mb:0, wordBreak: 'break-all'}} primary={d.title.length > 50 ? d.title.substring(0, 50)+'...' : d.title} />}
                                         { (d.title && d.title.length === 0) || !d.title && <ListItemText sx={{ pl:0,mb:0, wordBreak: 'break-all'}} primary={d.url.substring(0, 40)+'...'} />}
                                         <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
                                             Ajouté par : <b>{ roomPlaylist[idx].addedBy }</b>

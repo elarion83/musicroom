@@ -90,12 +90,6 @@
       .main_bg_color, .MuiInputAdornment-root {
         background-color: #b39f74 !important;
       }
-      .MuiOutlinedInput-root  fieldset{
-        border: 2px solid #b39f74;
-      }
-      .MuiOutlinedInput-root:hover fieldset{
-        border: 2px solid #786b4d;
-      }
       .main_bg_color:hover {
         background-color: #786b4d !important;
       }
@@ -106,6 +100,92 @@
         background-color: #4f4f4f !important;
       }
 
+      .input_big fieldset {
+        border:none !important;
+      }
+
+      .black_style_dialog {
+        background-color:#4f4f4f;
+      }
+
+    
+      .modal_full_screen_close_left {
+        padding:'25px';
+      }
+
+      .black_style_dialog .MuiPaper-root {
+        background:none;
+      }
+
+      .input_big input, .input_big.typed {
+        font-size: 2em;
+        color:#b39f74 !important;
+        text-transform: uppercase;
+        background-color:rgba(255, 255, 255, 0.1) !important;
+      }
+
+      .input_big.typed {
+        padding-left: 1em;
+      }
+      
+      .input_big.typed::placeholder {
+        color:#b39f74 !important;
+      }
+
+      .autowriter_container {
+        display: flex;
+        flex-direction: row;
+      }
+
+      .autowriter_container > span{
+        flex-grow: 1 !important;
+      }
+
+      @media (max-width: 500px) { 
+        .full_width_modal_content_container {
+          padding: 0 !important;
+        }
+        
+        .input_big input, .input_big.typed,.input_big.typed:focus {
+          font-size: 1em;
+          background-color:rgba(255, 255, 255, 0.1);
+        }
+
+
+        .video_title_list span {
+          font-size: 0.8em;
+        }
+        .hidden-xs {
+          display: none !important;
+        }
+      }
+
+      .typed-cursor {
+          opacity: 1;
+          animation: typedjsBlink 0.7s infinite;
+          -webkit-animation: typedjsBlink 0.7s infinite;
+          animation: typedjsBlink 0.7s infinite;
+      }
+
+      @keyframes typedjsBlink {
+          50% {
+              opacity: 0.0;
+          }
+      }
+
+      @-webkit-keyframes typedjsBlink {
+          0% {
+              opacity: 1;
+          }
+
+          50% {
+              opacity: 0.0;
+          }
+
+          100% {
+              opacity: 1;
+          }
+      }
 
     </style>
   </head>
