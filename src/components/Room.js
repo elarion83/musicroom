@@ -5,10 +5,12 @@ import { db } from "../services/firebase";
 import Toolbar from '@mui/material/Toolbar';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Dialog from '@mui/material/Dialog';
 import ReactPlayer from 'react-player';
 import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
+import TuneIcon from '@mui/icons-material/Tune';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import ShareIcon from '@mui/icons-material/Share';
@@ -49,6 +51,10 @@ import RoomTopBar from "./general_template/RoomTopBar";
 import ModalRoomParams from '../components/rooms/ModalRoomParams'
 import { TransitionProps } from '@mui/material/transitions';
 
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 const Room = ({ roomId }) => {
 
@@ -63,6 +69,7 @@ const Room = ({ roomId }) => {
     const [pip, setPip] = useState(true);
 	const roomRef = db.collection("rooms").doc(roomId.toLowerCase());
     const [userCanMakeInteraction, setUserCanMakeInteraction]= useState(true);
+    const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
 
     const playerRef = useRef({
         url: null,
@@ -223,6 +230,13 @@ const Room = ({ roomId }) => {
     }
 
     
+    function handleQuitRoom() {
+        if(localStorage.getItem("MusicRoom_RoomId")) {
+            localStorage.removeItem("MusicRoom_RoomId");
+            window.location.reload(false);
+        } 
+        window.location.href = "/";
+    }
 
     function handleFullScreen() {
         //findDOMNode(playerRef).requestFullscreen();
@@ -269,6 +283,10 @@ const Room = ({ roomId }) => {
         setOpenRoomParamModal(roomParamModalIsOpen);
     }
 
+    function handleOpenLeaveRoomModal(leaveRoomModalIsOpen) {
+        setOpenLeaveRoomModal(leaveRoomModalIsOpen);
+    }
+
     function handleUpdateRoomParams(newParams) {
 
         console.log(newParams);
@@ -278,7 +296,7 @@ const Room = ({ roomId }) => {
 
   return (
     <div className="flex flex-col w-full gap-0 relative " style={{height:'calc(100vh - 10em)'}}>
-        <RoomTopBar localData={localData} roomId={roomId} handleOpenShareModal={handleOpenShareModal} handleOpenRoomParamModal={handleOpenRoomParamModal} roomAdmin={room.admin}/>
+        <RoomTopBar localData={localData} roomId={roomId} handleOpenShareModal={handleOpenShareModal} handleOpenRoomParamModal={handleOpenRoomParamModal} handleOpenLeaveRoomModal={handleOpenLeaveRoomModal} roomAdmin={room.admin}/>
         <Container maxWidth={false} sx={{ padding: '0 !important'}} >
             { !<ActuallyPlaying roomRef={roomRef}/>}
             {loaded && room.playlistUrls && <div> 
@@ -437,6 +455,28 @@ const Room = ({ roomId }) => {
         {loaded && room.roomParams && <Dialog onClose={(e) => setOpenRoomParamModal(false)} open={openRoomParamModal}>
             <ModalRoomParams roomParams={room.roomParams} />
         </Dialog>} 
+
+        <Dialog open={openLeaveRoomModal} keepMounted onClose={(e) => setOpenLeaveRoomModal(false)} >
+            
+            <DialogTitle id="alert-dialog-title">
+                Quitter la room ?
+            </DialogTitle>
+            <DialogContent>
+                <DialogContentText >
+                Vous êtes sur le point de quitter la room pour retourner à l'accueil.
+                </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+                <Button variant="outlined" onClick={(e) => handleQuitRoom(false)}>
+                    Quitter
+                </Button>
+                <Button variant="outlined" onClick={(e) => setOpenLeaveRoomModal(false)} autoFocus>
+                    Rester
+                </Button>
+            </DialogActions>
+        </Dialog>
+
+
         {loaded && room.roomParams && <Grid className='room_bottom_interactions' item xs={3}>
             <Tooltip title={"Toutes les "+  (room.roomParams.frequenceInteraction/1000) +" secondes"}>  
                 <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mr:1, ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('laugh') : ''}>
@@ -466,11 +506,11 @@ const Room = ({ roomId }) => {
             <Fab size="small" variant="extended" sx={{justifyContent: 'center', ml:0}} onClick={e => handleOpenShareModal(true)} >
                 <ShareIcon  fontSize="small" />
             </Fab>
-            <Fab size="small" variant="extended" sx={{cursor:'initial',justifyContent: 'center', ml:1, opacity:0}} >
-                <FavoriteIcon  fontSize="small" />
+            <Fab size="small" variant="extended" sx={{justifyContent: 'center', ml:1}} onClick={e => handleOpenRoomParamModal(true)} >
+                <TuneIcon  fontSize="small" />
             </Fab>
-            <Fab size="small" variant="extended" sx={{cursor:'initial',justifyContent: 'center', ml:1, opacity:0}} >
-                <FavoriteIcon  fontSize="small" />
+            <Fab size="small" variant="extended" sx={{justifyContent: 'center', ml:1}} onClick={e => handleOpenLeaveRoomModal(true)} >
+                <ExitToAppIcon  fontSize="small" />
             </Fab>
         </Grid>  }
     </div>

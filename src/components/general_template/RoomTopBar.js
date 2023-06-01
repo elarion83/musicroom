@@ -13,14 +13,8 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import InfoIcon from '@mui/icons-material/Info';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import Button from '@mui/material/Button';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 
-const RoomTopBar = ({roomId, handleOpenShareModal, handleOpenRoomParamModal, roomAdmin }) => {
+const RoomTopBar = ({roomId, handleOpenShareModal, handleOpenRoomParamModal, handleOpenLeaveRoomModal, roomAdmin }) => {
     
     
     const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
@@ -35,13 +29,6 @@ const RoomTopBar = ({roomId, handleOpenShareModal, handleOpenRoomParamModal, roo
 
     const [anchorEl, setAnchorEl] = useState(null);
     
-    function handleQuitRoom() {
-        if(localStorage.getItem("MusicRoom_RoomId")) {
-            localStorage.removeItem("MusicRoom_RoomId");
-            window.location.reload(false);
-        } 
-        window.location.href = "/";
-    }
   return (
     <AppBar position="sticky" className='sticky_top' >
         <Toolbar xs={12}sx={{ bgcolor: '#262626',borderBottom: '2px solid #3e464d', minHeight: '45px !important', fontFamily: 'Monospace', pl:'5px', pr:'25 px' }}>
@@ -94,7 +81,7 @@ const RoomTopBar = ({roomId, handleOpenShareModal, handleOpenRoomParamModal, roo
                         Partager la room
                         </Typography>
                     </MenuItem>
-                    <MenuItem onClick={e => setOpenLeaveRoomModal(true)}>
+                    <MenuItem onClick={e => handleOpenLeaveRoomModal(true)}>
                         <ListItemIcon>
                             <ExitToAppIcon fontSize="small" />
                         </ListItemIcon>
@@ -110,25 +97,7 @@ const RoomTopBar = ({roomId, handleOpenShareModal, handleOpenRoomParamModal, roo
             
         </Toolbar>
         
-        <Dialog open={openLeaveRoomModal} keepMounted onClose={(e) => setOpenLeaveRoomModal(false)} >
-            
-            <DialogTitle id="alert-dialog-title">
-                Quitter la room ?
-            </DialogTitle>
-            <DialogContent>
-                <DialogContentText >
-                Vous êtes sur le point de quitter la room pour retourner à l'accueil.
-                </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-                <Button variant="outlined" onClick={(e) => handleQuitRoom(false)}>
-                    Quitter
-                </Button>
-                <Button variant="outlined" onClick={(e) => setOpenLeaveRoomModal(false)} autoFocus>
-                    Rester
-                </Button>
-            </DialogActions>
-        </Dialog>
+       
     </AppBar>
   )
 };
