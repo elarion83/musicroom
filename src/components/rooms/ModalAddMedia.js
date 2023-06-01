@@ -119,13 +119,15 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                   <Grid item xs={12} sx={{ mt:2, display:'flex', flexDirection:'row'}} className="autowriter_container">
                      <Typed
                         strings={[
-                            'TA MUSIQUE PREFEREE',
-                            'DAFT PUNK, ORELSAN, BTS',
-                            'UNE VIDEO YOUTUBE',
-                            'DOMINGO, SQUEEZIE',
+                            'CHERCHE TA MUSIQUE PREFEREE',
+                            'CHERCHE UNE VIDEO YOUTUBE OU DAILYMOTION',
+                            'DU DAFT PUNK, ORELSAN OU DRAKE ?',
+                            'UNE VIDEO DE DOMINGO OU SQUEEZIE ?', 
                             'UN ALBUM TENDANCE',
                             'UN LIEN SOUNCLOUND',
                             'UN LIEN YOUTUBE',
+                            'UN LIEN DAILYMOTION',
+                            'UN LIEN VIMEO',
                             'DAFT PUNK - ALIVE (LIVE)',
                             'MKRB - DOM P',
                             'GAZO - LA RUE',
