@@ -20,7 +20,7 @@ import Button from '@mui/material/Button';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-const RoomTopBar = ({roomId, handleOpenShareModal, roomAdmin }) => {
+const RoomTopBar = ({roomId, handleOpenShareModal, handleOpenRoomParamModal, roomAdmin }) => {
     
     
     const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
@@ -78,7 +78,7 @@ const RoomTopBar = ({roomId, handleOpenShareModal, roomAdmin }) => {
                         </Typography>
                     </MenuItem>
                     <Divider />
-                    <MenuItem >
+                    <MenuItem onClick={e => handleOpenRoomParamModal(true)}>
                         <ListItemIcon>
                             <TuneIcon fontSize="small" />
                         </ListItemIcon>
