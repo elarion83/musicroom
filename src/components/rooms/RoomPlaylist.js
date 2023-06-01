@@ -41,13 +41,16 @@ const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleVoteChange, u
                             <Grid item sx={{width:'100%', padding:0,pl:2, margin:0}} className='playlist_bloc'> 
                                 
                                 <ListItemButton sx={{ position:'relative',width:'100%', padding:0,pl:0,margin:0, backgroundColor:'#4f4f4f',borderBottom: '2px solid #3e464d', color:'white', "&.Mui-selected": {
-                                    backgroundColor: "#262626"
+                                    backgroundColor: "#262626",
+                                    transition: 'all 0.3s ease-out'
                                     },
                                     "&.Mui-focusVisible": {
-                                    backgroundColor: "#262626"
+                                    backgroundColor: "#262626",
+                                    transition: 'all 0.3s ease-out'
                                     },
                                     ":hover": {
-                                    backgroundColor: "#262626"
+                                    backgroundColor: "#262626",
+                                    transition: 'all 0.3s ease-out'
                                     } }} onClick={e => handleChangeIdActuallyPlaying(idx)} key={'playlist_'+idx} xs={12} selected={roomIdActuallyPlaying === idx}>
                                 
                                     <ListItemIcon sx={{ pl:2,color:'white', zIndex:2}} className="hidden-xs">
