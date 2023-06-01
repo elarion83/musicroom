@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Dialog from '@mui/material/Dialog';
 import ReactPlayer from 'react-player';
+import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
@@ -19,7 +20,8 @@ import Stack from '@mui/material/Stack';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Notifications from './rooms/Notifications';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
-
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import Typography from '@mui/material/Typography';
 
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
@@ -52,7 +54,8 @@ const Room = ({ roomId }) => {
     const [localVolume, setLocalVolume] = useState(0);
     const [pip, setPip] = useState(true);
 	const roomRef = db.collection("rooms").doc(roomId.toLowerCase());
-    const [roomRefUsed, setRoomRefUsed]= useState(false);
+    const [userCanMakeInteraction, setUserCanMakeInteraction]= useState(true);
+
     const playerRef = useRef({
         url: null,
         pip: false,
@@ -83,6 +86,7 @@ const Room = ({ roomId }) => {
                         playlistUrls: [],
                         playlistEmpty: true,
                         notifsArray:[],
+                        interactionsArray:[],
                         creationTimeStamp	: Date.now()
                     };
                     db.collection("rooms").doc(roomId.toLowerCase()).set(docData).then(() => {});
@@ -112,6 +116,14 @@ const Room = ({ roomId }) => {
         } else {
             document.title = 'Room ID:' + roomId + ' - MusicRoom';
         }
+
+        if(room.interactionsArray && room.interactionsArray.length > 0) {
+            room.interactionsArray.forEach(function (item, index, object) {
+                if(Date.now() - item.timestamp < 10000) { 
+                    createHeartAnimation();
+                }
+            });
+        }
 		getRoomData(roomId); 
     }, [loaded, localData,room]);
 
@@ -131,6 +143,34 @@ const Room = ({ roomId }) => {
     async function handleNonAdminPlay() {
     }
 
+    function createHeartAnimation() {
+        var n = 0;
+        while(n < 1) {
+            const heart = document.createElement("img");
+            heart.src = "img/heart.png";
+            heart.classList.add("heart");
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = Math.random() * 5 + 3 + "s ";
+            document.body.appendChild(heart);
+            setTimeout(() => {
+                heart.remove();
+            }, 1000);
+            n++
+        }
+    }
+
+    async function createHeart() {
+        
+		getRoomData(roomId); 
+        room.interactionsArray.push({timestamp:Date.now(), type:'heart', createdBy: localData.currentUserInfo[0]});
+        roomRef.update({
+            interactionsArray: room.interactionsArray
+        });
+
+        setUserCanMakeInteraction(false);
+        await delay(20000);
+        setUserCanMakeInteraction(true);
+    }
 
     async function handleReady() {
         playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayed, 'seconds');
@@ -150,7 +190,6 @@ const Room = ({ roomId }) => {
     function handleChangeActuallyPlaying(numberToPlay) {
         if(isActuallyAdmin) {
             roomRef.set({playing: numberToPlay, actuallyPlaying:true,mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });
-            
         }
     }
 
@@ -341,7 +380,7 @@ const Room = ({ roomId }) => {
                 </Typography>
                 </Toolbar>
                 { room.playlistEmpty && 
-                    <Alert severity="success" sx={{margin:2, border:'1px solid #F27C24'}}> Bienvenue dans la room ! <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} ><b>Ajoutez quelque chose dans la playlist !</b></a></Alert>
+                    <Alert severity="success" sx={{margin:2, border:'1px solid #F27C24'}}> Bienvenue dans la room ! <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} ><b>Ajoute quelque chose dans la playlist !</b></a></Alert>
                 }
                 {typeof(room.playlistUrls) !== 'undefined' && room.playlistUrls && room.playlistUrls.length > 0 && <Box sx={{ padding:"0em",marginBottom:0, paddingLeft:0}}>
                     <RoomPlaylist roomPlaylist={room.playlistUrls} roomIdActuallyPlaying={room.playing} userVoteArray={localData.currentUserVotes} handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying}  handleVoteChange={handleVoteChange} roomIsActuallyPlaying={room.actuallyPlaying} roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayed} />
@@ -376,10 +415,21 @@ const Room = ({ roomId }) => {
         <Dialog onClose={(e) => setOpenInvitePeopleToRoomModal(false)} open={OpenInvitePeopleToRoomModal}>
             <ModalShareRoom roomUrl={ localData.domain +'/?rid='+roomId} />
         </Dialog>
-        <Grid item xs={3} sx={{position:'fixed', width:'250px', left:'calc(50% - 125px)', bottom:'20px', zIndex:5}}>
-            <Fab variant="extended" style={{justifyContent: 'center'}} onClick={(e) => setOpenAddToPlaylistModal(true)}>
-                <SpeedDialIcon sx={{ mr: 1 }} />
-                Ajouter à la playlist
+        <Grid className='room_bottom_interactions' item xs={3}>
+            {userCanMakeInteraction && <Fab size="small" variant="extended" sx={{justifyContent: 'center', mr:2, bgcolor:'#ff5722'}} onClick={(e) => createHeart()}>
+                <FavoriteIcon  fontSize="small" sx={{color:'white'}} />
+            </Fab>}
+            {!userCanMakeInteraction && <Tooltip title="Toutes les 20secondes">  
+                <Fab size="small" variant="extended" sx={{justifyContent: 'center', mr:2, bgcolor:'grey !important'}}>
+                        <FavoriteIcon  fontSize="small" sx={{color:'white'}} />
+                        <HourglassBottomIcon class="icon_overlay"/>
+                </Fab>
+            </Tooltip>}
+            <Fab color="primary" className={`main_bg_color ${ room.playlistEmpty ? 'bounce': ''}`} aria-label="add" onClick={(e) => setOpenAddToPlaylistModal(true)}>
+                <SpeedDialIcon sx={{color:'white !important'}}/>
+            </Fab>
+            <Fab size="small" variant="extended" sx={{justifyContent: 'center', ml:2, opacity:0}} >
+                <FavoriteIcon  fontSize="small" />
             </Fab>
         </Grid>  
     </div>

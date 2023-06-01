@@ -54,6 +54,7 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
         addingObject.source='';
         addingObject.url='';
         setRecentlyAdded(false);
+        await delay(100);
         setRecentlyAdded(true);
         await delay(2000);
         setRecentlyAdded(false);
