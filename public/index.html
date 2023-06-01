@@ -199,7 +199,7 @@
         width: 25px;
         height: auto;
         opacity: 0;
-        transform: translateY(0);
+        transform: translateY(0) translateX(0);
         z-index: 1200;
         animation: fall 3s linear forwards;
       }
@@ -229,7 +229,7 @@
           opacity: 1;
         }
         to {
-          transform: translateY(101vh);
+          transform: translateY(101vh) translateX(15vw);
         }
       }
       
@@ -243,6 +243,18 @@
         100% {
           transform: rotate(360deg);
         }
+      }
+
+      .room_small_button_interactions {
+        justify-content: 'center';
+        background-color: 'greylight';
+        transform: translateY(0em);
+        transition: all 0.2s;
+      }
+
+      .room_small_button_interactions:hover {
+        transform: translateY(-.4em);
+        transition: all 0.2s;
       }
     </style>
   </head>
