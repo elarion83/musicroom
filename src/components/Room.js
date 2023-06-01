@@ -11,6 +11,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
+import ShareIcon from '@mui/icons-material/Share';
 import AppBar from '@mui/material/AppBar';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import Alert from '@mui/material/Alert';
@@ -433,20 +434,20 @@ const Room = ({ roomId }) => {
                 </Fab>
             </Tooltip>
             <Tooltip title="Toutes les 20secondes">  
-                <Fab size="small" variant="extended" sx={{justifyContent: 'center', mr:2,bgcolor: '', ...(userCanMakeInteraction && {bgcolor: '#ff5722'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('heart') : ''}>
+                <Fab size="small" variant="extended" sx={{justifyContent: 'center', mr:0,bgcolor: '', ...(userCanMakeInteraction && {bgcolor: '#ff5722'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('heart') : ''}>
                     <FavoriteIcon fontSize="small" sx={{color:'white'}} />
                     {!userCanMakeInteraction && <HourglassBottomIcon class="icon_overlay"/>}
                 </Fab>
             </Tooltip>
-            <Tooltip open={room && room.playlistEmpty && !OpenAddToPlaylistModal ? true : false}  title="Ajouter à la playlist" arrow>
-                <Fab sx={{width:'56px',height:'56px'}} color="primary" className={`main_bg_color ${ room.playlistEmpty ? 'animate__animated  animate__headShake animate__delay-5s  animate__repeat-3': ''}`} aria-label="add" onClick={(e) => setOpenAddToPlaylistModal(true)}>
+            <Tooltip open={room && room.playlistEmpty && !OpenAddToPlaylistModal ? true : false} sx={{mt:-2}} title="Ajouter à la playlist" arrow>
+                <Fab sx={{width:'56px',height:'56px', transform:'translateY(-20px) !important'}} color="primary" className={`main_bg_color ${ room.playlistEmpty ? 'animate__animated  animate__headShake animate__delay-5s  animate__repeat-3': ''}`} aria-label="add" onClick={(e) => setOpenAddToPlaylistModal(true)}>
                     <SpeedDialIcon sx={{color:'white !important'}}/>
                 </Fab>
             </Tooltip>
             
             
-            <Fab size="small" variant="extended" sx={{cursor:'initial',justifyContent: 'center', ml:2, opacity:0}} >
-                <FavoriteIcon  fontSize="small" />
+            <Fab size="small" variant="extended" sx={{justifyContent: 'center', ml:0}} onClick={e => handleOpenShareModal(true)} >
+                <ShareIcon  fontSize="small" />
             </Fab>
             <Fab size="small" variant="extended" sx={{cursor:'initial',justifyContent: 'center', ml:1, opacity:0}} >
                 <FavoriteIcon  fontSize="small" />
