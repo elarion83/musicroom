@@ -14,16 +14,21 @@ import Button from '@mui/material/Button';
 import AppBar from '@mui/material/AppBar';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import Alert from '@mui/material/Alert';
+import 'animate.css';
+
 import Fab from '@mui/material/Fab';
 import Stack from '@mui/material/Stack';
 //import screenfull from 'screenfull'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Notifications from './rooms/Notifications';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
+
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import Typography from '@mui/material/Typography';
+import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
+import CelebrationIcon from '@mui/icons-material/Celebration';
 
+import Typography from '@mui/material/Typography';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
@@ -120,7 +125,7 @@ const Room = ({ roomId }) => {
         if(room.interactionsArray && room.interactionsArray.length > 0) {
             room.interactionsArray.forEach(function (item, index, object) {
                 if(Date.now() - item.timestamp < 10000) { 
-                    createHeartAnimation();
+                    createInteractionAnimation(item.type);
                 }
             });
         }
@@ -143,12 +148,12 @@ const Room = ({ roomId }) => {
     async function handleNonAdminPlay() {
     }
 
-    function createHeartAnimation() {
+    async function createInteractionAnimation(type) {
         var n = 0;
         while(n < 1) {
             const heart = document.createElement("img");
-            heart.src = "img/heart.png";
-            heart.classList.add("heart");
+            heart.src = "img/"+type+".png";
+            heart.classList.add("interactionImageContainer");
             heart.style.left = Math.random() * 100 + "vw";
             heart.style.animationDuration = Math.random() * 5 + 3 + "s ";
             document.body.appendChild(heart);
@@ -159,13 +164,11 @@ const Room = ({ roomId }) => {
         }
     }
 
-    async function createHeart() {
+    async function createNewRoomInteraction(type) {
         
 		getRoomData(roomId); 
-        room.interactionsArray.push({timestamp:Date.now(), type:'heart', createdBy: localData.currentUserInfo[0]});
-        roomRef.update({
-            interactionsArray: room.interactionsArray
-        });
+        room.interactionsArray.push({timestamp:Date.now(), type:type, createdBy: localData.currentUserInfo[0]});
+        roomRef.update({interactionsArray: room.interactionsArray});
 
         setUserCanMakeInteraction(false);
         await delay(20000);
@@ -416,19 +419,39 @@ const Room = ({ roomId }) => {
             <ModalShareRoom roomUrl={ localData.domain +'/?rid='+roomId} />
         </Dialog>
         <Grid className='room_bottom_interactions' item xs={3}>
-            {userCanMakeInteraction && <Fab size="small" variant="extended" sx={{justifyContent: 'center', mr:2, bgcolor:'#ff5722'}} onClick={(e) => createHeart()}>
-                <FavoriteIcon  fontSize="small" sx={{color:'white'}} />
-            </Fab>}
-            {!userCanMakeInteraction && <Tooltip title="Toutes les 20secondes">  
-                <Fab size="small" variant="extended" sx={{justifyContent: 'center', mr:2, bgcolor:'grey !important'}}>
-                        <FavoriteIcon  fontSize="small" sx={{color:'white'}} />
-                        <HourglassBottomIcon class="icon_overlay"/>
+            
+            <Tooltip title="Toutes les 20secondes">  
+                <Fab size="small" variant="extended" sx={{justifyContent: 'center', mr:1,bgcolor: '', ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('laugh') : ''}>
+                    <EmojiEmotionsIcon fontSize="small" sx={{color:'white'}} />
+                    {!userCanMakeInteraction && <HourglassBottomIcon class="icon_overlay"/>}
                 </Fab>
-            </Tooltip>}
-            <Fab color="primary" className={`main_bg_color ${ room.playlistEmpty ? 'bounce': ''}`} aria-label="add" onClick={(e) => setOpenAddToPlaylistModal(true)}>
-                <SpeedDialIcon sx={{color:'white !important'}}/>
+            </Tooltip>
+            <Tooltip title="Toutes les 20secondes">  
+                <Fab size="small" variant="extended" sx={{justifyContent: 'center', mr:1,bgcolor: '', ...(userCanMakeInteraction && {bgcolor: '#ff9c22'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
+                    <CelebrationIcon fontSize="small" sx={{color:'white'}} />
+                    {!userCanMakeInteraction && <HourglassBottomIcon class="icon_overlay"/>}
+                </Fab>
+            </Tooltip>
+            <Tooltip title="Toutes les 20secondes">  
+                <Fab size="small" variant="extended" sx={{justifyContent: 'center', mr:2,bgcolor: '', ...(userCanMakeInteraction && {bgcolor: '#ff5722'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('heart') : ''}>
+                    <FavoriteIcon fontSize="small" sx={{color:'white'}} />
+                    {!userCanMakeInteraction && <HourglassBottomIcon class="icon_overlay"/>}
+                </Fab>
+            </Tooltip>
+            <Tooltip open={room && room.playlistEmpty && !OpenAddToPlaylistModal ? true : false}  title="Ajouter à la playlist" arrow>
+                <Fab sx={{width:'56px',height:'56px'}} color="primary" className={`main_bg_color ${ room.playlistEmpty ? 'animate__animated  animate__headShake animate__delay-5s  animate__repeat-3': ''}`} aria-label="add" onClick={(e) => setOpenAddToPlaylistModal(true)}>
+                    <SpeedDialIcon sx={{color:'white !important'}}/>
+                </Fab>
+            </Tooltip>
+            
+            
+            <Fab size="small" variant="extended" sx={{cursor:'initial',justifyContent: 'center', ml:2, opacity:0}} >
+                <FavoriteIcon  fontSize="small" />
             </Fab>
-            <Fab size="small" variant="extended" sx={{justifyContent: 'center', ml:2, opacity:0}} >
+            <Fab size="small" variant="extended" sx={{cursor:'initial',justifyContent: 'center', ml:1, opacity:0}} >
+                <FavoriteIcon  fontSize="small" />
+            </Fab>
+            <Fab size="small" variant="extended" sx={{cursor:'initial',justifyContent: 'center', ml:1, opacity:0}} >
                 <FavoriteIcon  fontSize="small" />
             </Fab>
         </Grid>  

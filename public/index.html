@@ -191,27 +191,16 @@
           }
       }
       
-      .bounce {
-        animation: bounce 2s ease infinite;
-      }
-      @keyframes bounce {
-          00% { transform:translateY(0%); }
-          70% { transform:translateY(0%); }
-          80% { transform:translateY(-15%); }
-          90% { transform:translateY(0%); }
-          95% { transform:translateY(-7%); }
-          97% { transform:translateY(0%); }
-          99% { transform:translateY(-3%); }
-          100% { transform:translateY(0); }
+      .animate__infinite:hover {
+        animation: none;
       }
 
-      .heart {
+      .interactionImageContainer {
         position: fixed;
         top: 70vh;
         width: 25px;
         height: auto;
         opacity: 0;
-        /* font-size: 40px; */
         transform: translateY(0);
         z-index: 1200;
         animation: fall 3s linear forwards;
