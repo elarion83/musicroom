@@ -18,6 +18,7 @@ import Stack from '@mui/material/Stack';
 //import screenfull from 'screenfull'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Notifications from './rooms/Notifications';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
 
 import Typography from '@mui/material/Typography';
 
@@ -289,33 +290,38 @@ const Room = ({ roomId }) => {
                                         Ajouté par : { room.playlistUrls[room.playing].addedBy }
                                     </Typography>
                                 </Grid>
-                                <Grid className='player_button_container' item sm={12} sx={{ padding:0,pl:1.5,ml:0, mb: 0 , mt:1, fill:'#f0f1f0'}}>
+                                <Grid className='player_button_container' item sm={12} sx={{ padding:0,pl:1.5,ml:0, pr:1.5,mb: 0 , mt:1, fill:'#f0f1f0'}}   >
                                     {isActuallyAdmin && <Grid item sm={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:2, mb: 1.5 }}>
+                                        
+                                        {room.playing > 0 && <IconButton onClick={e => handleChangeActuallyPlaying(0)}>
+                                             <FirstPageIcon  fontSize="large" sx={{color:'#f0f1f0'}} />
+                                        </IconButton>}
+                                        {room.playing == 0 && <IconButton>
+                                             <FirstPageIcon  fontSize="large" sx={{color:'#303134'}} />
+                                        </IconButton>}
+                                        
                                         {room.playing > 0 && <IconButton onClick={e => handleChangeActuallyPlaying(room.playing - 1)}>
                                             <SkipPreviousIcon fontSize="large" sx={{color:'#f0f1f0'}} />
                                         </IconButton>}
                                         {room.playing == 0 &&<IconButton>
                                             <SkipPreviousIcon fontSize="large" sx={{color:'#303134'}} />
                                         </IconButton>}
-                                        { room.actuallyPlaying && <IconButton variant="contained" onClick={e => handlePlay(false)} >
+                                        { room.actuallyPlaying && <IconButton variant="contained" onClick={e => handlePlay(false)}sx={{position:'sticky', top:0, zIndex:2500}} >
                                             <PauseCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />
                                         </IconButton>}
-                                        { !room.actuallyPlaying && <IconButton variant="contained" onClick={e => handlePlay(true)} >
+                                        { !room.actuallyPlaying && <IconButton variant="contained" onClick={e => handlePlay(true)} sx={{position:'sticky', top:0, zIndex:2500}}>
                                             <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}}/>
                                         </IconButton>}
                                         {(room.playlistUrls.length -1) !== room.playing && <IconButton onClick={e => handleChangeActuallyPlaying(room.playing + 1)}>
                                             <SkipNextIcon fontSize="large" sx={{color:'#f0f1f0'}} />
                                         </IconButton>}
-                                       
                                         {(room.playlistUrls.length -1) == room.playing && <IconButton>
                                             <SkipNextIcon fontSize="large" sx={{color:'#303134'}} />
                                         </IconButton>}
+
                                         <IconButton onClick={e => setPercentagePlayed(0)} >
                                             <SettingsBackupRestoreIcon fontSize="large" sx={{color:'#f0f1f0'}} />
                                         </IconButton>
-                                        {<IconButton onClick={e => handleChangeActuallyPlaying(0)}>
-                                             <RestartAltIcon fontSize="large" sx={{color:'#f0f1f0'}} />
-                                        </IconButton>}
                                         
                                     </Grid>}
                                     <Grid item sm={12} sx={{ pt:0,pl:2,pr:2,ml:0, mb: 0, pb:1, mt:3 }}>
@@ -330,7 +336,7 @@ const Room = ({ roomId }) => {
                         </Grid>
                     </Box>
                 }
-                <Toolbar xs={12} sx={{ bgcolor: '#262626',borderBottom: '2px solid #3e464d', minHeight: '45px !important', fontFamily: 'Monospace', pl:'5px', pr:'25 px' }}>
+                <Toolbar xs={12} sx={{ bgcolor: '#262626',borderBottom: '2px solid #3e464d', minHeight: '45px !important', fontFamily: 'Monospace', pl:'17px', pr:'25 px' }}>
                 <Typography component="div" sx={{ flexGrow: 1, textTransform:'uppercase', fontSize:'12px', color:'white' }}> Playlist <b><span> ({ room.playlistUrls && room.playlistUrls.length } médias en playlist)</span></b>
                 </Typography>
                 </Toolbar>
