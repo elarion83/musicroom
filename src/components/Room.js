@@ -46,6 +46,7 @@ import RoomModalAddMedia from '../components/rooms/ModalAddMedia'
 import ModalShareRoom from '../components/rooms/ModalShareRoom'
 import RoomPlaylist from "./rooms/RoomPlaylist";
 import RoomTopBar from "./general_template/RoomTopBar";
+import ModalRoomParams from '../components/rooms/ModalRoomParams'
 import { TransitionProps } from '@mui/material/transitions';
 
 import Slide from '@mui/material/Slide';
@@ -57,6 +58,7 @@ const Room = ({ roomId }) => {
 	const [room, setRoom] = useState({});
     const [OpenInvitePeopleToRoomModal, setOpenInvitePeopleToRoomModal] = useState(false);
     const [OpenAddToPlaylistModal, setOpenAddToPlaylistModal] = useState(false);
+    const [openRoomParamModal, setOpenRoomParamModal] = useState(false);
     const [localVolume, setLocalVolume] = useState(0);
     const [pip, setPip] = useState(true);
 	const roomRef = db.collection("rooms").doc(roomId.toLowerCase());
@@ -92,6 +94,7 @@ const Room = ({ roomId }) => {
                         playlistUrls: [],
                         playlistEmpty: true,
                         notifsArray:[],
+                        roomParams:{frequenceInteraction:20000},
                         interactionsArray:[],
                         creationTimeStamp	: Date.now()
                     };
@@ -125,7 +128,7 @@ const Room = ({ roomId }) => {
 
         if(room.interactionsArray && room.interactionsArray.length > 0) {
             room.interactionsArray.forEach(function (item, index, object) {
-                if(Date.now() - item.timestamp < 10000) { 
+                if(Date.now() - item.timestamp < 15000) { 
                     createInteractionAnimation(item.type);
                 }
             });
@@ -172,7 +175,7 @@ const Room = ({ roomId }) => {
         roomRef.update({interactionsArray: room.interactionsArray});
 
         setUserCanMakeInteraction(false);
-        await delay(20000);
+        await delay(room.roomParams.frequenceInteraction);
         setUserCanMakeInteraction(true);
     }
 
@@ -219,6 +222,8 @@ const Room = ({ roomId }) => {
         setLocalVolume(e.target.value);
     }
 
+    
+
     function handleFullScreen() {
         //findDOMNode(playerRef).requestFullscreen();
     }
@@ -259,12 +264,21 @@ const Room = ({ roomId }) => {
     function handleOpenShareModal(ShareModalIsOpen) {
         setOpenInvitePeopleToRoomModal(ShareModalIsOpen);
     }
+
+    function handleOpenRoomParamModal(roomParamModalIsOpen) {
+        setOpenRoomParamModal(roomParamModalIsOpen);
+    }
+
+    function handleUpdateRoomParams(newParams) {
+
+        console.log(newParams);
+    }
   
   // transitions
 
   return (
     <div className="flex flex-col w-full gap-0 relative " style={{height:'calc(100vh - 10em)'}}>
-        <RoomTopBar localData={localData} roomId={roomId} handleOpenShareModal={handleOpenShareModal} roomAdmin={room.admin}/>
+        <RoomTopBar localData={localData} roomId={roomId} handleOpenShareModal={handleOpenShareModal} handleOpenRoomParamModal={handleOpenRoomParamModal} roomAdmin={room.admin}/>
         <Container maxWidth={false} sx={{ padding: '0 !important'}} >
             { !<ActuallyPlaying roomRef={roomRef}/>}
             {loaded && room.playlistUrls && <div> 
@@ -419,21 +433,24 @@ const Room = ({ roomId }) => {
         <Dialog onClose={(e) => setOpenInvitePeopleToRoomModal(false)} open={OpenInvitePeopleToRoomModal}>
             <ModalShareRoom roomUrl={ localData.domain +'/?rid='+roomId} />
         </Dialog>
-        <Grid className='room_bottom_interactions' item xs={3}>
-            
-            <Tooltip title="Toutes les 20secondes">  
+        
+        {loaded && room.roomParams && <Dialog onClose={(e) => setOpenRoomParamModal(false)} open={openRoomParamModal}>
+            <ModalRoomParams roomParams={room.roomParams} />
+        </Dialog>} 
+        {loaded && room.roomParams && <Grid className='room_bottom_interactions' item xs={3}>
+            <Tooltip title={"Toutes les "+  (room.roomParams.frequenceInteraction/1000) +" secondes"}>  
                 <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mr:1, ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('laugh') : ''}>
                     <EmojiEmotionsIcon fontSize="small" sx={{color:'white'}} />
                     {!userCanMakeInteraction && <HourglassBottomIcon class="icon_overlay"/>}
                 </Fab>
             </Tooltip>
-            <Tooltip title="Toutes les 20secondes">  
+            <Tooltip title={"Toutes les "+  (room.roomParams.frequenceInteraction/1000) +" secondes"}>  
                 <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{mr:1, ...(userCanMakeInteraction && {bgcolor: '#ff9c22 !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
                     <CelebrationIcon fontSize="small" sx={{color:'white'}} />
                     {!userCanMakeInteraction && <HourglassBottomIcon class="icon_overlay"/>}
                 </Fab>
             </Tooltip>
-            <Tooltip title="Toutes les 20secondes">  
+            <Tooltip title={"Toutes les "+  (room.roomParams.frequenceInteraction/1000) +" secondes"}>  
                 <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mr:0, ...(userCanMakeInteraction && {bgcolor: '#ff5722 !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('heart') : ''}>
                     <FavoriteIcon fontSize="small" sx={{color:'white'}} />
                     {!userCanMakeInteraction && <HourglassBottomIcon class="icon_overlay"/>}
@@ -455,7 +472,7 @@ const Room = ({ roomId }) => {
             <Fab size="small" variant="extended" sx={{cursor:'initial',justifyContent: 'center', ml:1, opacity:0}} >
                 <FavoriteIcon  fontSize="small" />
             </Fab>
-        </Grid>  
+        </Grid>  }
     </div>
   );
 };
