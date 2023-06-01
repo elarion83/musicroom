@@ -9,12 +9,14 @@ import Dialog from '@mui/material/Dialog';
 import ReactPlayer from 'react-player';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import AppBar from '@mui/material/AppBar';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import Alert from '@mui/material/Alert';
 import Fab from '@mui/material/Fab';
 import Stack from '@mui/material/Stack';
 //import screenfull from 'screenfull'
-
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Notifications from './rooms/Notifications';
 
 import Typography from '@mui/material/Typography';
@@ -35,9 +37,11 @@ import RoomModalAddMedia from '../components/rooms/ModalAddMedia'
 import ModalShareRoom from '../components/rooms/ModalShareRoom'
 import RoomPlaylist from "./rooms/RoomPlaylist";
 import RoomTopBar from "./general_template/RoomTopBar";
+import { TransitionProps } from '@mui/material/transitions';
 
 import Slide from '@mui/material/Slide';
 const Room = ({ roomId }) => {
+
 
     const [localData, setLocalData] = useState({domain:window.location.hostname, synchro:false, currentUserVotes:{up:[], down:[]}, currentUserInfo: useState(localStorage.getItem("MusicRoom_UserInfoPseudo")) });
 	const [loaded, setLoaded] = useState(false);
@@ -339,12 +343,34 @@ const Room = ({ roomId }) => {
             </div>
             } 
         </Container>
-        <RoomModalAddMedia validatedObjectToAdd={handleAddValidatedObjectToPlaylist} isOpen={OpenAddToPlaylistModal} handleIsOpen={setOpenAddToPlaylistModal} /> 
-        
+        <Dialog fullScreen open={OpenAddToPlaylistModal} keepMounted onClose={(e) => setOpenAddToPlaylistModal(false)} className='black_style_dialog' >
+            
+            <Grid sx={{bgcolor:'#202124', pb:0}} container>
+                <Button 
+                    className='modal_full_screen_close_left'
+                    onClick={(e) => setOpenAddToPlaylistModal(false)}
+                    aria-label="close"
+                    sx={{bgcolor:'#131416', mr:2,borderRadius:0}}
+                    xs={12}
+                >
+                    <ArrowBackIosNewIcon sx={{fontSize:'2em', color:'#b39f74', fill:'#b39f74'}} />
+                </Button >
+                {room.playlistEmpty && <Box sx={{display:'flex',flexDirection:'column', pt:'5px', pb:'5px'}}>
+                    <Typography component="span"> Playlist vide </Typography>
+                    <Typography sx={{color:'#d5cdcd', display:'block', width:'100%',ml:0, fontSize: '12px', textTransform:'uppercase' }} > Room n° { roomId }</Typography>
+                </Box>}
+                {typeof(room.playlistUrls) !== 'undefined' && loaded && !room.playlistEmpty && <Box sx={{display:'flex',flexDirection:'column', pt:'5px', pb:'5px'}}>
+                    <Typography sx={{color:'#d5cdcd', display:'block', width:'100%',ml:0, fontSize: '12px', textTransform:'uppercase' }} > Room n° { roomId }</Typography>
+                    {room.playlistEmpty && <Typography component="span" sx={{color:'#d5cdcd', display:'block', width:'100%',ml:0, fontSize: '10px', textTransform:'uppercase' }}>  Playlist vide </Typography>}
+                    <Typography sx={{color:'#d5cdcd', display:'block', width:'100%',ml:0, fontSize: '10px', textTransform:'uppercase' }} >{room.actuallyPlaying ? 'En lecture ' : 'En pause :'} <span>{ room.playlistUrls[room.playing].title ? room.playlistUrls[room.playing].title : room.playlistUrls[room.playing].url.substring(0,25)+'..' }</span></Typography>
+                </Box>}
+            </Grid>
+            {OpenAddToPlaylistModal && <RoomModalAddMedia validatedObjectToAdd={handleAddValidatedObjectToPlaylist} /> }
+        </Dialog>
         <Dialog onClose={(e) => setOpenInvitePeopleToRoomModal(false)} open={OpenInvitePeopleToRoomModal}>
             <ModalShareRoom roomUrl={ localData.domain +'/?rid='+roomId} />
         </Dialog>
-        <Grid item xs={3} sx={{position:'fixed', width:'250px', left:'calc(50% - 125px)', bottom:'20px', zIndex:3}}>
+        <Grid item xs={3} sx={{position:'fixed', width:'250px', left:'calc(50% - 125px)', bottom:'20px', zIndex:5}}>
             <Fab variant="extended" style={{justifyContent: 'center'}} onClick={(e) => setOpenAddToPlaylistModal(true)}>
                 <SpeedDialIcon sx={{ mr: 1 }} />
                 Ajouter à la playlist
