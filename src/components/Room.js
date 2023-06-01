@@ -403,11 +403,11 @@ const Room = ({ roomId }) => {
                 >
                     <ArrowBackIosNewIcon sx={{fontSize:'2em', color:'#b39f74', fill:'#b39f74'}} />
                 </Button >
-                {room.playlistEmpty && <Box sx={{display:'flex',flexDirection:'column', pt:'5px', pb:'5px'}}>
+                {room.playlistEmpty && <Box sx={{display:'flex',flexDirection:'column', padding:'1em'}}>
                     <Typography component="span"> Playlist vide </Typography>
                     <Typography sx={{color:'#d5cdcd', display:'block', width:'100%',ml:0, fontSize: '12px', textTransform:'uppercase' }} > Room n° { roomId }</Typography>
                 </Box>}
-                {typeof(room.playlistUrls) !== 'undefined' && loaded && !room.playlistEmpty && <Box sx={{display:'flex',flexDirection:'column', pt:'5px', pb:'5px'}}>
+                {typeof(room.playlistUrls) !== 'undefined' && loaded && !room.playlistEmpty && <Box sx={{display:'flex',flexDirection:'column',padding:'1em'}}>
                     <Typography sx={{color:'#d5cdcd', display:'block', width:'100%',ml:0, fontSize: '12px', textTransform:'uppercase' }} > Room n° { roomId }</Typography>
                     {room.playlistEmpty && <Typography component="span" sx={{color:'#d5cdcd', display:'block', width:'100%',ml:0, fontSize: '10px', textTransform:'uppercase' }}>  Playlist vide </Typography>}
                     <Typography sx={{color:'#d5cdcd', display:'block', width:'100%',ml:0, fontSize: '10px', textTransform:'uppercase' }} >{room.actuallyPlaying ? 'En lecture ' : 'En pause :'} <span>{ room.playlistUrls[room.playing].title ? room.playlistUrls[room.playing].title : room.playlistUrls[room.playing].url.substring(0,25)+'..' }</span></Typography>
