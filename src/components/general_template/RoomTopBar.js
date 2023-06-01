@@ -35,8 +35,8 @@ const RoomTopBar = ({roomId, handleOpenShareModal, roomAdmin }) => {
         window.location.href = "/";
     }
   return (
-    <AppBar position="static">
-            <Toolbar xs={12} sx={{ bgcolor: '#262626',borderBottom: '2px solid #3e464d', minHeight: '45px !important', fontFamily: 'Monospace', pl:'5px', pr:'25 px' }}>
+    <AppBar position="sticky" className='sticky_top' >
+            <Toolbar xs={12}sx={{ bgcolor: '#262626',borderBottom: '2px solid #3e464d', minHeight: '45px !important', fontFamily: 'Monospace', pl:'5px', pr:'25 px' }}>
                 
                     <Tooltip title="Paramètres de la room" sx={{ bgColor:'#30363c'}}>
                         <IconButton

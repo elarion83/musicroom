@@ -133,7 +133,7 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                             'DOMINGO - REACT',
                             'HTTPS://WWW.YOUTUBE.COM/WATCH?V=MAVIDEO',
                             'HTTPS://SOUNDCLOUD.COM/THOMS-12/EBRIUS']}
-                        typeSpeed={15}
+                        typeSpeed={10}
                         showCursor={true}
                         backSpeed={15}
                         attr="placeholder"
