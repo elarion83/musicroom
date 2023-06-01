@@ -422,24 +422,24 @@ const Room = ({ roomId }) => {
         <Grid className='room_bottom_interactions' item xs={3}>
             
             <Tooltip title="Toutes les 20secondes">  
-                <Fab size="small" variant="extended" sx={{justifyContent: 'center', mr:1,bgcolor: '', ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('laugh') : ''}>
+                <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mr:1, ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('laugh') : ''}>
                     <EmojiEmotionsIcon fontSize="small" sx={{color:'white'}} />
                     {!userCanMakeInteraction && <HourglassBottomIcon class="icon_overlay"/>}
                 </Fab>
             </Tooltip>
             <Tooltip title="Toutes les 20secondes">  
-                <Fab size="small" variant="extended" sx={{justifyContent: 'center', mr:1,bgcolor: '', ...(userCanMakeInteraction && {bgcolor: '#ff9c22'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
+                <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{mr:1, ...(userCanMakeInteraction && {bgcolor: '#ff9c22 !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
                     <CelebrationIcon fontSize="small" sx={{color:'white'}} />
                     {!userCanMakeInteraction && <HourglassBottomIcon class="icon_overlay"/>}
                 </Fab>
             </Tooltip>
             <Tooltip title="Toutes les 20secondes">  
-                <Fab size="small" variant="extended" sx={{justifyContent: 'center', mr:0,bgcolor: '', ...(userCanMakeInteraction && {bgcolor: '#ff5722'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('heart') : ''}>
+                <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mr:0, ...(userCanMakeInteraction && {bgcolor: '#ff5722 !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('heart') : ''}>
                     <FavoriteIcon fontSize="small" sx={{color:'white'}} />
                     {!userCanMakeInteraction && <HourglassBottomIcon class="icon_overlay"/>}
                 </Fab>
             </Tooltip>
-            <Tooltip open={room && room.playlistEmpty && !OpenAddToPlaylistModal ? true : false} sx={{mt:-2}} title="Ajouter à la playlist" arrow>
+            <Tooltip placement="top" open={room && room.playlistEmpty && !OpenAddToPlaylistModal ? true : false} sx={{mt:-2}} title="Ajouter à la playlist" arrow>
                 <Fab sx={{width:'56px',height:'56px', transform:'translateY(-20px) !important'}} color="primary" className={`main_bg_color ${ room.playlistEmpty ? 'animate__animated  animate__headShake animate__delay-5s  animate__repeat-3': ''}`} aria-label="add" onClick={(e) => setOpenAddToPlaylistModal(true)}>
                     <SpeedDialIcon sx={{color:'white !important'}}/>
                 </Fab>
