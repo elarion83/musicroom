@@ -87,7 +87,7 @@ function App() {
       <Container maxWidth={false} className='main_container' sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
          <AppBar position="static" sx={{bgcolor: '#202124'}}>
             <Toolbar>
-              <img src="img/logo_small.png" style={{ width: '250px', 'max-width':'50%'}} alt="MusicRoom logo"/>
+              <img src="img/logo_small.png" style={{ width: '250px', maxWidth:'50%'}} alt="MusicRoom logo"/>
               {userInfoPseudo && (
                 <UserTopBar userInfoPseudo={userInfoPseudo} />
               )}

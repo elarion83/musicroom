@@ -21,6 +21,8 @@ import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 
 const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleVoteChange, userVoteArray, handleChangeIdActuallyPlaying, roomIsActuallyPlaying, roomPlayedActuallyPlayed}) => {
 
+    const [idDisplaying, setIdDisplaying] = useState(roomIdActuallyPlaying);
+
     function handleVotePositif(idMedia, mediaHashId) {
         roomPlaylist[idMedia].vote.up++;
         handleVoteChange(idMedia, roomPlaylist[idMedia].vote, mediaHashId, 'up');
@@ -31,6 +33,9 @@ const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleVoteChange, u
         handleVoteChange(idMedia, roomPlaylist[idMedia].vote, mediaHashId, 'down');
     }
 
+    function handleChangeIdActuallyDisplaying(idDisplaying) {
+        setIdDisplaying(idDisplaying);
+    }
     return (
         <Paper className={'scroll'} style={{borderRadius:0}}>
             <List sx={{height: '100%', padding:0, mb:0}}>
@@ -51,7 +56,7 @@ const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleVoteChange, u
                                     ":hover": {
                                     backgroundColor: "#262626",
                                     transition: 'all 0.3s ease-out'
-                                    } }} onClick={e => handleChangeIdActuallyPlaying(idx)} key={'playlist_'+idx} xs={12} selected={roomIdActuallyPlaying === idx}>
+                                    } }} onClick={e => handleChangeIdActuallyDisplaying(idx)} key={'playlist_'+idx} xs={12} selected={roomIdActuallyPlaying === idx}>
                                 
                                     <ListItemIcon sx={{ pl:2,color:'white', zIndex:2}} className="hidden-xs">
                                             {idx !== roomIdActuallyPlaying && <PlayCircleOutlineIcon />}
@@ -61,26 +66,30 @@ const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleVoteChange, u
                                     <Grid item sx={{display:'block', zIndex:2, pl: 2, pb:0.5, flexGrow:1}}>
                                         { d.title && <ListItemText sx={{ pl:0, mb:0, wordBreak: 'break-all'}} primary={d.title.length > 50 ? d.title.substring(0, 50)+'...' : d.title} />}
                                         { (d.title && d.title.length === 0) || !d.title && <ListItemText sx={{ pl:0,mb:0, wordBreak: 'break-all'}} primary={d.url.substring(0, 40)+'...'} />}
-                                        <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
-                                            Ajouté par : <b>{ roomPlaylist[idx].addedBy }</b>
-                                        </Typography>
-                                        {idx === roomIdActuallyPlaying && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1, fontSize: '8px', textTransform:'uppercase' }}>
-                                            Source : { roomPlaylist[idx].source } 
-                                        </Typography>}
+                                        
+                                        {(idx === idDisplaying || idx === roomIdActuallyPlaying)  && 
+                                            <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
+                                                Ajouté par : <b>{ roomPlaylist[idx].addedBy }</b>
+                                            </Typography>
+                                        }
+                                        {(idx === idDisplaying ||idx === roomIdActuallyPlaying)  && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1, fontSize: '8px', textTransform:'uppercase' }}>
+                                                Source : { roomPlaylist[idx].source } 
+                                            </Typography>
+                                        }
                                         {idx === roomIdActuallyPlaying && roomIsActuallyPlaying && <Typography sx={{ display:'block', width:'100%',ml:0, mb: .5, fontSize: '10px', textTransform:'uppercase' }}>
                                             En lecture
                                         </Typography>}
                                         {idx === roomIdActuallyPlaying && !roomIsActuallyPlaying && <Typography sx={{ display:'block', width:'100%',ml:0, mb: .5, fontSize: '10px', textTransform:'uppercase' }}>
                                             En pause
                                         </Typography>}
+                                        
                                     </Grid>
                                    {idx === roomIdActuallyPlaying && <LinearProgress sx={{height:'10px', position:'absolute', width:'100%', height:'100%', zIndex:1, opacity:0.5, "& .MuiLinearProgress-barColorPrimary": {
                                         backgroundColor: "#262626",
                                     }}} variant="determinate" value={roomPlayedActuallyPlayed} /> }
                                 </ListItemButton>
                                 
-                                    
-                                    <Grid className='votebuttons' sx={{position:'absolute', right:'5px', bottom:'10px'}}>
+                                {(idx === idDisplaying || idx === roomIdActuallyPlaying) && <Grid className='votebuttons' sx={{position:'absolute', right:'5px', bottom:'10px'}}>
                                         {!userVoteArray.up.includes(roomPlaylist[idx].hashId) && 
                                             <Button size="small" variant="contained" sx={{zIndex:5,mr:2, fontSize:'0.8em', color:'white', bgcolor:'#262626'}}  onClick={e => handleVotePositif(idx, roomPlaylist[idx].hashId)}>
                                                 <ThumbUpIcon  fontSize="small" sx={{mr:1}}/>
@@ -105,7 +114,8 @@ const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleVoteChange, u
                                                     {roomPlaylist[idx].vote.down }
                                                 </Button>
                                         }
-                                    </Grid>
+                                </Grid>}
+                                
                             </Grid>
                         </Fade>)
                     }) }

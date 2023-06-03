@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { db } from "../services/firebase";
 
-
 import Toolbar from '@mui/material/Toolbar';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -71,17 +70,14 @@ const Room = ({ roomId }) => {
     const [userCanMakeInteraction, setUserCanMakeInteraction]= useState(true);
     const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
 
-    const [scrollPosition, setSrollPosition] = useState(0);
+    const [scrollPosition, setScrollPosition] = useState(0);
     
     
-    function handleScroll() {
-        console.log('a');
-        const position = window.pageYOffset;
-        console.log(position);
-        console.log(scrollPosition);
-        setSrollPosition(position);
-    };
-
+    
+    const onScroll = (e) => {
+        console.log('b');
+        setScrollPosition(e.target.documentElement.scrollTop);
+    }
     const playerRef = useRef({
         url: null,
         pip: false,
@@ -134,6 +130,10 @@ const Room = ({ roomId }) => {
         document.title = 'Room ID:' + roomId + ' - MusicRoom';
 	}, [roomId]);
     
+	useEffect(() => {
+        console.log('a');
+    }, [scrollPosition]);
+
 	useEffect(() => {
         if(localData.currentUserInfo[0] === room.admin || localData.currentUserInfo === room.admin) {
             setIsActuallyAdmin(true);
@@ -305,8 +305,7 @@ const Room = ({ roomId }) => {
   // transitions
 
   return (
-    <div className="flex flex-col w-full gap-0 relative " style={{height:'calc(100vh - 10em)'}} 
-        onScroll={handleScroll}>
+    <div className="flex flex-col w-full gap-0 relative " style={{height:'calc(100vh - 10em)'}} >
         <RoomTopBar localData={localData} roomId={roomId} roomAdmin={room.admin}/>
         <Container maxWidth={false} sx={{ padding: '0 !important'}} >
             { !<ActuallyPlaying roomRef={roomRef}/>}
