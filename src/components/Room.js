@@ -126,10 +126,6 @@ const Room = ({ roomId }) => {
 	useEffect(() => {
 		getRoomData(roomId); 
         
-            if(null !== localStorage.getItem("MusicRoom_SpotifyToken")) {
-                roomRef.set({spotifyToken:localStorage.getItem("MusicRoom_SpotifyToken") }, {merge:true});
-            }
-
         if(null === localStorage.getItem("MusicRoom_UserInfoVotes")) {
             localStorage.setItem("MusicRoom_UserInfoVotes", JSON.stringify({up:[], down:[]}));
         } else {
@@ -305,13 +301,14 @@ const Room = ({ roomId }) => {
             window.location.hash = ""
             window.localStorage.setItem("MusicRoom_SpotifyToken", token)
             handleChangeSpotifyToken(token)
-            window.location.href = "/?rid="+roomId.replace(/\s/g,'');
         }
     }, [])
 
 
-    function handleChangeSpotifyToken(newToken) {
+    async function handleChangeSpotifyToken(newToken) {
         roomRef.set({spotifyToken: newToken}, { merge: true });
+        await delay(2000);
+        window.location.href = "/?rid="+roomId.replace(/\s/g,'');
     }
 
 
@@ -346,7 +343,7 @@ const Room = ({ roomId }) => {
 
   return (
     <div className="flex flex-col w-full gap-0 relative " style={{height:'calc(100vh - 10em)'}} >
-        <RoomTopBar localData={localData} roomId={roomId} roomAdmin={room.admin}/>
+        {loaded && <RoomTopBar localData={localData} roomId={roomId} roomAdmin={room.admin} spotifyTokenProps={room.spotifyToken}/>}
         <Container maxWidth={false} sx={{ padding: '0 !important'}} >
             { !<ActuallyPlaying roomRef={roomRef}/>}
             {loaded && room.playlistUrls && <div> 
@@ -355,14 +352,18 @@ const Room = ({ roomId }) => {
                         <Grid container spacing={0} sx={{ bgcolor:'#262626',}}>
 
                             <Grid item sm={4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
-                                {room.playlistUrls[room.playing].source == 'spotify' &&
-                                <SpotifyPlayer
-                                    token={room.spotifyToken}
-                                    uris={room.playlistUrls[room.playing].url}
-                                    play={room.actuallyPlaying}
-                                    inlineVolume={localVolume}
-                                    ref={playerRef}
-                                />}
+                                {isActuallyAdmin && room.playlistUrls[room.playing].source == 'spotify' &&
+                                    <SpotifyPlayer
+                                        token={room.spotifyToken}
+                                        uris={room.playlistUrls[room.playing].url}
+                                        play={room.actuallyPlaying}
+                                        inlineVolume={localVolume}
+                                        sx={{height:'100%'}}
+                                    />}
+                                {!isActuallyAdmin && room.playlistUrls[room.playing].source == 'spotify' &&
+                                    <Alert severity="warning" sx={{margin:2, border:'1px solid #F27C24'}}> Le lecteur Spotify n'est visible que par l'host de la room. <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} ><b>Ajoute quelque chose dans la playlist en attendant !</b></a></Alert>
+
+                                }
                                 {isActuallyAdmin && room.playlistUrls[room.playing].source != 'spotify'  && <ReactPlayer sx={{ padding:0}}
                                     ref={playerRef}
                                     className='react-player'
@@ -417,7 +418,7 @@ const Room = ({ roomId }) => {
                                     { room.playlistUrls[room.playing].url && room.playlistUrls[room.playing].url.length == 0 || !room.playlistUrls[room.playing].title && <Typography component={'span'} sm={12} >
                                         {room.playlistUrls[room.playing].url.substring(0, 50)+'...'} 
                                     </Typography>}
-                                    {playerReady && <Typography sx={{ ml:0, mb: 1}}> {~~(Math.round(playerRef.current.getCurrentTime())/60) + 'm'+Math.round(playerRef.current.getCurrentTime()) % 60+ 's / ' + formatNumberToMinAndSec(playerRef.current.getDuration())}</Typography>}
+                                    {playerReady && room.playlistUrls[room.playing].source !== 'spotify' && <Typography sx={{ ml:0, mb: 1}}> {~~(Math.round(playerRef.current.getCurrentTime())/60) + 'm'+Math.round(playerRef.current.getCurrentTime()) % 60+ 's / ' + formatNumberToMinAndSec(playerRef.current.getDuration())}</Typography>}
                                     <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
                                         Source : { room.playlistUrls[room.playing].source }
                                     </Typography>
@@ -454,18 +455,25 @@ const Room = ({ roomId }) => {
                                             <SkipNextIcon fontSize="large" sx={{color:'#303134'}} />
                                         </IconButton>}
 
-                                        <IconButton onClick={e => setPercentagePlayed(0)} >
-                                            <SettingsBackupRestoreIcon fontSize="large" sx={{color:'#f0f1f0'}} />
-                                        </IconButton>
                                         
+                                        {room.playlistUrls[room.playing].source === 'spotify' &&
+                                            <IconButton>
+                                                <SettingsBackupRestoreIcon fontSize="large" sx={{color:'#303134'}} />
+                                            </IconButton>
+                                        }
+                                        {room.playlistUrls[room.playing].source !== 'spotify' &&
+                                            <IconButton onClick={e => setPercentagePlayed(0)} >
+                                                <SettingsBackupRestoreIcon fontSize="large" sx={{color:'#f0f1f0'}} />
+                                            </IconButton>
+                                        }
                                     </Grid>}
-                                    <Grid item sm={12} sx={{ pt:0,pl:2,pr:2,ml:0, mb: 0, pb:1, mt:3 }}>
+                                    {room.playlistUrls[room.playing].source !== 'spotify' && <Grid item sm={12} sx={{ pt:0,pl:2,pr:2,ml:0, mb: 0, pb:1, mt:3 }}>
                                         <Stack spacing={2} sm={8} direction="row" sx={{ mb: 1, mr:2 }} alignItems="center">
                                             <VolumeDown />
                                             <Slider step={0.01} min={0}  max={1} aria-label="Volume" value={localVolume} onChange={e => handleVolumeChange(e)} />
                                             <VolumeUp />
                                         </Stack>
-                                    </Grid>
+                                    </Grid>}
                                 </Grid>
                             </Grid>
                         </Grid>
