@@ -13,9 +13,15 @@ import InfoIcon from '@mui/icons-material/Info';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import 'animate.css';
 
-const RoomTopBar = ({roomId, roomAdmin }) => {
+const RoomTopBar = ({localData, roomId, roomAdmin, spotifyTokenProps }) => {
     
     
+    const querystring = require('querystring');
+    const CLIENT_ID = "cd4558d83dd845139f3dfffecf48b903"
+    const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
+    const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
+    const RESPONSE_TYPE = "token"
+
     const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
 
     function handleClickMenu(event) {
@@ -56,6 +62,17 @@ const RoomTopBar = ({roomId, roomAdmin }) => {
                         <Typography>
                         Hosté par <b>{roomAdmin}</b>
                         </Typography>
+                    </MenuItem>
+                    <MenuItem>
+                        <ListItemIcon>
+                            <InfoIcon  fontSize="small" />
+                        </ListItemIcon>
+                        {spotifyTokenProps ? <Typography>Spotify connecté</Typography> 
+                                           : <Typography>
+                                                <a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>
+                                                    Spotify non connecté
+                                                </a>
+                                              </Typography> }
                     </MenuItem>
                 </Menu>
 
