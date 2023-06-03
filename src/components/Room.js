@@ -69,9 +69,11 @@ const Room = ({ roomId }) => {
 	const roomRef = db.collection("rooms").doc(roomId.toLowerCase());
     const [userCanMakeInteraction, setUserCanMakeInteraction]= useState(true);
     const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
-
     const [scrollPosition, setScrollPosition] = useState(0);
+    const [playerReady, setPlayerReady] = useState(false);
     
+    
+
     
     
     const onScroll = (e) => {
@@ -197,6 +199,7 @@ const Room = ({ roomId }) => {
     }
 
     async function handleReady() {
+        setPlayerReady(true);
         playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayed, 'seconds');
         if(isActuallyAdmin) {
             setLocalVolume(0.5);
@@ -297,6 +300,15 @@ const Room = ({ roomId }) => {
         setOpenLeaveRoomModal(leaveRoomModalIsOpen);
     }
 
+    // display function
+    function formatNumberToMinAndSec(number) {
+        
+        var minute = ~~(Math.round(number)/60)+'m';
+        var seconde = Math.round(number)%60+'s';
+        
+        return minute+' '+seconde;
+    }
+
     function handleUpdateRoomParams(newParams) {
 
         console.log(newParams);
@@ -368,6 +380,7 @@ const Room = ({ roomId }) => {
                                     { room.playlistUrls[room.playing].url && room.playlistUrls[room.playing].url.length == 0 || !room.playlistUrls[room.playing].title && <Typography component={'span'} sm={12} >
                                         {room.playlistUrls[room.playing].url.substring(0, 50)+'...'} 
                                     </Typography>}
+                                    {playerReady && <Typography sx={{ ml:0, mb: 1}}> {~~(Math.round(playerRef.current.getCurrentTime())/60) + 'm'+Math.round(playerRef.current.getCurrentTime()) % 60+ 's / ' + formatNumberToMinAndSec(playerRef.current.getDuration())}</Typography>}
                                     <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
                                         Source : { room.playlistUrls[room.playing].source }
                                     </Typography>
@@ -429,7 +442,7 @@ const Room = ({ roomId }) => {
                     <Alert severity="success" sx={{margin:2, border:'1px solid #F27C24'}}> Bienvenue dans la room ! <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} ><b>Ajoute quelque chose dans la playlist !</b></a></Alert>
                 }
                 {typeof(room.playlistUrls) !== 'undefined' && room.playlistUrls && room.playlistUrls.length > 0 && <Box sx={{ padding:"0em",marginBottom:0, paddingLeft:0}}>
-                    <RoomPlaylist roomPlaylist={room.playlistUrls} roomIdActuallyPlaying={room.playing} userVoteArray={localData.currentUserVotes} handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying}  handleVoteChange={handleVoteChange} roomIsActuallyPlaying={room.actuallyPlaying} roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayed} />
+                    <RoomPlaylist isAdminView={isActuallyAdmin} roomPlaylist={room.playlistUrls} roomIdActuallyPlaying={room.playing} userVoteArray={localData.currentUserVotes} handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying}  handleVoteChange={handleVoteChange} roomIsActuallyPlaying={room.actuallyPlaying} roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayed} />
                 </Box>}
             </div>
             } 
@@ -444,7 +457,7 @@ const Room = ({ roomId }) => {
                     sx={{bgcolor:'#131416', mr:2,borderRadius:0}}
                     xs={12}
                 >
-                    <ArrowBackIosNewIcon sx={{fontSize:'2em', color:'#b39f74', fill:'#b39f74'}} />
+                    <ArrowBackIosNewIcon sx={{fontSize:'2em', color:'#b39f74', fill:'#b39f74'}} className='animate__animated animate__fadeInLeft animate__fast' />
                 </Button >
                 {room.playlistEmpty && <Box sx={{display:'flex',flexDirection:'column', padding:'1em'}}>
                     <Typography component="span"> Playlist vide </Typography>
@@ -509,21 +522,21 @@ const Room = ({ roomId }) => {
 
             <Tooltip className='animate__animated animate__fadeInUp animate__delay-1s' placement="top" open={room && room.playlistEmpty && !OpenAddToPlaylistModal ? true : false} sx={{mt:-2}} title="Ajouter à la playlist" arrow>
                 <Fab sx={{width:'56px',height:'56px', transform:'translateY(-20px) !important'}} color="primary" className={`main_bg_color `} aria-label="add" onClick={(e) => setOpenAddToPlaylistModal(true)}>
-                    <SpeedDialIcon sx={{color:'white !important'}}/>
+                    <SpeedDialIcon sx={{color:'white !important'}} className={room && room.playlistEmpty && !OpenAddToPlaylistModal ? 'main_add_media_button' : ''}/>
                 </Fab>
             </Tooltip>
             
-            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s' title={"Paramètres"}>  
+            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s' title="Paramètres">  
                 <Fab size="small" variant="extended" className='room_small_button_interactions'  sx={{justifyContent: 'center', ml:0}} onClick={e => handleOpenRoomParamModal(true)} >
                     <TuneIcon  fontSize="small" />
                 </Fab>
             </Tooltip>
-            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s animate__fast' title={"Partager la room"}>  
+            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s animate__fast' title="Partager la room">  
                 <Fab size="small" variant="extended" className='room_small_button_interactions'  sx={{justifyContent: 'center', ml:1}} onClick={e => handleOpenShareModal(true)} >
                     <ShareIcon  fontSize="small" />
                 </Fab>
             </Tooltip>
-            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s animate__faster' title={"Quitter la room"}>  
+            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s animate__faster' title="Quitter la room">  
                 <Fab size="small" variant="extended" className='room_small_button_interactions'  sx={{justifyContent: 'center', ml:1}} onClick={e => handleOpenLeaveRoomModal(true)} >
                     <ExitToAppIcon  fontSize="small" />
                 </Fab>

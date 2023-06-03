@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
-
+import dateFormat, { masks } from "dateformat";
 import Container from '@mui/material/Container';
 import Dialog from '@mui/material/Dialog';
 import { v4 as uuid } from 'uuid';
@@ -61,18 +61,18 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
     }
         
     async function getYoutubeVideoInfosFromId(videoId, addingObject) {
-                    var params = {
-                        part: 'snippet',
-                        key: 'AIzaSyAcFecOONJZvjwMnTB9Fv9x753KWsVUvWM',
-                        id: videoId,
-                    }; 
-                    
-                    await axios.get('https://www.googleapis.com/youtube/v3/videos', { params: params })
-                    .then(function(response) {
-                        addingObject.title = response.data.items[0].snippet.title;
-                    })
-                    .catch(function(error) {
-                    });
+        var params = {
+            part: 'snippet',
+            key: 'AIzaSyAcFecOONJZvjwMnTB9Fv9x753KWsVUvWM',
+            id: videoId,
+        }; 
+        
+        await axios.get('https://www.googleapis.com/youtube/v3/videos', { params: params })
+        .then(function(response) {
+            addingObject.title = response.data.items[0].snippet.title;
+        })
+        .catch(function(error) {
+        });
     }
 
     async function handleSearchForMedia() {
@@ -103,6 +103,7 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
             } else {
                 YTSearch({key: 'AIzaSyAcFecOONJZvjwMnTB9Fv9x753KWsVUvWM', term: searchTerm}, (videos) => {
                     setMediaSearchResultYoutube(videos);
+                    console.log(videos);
                 });
 
                 fetch('https://api.dailymotion.com/videos?fields=id,thumbnail_url%2Ctitle&country=fr&search='+searchTerm+'&limit=5')
@@ -123,14 +124,13 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                             'CHERCHE UNE MUSIQUE',
                             'CHERCHE UN CLIP',
                             'CHERCHE UNE VIDEO YOUTUBE ',
-                            'DAFT PUNK, ORELSAN OU DRAKE ?',
-                            'TU CHERCHE UNE VIDEO SUR DAILYMOTION ?',
+                            'CHERCHE UNE VIDEO DAILYMOTION ?',
                             'UNE VIDEO DE DOMINGO OU SQUEEZIE ?', 
                             'LE SON DE MON POTE : MKRB - DOM P ?',
-                            'ENTRE UN LIEN SOUNCLOUND',
-                            'ENTRE UN LIEN YOUTUBE',
-                            'ENTRE UN LIEN DAILYMOTION',
-                            'ENTRE UN LIEN VIMEO',
+                            'UN LIEN SOUNCLOUND',
+                            'UN LIEN YOUTUBE',
+                            'UN LIEN DAILYMOTION',
+                            'UN LIEN VIMEO',
                             'ENTRE CE QUE TU VEUX DE LISIBLE',
                             'DAFT PUNK - ALIVE (LIVE)',
                             'MKRB - DOM P',
@@ -168,8 +168,8 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                   </Grid>
                   {mediaSearchResultYoutube.length > 1 && <Grid item xs={12}>
                     <Tabs value={tabIndex} onChange={handleTabChange} sx={{bgcolor:'#202124'}}>
-                        {mediaSearchResultYoutube.length > 1  && <Tab label="Youtube" />}
-                        {mediaSearchResultDailyMotion.length > 1 && <Tab label="Dailymotion" />}
+                        {mediaSearchResultYoutube.length > 1  && <Tab sx={{ color:'white'}} label="Youtube" />}
+                        {mediaSearchResultDailyMotion.length > 1 && <Tab sx={{ color:'white'}} label="Dailymotion" />}
                     </Tabs>
                     <Box sx={{ lineHeight:"15px", padding:0, pt:1, mb:3 }}>
                         {tabIndex === 0 && (
@@ -181,7 +181,8 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                                             <img src={media.snippet.thumbnails.default.url} />
                                             <Grid sx={{display:'flex',flexDirection:'column',pl:2}}>
                                                 <ListItemText primary={media.snippet.title.substring(0, 50)} className='video_title_list' sx={{ mt:0, fontSize:'0.9em'}}/>
-                                                <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>Publié par <b>{media.snippet.channelTitle}</b></Typography>
+                                                <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>Par <b>{media.snippet.channelTitle} </b></Typography>
+                                                <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>Le <b>{dateFormat(media.snippet.publishedAt, 'd mmm yyyy à HH:MM')} </b></Typography>
                                             </Grid>
                                             </ListItemButton>)
                                     }) }
