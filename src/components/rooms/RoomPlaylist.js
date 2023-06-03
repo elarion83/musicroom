@@ -76,12 +76,12 @@ const RoomPlaylist = ({ isAdminView, roomPlaylist, roomIdActuallyPlaying, handle
                                         </ListItemText>}
                                         { (d.title && d.title.length === 0) || !d.title && <ListItemText onClick={e => (idx === idDisplaying) ? handleChangeIdActuallyDisplaying(-1) : handleChangeIdActuallyDisplaying(idx)} sx={{ pl:0,mb:0, wordBreak: 'break-all'}} primary={d.url.substring(0, 40)+'...'} />}
                                         
-                                        {(idx === idDisplaying )  && 
+                                        {(idx === idDisplaying  || roomIdActuallyPlaying == idx)  && 
                                             <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, pt:1, fontSize: '10px', textTransform:'uppercase' }}>
                                                 Ajouté par : <b>{ roomPlaylist[idx].addedBy }</b>
                                             </Typography>
                                         }
-                                        {(idx === idDisplaying)  && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1, fontSize: '8px', textTransform:'uppercase' }}>
+                                        {(idx === idDisplaying || roomIdActuallyPlaying == idx)  && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1, fontSize: '8px', textTransform:'uppercase' }}>
                                                 Source : { roomPlaylist[idx].source } 
                                             </Typography>
                                         }

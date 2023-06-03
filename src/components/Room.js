@@ -76,10 +76,6 @@ const Room = ({ roomId }) => {
     const [scrollPosition, setScrollPosition] = useState(0);
     const [playerReady, setPlayerReady] = useState(false);
     
-    
-
-    
-    
     const onScroll = (e) => {
         console.log('b');
         setScrollPosition(e.target.documentElement.scrollTop);
@@ -130,11 +126,8 @@ const Room = ({ roomId }) => {
 	useEffect(() => {
 		getRoomData(roomId); 
         
-           // localStorage.removeItem("MusicRoom_SpotifyToken");
-
             if(null !== localStorage.getItem("MusicRoom_SpotifyToken")) {
                 roomRef.set({spotifyToken:localStorage.getItem("MusicRoom_SpotifyToken") }, {merge:true});
-                console.log(room.spotifyToken);
             }
 
         if(null === localStorage.getItem("MusicRoom_UserInfoVotes")) {
@@ -258,6 +251,8 @@ const Room = ({ roomId }) => {
     
     function handleQuitRoom() {
         if(localStorage.getItem("MusicRoom_RoomId")) {
+            
+            localStorage.removeItem("MusicRoom_SpotifyToken");
             localStorage.removeItem("MusicRoom_RoomId");
             window.location.reload(false);
         } 
@@ -301,10 +296,25 @@ const Room = ({ roomId }) => {
         }
     }
 
+    useEffect(() => {
+        const hash = window.location.hash
+
+        if (hash) {
+            var token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
+
+            window.location.hash = ""
+            window.localStorage.setItem("MusicRoom_SpotifyToken", token)
+            handleChangeSpotifyToken(token)
+            window.location.href = "/?rid="+roomId.replace(/\s/g,'');
+        }
+    }, [])
+
+
     function handleChangeSpotifyToken(newToken) {
-        room.spotifyToken = newToken;
-        roomRef.set({spotifyToken: room.spotifyToken}, { merge: true });
+        roomRef.set({spotifyToken: newToken}, { merge: true });
     }
+
+
 
     function handleOpenShareModal(ShareModalIsOpen) {
         setOpenInvitePeopleToRoomModal(ShareModalIsOpen);
@@ -496,7 +506,7 @@ const Room = ({ roomId }) => {
                     <Typography sx={{color:'#d5cdcd', display:'block', width:'100%',ml:0, fontSize: '10px', textTransform:'uppercase' }} >{room.actuallyPlaying ? 'En lecture ' : 'En pause :'} <span>{ room.playlistUrls[room.playing].title ? room.playlistUrls[room.playing].title : room.playlistUrls[room.playing].url.substring(0,25)+'..' }</span></Typography>
                 </Box>}
             </Grid>
-            {OpenAddToPlaylistModal && <RoomModalAddMedia spotifyTokenProps={room.spotifyToken} handleChangeSpotifyToken={handleChangeSpotifyToken} validatedObjectToAdd={handleAddValidatedObjectToPlaylist} /> }
+            {OpenAddToPlaylistModal && <RoomModalAddMedia roomId={roomId} spotifyTokenProps={room.spotifyToken} handleChangeSpotifyToken={handleChangeSpotifyToken} validatedObjectToAdd={handleAddValidatedObjectToPlaylist} /> }
         </Dialog>
         <Dialog onClose={(e) => setOpenInvitePeopleToRoomModal(false)} open={OpenInvitePeopleToRoomModal}>
             <ModalShareRoom roomUrl={ localData.domain +'/?rid='+roomId} />

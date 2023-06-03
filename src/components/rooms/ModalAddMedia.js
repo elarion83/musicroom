@@ -30,7 +30,7 @@ import { Button, Typography } from "@mui/material";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import InputBase from '@mui/material/InputBase';
 
-const RoomModalAddMedia = ({ validatedObjectToAdd, spotifyTokenProps }) => {
+const RoomModalAddMedia = ({ roomId, validatedObjectToAdd, spotifyTokenProps }) => {
 
     const [mediaSearchResultYoutube, setMediaSearchResultYoutube] = useState([]);
     const [mediaSearchResultDailyMotion, setMediaSearchResultDailyMotion] = useState([]);
@@ -43,31 +43,15 @@ const RoomModalAddMedia = ({ validatedObjectToAdd, spotifyTokenProps }) => {
 
     const querystring = require('querystring');
     const CLIENT_ID = "cd4558d83dd845139f3dfffecf48b903"
-    const REDIRECT_URI = "http://localhost:3000"
+    const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
     const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
     const RESPONSE_TYPE = "token"
-
-    const [spotifyToken, setSpotifyToken] = useState(spotifyTokenProps);
 
     const [addingObject, setAddingObject] = useState({title:'',source:'',url:'', addedBy: localStorage.getItem("MusicRoom_UserInfoPseudo")})
 
     const handleTabChange = (event, newTabIndex) => {
         setTabIndex(newTabIndex);
     };
-
-    useEffect(() => {
-        const hash = window.location.hash
-        let token = spotifyToken
-
-        if (!token && hash) {
-            token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
-
-            window.location.hash = ""
-            window.localStorage.setItem("MusicRoom_SpotifyToken", token)
-        }
-        setSpotifyToken(token)
-
-    }, [])
 
     const [tabIndex, setTabIndex] = useState(0);
 
@@ -136,9 +120,9 @@ const RoomModalAddMedia = ({ validatedObjectToAdd, spotifyTokenProps }) => {
                         setIsSearching(false);
                 });
 
-                if(spotifyTokenProps.length === 0) {
+                if(spotifyTokenProps.length !== 0) {
                     await axios.get("https://api.spotify.com/v1/search", {
-                        headers: {Authorization: `Bearer ${spotifyToken}`},
+                        headers: {Authorization: `Bearer ${spotifyTokenProps}`},
                         params: {
                             q: searchTerm,
                             type: "track"
