@@ -71,6 +71,16 @@ const Room = ({ roomId }) => {
     const [userCanMakeInteraction, setUserCanMakeInteraction]= useState(true);
     const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
 
+    const [scrollPosition, setSrollPosition] = useState(0);
+    
+    
+    const handleScroll = () => {
+        console.log('a');
+        const position = window.pageYOffset;
+        console.log(position);
+        setSrollPosition(position);
+    };
+
     const playerRef = useRef({
         url: null,
         pip: false,
@@ -135,14 +145,13 @@ const Room = ({ roomId }) => {
 
         if(room.interactionsArray && room.interactionsArray.length > 0) {
             room.interactionsArray.forEach(function (item, index, object) {
-                if(Date.now() - item.timestamp < 15000) { 
+                if(Date.now() - item.timestamp < 10000) { 
                     createInteractionAnimation(item.type);
                 }
             });
         }
 		getRoomData(roomId); 
     }, [loaded, localData,room]);
-
 
     async function handlePlay(playStatus) {
         if(isActuallyAdmin) {
@@ -295,7 +304,8 @@ const Room = ({ roomId }) => {
   // transitions
 
   return (
-    <div className="flex flex-col w-full gap-0 relative " style={{height:'calc(100vh - 10em)'}}>
+    <div className="flex flex-col w-full gap-0 relative " style={{height:'calc(100vh - 10em)'}} 
+        onScroll={handleScroll}>
         <RoomTopBar localData={localData} roomId={roomId} handleOpenShareModal={handleOpenShareModal} handleOpenRoomParamModal={handleOpenRoomParamModal} handleOpenLeaveRoomModal={handleOpenLeaveRoomModal} roomAdmin={room.admin}/>
         <Container maxWidth={false} sx={{ padding: '0 !important'}} >
             { !<ActuallyPlaying roomRef={roomRef}/>}
@@ -478,19 +488,19 @@ const Room = ({ roomId }) => {
 
 
         {loaded && room.roomParams && <Grid className='room_bottom_interactions' item xs={3}>
-            <Tooltip title={!userCanMakeInteraction ? "Toutes les "+  (room.roomParams.frequenceInteraction/1000) +" secondes": ''}>  
+            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s animate__faster' title={!userCanMakeInteraction ? "Toutes les "+  (room.roomParams.frequenceInteraction/1000) +" secondes": ''}>  
                 <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mr:1, ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('laugh') : ''}>
                     <EmojiEmotionsIcon fontSize="small" sx={{color:'white'}} />
                     {!userCanMakeInteraction && <HourglassBottomIcon class="icon_overlay"/>}
                 </Fab>
             </Tooltip>
-            <Tooltip title={!userCanMakeInteraction ? "Toutes les "+  (room.roomParams.frequenceInteraction/1000) +" secondes": ''}>  
+            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s animate__faster' title={!userCanMakeInteraction ? "Toutes les "+  (room.roomParams.frequenceInteraction/1000) +" secondes": ''}>  
                 <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{mr:1, ...(userCanMakeInteraction && {bgcolor: '#ff9c22 !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
                     <CelebrationIcon fontSize="small" sx={{color:'white'}} />
                     {!userCanMakeInteraction && <HourglassBottomIcon class="icon_overlay"/>}
                 </Fab>
             </Tooltip>
-            <Tooltip title={!userCanMakeInteraction ? "Toutes les "+  (room.roomParams.frequenceInteraction/1000) +" secondes": ''}>  
+            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s animate__faster' title={!userCanMakeInteraction ? "Toutes les "+  (room.roomParams.frequenceInteraction/1000) +" secondes": ''}>  
                 <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mr:0, ...(userCanMakeInteraction && {bgcolor: '#ff5722 !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('heart') : ''}>
                     <FavoriteIcon fontSize="small" sx={{color:'white'}} />
                     {!userCanMakeInteraction && <HourglassBottomIcon class="icon_overlay"/>}
@@ -498,27 +508,27 @@ const Room = ({ roomId }) => {
             </Tooltip>
 
             <Tooltip placement="top" open={room && room.playlistEmpty && !OpenAddToPlaylistModal ? true : false} sx={{mt:-2}} title="Ajouter à la playlist" arrow>
-                <Fab sx={{width:'56px',height:'56px', transform:'translateY(-20px) !important'}} color="primary" className={`main_bg_color ${ room.playlistEmpty ? 'animate__animated  animate__headShake animate__delay-5s  animate__repeat-3': ''}`} aria-label="add" onClick={(e) => setOpenAddToPlaylistModal(true)}>
+                <Fab sx={{width:'56px',height:'56px', transform:'translateY(-20px) !important'}} color="primary" className={`main_bg_color `} aria-label="add" onClick={(e) => setOpenAddToPlaylistModal(true)}>
                     <SpeedDialIcon sx={{color:'white !important'}}/>
                 </Fab>
             </Tooltip>
             
-            <Tooltip title={"Paramètres"}>  
-                <Fab size="small" variant="extended" className='room_small_button_interactions'  sx={{justifyContent: 'center', ml:1}} onClick={e => handleOpenRoomParamModal(true)} >
+            <Tooltip className='animate__animated animate__fadeInUp animate__delay-3s animate__faster' title={"Paramètres"}>  
+                <Fab size="small" variant="extended" className='room_small_button_interactions'  sx={{justifyContent: 'center', ml:0}} onClick={e => handleOpenRoomParamModal(true)} >
                     <TuneIcon  fontSize="small" />
                 </Fab>
             </Tooltip>
-            <Tooltip title={"Partager la room"}>  
-                <Fab size="small" variant="extended" className='room_small_button_interactions'  sx={{justifyContent: 'center', ml:0}} onClick={e => handleOpenShareModal(true)} >
+            <Tooltip className='animate__animated animate__fadeInUp animate__delay-3s animate__faster' title={"Partager la room"}>  
+                <Fab size="small" variant="extended" className='room_small_button_interactions'  sx={{justifyContent: 'center', ml:1}} onClick={e => handleOpenShareModal(true)} >
                     <ShareIcon  fontSize="small" />
                 </Fab>
             </Tooltip>
-            <Tooltip title={"Quitter la room"}>  
+            <Tooltip className='animate__animated animate__fadeInUp animate__delay-3s animate__faster' title={"Quitter la room"}>  
                 <Fab size="small" variant="extended" className='room_small_button_interactions'  sx={{justifyContent: 'center', ml:1}} onClick={e => handleOpenLeaveRoomModal(true)} >
                     <ExitToAppIcon  fontSize="small" />
                 </Fab>
             </Tooltip>
-        </Grid>  }
+        </Grid>  } 
     </div>
   );
 };
