@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect, useRef } from "react";
 import { db } from "../services/firebase";
 
@@ -17,6 +19,8 @@ import AppBar from '@mui/material/AppBar';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import Alert from '@mui/material/Alert';
 import 'animate.css';
+import SpotifyPlayer from 'react-spotify-web-playback';
+
 
 import Fab from '@mui/material/Fab';
 import Stack from '@mui/material/Stack';
@@ -94,6 +98,7 @@ const Room = ({ roomId }) => {
         playbackRate: 1.0,
         loop: false
     });
+
     const [isActuallyAdmin, setIsActuallyAdmin] = useState(false);
     const delay = ms => new Promise(res => setTimeout(res, ms));
     const getRoomData = (roomId) => {
@@ -109,6 +114,7 @@ const Room = ({ roomId }) => {
                         actuallyPlaying:false,
                         playlistUrls: [],
                         playlistEmpty: true,
+                        spotifyToken:'',
                         notifsArray:[],
                         roomParams:{frequenceInteraction:20000},
                         interactionsArray:[],
@@ -123,6 +129,14 @@ const Room = ({ roomId }) => {
 
 	useEffect(() => {
 		getRoomData(roomId); 
+        
+           // localStorage.removeItem("MusicRoom_SpotifyToken");
+
+            if(null !== localStorage.getItem("MusicRoom_SpotifyToken")) {
+                roomRef.set({spotifyToken:localStorage.getItem("MusicRoom_SpotifyToken") }, {merge:true});
+                console.log(room.spotifyToken);
+            }
+
         if(null === localStorage.getItem("MusicRoom_UserInfoVotes")) {
             localStorage.setItem("MusicRoom_UserInfoVotes", JSON.stringify({up:[], down:[]}));
         } else {
@@ -133,7 +147,6 @@ const Room = ({ roomId }) => {
 	}, [roomId]);
     
 	useEffect(() => {
-        console.log('a');
     }, [scrollPosition]);
 
 	useEffect(() => {
@@ -288,6 +301,11 @@ const Room = ({ roomId }) => {
         }
     }
 
+    function handleChangeSpotifyToken(newToken) {
+        room.spotifyToken = newToken;
+        roomRef.set({spotifyToken: room.spotifyToken}, { merge: true });
+    }
+
     function handleOpenShareModal(ShareModalIsOpen) {
         setOpenInvitePeopleToRoomModal(ShareModalIsOpen);
     }
@@ -325,8 +343,17 @@ const Room = ({ roomId }) => {
                 {!room.playlistEmpty && room.playlistUrls.length > 0 && room.playing !== null && 
                     <Box sx={{bgcolor:'#303030',borderBottom: '2px solid #3e464d', padding:"0px 0em"}}>
                         <Grid container spacing={0} sx={{ bgcolor:'#262626',}}>
+
                             <Grid item sm={4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
-                                {isActuallyAdmin && <ReactPlayer sx={{ padding:0}}
+                                {room.playlistUrls[room.playing].source == 'spotify' &&
+                                <SpotifyPlayer
+                                    token={room.spotifyToken}
+                                    uris={room.playlistUrls[room.playing].url}
+                                    play={room.actuallyPlaying}
+                                    inlineVolume={localVolume}
+                                    ref={playerRef}
+                                />}
+                                {isActuallyAdmin && room.playlistUrls[room.playing].source != 'spotify'  && <ReactPlayer sx={{ padding:0}}
                                     ref={playerRef}
                                     className='react-player'
                                     width='100%'
@@ -350,7 +377,7 @@ const Room = ({ roomId }) => {
                                         }
                                     }}
                                 />}
-                                {!isActuallyAdmin && <ReactPlayer sx={{ padding:0}}
+                                {!isActuallyAdmin && room.playlistUrls[room.playing].source != 'spotify'  && <ReactPlayer sx={{ padding:0}}
                                     ref={playerRef}
                                     className='react-player'
                                     width='100%'
@@ -469,7 +496,7 @@ const Room = ({ roomId }) => {
                     <Typography sx={{color:'#d5cdcd', display:'block', width:'100%',ml:0, fontSize: '10px', textTransform:'uppercase' }} >{room.actuallyPlaying ? 'En lecture ' : 'En pause :'} <span>{ room.playlistUrls[room.playing].title ? room.playlistUrls[room.playing].title : room.playlistUrls[room.playing].url.substring(0,25)+'..' }</span></Typography>
                 </Box>}
             </Grid>
-            {OpenAddToPlaylistModal && <RoomModalAddMedia validatedObjectToAdd={handleAddValidatedObjectToPlaylist} /> }
+            {OpenAddToPlaylistModal && <RoomModalAddMedia spotifyTokenProps={room.spotifyToken} handleChangeSpotifyToken={handleChangeSpotifyToken} validatedObjectToAdd={handleAddValidatedObjectToPlaylist} /> }
         </Dialog>
         <Dialog onClose={(e) => setOpenInvitePeopleToRoomModal(false)} open={OpenInvitePeopleToRoomModal}>
             <ModalShareRoom roomUrl={ localData.domain +'/?rid='+roomId} />

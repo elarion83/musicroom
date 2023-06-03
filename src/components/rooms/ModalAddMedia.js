@@ -30,21 +30,44 @@ import { Button, Typography } from "@mui/material";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import InputBase from '@mui/material/InputBase';
 
-const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
+const RoomModalAddMedia = ({ validatedObjectToAdd, spotifyTokenProps }) => {
 
     const [mediaSearchResultYoutube, setMediaSearchResultYoutube] = useState([]);
     const [mediaSearchResultDailyMotion, setMediaSearchResultDailyMotion] = useState([]);
+    const [mediaSearchResultSpotify, setMediaSearchResultSpotify] = useState([]);
     const [addingUrl, setAddingUrl] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [recentlyAdded, setRecentlyAdded]= useState(false);
     const [isSearching, setIsSearching]= useState(false);
     const delay = ms => new Promise(res => setTimeout(res, ms));
-    
+
+    const querystring = require('querystring');
+    const CLIENT_ID = "cd4558d83dd845139f3dfffecf48b903"
+    const REDIRECT_URI = "http://localhost:3000"
+    const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
+    const RESPONSE_TYPE = "token"
+
+    const [spotifyToken, setSpotifyToken] = useState(spotifyTokenProps);
+
     const [addingObject, setAddingObject] = useState({title:'',source:'',url:'', addedBy: localStorage.getItem("MusicRoom_UserInfoPseudo")})
 
     const handleTabChange = (event, newTabIndex) => {
         setTabIndex(newTabIndex);
     };
+
+    useEffect(() => {
+        const hash = window.location.hash
+        let token = spotifyToken
+
+        if (!token && hash) {
+            token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
+
+            window.location.hash = ""
+            window.localStorage.setItem("MusicRoom_SpotifyToken", token)
+        }
+        setSpotifyToken(token)
+
+    }, [])
 
     const [tabIndex, setTabIndex] = useState(0);
 
@@ -111,32 +134,39 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                     .then((responseJson) => {
                         setMediaSearchResultDailyMotion(responseJson.list);
                         setIsSearching(false);
-                })
+                });
+
+                if(spotifyTokenProps.length === 0) {
+                    await axios.get("https://api.spotify.com/v1/search", {
+                        headers: {Authorization: `Bearer ${spotifyToken}`},
+                        params: {
+                            q: searchTerm,
+                            type: "track"
+                        }
+                    }).then(function(response) {
+                        setMediaSearchResultSpotify(response.data.tracks.items);
+                    });
+                }
             }
         }
     }
 
     return(
             <Container sx={{padding:'3em',pt:0, height:'100vh', zIndex:3}} className="full_width_modal_content_container">
+                 {spotifyTokenProps.length !== 0 && <Alert severity="success">La room est connectée a Spotify</Alert>}
+                 {spotifyTokenProps.length === 0 && <a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>Login to Spotify</a>}
+
                   <Grid item xs={12} sx={{ mt:2, display:'flex', flexDirection:'row'}} className="autowriter_container">
                      <Typed
                         strings={[
+                            'CHERCHE SUR YOUTUBE ',
+                            'CHERCHE SUR SPOTIFY ',
                             'CHERCHE UNE MUSIQUE',
                             'CHERCHE UN CLIP',
-                            'CHERCHE UNE VIDEO YOUTUBE ',
-                            'CHERCHE UNE VIDEO DAILYMOTION ?',
-                            'UNE VIDEO DE DOMINGO OU SQUEEZIE ?', 
-                            'LE SON DE MON POTE : MKRB - DOM P ?',
+                            'UNE VIDEO DE DOMINGO', 
+                            'UNE VIDEO DE SQUEEZIE', 
                             'UN LIEN SOUNCLOUND',
                             'UN LIEN YOUTUBE',
-                            'UN LIEN DAILYMOTION',
-                            'UN LIEN VIMEO',
-                            'ENTRE CE QUE TU VEUX DE LISIBLE',
-                            'DAFT PUNK - ALIVE (LIVE)',
-                            'MKRB - DOM P',
-                            'GAZO - LA RUE',
-                            'PNL - AU DD',
-                            'DOMINGO - REACT',
                             'HTTPS://WWW.YOUTUBE.COM/WATCH?V=MAVIDEO',
                             'HTTPS://SOUNDCLOUD.COM/THOMS-12/EBRIUS']}
                         typeSpeed={10}
@@ -169,6 +199,7 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                   {mediaSearchResultYoutube.length > 1 && <Grid item xs={12}>
                     <Tabs value={tabIndex} onChange={handleTabChange} sx={{bgcolor:'#202124'}}>
                         {mediaSearchResultYoutube.length > 1  && <Tab sx={{ color:'white'}} label="Youtube" />}
+                        {mediaSearchResultSpotify.length > 1 && <Tab sx={{ color:'white'}} label="Spotify" />}
                         {mediaSearchResultDailyMotion.length > 1 && <Tab sx={{ color:'white'}} label="Dailymotion" />}
                     </Tabs>
                     <Box sx={{ lineHeight:"15px", padding:0, pt:1, mb:3 }}>
@@ -191,6 +222,30 @@ const RoomModalAddMedia = ({ validatedObjectToAdd }) => {
                         </Box>
                         )}
                         {tabIndex === 1 && (
+                        <Box>
+                            {mediaSearchResultSpotify.length > 1 && <Grid item xs={12}>
+                            <List component="nav">
+                                { mediaSearchResultSpotify.map(function(media, idx){
+                                    return (<ListItemButton sx={{margin:0,padding:0, pr:1,borderBottom: '2px solid #3e464d'}} key={idx} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.artists[0].name + ' - ' +media.name, source:'spotify', url:media.uri, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
+                                        <img src={media.album.images[2].url} />
+                                        <Grid sx={{display:'flex',flexDirection:'column',pl:2}}>
+                                            <ListItemText primary={media.name} sx={{ mt:0, fontSize:'0.9em'}}/>
+                                            <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}> 
+                                                { media.artists.map(function(artist, ida){
+                                                    return ( 
+                                                        <b>{artist.name} / </b>
+                                                    )
+                                                })}
+                                            </Typography>
+                                            <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>Album {media.album.name} - <b>{dateFormat(media.album.release_date, 'd mmm yyyy ')} </b></Typography>
+                                        </Grid>
+                                    </ListItemButton>)
+                                }) }
+                            </List>
+                        </Grid>}
+                        </Box>
+                        )}
+                        {tabIndex === 2 && (
                         <Box>
                             {mediaSearchResultDailyMotion.length > 1 && <Grid item xs={12}>
                             <List component="nav">
