@@ -5,16 +5,13 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import ShareIcon from '@mui/icons-material/Share';
-import Divider from '@mui/material/Divider';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import TuneIcon from '@mui/icons-material/Tune';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import InfoIcon from '@mui/icons-material/Info';
 import ListItemIcon from '@mui/material/ListItemIcon';
 
-const RoomTopBar = ({roomId, handleOpenShareModal, handleOpenRoomParamModal, handleOpenLeaveRoomModal, roomAdmin }) => {
+const RoomTopBar = ({roomId, roomAdmin }) => {
     
     
     const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
@@ -41,7 +38,7 @@ const RoomTopBar = ({roomId, handleOpenShareModal, handleOpenRoomParamModal, han
                         color="inherit"
                         sx={{bgcolor:'#202124', mr:1}}
                     >
-                        <TuneIcon />
+                        <MoreVertIcon />
                     </IconButton>
                 </Tooltip>
                 <Menu
@@ -62,31 +59,6 @@ const RoomTopBar = ({roomId, handleOpenShareModal, handleOpenRoomParamModal, han
                         </ListItemIcon>
                         <Typography>
                         Hosté par <b>{roomAdmin}</b>
-                        </Typography>
-                    </MenuItem>
-                    <Divider />
-                    <MenuItem onClick={e => handleOpenRoomParamModal(true)}>
-                        <ListItemIcon>
-                            <TuneIcon fontSize="small" />
-                        </ListItemIcon>
-                        <Typography>
-                        Paramètres 
-                        </Typography>
-                    </MenuItem>
-                    <MenuItem onClick={e => handleOpenShareModal(true)}>
-                        <ListItemIcon>
-                            <ShareIcon fontSize="small" />
-                        </ListItemIcon>
-                        <Typography>
-                        Partager la room
-                        </Typography>
-                    </MenuItem>
-                    <MenuItem onClick={e => handleOpenLeaveRoomModal(true)}>
-                        <ListItemIcon>
-                            <ExitToAppIcon fontSize="small" />
-                        </ListItemIcon>
-                        <Typography>
-                        Quitter la room
                         </Typography>
                     </MenuItem>
                 </Menu>
