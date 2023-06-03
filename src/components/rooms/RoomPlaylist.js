@@ -25,8 +25,9 @@ import { Diversity1TwoTone } from '@mui/icons-material';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
-const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleVoteChange, userVoteArray, handleChangeIdActuallyPlaying, roomIsActuallyPlaying, roomPlayedActuallyPlayed}) => {
+const RoomPlaylist = ({ isAdminView, roomPlaylist, roomIdActuallyPlaying, handleVoteChange, userVoteArray, handleChangeIdActuallyPlaying, roomIsActuallyPlaying, roomPlayedActuallyPlayed}) => {
 
     const [idDisplaying, setIdDisplaying] = useState(roomIdActuallyPlaying);
 
@@ -52,46 +53,46 @@ const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleVoteChange, u
                         <Fade key={idx} in={true} xs={12} sx={{  width:'100%', padding:0, margin:0}}>
                             <Grid item sx={{width:'100%', padding:0,pl:2, margin:0}} className='playlist_bloc'> 
                                 
-                                <ListItemButton sx={{ position:'relative',width:'100%', padding:0,pl:0,margin:0, backgroundColor:'#4f4f4f',borderBottom: '2px solid #3e464d', color:'white', "&.Mui-selected": {
-                                    backgroundColor: "#262626",
-                                    transition: 'all 0.3s ease-out'
-                                    },
-                                    "&.Mui-focusVisible": {
-                                    backgroundColor: "#262626",
-                                    transition: 'all 0.3s ease-out'
-                                    },
-                                    ":hover": {
-                                    backgroundColor: "#262626",
-                                    transition: 'all 0.3s ease-out'
-                                    } }} onClick={e => handleChangeIdActuallyDisplaying(idx)} key={'playlist_'+idx} xs={12} selected={roomIdActuallyPlaying === idx}>
-                                
-                                    <ListItemIcon sx={{ pl:2,color:'white', zIndex:2}} className="hidden-xs">
-                                            {idx !== roomIdActuallyPlaying && <PlayCircleOutlineIcon />}
-                                            {idx === roomIdActuallyPlaying && roomIsActuallyPlaying && <PauseCircleOutlineIcon  />}
-                                            {idx === roomIdActuallyPlaying && !roomIsActuallyPlaying && <PlayCircleOutlineIcon />}
+                                <ListItemButton sx={{ alignItems:'flex-start',position:'relative',width:'100%', pt:1,pl:0,margin:0, backgroundColor:'#4f4f4f',borderBottom: '2px solid #3e464d', color:'white', "&.Mui-selected": {
+                                        backgroundColor: "#262626",
+                                        transition: 'all 0.3s ease-out'
+                                        },
+                                        "&.Mui-focusVisible": {
+                                        backgroundColor: "#262626",
+                                        transition: 'all 0.3s ease-out'
+                                        },
+                                        ":hover": {
+                                        backgroundColor: "#262626",
+                                        transition: 'all 0.3s ease-out'
+                                        } }} key={'playlist_'+idx} xs={12} selected={roomIdActuallyPlaying === idx}>
+                                    <ListItemIcon sx={{ pl:2,paddingTop:'5px',color:'white', zIndex:2, display:'flex', flexDirection:'column'}}>        
+                                            {idx !== idDisplaying && <ExpandMoreIcon sx={{display:'inline-block'}}  onClick={e => handleChangeIdActuallyDisplaying(idx)}/>}
+                                            {idx === idDisplaying && <ExpandLessIcon sx={{display:'inline-block'}} onClick={e => handleChangeIdActuallyDisplaying(-1)}  />}
+                                            {idx === idDisplaying && idx !== roomIdActuallyPlaying && isAdminView && <PlayCircleOutlineIcon sx={{mt:1}} onClick={e => handleChangeIdActuallyPlaying(idx)}  />}
                                     </ListItemIcon>
-                                    <Grid item sx={{display:'block', zIndex:2, pl: 2, pb:0.5, flexGrow:1}}>
-                                        { d.title && <ListItemText sx={{ pl:0, mb:0, wordBreak: 'break-all'}} primary={d.title.length > 50 ? d.title.substring(0, 50)+'...' : d.title} />}
-                                        { (d.title && d.title.length === 0) || !d.title && <ListItemText sx={{ pl:0,mb:0, wordBreak: 'break-all'}} primary={d.url.substring(0, 40)+'...'} />}
+                                    <Grid item sx={{display:'block', zIndex:2, pl: '5px', pb:0.5, flexGrow:1}}>
+                                        { d.title && <ListItemText onClick={e => (idx === idDisplaying) ? handleChangeIdActuallyDisplaying(-1) : handleChangeIdActuallyDisplaying(idx)} sx={{ pl:0,mb:0, wordBreak: 'break-all'}}>
+                                            {d.title.length > 50 ? d.title.substring(0, 50)+'...' : d.title}
+                                        </ListItemText>}
+                                        { (d.title && d.title.length === 0) || !d.title && <ListItemText onClick={e => (idx === idDisplaying) ? handleChangeIdActuallyDisplaying(-1) : handleChangeIdActuallyDisplaying(idx)} sx={{ pl:0,mb:0, wordBreak: 'break-all'}} primary={d.url.substring(0, 40)+'...'} />}
                                         
-                                        {(idx === idDisplaying || idx === roomIdActuallyPlaying)  && 
-                                            <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
+                                        {(idx === idDisplaying )  && 
+                                            <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, pt:1, fontSize: '10px', textTransform:'uppercase' }}>
                                                 Ajouté par : <b>{ roomPlaylist[idx].addedBy }</b>
                                             </Typography>
                                         }
-                                        {(idx === idDisplaying || idx === roomIdActuallyPlaying)  && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1, fontSize: '8px', textTransform:'uppercase' }}>
+                                        {(idx === idDisplaying)  && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1, fontSize: '8px', textTransform:'uppercase' }}>
                                                 Source : { roomPlaylist[idx].source } 
                                             </Typography>
                                         }
-                                        {idx === roomIdActuallyPlaying && roomIsActuallyPlaying && <Typography sx={{ display:'block', width:'100%',ml:0, mb: .5, fontSize: '10px', textTransform:'uppercase' }}>
+                                        {idx === roomIdActuallyPlaying && roomIsActuallyPlaying && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
                                             En lecture
                                         </Typography>}
-                                        {idx === roomIdActuallyPlaying && !roomIsActuallyPlaying && <Typography sx={{ display:'block', width:'100%',ml:0, mb: .5, fontSize: '10px', textTransform:'uppercase' }}>
+                                        {idx === roomIdActuallyPlaying && !roomIsActuallyPlaying && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
                                             En pause
                                         </Typography>}
-                                        
                                     </Grid>
-                                   {idx === roomIdActuallyPlaying && <LinearProgress sx={{height:'10px', position:'absolute', width:'100%', height:'100%', zIndex:1, opacity:0.5, "& .MuiLinearProgress-barColorPrimary": {
+                                   {idx === roomIdActuallyPlaying && <LinearProgress sx={{height:'10px',top:0, position:'absolute', width:'100%', height:'100%', zIndex:1, opacity:0.5, "& .MuiLinearProgress-barColorPrimary": {
                                         backgroundColor: "#262626",
                                     }}} variant="determinate" value={roomPlayedActuallyPlayed} /> }
                                 </ListItemButton>
