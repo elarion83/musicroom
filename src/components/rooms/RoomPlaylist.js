@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState } from "react";
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 
 import Fade from '@mui/material/Fade';
 import ListItemText from '@mui/material/ListItemText';
@@ -14,10 +16,15 @@ import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import LinearProgress from '@mui/material/LinearProgress';
 
+
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
 import IconButton from '@mui/material/IconButton';
 import { Diversity1TwoTone } from '@mui/icons-material';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleVoteChange, userVoteArray, handleChangeIdActuallyPlaying, roomIsActuallyPlaying, roomPlayedActuallyPlayed}) => {
 
@@ -39,7 +46,7 @@ const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleVoteChange, u
     return (
         <Paper className={'scroll'} style={{borderRadius:0}}>
             <List sx={{height: '100%', padding:0, mb:0}}>
-                    
+                
                     {roomPlaylist.map(function(d, idx){
                     return (
                         <Fade key={idx} in={true} xs={12} sx={{  width:'100%', padding:0, margin:0}}>
@@ -72,7 +79,7 @@ const RoomPlaylist = ({ roomPlaylist, roomIdActuallyPlaying, handleVoteChange, u
                                                 Ajouté par : <b>{ roomPlaylist[idx].addedBy }</b>
                                             </Typography>
                                         }
-                                        {(idx === idDisplaying ||idx === roomIdActuallyPlaying)  && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1, fontSize: '8px', textTransform:'uppercase' }}>
+                                        {(idx === idDisplaying || idx === roomIdActuallyPlaying)  && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1, fontSize: '8px', textTransform:'uppercase' }}>
                                                 Source : { roomPlaylist[idx].source } 
                                             </Typography>
                                         }

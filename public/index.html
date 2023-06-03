@@ -30,15 +30,15 @@
         font-family: 'roboto';
       }
       .playlist_bloc {
-        position:relative;
+        position: relative;
+        margin:0 !important;
+      }
+      .playlist_bloc .MuiAccordionDetails-root {
+        background: #b39f74;
       }
 
-      .playlist_bloc .votebuttons {
-        opacity: 0.5;
+      .playlist_bloc .MuiAccordionSummary-expandIconWrapper {
         z-index: 5; 
-      }
-      .playlist_bloc:hover .votebuttons, .playlist_bloc:has(.Mui-selected) .votebuttons{
-        opacity: 1;
       }
 
       .votebuttons > button {
@@ -50,7 +50,6 @@
         background:#4f4f4f;
         height: 100vh;
         width: 100vw;
-        background-size: cover;
         background-image:url('img/textura.png');
         background-size: cover;
         background-position: 50% 50%;
@@ -248,14 +247,8 @@
       .room_small_button_interactions {
         justify-content: 'center';
         background-color: 'greylight';
-        transform: translateY(0em);
-        transition: all 0.2s;
       }
 
-      .room_small_button_interactions:hover {
-        transform: translateY(-.4em);
-        transition: all 0.2s;
-      }
     </style>
   </head>
   <body>
