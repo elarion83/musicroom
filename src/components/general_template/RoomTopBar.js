@@ -12,8 +12,11 @@ import Button from '@mui/material/Button';
 import InfoIcon from '@mui/icons-material/Info';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import 'animate.css';
+import Switch from '@mui/material/Switch';
+import Badge from '@mui/material/Badge';
 
-const RoomTopBar = ({localData, roomId, roomAdmin, spotifyTokenProps }) => {
+
+const RoomTopBar = ({localData, roomId, roomAdmin, isLinkedToSpotify }) => {
     
     
     const querystring = require('querystring');
@@ -39,9 +42,14 @@ const RoomTopBar = ({localData, roomId, roomAdmin, spotifyTokenProps }) => {
         <Toolbar xs={12}sx={{ bgcolor: '#262626',borderBottom: '2px solid #3e464d', minHeight: '45px !important', fontFamily: 'Monospace', pl:'5px', pr:'25 px' }}>
                 
                 <Tooltip  className='animate__animated animate__fadeInLeft animate__delay-2s animate__fast' title="Paramètres de la room" sx={{ bgColor:'#30363c'}}>
-                        <MoreVertIcon 
-                        onClick={e => handleClickMenu(e)} 
-                        sx={{mr:1, cursor:'pointer'}}/>
+                        <Badge invisible={isLinkedToSpotify} variant="dot" sx={{'& .MuiBadge-badge': {
+                            right:'10px',
+                            bgcolor:'#ff5722'
+                        }}} >
+                            <MoreVertIcon 
+                            onClick={e => handleClickMenu(e)} 
+                            sx={{mr:1, cursor:'pointer'}}/>
+                        </Badge>
                 </Tooltip>
                 <Menu
                     id="menu-appbar"
@@ -63,15 +71,19 @@ const RoomTopBar = ({localData, roomId, roomAdmin, spotifyTokenProps }) => {
                         Hosté par <b>{roomAdmin}</b>
                         </Typography>
                     </MenuItem>
-                    <MenuItem>
-                        <ListItemIcon>
-                            <InfoIcon  fontSize="small" />
-                        </ListItemIcon>
-                        {spotifyTokenProps ? <Typography>Spotify connecté</Typography> 
-                                           : <Typography>
-                                                <a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>
-                                                    Spotify non connecté
-                                                </a>
+                    <MenuItem sx={{pl:0}}>
+                        {isLinkedToSpotify ? <Typography>
+                                                <Switch disabled checked={true} /> 
+                                                Spotify connecté
+                                            </Typography> 
+                                           : <Typography onClick={e => window.location.href = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>
+                                                <Switch checked={false} /> 
+                                                    <Badge invisible={isLinkedToSpotify} variant="dot" sx={{'& .MuiBadge-badge': {
+                                                            right:'0px',
+                                                            bgcolor:'#ff5722'
+                                                        }}} >
+                                                        Spotify non connecté
+                                                    </Badge>
                                               </Typography> }
                     </MenuItem>
                 </Menu>

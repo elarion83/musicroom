@@ -77,7 +77,6 @@ const Room = ({ roomId }) => {
     const [playerReady, setPlayerReady] = useState(false);
     
     const onScroll = (e) => {
-        console.log('b');
         setScrollPosition(e.target.documentElement.scrollTop);
     }
     const playerRef = useRef({
@@ -111,6 +110,7 @@ const Room = ({ roomId }) => {
                         playlistUrls: [],
                         playlistEmpty: true,
                         spotifyToken:'',
+                        isLinkedToSpotify:false,
                         notifsArray:[],
                         roomParams:{frequenceInteraction:20000},
                         interactionsArray:[],
@@ -297,7 +297,7 @@ const Room = ({ roomId }) => {
 
         if (hash) {
             var token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
-
+            
             window.location.hash = ""
             window.localStorage.setItem("MusicRoom_SpotifyToken", token)
             handleChangeSpotifyToken(token)
@@ -306,7 +306,7 @@ const Room = ({ roomId }) => {
 
 
     async function handleChangeSpotifyToken(newToken) {
-        roomRef.set({spotifyToken: newToken}, { merge: true });
+        roomRef.set({spotifyToken: newToken, isLinkedToSpotify:true}, { merge: true });
         await delay(2000);
         window.location.href = "/?rid="+roomId.replace(/\s/g,'');
     }
@@ -343,7 +343,7 @@ const Room = ({ roomId }) => {
 
   return (
     <div className="flex flex-col w-full gap-0 relative " style={{height:'calc(100vh - 10em)'}} >
-        {loaded && <RoomTopBar localData={localData} roomId={roomId} roomAdmin={room.admin} spotifyTokenProps={room.spotifyToken}/>}
+        {loaded && <RoomTopBar localData={localData} roomId={roomId} roomAdmin={room.admin} isLinkedToSpotify={room.isLinkedToSpotify}/>}
         <Container maxWidth={false} sx={{ padding: '0 !important'}} >
             { !<ActuallyPlaying roomRef={roomRef}/>}
             {loaded && room.playlistUrls && <div> 

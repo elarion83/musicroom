@@ -43,6 +43,7 @@ function App() {
   useEffect(() => {   
     if(rid) {
       setRoomId(rid);
+      localStorage.setItem("MusicRoom_RoomId", rid);
     }
   }, [rid]);
 
