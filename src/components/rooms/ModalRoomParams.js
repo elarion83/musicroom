@@ -9,10 +9,18 @@ import Switch from '@mui/material/Switch';
 
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
+import { Button } from "@mui/material";
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-const ModalRoomParams = ({ roomParams }) => {
+const ModalRoomParams = ({ roomParams,spotifyTokenProps }) => {
+
+    
+    const CLIENT_ID = "cd4558d83dd845139f3dfffecf48b903"
+    const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
+    const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
+    const RESPONSE_TYPE = "token"
+
     const marks = [
         {
             value: 5000,
@@ -68,6 +76,11 @@ const ModalRoomParams = ({ roomParams }) => {
                 <MenuItem value={60}>1 minute</MenuItem>
                 <MenuItem value={120}>2 minute</MenuItem>
             </Select>
+            {spotifyTokenProps.length === 0 && 
+                <Button variant="contained" color="success" sx={{mt:2, display:'block'}} onClick={e => window.location.href = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>
+                Connecter la room a Spotify
+                </Button>
+            }
         </Box>
     )
 };

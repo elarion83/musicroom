@@ -38,10 +38,10 @@ const RoomModalAddMedia = ({ roomId, validatedObjectToAdd, spotifyTokenProps }) 
     const [addingUrl, setAddingUrl] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [recentlyAdded, setRecentlyAdded]= useState(false);
+    const [recentlyAddedTitle, setRecentlyAddedTitle]= useState('');
     const [isSearching, setIsSearching]= useState(false);
     const delay = ms => new Promise(res => setTimeout(res, ms));
 
-    const querystring = require('querystring');
     const CLIENT_ID = "cd4558d83dd845139f3dfffecf48b903"
     const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
     const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
@@ -57,13 +57,15 @@ const RoomModalAddMedia = ({ roomId, validatedObjectToAdd, spotifyTokenProps }) 
 
     async function handleCheckAndAddObjectToPlaylistFromObject(objectFormatted) {
         validatedObjectToAdd(objectFormatted);
+        
+        setRecentlyAddedTitle(objectFormatted.title);
         addingObject.title='';
         addingObject.source='';
         addingObject.url='';
         setRecentlyAdded(false);
         await delay(100);
         setRecentlyAdded(true);
-        await delay(2000);
+        await delay(6000);
         setRecentlyAdded(false);
     }
         
@@ -198,8 +200,8 @@ const RoomModalAddMedia = ({ roomId, validatedObjectToAdd, spotifyTokenProps }) 
                         <Box >  
                             {mediaSearchResultYoutube.length > 1 && <Grid item xs={12}>
                                 <List component="nav">
-                                    { mediaSearchResultYoutube.map(function(media, idx){
-                                        return (<ListItemButton sx={{margin:0, padding:0, pr:1,borderBottom: '2px solid #3e464d'}}  key={idx} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.snippet.title, source:'youtube', url:'https://www.youtube.com/watch?v='+media.id.videoId, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
+                                    { mediaSearchResultYoutube.map(function(media, idyt){
+                                        return (<ListItemButton sx={{margin:0, padding:0, pr:1,borderBottom: '2px solid #3e464d'}}  key={idyt} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.snippet.title, source:'youtube', url:'https://www.youtube.com/watch?v='+media.id.videoId, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
                                             <img src={media.snippet.thumbnails.default.url} />
                                             <Grid sx={{display:'flex',flexDirection:'column',pl:2}}>
                                                 <ListItemText primary={media.snippet.title.substring(0, 50)} className='video_title_list' sx={{ mt:0, fontSize:'0.9em'}}/>
@@ -216,8 +218,8 @@ const RoomModalAddMedia = ({ roomId, validatedObjectToAdd, spotifyTokenProps }) 
                         <Box>
                             {mediaSearchResultSpotify.length > 1 && <Grid item xs={12}>
                             <List component="nav">
-                                { mediaSearchResultSpotify.map(function(media, idx){
-                                    return (<ListItemButton sx={{margin:0,padding:0, pr:1,borderBottom: '2px solid #3e464d'}} key={idx} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.artists[0].name + ' - ' +media.name, source:'spotify', url:media.uri, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
+                                { mediaSearchResultSpotify.map(function(media, idsp){
+                                    return (<ListItemButton sx={{margin:0,padding:0, pr:1,borderBottom: '2px solid #3e464d'}} key={idsp} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.artists[0].name + ' - ' +media.name, source:'spotify', url:media.uri, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
                                         <img src={media.album.images[2].url} />
                                         <Grid sx={{display:'flex',flexDirection:'column',pl:2}}>
                                             <ListItemText primary={media.name} sx={{ mt:0, fontSize:'0.9em'}}/>
@@ -240,8 +242,8 @@ const RoomModalAddMedia = ({ roomId, validatedObjectToAdd, spotifyTokenProps }) 
                         <Box>
                             {mediaSearchResultDailyMotion.length > 1 && <Grid item xs={12}>
                             <List component="nav">
-                                { mediaSearchResultDailyMotion.map(function(media, idx){
-                                    return (<ListItemButton sx={{margin:0,padding:0, pr:1,borderBottom: '2px solid #3e464d'}} key={idx} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.title, source:'dailymotion', url:'https://www.dailymotion.com/video/'+media.id, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
+                                { mediaSearchResultDailyMotion.map(function(media, iddm){
+                                    return (<ListItemButton sx={{margin:0,padding:0, pr:1,borderBottom: '2px solid #3e464d'}} key={iddm} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.title, source:'dailymotion', url:'https://www.dailymotion.com/video/'+media.id, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
                                         <img src={media.thumbnail_url} style={{width:'120px', height:'90px'}}/>
                                         <ListItemText primary={media.title} sx={{ml:2, mt:0, fontSize:'0.9em'}}/></ListItemButton>)
                                 }) }
@@ -254,8 +256,8 @@ const RoomModalAddMedia = ({ roomId, validatedObjectToAdd, spotifyTokenProps }) 
                   <Snackbar
                     open={recentlyAdded}
                     autoHideDuration={6000}
-                    sx={{bgcolor:'#2e7d32', borderRadius:'2px'}}
-                    message="Bien ajouté à la playlist !"
+                    sx={{bgcolor:'#2e7d32 !important', borderRadius:'2px'}}
+                    message={recentlyAddedTitle +" ajouté !"}
                     />
     </Container>
     )

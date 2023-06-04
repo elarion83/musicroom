@@ -358,7 +358,14 @@ const Room = ({ roomId }) => {
                                         uris={room.playlistUrls[room.playing].url}
                                         play={room.actuallyPlaying}
                                         inlineVolume={localVolume}
-                                        sx={{height:'100%'}}
+                                        styles={{
+                                            activeColor: '#b39f74',
+                                            bgColor: '#303030',
+                                            loaderColor: '#fff',
+                                            sliderColor: '#b39f74',
+                                            trackArtistColor: '#b39f74',
+                                            trackNameColor: '#b39f74',
+                                        }}
                                     />}
                                 {!isActuallyAdmin && room.playlistUrls[room.playing].source == 'spotify' &&
                                     <Alert severity="warning" sx={{margin:2, border:'1px solid #F27C24'}}> Le lecteur Spotify n'est visible que par l'host de la room. <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} ><b>Ajoute quelque chose dans la playlist en attendant !</b></a></Alert>
@@ -418,7 +425,7 @@ const Room = ({ roomId }) => {
                                     { room.playlistUrls[room.playing].url && room.playlistUrls[room.playing].url.length == 0 || !room.playlistUrls[room.playing].title && <Typography component={'span'} sm={12} >
                                         {room.playlistUrls[room.playing].url.substring(0, 50)+'...'} 
                                     </Typography>}
-                                    {playerReady && room.playlistUrls[room.playing].source !== 'spotify' && <Typography sx={{ ml:0, mb: 1}}> {~~(Math.round(playerRef.current.getCurrentTime())/60) + 'm'+Math.round(playerRef.current.getCurrentTime()) % 60+ 's / ' + formatNumberToMinAndSec(playerRef.current.getDuration())}</Typography>}
+                                    {playerReady && playerRef.current !== null && room.playlistUrls[room.playing].source !== 'spotify' && <Typography sx={{ ml:0, mb: 1}}> {~~(Math.round(playerRef.current.getCurrentTime())/60) + 'm'+Math.round(playerRef.current.getCurrentTime()) % 60+ 's / ' + formatNumberToMinAndSec(playerRef.current.getDuration())}</Typography>}
                                     <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
                                         Source : { room.playlistUrls[room.playing].source }
                                     </Typography>
@@ -521,7 +528,7 @@ const Room = ({ roomId }) => {
         </Dialog>
         
         {loaded && room.roomParams && <Dialog onClose={(e) => setOpenRoomParamModal(false)} open={openRoomParamModal}>
-            <ModalRoomParams roomParams={room.roomParams} />
+            <ModalRoomParams  roomParams={room.roomParams} spotifyTokenProps={room.spotifyToken} />
         </Dialog>} 
 
         <Dialog open={openLeaveRoomModal} keepMounted onClose={(e) => setOpenLeaveRoomModal(false)} >
