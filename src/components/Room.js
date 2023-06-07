@@ -115,10 +115,12 @@ const Room = ({ roomId }) => {
                         notifsArray:[],
                         roomParams:{
                             isPrivate:false,
+                            isOnInvitation:false,
                             isPlayingLooping:true,
-                            isInteractionsAllowed:true,
-                            frequenceInteraction:20000,
-                            isLinkedToSpotify:false,
+                            allowEverybodyToAddMedia:true,
+                            interactionsAllowed:true,
+                            interactionFrequence:20000,
+                            spotifyIsLinked:false,
                             spotifyToken:'',
                             spotifyTokenTimestamp:0,
                             spotifyUserConnected:''
@@ -206,7 +208,7 @@ const Room = ({ roomId }) => {
         roomRef.update({interactionsArray: room.interactionsArray});
 
         setUserCanMakeInteraction(false);
-        await delay(room.roomParams.frequenceInteraction);
+        await delay(room.roomParams.interactionFrequence);
         setUserCanMakeInteraction(true);
     }
 
@@ -322,7 +324,7 @@ const Room = ({ roomId }) => {
 
 
     async function handleChangeSpotifyToken(newToken) {
-        roomRef.set({roomParams:{spotifyToken: newToken,isLinkedToSpotify:true, spotifyTokenTimestamp: Date.now(), spotifyUserConnected:localStorage.getItem("MusicRoom_UserInfoPseudo")}}, { merge: true });
+        roomRef.set({roomParams:{spotifyToken: newToken,spotifyIsLinked:true, spotifyTokenTimestamp: Date.now(), spotifyUserConnected:localStorage.getItem("MusicRoom_UserInfoPseudo")}}, { merge: true });
         
         await delay(2000);
         window.location.href = "/?rid="+roomId.replace(/\s/g,'');
@@ -374,7 +376,7 @@ const Room = ({ roomId }) => {
   // transitions
   return (
     <div className="flex flex-col w-full gap-0 relative " style={{height:'calc(100vh - 10em)'}} >
-        {loaded && room.roomParams !== undefined && <RoomTopBar localData={localData} roomId={roomId} roomAdmin={room.admin} isLinkedToSpotify={room.roomParams.isLinkedToSpotify}/>}
+        {loaded && room.roomParams !== undefined && <RoomTopBar localData={localData} roomId={roomId} roomAdmin={room.admin} isLinkedToSpotify={room.roomParams.spotifyIsLinked}/>}
         <Container maxWidth={false} sx={{ padding: '0 !important'}} >
             { !<ActuallyPlaying roomRef={roomRef}/>}
             {loaded && room.playlistUrls && <div> 
@@ -584,19 +586,19 @@ const Room = ({ roomId }) => {
 
 
         {loaded && room.roomParams && <Grid className='room_bottom_interactions' item xs={3}>
-            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s animate__faster' title={!userCanMakeInteraction ? "Toutes les "+  (room.roomParams.frequenceInteraction/1000) +" secondes": ''}>  
+            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s animate__faster' title={!userCanMakeInteraction ? "Toutes les "+  (room.roomParams.interactionFrequence/1000) +" secondes": ''}>  
                 <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mr:1, ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('laugh') : ''}>
                     <EmojiEmotionsIcon fontSize="small" sx={{color:'white'}} />
                     {!userCanMakeInteraction && <HourglassBottomIcon class="icon_overlay"/>}
                 </Fab>
             </Tooltip>
-            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s animate__fast' title={!userCanMakeInteraction ? "Toutes les "+  (room.roomParams.frequenceInteraction/1000) +" secondes": ''}>  
+            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s animate__fast' title={!userCanMakeInteraction ? "Toutes les "+  (room.roomParams.interactionFrequence/1000) +" secondes": ''}>  
                 <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{mr:1, ...(userCanMakeInteraction && {bgcolor: '#ff9c22 !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
                     <CelebrationIcon fontSize="small" sx={{color:'white'}} />
                     {!userCanMakeInteraction && <HourglassBottomIcon class="icon_overlay"/>}
                 </Fab>
             </Tooltip>
-            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s' title={!userCanMakeInteraction ? "Toutes les "+  (room.roomParams.frequenceInteraction/1000) +" secondes": ''}>  
+            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s' title={!userCanMakeInteraction ? "Toutes les "+  (room.roomParams.interactionFrequence/1000) +" secondes": ''}>  
                 <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mr:0, ...(userCanMakeInteraction && {bgcolor: '#ff5722 !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('heart') : ''}>
                     <FavoriteIcon fontSize="small" sx={{color:'white'}} />
                     {!userCanMakeInteraction && <HourglassBottomIcon class="icon_overlay"/>}
@@ -610,7 +612,7 @@ const Room = ({ roomId }) => {
             </Tooltip>
             
             <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s' title="Paramètres">  
-            <Badge invisible={room.roomParams.isLinkedToSpotify} variant="dot" sx={{'& .MuiBadge-badge': {
+            <Badge invisible={room.roomParams.spotifyIsLinked} variant="dot" sx={{'& .MuiBadge-badge': {
                     right:'10px',
                     bgcolor:'#ff5722',
                     zIndex:10000
