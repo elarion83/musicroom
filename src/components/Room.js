@@ -176,14 +176,14 @@ const Room = ({ roomId }) => {
     async function createInteractionAnimation(type) {
         var n = 0;
         while(n < 1) {
-            const heart = document.createElement("img");
-            heart.src = "img/"+type+".png";
-            heart.classList.add("interactionImageContainer");
-            heart.style.left = Math.random() * 100 + "vw";
-            heart.style.animationDuration = Math.random() * 5 + 3 + "s ";
-            document.body.appendChild(heart);
+            const interactionDisplay = document.createElement("img");
+            interactionDisplay.src = "img/"+type+".png";
+            interactionDisplay.classList.add("interactionImageContainer");
+            interactionDisplay.style.left = Math.random() * 100 + "vw";
+            interactionDisplay.style.animationDuration = Math.random() * 5 + 3 + "s ";
+            document.body.appendChild(interactionDisplay);
             setTimeout(() => {
-                heart.remove();
+                interactionDisplay.remove();
             }, 1000);
             n++
         }
