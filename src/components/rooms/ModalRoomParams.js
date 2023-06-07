@@ -64,35 +64,6 @@ const ModalRoomParams = ({ roomParams,spotifyTokenProps }) => {
                 </Button>
             }
             
-            <Typography variant="subtitle1" display="block" sx={{mt:3}}>
-                Qui peut ajouter à la playlist ?
-            </Typography>
-            <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={'all'}
-            >
-                <MenuItem value={'all'}>Tout le monde </MenuItem>
-                <MenuItem value={25}>Moi uniquement</MenuItem>
-            </Select>
-
-            <Typography variant="subtitle1" display="block" sx={{mt:3}}>
-            <FormControlLabel control={<Switch checked={true} />} /> Activer les réactions en temps réel
-            </Typography>
-
-            <Typography variant="subtitle1" display="block" sx={{mt:3}}>
-                Délai des réactions en temps réel
-            </Typography>
-            <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={25}
-            >
-                <MenuItem value={15}>15 secondes</MenuItem>
-                <MenuItem value={25}>25 secondes</MenuItem>
-                <MenuItem value={60}>1 minute</MenuItem>
-                <MenuItem value={120}>2 minute</MenuItem>
-            </Select>
         </Box>
     )
 };
