@@ -355,7 +355,7 @@ const Room = ({ roomId }) => {
                 } else {
                     setSpotifyEndSwitchTempFix(true);
                 }
-            }
+            } 
         }
     }
   // transitions
@@ -369,7 +369,7 @@ const Room = ({ roomId }) => {
                     <Box sx={{bgcolor:'#303030',borderBottom: '2px solid #3e464d', padding:"0px 0em"}}>
                         <Grid container spacing={0} sx={{ bgcolor:'#262626',}}>
 
-                            <Grid item sm={4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
+                            <Grid item sm={(room.playlistUrls[room.playing].source == 'spotify') ? 12 : 4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
                                 {spotifyPlayerShow && isActuallyAdmin && room.playlistUrls[room.playing].source == 'spotify' &&
                                     <SpotifyPlayer
                                         callback={SpotifyPlayerCallBack}
@@ -379,11 +379,11 @@ const Room = ({ roomId }) => {
                                         inlineVolume={localVolume}
                                         styles={{
                                             activeColor: '#b39f74',
-                                            bgColor: '#303030',
-                                            loaderColor: '#fff',
-                                            sliderColor: '#b39f74',
-                                            trackArtistColor: '#b39f74',
-                                            trackNameColor: '#b39f74',
+                                            bgColor: '#262626',
+                                            loaderColor: '#b39f74',
+                                            sliderColor: '#ff5722',
+                                            trackArtistColor: '#262626',
+                                            trackNameColor: '#262626',
                                         }}
                                     />}
                                 {!isActuallyAdmin && room.playlistUrls[room.playing].source == 'spotify' &&
@@ -434,7 +434,7 @@ const Room = ({ roomId }) => {
                                 />}
                                 {isActuallyAdmin && <div style={{width:'100%',height:'100%',opacity:0,top:0,position:'absolute'}}></div>}
                             </Grid>
-                            <Grid item sm={8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }} className='player_right_side_container'>
+                            <Grid item sm={(room.playlistUrls[room.playing].source == 'spotify') ? 12 : 8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }} className={`player_right_side_container ${(room.playlistUrls[room.playing].source == 'spotify') ? "spotify_header" : ""}`}>
                                 { /* pip ? 'Disable PiP' : 'Enable PiP' */ }
                                 <Grid item sm={12} sx={{ padding:0,pl:1.5,ml:0, mb: 0 , mt:1, fill:'#f0f1f0'}}>
                                     { room.playlistUrls[room.playing].title && <Typography component={'span'} sm={12} >
