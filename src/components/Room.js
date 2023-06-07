@@ -12,6 +12,7 @@ import ReactPlayer from 'react-player';
 import Tooltip from '@mui/material/Tooltip';
 import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
+import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
 import TuneIcon from '@mui/icons-material/Tune';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
@@ -111,10 +112,17 @@ const Room = ({ roomId }) => {
                         actuallyPlaying:false,
                         playlistUrls: [],
                         playlistEmpty: true,
-                        spotifyToken:'',
-                        isLinkedToSpotify:false,
                         notifsArray:[],
-                        roomParams:{frequenceInteraction:20000},
+                        roomParams:{
+                            isPrivate:false,
+                            isPlayingLooping:true,
+                            isInteractionsAllowed:true,
+                            frequenceInteraction:20000,
+                            isLinkedToSpotify:false,
+                            spotifyToken:'',
+                            spotifyTokenTimestamp:0,
+                            spotifyUserConnected:''
+                            },
                         interactionsArray:[],
                         creationTimeStamp	: Date.now()
                     };
@@ -214,7 +222,9 @@ const Room = ({ roomId }) => {
         if(room.playlistUrls[room.playing+1]) {
             handleChangeActuallyPlaying(room.playing+1);
         } else {
-            handleChangeActuallyPlaying(0);
+            if(room.roomParams.isPlayingLooping) {
+                handleChangeActuallyPlaying(0);
+            }
         }
     }
   
@@ -312,7 +322,8 @@ const Room = ({ roomId }) => {
 
 
     async function handleChangeSpotifyToken(newToken) {
-        roomRef.set({spotifyToken: newToken, isLinkedToSpotify:true}, { merge: true });
+        roomRef.set({roomParams:{spotifyToken: newToken,isLinkedToSpotify:true, spotifyTokenTimestamp: Date.now(), spotifyUserConnected:localStorage.getItem("MusicRoom_UserInfoPseudo")}}, { merge: true });
+        
         await delay(2000);
         window.location.href = "/?rid="+roomId.replace(/\s/g,'');
     }
@@ -363,7 +374,7 @@ const Room = ({ roomId }) => {
   // transitions
   return (
     <div className="flex flex-col w-full gap-0 relative " style={{height:'calc(100vh - 10em)'}} >
-        {loaded && <RoomTopBar localData={localData} roomId={roomId} roomAdmin={room.admin} isLinkedToSpotify={room.isLinkedToSpotify}/>}
+        {loaded && room.roomParams !== undefined && <RoomTopBar localData={localData} roomId={roomId} roomAdmin={room.admin} isLinkedToSpotify={room.roomParams.isLinkedToSpotify}/>}
         <Container maxWidth={false} sx={{ padding: '0 !important'}} >
             { !<ActuallyPlaying roomRef={roomRef}/>}
             {loaded && room.playlistUrls && <div> 
@@ -375,7 +386,7 @@ const Room = ({ roomId }) => {
                                 {spotifyPlayerShow && isActuallyAdmin && room.playlistUrls[room.playing].source == 'spotify' &&
                                     <SpotifyPlayer
                                         callback={SpotifyPlayerCallBack}
-                                        token={room.spotifyToken}
+                                        token={room.roomParams.spotifyToken}
                                         uris={room.playlistUrls[room.playing].url}
                                         play={room.actuallyPlaying}
                                         inlineVolume={localVolume}
@@ -541,14 +552,14 @@ const Room = ({ roomId }) => {
                     <Typography sx={{color:'#d5cdcd', display:'block', width:'100%',ml:0, fontSize: '10px', textTransform:'uppercase' }} >{room.actuallyPlaying ? 'En lecture ' : 'En pause :'} <span>{ room.playlistUrls[room.playing].title ? room.playlistUrls[room.playing].title : room.playlistUrls[room.playing].url.substring(0,25)+'..' }</span></Typography>
                 </Box>}
             </Grid>
-            {OpenAddToPlaylistModal && <RoomModalAddMedia roomId={roomId} spotifyTokenProps={room.spotifyToken} handleChangeSpotifyToken={handleChangeSpotifyToken} validatedObjectToAdd={handleAddValidatedObjectToPlaylist} /> }
+            {OpenAddToPlaylistModal && <RoomModalAddMedia roomId={roomId} spotifyTokenProps={room.roomParams.spotifyToken} handleChangeSpotifyToken={handleChangeSpotifyToken} validatedObjectToAdd={handleAddValidatedObjectToPlaylist} /> }
         </Dialog>
         <Dialog onClose={(e) => setOpenInvitePeopleToRoomModal(false)} open={OpenInvitePeopleToRoomModal}>
             <ModalShareRoom roomUrl={ localData.domain +'/?rid='+roomId} />
         </Dialog>
         
         {loaded && room.roomParams && <Dialog onClose={(e) => setOpenRoomParamModal(false)} open={openRoomParamModal}>
-            <ModalRoomParams  roomParams={room.roomParams} spotifyTokenProps={room.spotifyToken} />
+            <ModalRoomParams  roomParams={room.roomParams} spotifyTokenProps={room.roomParams.spotifyToken} />
         </Dialog>} 
 
         <Dialog open={openLeaveRoomModal} keepMounted onClose={(e) => setOpenLeaveRoomModal(false)} >
@@ -599,7 +610,7 @@ const Room = ({ roomId }) => {
             </Tooltip>
             
             <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s' title="Paramètres">  
-            <Badge invisible={room.isLinkedToSpotify} variant="dot" sx={{'& .MuiBadge-badge': {
+            <Badge invisible={room.roomParams.isLinkedToSpotify} variant="dot" sx={{'& .MuiBadge-badge': {
                     right:'10px',
                     bgcolor:'#ff5722',
                     zIndex:10000
@@ -619,6 +630,18 @@ const Room = ({ roomId }) => {
                     <ExitToAppIcon  fontSize="small" />
                 </Fab>
             </Tooltip>
+            
+            <Snackbar
+            open={(Date.now() - room.roomParams.spotifyTokenTimestamp) < 8000}
+            autoHideDuration={8000}
+            sx={{bgcolor:'#2e7d32 !important', borderRadius:'2px'}}
+            message={room.roomParams.spotifyUserConnected + " a ajouté Spotify a la room !"}
+            action = {
+                <Button variant="extended" className='room_small_button_interactions' sx={{mr:1, ...(userCanMakeInteraction && {bgcolor: '#ff9c22 !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
+                    <CelebrationIcon fontSize="small" sx={{color:'white'}} />
+                </Button>
+            }
+            />
         </Grid>  } 
     </div>
   );
