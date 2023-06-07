@@ -10,6 +10,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Dialog from '@mui/material/Dialog';
 import ReactPlayer from 'react-player';
 import Tooltip from '@mui/material/Tooltip';
+import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import TuneIcon from '@mui/icons-material/Tune';
 import IconButton from '@mui/material/IconButton';
@@ -59,6 +60,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
+import zIndex from "@mui/material/styles/zIndex";
 const Room = ({ roomId }) => {
 
 
@@ -597,9 +599,15 @@ const Room = ({ roomId }) => {
             </Tooltip>
             
             <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s' title="Paramètres">  
+            <Badge invisible={room.isLinkedToSpotify} variant="dot" sx={{'& .MuiBadge-badge': {
+                    right:'10px',
+                    bgcolor:'#ff5722',
+                    zIndex:10000
+                }}} >
                 <Fab size="small" variant="extended" className='room_small_button_interactions'  sx={{justifyContent: 'center', ml:0}} onClick={e => handleOpenRoomParamModal(true)} >
                     <TuneIcon  fontSize="small" />
                 </Fab>
+            </Badge>
             </Tooltip>
             <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s animate__fast' title="Partager la room">  
                 <Fab size="small" variant="extended" className='room_small_button_interactions'  sx={{justifyContent: 'center', ml:1}} onClick={e => handleOpenShareModal(true)} >

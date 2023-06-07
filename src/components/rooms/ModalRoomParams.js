@@ -11,6 +11,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import { Button } from "@mui/material";
 import FormControl from '@mui/material/FormControl';
+import Typography from '@mui/material/Typography';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const ModalRoomParams = ({ roomParams,spotifyTokenProps }) => {
@@ -54,7 +55,18 @@ const ModalRoomParams = ({ roomParams,spotifyTokenProps }) => {
         <Box sx={{ padding: '1em 2em 1em 1em' }} className='modal_share_room'>
             <DialogTitle sx={{padding:0}}>Paramètres de la room </DialogTitle>  
             
-            <p>Qui peut ajouter à la playlist ?</p>
+            <Typography variant="subtitle1" display="block">
+                Connexion Spotify
+            </Typography>
+            {spotifyTokenProps.length === 0 && 
+                <Button variant="contained" color="success" sx={{mt:0, display:'block'}} onClick={e => window.location.href = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>
+                Connecter la room a Spotify
+                </Button>
+            }
+            
+            <Typography variant="subtitle1" display="block" sx={{mt:3}}>
+                Qui peut ajouter à la playlist ?
+            </Typography>
             <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -63,9 +75,14 @@ const ModalRoomParams = ({ roomParams,spotifyTokenProps }) => {
                 <MenuItem value={'all'}>Tout le monde </MenuItem>
                 <MenuItem value={25}>Moi uniquement</MenuItem>
             </Select>
-            <p>Activer les réactions en temps réel</p>
-            <FormControlLabel control={<Switch checked={true} />} />
-            <p>Délai des réactions en temps réel</p>
+
+            <Typography variant="subtitle1" display="block" sx={{mt:3}}>
+            <FormControlLabel control={<Switch checked={true} />} /> Activer les réactions en temps réel
+            </Typography>
+
+            <Typography variant="subtitle1" display="block" sx={{mt:3}}>
+                Délai des réactions en temps réel
+            </Typography>
             <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -76,11 +93,6 @@ const ModalRoomParams = ({ roomParams,spotifyTokenProps }) => {
                 <MenuItem value={60}>1 minute</MenuItem>
                 <MenuItem value={120}>2 minute</MenuItem>
             </Select>
-            {spotifyTokenProps.length === 0 && 
-                <Button variant="contained" color="success" sx={{mt:2, display:'block'}} onClick={e => window.location.href = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>
-                Connecter la room a Spotify
-                </Button>
-            }
         </Box>
     )
 };
