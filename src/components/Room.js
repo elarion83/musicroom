@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback} from "react";
 import { db } from "../services/firebase";
 
 import Toolbar from '@mui/material/Toolbar';
@@ -75,7 +75,7 @@ const Room = ({ roomId }) => {
     const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
     const [scrollPosition, setScrollPosition] = useState(0);
     const [playerReady, setPlayerReady] = useState(false);
-    
+    const [spotifyPlayerShow, setSpotifyPlayerShow] = useState(true);
     const onScroll = (e) => {
         setScrollPosition(e.target.documentElement.scrollTop);
     }
@@ -212,13 +212,17 @@ const Room = ({ roomId }) => {
         if(room.playlistUrls[room.playing+1]) {
             handleChangeActuallyPlaying(room.playing+1);
         } else {
-            handlePlay(false);
+            handleChangeActuallyPlaying(0);
         }
     }
   
     function handleChangeActuallyPlaying(numberToPlay) {
-        if(isActuallyAdmin) {
-            roomRef.set({playing: numberToPlay, actuallyPlaying:true,mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });
+        if(room.playlistUrls[numberToPlay]) {
+            if(isActuallyAdmin) {
+                roomRef.set({playing: numberToPlay, actuallyPlaying:true,mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });
+            }
+        } else {
+                roomRef.set({playing: 0, actuallyPlaying:true,mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });
         }
     }
 
@@ -338,9 +342,23 @@ const Room = ({ roomId }) => {
 
         console.log(newParams);
     }
-  
-  // transitions
 
+    const [spotifyEndSwitchTempFix, setSpotifyEndSwitchTempFix] = useState(true);
+    function SpotifyPlayerCallBack(e){
+        if(e.type == 'player_update') {
+            if(e.previousTracks[0] && (e.track.id === e.previousTracks[0].id)) {
+                if((e.track.uri !== room.playlistUrls[room.playing].source) && spotifyEndSwitchTempFix) {
+                    setSpotifyPlayerShow(false);
+                    setSpotifyEndSwitchTempFix(false);
+                    handleChangeActuallyPlaying(room.playing+1);
+                    setSpotifyPlayerShow(true);
+                } else {
+                    setSpotifyEndSwitchTempFix(true);
+                }
+            }
+        }
+    }
+  // transitions
   return (
     <div className="flex flex-col w-full gap-0 relative " style={{height:'calc(100vh - 10em)'}} >
         {loaded && <RoomTopBar localData={localData} roomId={roomId} roomAdmin={room.admin} isLinkedToSpotify={room.isLinkedToSpotify}/>}
@@ -352,8 +370,9 @@ const Room = ({ roomId }) => {
                         <Grid container spacing={0} sx={{ bgcolor:'#262626',}}>
 
                             <Grid item sm={4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
-                                {isActuallyAdmin && room.playlistUrls[room.playing].source == 'spotify' &&
+                                {spotifyPlayerShow && isActuallyAdmin && room.playlistUrls[room.playing].source == 'spotify' &&
                                     <SpotifyPlayer
+                                        callback={SpotifyPlayerCallBack}
                                         token={room.spotifyToken}
                                         uris={room.playlistUrls[room.playing].url}
                                         play={room.actuallyPlaying}
@@ -369,7 +388,6 @@ const Room = ({ roomId }) => {
                                     />}
                                 {!isActuallyAdmin && room.playlistUrls[room.playing].source == 'spotify' &&
                                     <Alert severity="warning" sx={{margin:2, border:'1px solid #F27C24'}}> Le lecteur Spotify n'est visible que par l'host de la room. <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} ><b>Ajoute quelque chose dans la playlist en attendant !</b></a></Alert>
-
                                 }
                                 {isActuallyAdmin && room.playlistUrls[room.playing].source != 'spotify'  && <ReactPlayer sx={{ padding:0}}
                                     ref={playerRef}
