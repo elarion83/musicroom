@@ -600,19 +600,19 @@ const Room = ({ roomId }) => {
             <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s animate__faster' title={!userCanMakeInteraction ? "Toutes les "+  (room.roomParams.interactionFrequence/1000) +" secondes": ''}>  
                 <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mr:1, ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('laugh') : ''}>
                     <EmojiEmotionsIcon fontSize="small" sx={{color:'white'}} />
-                    {!userCanMakeInteraction && <HourglassBottomIcon class="icon_overlay"/>}
+                    {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
                 </Fab>
             </Tooltip>
             <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s animate__fast' title={!userCanMakeInteraction ? "Toutes les "+  (room.roomParams.interactionFrequence/1000) +" secondes": ''}>  
                 <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{mr:1, ...(userCanMakeInteraction && {bgcolor: '#ff9c22 !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
                     <CelebrationIcon fontSize="small" sx={{color:'white'}} />
-                    {!userCanMakeInteraction && <HourglassBottomIcon class="icon_overlay"/>}
+                    {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
                 </Fab>
             </Tooltip>
             <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s' title={!userCanMakeInteraction ? "Toutes les "+  (room.roomParams.interactionFrequence/1000) +" secondes": ''}>  
                 <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mr:0, ...(userCanMakeInteraction && {bgcolor: '#ff5722 !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('heart') : ''}>
                     <FavoriteIcon fontSize="small" sx={{color:'white'}} />
-                    {!userCanMakeInteraction && <HourglassBottomIcon class="icon_overlay"/>}
+                    {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
                 </Fab>
             </Tooltip>
 

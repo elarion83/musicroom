@@ -46,7 +46,7 @@ const RoomPlaylist = ({ isAdminView, roomPlaylist, roomIdActuallyPlaying, handle
     }
     return (
         <Paper className={'scroll'} style={{borderRadius:0}}>
-            <List sx={{height: '100%', padding:0, mb:0}}>
+            <List sx={{height: '100%', padding:0}}>
                 
                     {roomPlaylist.map(function(d, idx){
                     return (
