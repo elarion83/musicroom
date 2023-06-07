@@ -237,12 +237,17 @@ const Room = ({ roomId }) => {
     function handleChangeActuallyPlaying(numberToPlay) {
         if(room.playlistUrls[numberToPlay]) {
             if(isActuallyAdmin) {
-                
-                roomRef.set({playing: numberToPlay, actuallyPlaying:true,mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });
+                if(room.playlistUrls[numberToPlay].source == 'spotify' && !room.roomParams.spotifyIsLinked ) {
+                    handleChangeActuallyPlaying(numberToPlay+1);
+                } else {
+                    roomRef.set({playing: numberToPlay, actuallyPlaying:true,mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });   
+                }
             }
         } else {
             if(room.roomParams.isPlayingLooping) {
                 roomRef.set({playing: 0, actuallyPlaying:true,mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });
+            } else {    
+                roomRef.set({actuallyPlaying:false}, { merge: true });
             }
         }
     }
