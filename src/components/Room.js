@@ -171,6 +171,10 @@ const Room = ({ roomId }) => {
     }, [loaded, localData,room]);
 
     async function handlePlay(playStatus) {
+        
+        if((Date.now() - room.roomParams.spotifyTokenTimestamp) > 3600000) {
+            roomRef.set({roomParams:{spotifyToken: '',spotifyIsLinked:false, spotifyTokenTimestamp: Date.now(), spotifyUserConnected:''}}, { merge: true });
+        }
         if(isActuallyAdmin) {
             roomRef.set({actuallyPlaying: playStatus, mediaActuallyPlayingAlreadyPlayed:room.mediaActuallyPlayingAlreadyPlayed}, { merge: true });
         } else {
@@ -233,10 +237,13 @@ const Room = ({ roomId }) => {
     function handleChangeActuallyPlaying(numberToPlay) {
         if(room.playlistUrls[numberToPlay]) {
             if(isActuallyAdmin) {
+                
                 roomRef.set({playing: numberToPlay, actuallyPlaying:true,mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });
             }
         } else {
+            if(room.roomParams.isPlayingLooping) {
                 roomRef.set({playing: 0, actuallyPlaying:true,mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });
+            }
         }
     }
 
@@ -637,9 +644,9 @@ const Room = ({ roomId }) => {
             open={(Date.now() - room.roomParams.spotifyTokenTimestamp) < 8000}
             autoHideDuration={8000}
             sx={{bgcolor:'#2e7d32 !important', borderRadius:'2px'}}
-            message={room.roomParams.spotifyUserConnected + " a ajouté Spotify a la room !"}
+            message={room.roomParams.spotifyIsLinked ? room.roomParams.spotifyUserConnected + " a ajouté Spotify a la room !" : "La connexion spotify a expirée"}
             action = {
-                <Button variant="extended" className='room_small_button_interactions' sx={{mr:1, ...(userCanMakeInteraction && {bgcolor: '#ff9c22 !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
+                <Button variant="extended" className='room_small_button_interactions' sx={{mr:1, ...(userCanMakeInteraction && {bgcolor: '#ff9c22 !important'}), ...(!room.roomParams.spotifyIsLinked && {display:'none'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
                     <CelebrationIcon fontSize="small" sx={{color:'white'}} />
                 </Button>
             }
