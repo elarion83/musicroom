@@ -35,7 +35,6 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import CelebrationIcon from '@mui/icons-material/Celebration';
-
 import Typography from '@mui/material/Typography';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
@@ -387,7 +386,7 @@ const Room = ({ roomId }) => {
     }
   // transitions
   return (
-    <div className="flex flex-col w-full gap-0 relative " style={{height:'calc(100vh - 10em)'}} >
+    <div className="flex flex-col w-full gap-0 relative " style={{height:'auto'}} >
         {loaded && room.roomParams !== undefined && <RoomTopBar localData={localData} roomId={roomId} roomAdmin={room.admin} isLinkedToSpotify={room.roomParams.spotifyIsLinked}/>}
         <Container maxWidth={false} sx={{ padding: '0 !important'}} >
             { !<ActuallyPlaying roomRef={roomRef}/>}
@@ -477,7 +476,7 @@ const Room = ({ roomId }) => {
                                     <Typography sx={{ ml:0, mb: 1.5, fontSize: '10px', textTransform:'uppercase' }}>
                                         Ajouté par : { room.playlistUrls[room.playing].addedBy }
                                     </Typography>
-                                </Grid>
+                                </Grid> 
                                 <Grid className='player_button_container' item sm={12} sx={{ padding:0,pl:1.5,ml:0, pr:1.5,mb: 0 , mt:1, fill:'#f0f1f0'}}   >
                                     {isActuallyAdmin && <Grid item sm={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:2, mb: 1.5 }}>
                                         
@@ -525,7 +524,7 @@ const Room = ({ roomId }) => {
                                             <Slider step={0.01} min={0}  max={1} aria-label="Volume" value={localVolume} onChange={e => handleVolumeChange(e)} />
                                             <VolumeUp />
                                         </Stack>
-                                    </Grid>}
+                                    </Grid> }
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -539,7 +538,7 @@ const Room = ({ roomId }) => {
                     <Alert severity="success" sx={{margin:2, border:'1px solid #F27C24'}}> Bienvenue dans la room ! <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} ><b>Ajoute quelque chose dans la playlist !</b></a></Alert>
                 }
                 {typeof(room.playlistUrls) !== 'undefined' && room.playlistUrls && room.playlistUrls.length > 0 && <Box sx={{ padding:"0em",marginBottom:0, paddingLeft:0}}>
-                    <RoomPlaylist isAdminView={isActuallyAdmin} roomPlaylist={room.playlistUrls} roomIdActuallyPlaying={room.playing} userVoteArray={localData.currentUserVotes} handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying}  handleVoteChange={handleVoteChange} roomIsActuallyPlaying={room.actuallyPlaying} roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayed} />
+                    <RoomPlaylist isAdminView={isActuallyAdmin} roomPlaylist={room.playlistUrls} roomIdActuallyPlaying={room.playing} userVoteArray={localData.currentUserVotes} handleChangeIsActuallyPlaying={handlePlay} handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying}  handleVoteChange={handleVoteChange} roomIsActuallyPlaying={room.actuallyPlaying} roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayed} />
                 </Box>}
             </div>
             } 
