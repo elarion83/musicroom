@@ -38,3 +38,10 @@ display: block;
 .spotify_header {
     text-align: center;
 }
+
+@media (min-width: 500px) { 
+    .spotify_header .player_button_container>div {
+        margin: 0 auto !important;
+        max-width: 50%;
+    }
+}

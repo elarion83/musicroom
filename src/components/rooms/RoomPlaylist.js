@@ -66,8 +66,8 @@ const RoomPlaylist = ({ isAdminView, roomPlaylist, roomIdActuallyPlaying, handle
                                         transition: 'all 0.3s ease-out'
                                         } }} key={'playlist_'+idx} xs={12} selected={roomIdActuallyPlaying === idx}>
                                     <ListItemIcon sx={{ pl:2,paddingTop:'5px',color:'white', zIndex:2, display:'flex', flexDirection:'column'}}>        
-                                            {idx !== idDisplaying && <ExpandMoreIcon sx={{display:'inline-block'}}  onClick={e => handleChangeIdActuallyDisplaying(idx)}/>}
-                                            {idx === idDisplaying && <ExpandLessIcon sx={{display:'inline-block'}} onClick={e => handleChangeIdActuallyDisplaying(-1)}  />}
+                                            {idx !== idDisplaying && idx !== roomIdActuallyPlaying && <ExpandMoreIcon sx={{display:'inline-block'}}  onClick={e => handleChangeIdActuallyDisplaying(idx)}/>}
+                                            {idx === idDisplaying && idx !== roomIdActuallyPlaying && <ExpandLessIcon sx={{display:'inline-block'}} onClick={e => handleChangeIdActuallyDisplaying(-1)}  />}
                                             {idx === idDisplaying && idx !== roomIdActuallyPlaying && isAdminView && <PlayCircleOutlineIcon sx={{mt:1}} onClick={e => handleChangeIdActuallyPlaying(idx)}  />}
                                     </ListItemIcon>
                                     <Grid item sx={{display:'block', zIndex:2, pl: '5px', pb:0.5, flexGrow:1}}>
