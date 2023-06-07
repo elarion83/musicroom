@@ -10,6 +10,7 @@ import Switch from '@mui/material/Switch';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import { Button } from "@mui/material";
+import Alert from '@mui/material/Alert';
 import TuneIcon from '@mui/icons-material/Tune';
 import FormControl from '@mui/material/FormControl';
 import Typography from '@mui/material/Typography';
@@ -55,7 +56,7 @@ const ModalRoomParams = ({ roomParams,spotifyTokenProps }) => {
     return(
         <Box sx={{ padding: '1em 2em 1em 1em' }} className='modal_share_room'>
             <DialogTitle sx={{padding:0}}><TuneIcon  fontSize="small" /> Paramètres de la room </DialogTitle>  
-            
+            {spotifyTokenProps.length !== 0 && <Alert severity="success" sx={{mt:1,color:'#d5cdcd', border:'1px solid #F27C24'}}>La room est connectée a Spotify</Alert>}
             {spotifyTokenProps.length === 0 && 
                 <Button variant="contained" color="success" sx={{mt:2, display:'block'}} onClick={e => window.location.href = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>
                 Connecter la room a Spotify
