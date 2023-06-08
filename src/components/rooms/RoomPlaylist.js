@@ -92,11 +92,8 @@ const RoomPlaylist = ({ isAdminView, roomPlaylist, roomIdActuallyPlaying, handle
                                                 Source : { roomPlaylist[idx].source } 
                                             </Typography>
                                         }
-                                        {idx === roomIdActuallyPlaying && roomIsActuallyPlaying && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
-                                            En lecture
-                                        </Typography>}
-                                        {idx === roomIdActuallyPlaying && !roomIsActuallyPlaying && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
-                                            En pause
+                                        {idx === roomIdActuallyPlaying && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
+                                            {roomIsActuallyPlaying ? 'En lecture' : 'En pause'}
                                         </Typography>}
                                     </Grid>
                                    {idx === roomIdActuallyPlaying && <LinearProgress sx={{height:'10px',top:0, position:'absolute', width:'100%', height:'100%', zIndex:1, opacity:0.5, "& .MuiLinearProgress-barColorPrimary": {

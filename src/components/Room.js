@@ -77,6 +77,7 @@ const Room = ({ roomId }) => {
     const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
     const [scrollPosition, setScrollPosition] = useState(0);
     const [playerReady, setPlayerReady] = useState(false);
+    const [isFullScreen, setIsFullScreen] = useState(false);
     const [spotifyPlayerShow, setSpotifyPlayerShow] = useState(true);
     const onScroll = (e) => {
         setScrollPosition(e.target.documentElement.scrollTop);
@@ -171,7 +172,7 @@ const Room = ({ roomId }) => {
 
     async function handlePlay(playStatus) {
         
-        if((Date.now() - room.roomParams.spotifyTokenTimestamp) > 3600000) {
+        if(room.roomParams.spotifyTokenTimestamp.length > 1 && (Date.now() - room.roomParams.spotifyTokenTimestamp) > 3600000) {
             roomRef.set({roomParams:{spotifyToken: '',spotifyIsLinked:false, spotifyTokenTimestamp: Date.now(), spotifyUserConnected:''}}, { merge: true });
         }
         if(isActuallyAdmin) {
@@ -395,7 +396,7 @@ const Room = ({ roomId }) => {
                     <Box sx={{bgcolor:'#303030',borderBottom: '2px solid #3e464d', padding:"0px 0em"}}>
                         <Grid container spacing={0} sx={{ bgcolor:'#262626',}}>
 
-                            <Grid item sm={(room.playlistUrls[room.playing].source == 'spotify') ? 12 : 4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
+                            <Grid item className={isFullScreen ? 'fullscreen' : ''} sm={(room.playlistUrls[room.playing].source == 'spotify') ? 12 : 4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
                                 {spotifyPlayerShow && isActuallyAdmin && room.playlistUrls[room.playing].source == 'spotify' &&
                                     <SpotifyPlayer
                                         callback={SpotifyPlayerCallBack}
@@ -466,6 +467,10 @@ const Room = ({ roomId }) => {
                                     { room.playlistUrls[room.playing].title && <Typography component={'span'} sm={12} >
                                        {room.playlistUrls[room.playing].title}
                                     </Typography>}
+                                    
+                                    <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
+                                        {room.actuallyPlaying ? 'En lecture' : 'En pause'}
+                                    </Typography>
                                     { room.playlistUrls[room.playing].url && room.playlistUrls[room.playing].url.length == 0 || !room.playlistUrls[room.playing].title && <Typography component={'span'} sm={12} >
                                         {room.playlistUrls[room.playing].url.substring(0, 50)+'...'} 
                                     </Typography>}
@@ -517,6 +522,11 @@ const Room = ({ roomId }) => {
                                                 <SettingsBackupRestoreIcon fontSize="large" sx={{color:'#f0f1f0'}} />
                                             </IconButton>
                                         }
+                                        {isFullScreen &&
+                                            <IconButton onClick={e => setIsFullScreen(true)} >
+                                                <SettingsBackupRestoreIcon fontSize="large" sx={{color:'#f0f1f0'}} />
+                                            </IconButton>
+                                        }
                                     </Grid>}
                                     {room.playlistUrls[room.playing].source !== 'spotify' && <Grid item sm={12} sx={{ pt:0,pl:2,pr:2,ml:0, mb: 0, pb:1, mt:3 }}>
                                         <Stack spacing={2} sm={8} direction="row" sx={{ mb: 1, mr:2 }} alignItems="center">
@@ -524,6 +534,12 @@ const Room = ({ roomId }) => {
                                             <Slider step={0.01} min={0}  max={1} aria-label="Volume" value={localVolume} onChange={e => handleVolumeChange(e)} />
                                             <VolumeUp />
                                         </Stack>
+                                        
+                                        {isFullScreen &&
+                                            <IconButton onClick={e => setIsFullScreen(true)} >
+                                                <SettingsBackupRestoreIcon fontSize="large" sx={{color:'#f0f1f0'}} />
+                                            </IconButton>
+                                        }
                                     </Grid> }
                                 </Grid>
                             </Grid>
@@ -643,7 +659,6 @@ const Room = ({ roomId }) => {
                     <ExitToAppIcon  fontSize="small" />
                 </Fab>
             </Tooltip>
-            
             <Snackbar
             open={(Date.now() - room.roomParams.spotifyTokenTimestamp) < 8000}
             autoHideDuration={8000}

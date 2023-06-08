@@ -268,6 +268,19 @@
         animation : rotate 6s ease infinite;
       }
 
+      .fullscreen, .fullscreenoff {    
+        position: fixed !important;
+        width: 100vw;
+        top: 0;
+        max-width: 100vw !important;
+        height: 100%;
+        z-index: 8000;
+      }
+
+      .fullscreenoff {
+        z-index: 8001;
+      }
+
     </style>
   </head>
   <body>
