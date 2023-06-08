@@ -1,26 +1,25 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { db } from "../services/firebase";
 
-import Toolbar from '@mui/material/Toolbar';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import Dialog from '@mui/material/Dialog';
-import ReactPlayer from 'react-player';
-import Tooltip from '@mui/material/Tooltip';
-import Badge from '@mui/material/Badge';
-import Container from '@mui/material/Container';
-import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
-import TuneIcon from '@mui/icons-material/Tune';
-import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
 import ShareIcon from '@mui/icons-material/Share';
-import AppBar from '@mui/material/AppBar';
-import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+import TuneIcon from '@mui/icons-material/Tune';
 import Alert from '@mui/material/Alert';
+import Badge from '@mui/material/Badge';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import Dialog from '@mui/material/Dialog';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Snackbar from '@mui/material/Snackbar';
+import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+import Toolbar from '@mui/material/Toolbar';
+import Tooltip from '@mui/material/Tooltip';
 import 'animate.css';
+import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
 
@@ -29,38 +28,33 @@ import Fab from '@mui/material/Fab';
 import Stack from '@mui/material/Stack';
 //import screenfull from 'screenfull'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import Notifications from './rooms/Notifications';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import LastPageIcon from '@mui/icons-material/LastPage';
 
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import CelebrationIcon from '@mui/icons-material/Celebration';
-import Typography from '@mui/material/Typography';
-import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
-import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
-import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import ReplayIcon from '@mui/icons-material/Replay';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+import Typography from '@mui/material/Typography';
 
-import Slider from '@mui/material/Slider';
 import VolumeDown from '@mui/icons-material/VolumeDown';
 import VolumeUp from '@mui/icons-material/VolumeUp';
+import Slider from '@mui/material/Slider';
 
-import RoomModalAddMedia from './rooms/modalsOrDialogs/ModalAddMedia'
-import ModalShareRoom from './rooms/modalsOrDialogs/ModalShareRoom'
-import ModalRoomParams from './rooms/modalsOrDialogs/ModalRoomParams'
-import ModalLeaveRoom from './rooms/modalsOrDialogs/ModalLeaveRoom';
+import RoomModalAddMedia from './rooms/modalsOrDialogs/ModalAddMedia';
 import ModalForceSpotifyDisconnect from "./rooms/modalsOrDialogs/ModalForceSpotifyDisconnect";
+import ModalLeaveRoom from './rooms/modalsOrDialogs/ModalLeaveRoom';
+import ModalRoomParams from './rooms/modalsOrDialogs/ModalRoomParams';
+import ModalShareRoom from './rooms/modalsOrDialogs/ModalShareRoom';
 
-import RoomPlaylist from "./rooms/RoomPlaylist";
 import RoomTopBar from "./general_template/RoomTopBar";
-import { TransitionProps } from '@mui/material/transitions';
+import RoomPlaylist from "./rooms/RoomPlaylist";
 
 const Room = ({ roomId }) => {
 

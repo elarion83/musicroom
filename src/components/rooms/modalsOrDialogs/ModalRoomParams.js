@@ -1,23 +1,15 @@
-import React, { useState } from "react";
 import Box from '@mui/material/Box';
-import Slider from '@mui/material/Slider';
+import React from "react";
 
 import DialogTitle from '@mui/material/DialogTitle';
 
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
+import { Icon } from '@iconify/react';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import TuneIcon from '@mui/icons-material/Tune';
 import { Button } from "@mui/material";
 import Alert from '@mui/material/Alert';
-import TuneIcon from '@mui/icons-material/Tune';
-import FormControl from '@mui/material/FormControl';
-import Typography from '@mui/material/Typography';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Tooltip from '@mui/material/Tooltip';
-import { Icon } from '@iconify/react';
 
 const ModalRoomParams = ({ roomParams , handleDisconnectFromSpotifyModal}) => {
 
