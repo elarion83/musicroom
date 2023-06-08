@@ -181,9 +181,9 @@ const RoomModalAddMedia = ({ roomId, validatedObjectToAdd, spotifyTokenProps }) 
                   </Grid>
                   {mediaSearchResultYoutube.length > 1 && <Grid item xs={12}>
                     <Tabs value={tabIndex} onChange={handleTabChange} sx={{bgcolor:'#202124'}}>
-                        {mediaSearchResultYoutube.length > 1  && <Tab sx={{ color:'white'}} label="Youtube" />}
-                        {mediaSearchResultSpotify.length > 1 && <Tab sx={{ color:'white'}} label="Spotify" />}
-                        {mediaSearchResultDailyMotion.length > 1 && <Tab sx={{ color:'white'}} label="Dailymotion" />}
+                        {mediaSearchResultYoutube.length > 1  && <Tab sx={{ color:'var(--white)'}} label="Youtube" />}
+                        {mediaSearchResultSpotify.length > 1 && <Tab sx={{ color:'var(--white)'}} label="Spotify" />}
+                        {mediaSearchResultDailyMotion.length > 1 && <Tab sx={{ color:'var(--white)'}} label="Dailymotion" />}
                     </Tabs>
                     <Box sx={{ lineHeight:"15px", padding:0, pt:1, mb:3 }}>
                         {tabIndex === 0 && (

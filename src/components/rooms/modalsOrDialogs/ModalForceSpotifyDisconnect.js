@@ -8,9 +8,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 const ModalForceSpotifyDisconnect = ({ open, changeOpen, handleDisconnectSpotify }) => {
 
     const [loading, setLoading] = useState(false);
-
-    function handleDisconnectSpotifyInComp() {
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+    
+    async function handleDisconnectSpotifyInComp() {
         setLoading(true);
+        await delay(500)
         handleDisconnectSpotify();
     }
 

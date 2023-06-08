@@ -23,6 +23,7 @@ const UserTopBar = ({ userInfoPseudo }) => {
     const open = Boolean(anchorEl);
 
     function handleLogout() {
+        localStorage.removeItem("MusicRoom_RoomId");
         localStorage.removeItem("MusicRoom_SpotifyToken");
         localStorage.removeItem("MusicRoom_UserInfoPseudo");
         window.location.reload();

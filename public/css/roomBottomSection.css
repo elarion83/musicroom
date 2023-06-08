@@ -1,0 +1,12 @@
+.addMediaIcon {
+    display:inline;
+    color:var(--main-color-darker) ;
+    transform:scale(2.5);
+    margin-left:1;
+    animation-name: slideOutUp;
+    transition: var(--transition-smooth-all);
+}
+
+.addMediaIcon:hover {
+    color:var(--white);
+}

@@ -19,6 +19,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import SoundWave from "./SoundWave";
 
 const RoomPlaylist = ({isSpotifyAvailable, isAdminView, roomPlaylist, roomIdActuallyPlaying, handleVoteChange, userVoteArray, handleChangeIdActuallyPlaying, roomIsActuallyPlaying, roomPlayedActuallyPlayed}) => {
 
@@ -54,7 +55,7 @@ const RoomPlaylist = ({isSpotifyAvailable, isAdminView, roomPlaylist, roomIdActu
                         <Fade key={idx} in={true} xs={12} sx={{  width:'100%', padding:0, margin:0}}>
                             <Grid item sx={{width:'100%', padding:0,pl:2, margin:0}} className={`playlist_bloc ${(d.source == 'spotify') ? !isSpotifyAvailable ? 'mediaUnavailable' : '' : 'mediaAvailable'}`}> 
                                 
-                                <ListItemButton sx={{ alignItems:'flex-start',position:'relative',width:'100%', pt:1,pl:0,margin:0, backgroundColor:'var(--main-bg-color)',borderBottom: '2px solid #3e464d', color:'white', "&.Mui-selected": {
+                                <ListItemButton sx={{ alignItems:'flex-start',position:'relative',width:'100%', pt:1,pl:0,margin:0, backgroundColor:'var(--main-bg-color)',borderBottom: '2px solid #3e464d', color:'var(--white)', "&.Mui-selected": {
                                         backgroundColor: "#262626",
                                         transition: 'all 0.3s ease-out'
                                         },
@@ -66,24 +67,14 @@ const RoomPlaylist = ({isSpotifyAvailable, isAdminView, roomPlaylist, roomIdActu
                                         backgroundColor: "#262626",
                                         transition: 'all 0.3s ease-out'
                                         } }} key={'playlist_'+idx} xs={12} selected={roomIdActuallyPlaying === idx}>
-                                    <ListItemIcon sx={{ pl:2,paddingTop:'5px',color:'white', zIndex:2, display:'flex', flexDirection:'column'}}>        
+                                    <ListItemIcon sx={{ pl:2,paddingTop:'5px',color:'var(--white)', zIndex:2, display:'flex', flexDirection:'column'}}>        
                                             {idx !== idDisplaying && idx !== roomIdActuallyPlaying && <ExpandMoreIcon sx={{display:'inline-block'}}  onClick={e => handleChangeIdActuallyDisplaying(idx)}/>}
                                             {idx === idDisplaying && idx !== roomIdActuallyPlaying && <ExpandLessIcon sx={{display:'inline-block'}} onClick={e => handleChangeIdActuallyDisplaying(-1)}  />}
                                             {(idx === idDisplaying) && (idx !== roomIdActuallyPlaying) && isAdminView && <PlayCircleOutlineIcon sx={{mt:1}} onClick={e => handleChangeIdActuallyPlayingInComp(idx)}  />}
                                             
                                             {(d.source == 'spotify' && !isSpotifyAvailable) && (idx !== roomIdActuallyPlaying) && (idx === idDisplaying) && <Icon className='mediaForbiddenIcon' icon="ps:forbidden" />}
                                             {idx === roomIdActuallyPlaying && 
-                                                <>
-                                                    <div className={roomIsActuallyPlaying ? 'animated soundWaveContainer' : 'waiting soundWaveContainer'}>
-                                                        <div class="box boxQuiet"></div>
-                                                        <div class="box boxNormal"></div>
-                                                        <div class="box boxQuiet"></div>
-                                                        <div class="box boxLoud"></div>
-                                                        <div class="box boxQuiet"></div>
-                                                        <div class="box boxNormal"></div>
-                                                        <div class="box boxLoud"></div>
-                                                    </div>
-                                                </>
+                                                <SoundWave waveNumber={7}  isPlayingOrNo={roomIsActuallyPlaying} />
                                             }
 
                                     </ListItemIcon>
@@ -123,19 +114,19 @@ const RoomPlaylist = ({isSpotifyAvailable, isAdminView, roomPlaylist, roomIdActu
                                 
                                 {(idx === idDisplaying || idx === roomIdActuallyPlaying) && <Grid className='votebuttons' sx={{position:'absolute', right:'5px', bottom:'10px'}}>
                                         {!userVoteArray.up.includes(d.hashId) && 
-                                            <Button size="small" variant="contained" sx={{zIndex:5,mr:2, fontSize:'0.8em', color:'white', bgcolor:'#262626'}}  onClick={e => handleVotePositif(idx, d.hashId)}>
+                                            <Button size="small" variant="contained" sx={{zIndex:5,mr:2, fontSize:'0.8em', color:'var(--white)', bgcolor:'#262626'}}  onClick={e => handleVotePositif(idx, d.hashId)}>
                                                 <ThumbUpIcon  fontSize="small" sx={{mr:1}}/>
                                                 {d.vote.up }
                                             </Button>
                                         }
                                         {userVoteArray.up.includes(d.hashId) && 
-                                            <Button size="small" variant="contained" sx={{zIndex:5,mr:2, fontSize:'0.8em', color:'white', bgcolor:'#262626'}}>
+                                            <Button size="small" variant="contained" sx={{zIndex:5,mr:2, fontSize:'0.8em', color:'var(--white)', bgcolor:'#262626'}}>
                                                 <ThumbUpIcon  fontSize="small" sx={{mr:1, color:'#66BB6A'}}/>
                                                 {d.vote.up }
                                             </Button>
                                         }
                                         {!userVoteArray.down.includes(d.hashId) &&
-                                                <Button size="small" variant="contained" sx={{zIndex:5, fontSize:'0.8em',  color:'white', bgcolor:'#262626'}}  onClick={e => handleVoteNegatif(idx, d.hashId)}>
+                                                <Button size="small" variant="contained" sx={{zIndex:5, fontSize:'0.8em',  color:'var(--white)', bgcolor:'#262626'}}  onClick={e => handleVoteNegatif(idx, d.hashId)}>
                                                     <ThumbDownAltIcon fontSize="small"  sx={{mr:1}}/>
                                                     {d.vote.down }
                                                 </Button>

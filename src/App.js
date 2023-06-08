@@ -107,7 +107,7 @@ function App() {
                     <Typography  sx={{pl:2,pr:2}} variant="h5" gutterBottom>
                       Crée ta room ou rejoins en une !
                     </Typography>
-                    <Typography sx={{pl:2,pr:2, color:'white'}} >
+                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} >
                       Tous les membres d'une room peuvent ajouter une musique ou une vidéo à la playlist quand ils le désirent depuis leur téléphone ! 
                       La playlist est partagée entre tout le monde en temps réel et l'hôte de la room est maître de la soirée !
                     </Typography>
@@ -116,14 +116,14 @@ function App() {
                     <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
                       Soyez tous synchronisés !
                     </Typography>
-                    <Typography sx={{pl:2,pr:2, color:'white'}} >
+                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} >
                       La playlist est partagée en temps réel entre tous les utilisateurs, vous pouvez ainsi regarder la même chose, en même temps a des endroits différents !
                     </Typography>
                   </Box>
               </AutoplaySlider>
             </Grid>
             
-            <Button variant="filled" className='main_bg_color' sx={{width:'100%',color:'white', height:'50px', mt:'2em', mb:'2em'}} onClick={createNewRoom}> Créer une Room </Button> 
+            <Button variant="filled" className='main_bg_color' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em', mb:'2em'}} onClick={createNewRoom}> Créer une Room </Button> 
             <Typography sx={{mb:2}}></Typography>
             <Typography variant="h5" gutterBottom>
               Rejoindre une room 
@@ -149,7 +149,7 @@ function App() {
                           <InputAdornment  sx={{
                           padding: "27.5px 14px",
                           backgroundColor: "#23282d",
-                          color:'white',
+                          color:'var(--white)',
                           cursor:'pointer'}} position="end" onClick={e => handleJoinRoomByRoomId()}>
                           <DoubleArrowIcon />
                           </InputAdornment>
@@ -184,7 +184,7 @@ function App() {
                             <InputAdornment  sx={{
                             padding: "27.5px 14px",
                             backgroundColor: "#23282d",
-                            color:'white',
+                            color:'var(--white)',
                             cursor:'pointer',
                             }} position="end" onClick={e=> checkForNewPseudo()}>
                             <DoubleArrowIcon  />

@@ -1,5 +1,8 @@
 :root{
   --main-bg-color: #4f4f4f;
   --main-color: #b39f74;
+  --main-color-darker: #75684b;
   --red:#c63b3b;
+  --white:#e5dece;
+  --transition-smooth-all:all 0.3s ease-out;
 }

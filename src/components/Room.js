@@ -3,11 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { db } from "../services/firebase";
 
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import ShareIcon from '@mui/icons-material/Share';
-import TuneIcon from '@mui/icons-material/Tune';
 import Alert from '@mui/material/Alert';
-import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
@@ -31,15 +27,13 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import LastPageIcon from '@mui/icons-material/LastPage';
 
-import CelebrationIcon from '@mui/icons-material/Celebration';
-import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import ReplayIcon from '@mui/icons-material/Replay';
+import SkipPrevious from '@mui/icons-material/SkipPrevious';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import Typography from '@mui/material/Typography';
 
@@ -55,6 +49,8 @@ import ModalShareRoom from './rooms/modalsOrDialogs/ModalShareRoom';
 
 import RoomTopBar from "./general_template/RoomTopBar";
 import RoomPlaylist from "./rooms/RoomPlaylist";
+import BottomInteractions from "./rooms/BottomInteractions";
+import SoundWave from "./rooms/SoundWave";
 
 const Room = ({ roomId }) => {
 
@@ -117,6 +113,7 @@ const Room = ({ roomId }) => {
                             interactionsAllowed:true,
                             interactionFrequence:20000,
                             spotifyIsLinked:false,
+                            spotifyAlreadyHaveBeenLinked:false,
                             spotifyToken:'',
                             spotifyTokenTimestamp:0,
                             spotifyUserConnected:''
@@ -145,7 +142,6 @@ const Room = ({ roomId }) => {
 
 	useEffect(() => {
 		getRoomData(roomId); 
-        
         if(null === localStorage.getItem("MusicRoom_UserInfoVotes")) {
             localStorage.setItem("MusicRoom_UserInfoVotes", JSON.stringify({up:[], down:[]}));
         } else {
@@ -180,7 +176,7 @@ const Room = ({ roomId }) => {
     }, [loaded, localData,room]);
 
     async function handlePlay(playStatus) {
-        if((typeof(room.roomParams.spotifyTokenTimestamp) === 'number') && ((Date.now() - room.roomParams.spotifyTokenTimestamp) > 3600000)) {   
+        if((typeof(room.roomParams.spotifyTokenTimestamp) === 'number' && room.roomParams.spotifyTokenTimestamp > 0) && ((Date.now() - room.roomParams.spotifyTokenTimestamp) > 3600000)) {   
             disconnectSpotify();
         }
         if(isActuallyAdmin) {
@@ -244,14 +240,25 @@ const Room = ({ roomId }) => {
             }
         }
     }
+
+    async function isSpotifyAndIsNotPlayableBySpotify(numberToPlay, spotifyIsLinked) {
+        if(spotifyIsLinked) {
+            return false;
+        }
+        if(room.playlistUrls[numberToPlay].source == 'spotify' && !spotifyIsLinked) {
+            return true;
+        }
+        
+        return false;
+    }
   
     function handleChangeActuallyPlaying(numberToPlay) {
         if(room.playlistUrls[numberToPlay]) {
             if(isActuallyAdmin) {
-                if(room.playlistUrls[numberToPlay].source == 'spotify' && !room.roomParams.spotifyIsLinked ) {
+                if(isSpotifyAndIsNotPlayableBySpotify(numberToPlay, room.roomParams.spotifyIsLinked)) {
                     handleChangeActuallyPlaying(numberToPlay+1);
-                } else {
-                    roomRef.set({playing: numberToPlay, actuallyPlaying:true,mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });   
+                } else { 
+                    roomRef.set({playing: numberToPlay, actuallyPlaying:true,mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });  
                 }
             }
         } else {
@@ -351,7 +358,7 @@ const Room = ({ roomId }) => {
 
 
     async function handleChangeSpotifyToken(newToken) {
-        roomRef.set({roomParams:{spotifyToken: newToken,spotifyIsLinked:true, spotifyTokenTimestamp: Date.now(), spotifyUserConnected:localStorage.getItem("MusicRoom_UserInfoPseudo")}}, { merge: true });
+        roomRef.set({roomParams:{spotifyToken: newToken,spotifyIsLinked:true,spotifyAlreadyHaveBeenLinked:true, spotifyTokenTimestamp: Date.now(), spotifyUserConnected:localStorage.getItem("MusicRoom_UserInfoPseudo")}}, { merge: true });
         
         await delay(2000);
         window.location.href = "/?rid="+roomId.replace(/\s/g,'');
@@ -504,8 +511,8 @@ const Room = ({ roomId }) => {
                                                 <FirstPageIcon  fontSize="large" sx={{color:room.playing > 0 ? '#f0f1f0': '#303134'}} />
                                             </IconButton>
                                             
-                                            <IconButton onClick={e => room.playing > 0 ? handleChangeActuallyPlaying(room.playing - 1) : ''}>
-                                                <FirstPageIcon  fontSize="large" sx={{color:room.playing > 0 ? '#f0f1f0': '#303134'}} />
+                                            <IconButton onClick={e => ((room.playing > 0) && isSpotifyAndIsNotPlayableBySpotify(room.playing-1, room.roomParams.isLinkedToSpotify)) ? handleChangeActuallyPlaying(room.playing - 1) : ''}>
+                                                <SkipPrevious fontSize="large" sx={{color:((room.playing > 0) && isSpotifyAndIsNotPlayableBySpotify(room.playing-1, room.roomParams.isLinkedToSpotify)) ? '#f0f1f0': '#303134'}} />
                                             </IconButton>
 
                                             <IconButton variant="contained" onClick={e => handlePlay(!room.actuallyPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
@@ -593,8 +600,16 @@ const Room = ({ roomId }) => {
                 </Box>}
                 {typeof(room.playlistUrls) !== 'undefined' && loaded && !room.playlistEmpty && <Box sx={{display:'flex',flexDirection:'column',padding:'1em'}}>
                     <Typography sx={{color:'#d5cdcd', display:'block', width:'100%',ml:0, fontSize: '12px', textTransform:'uppercase' }} > Room n° { roomId }</Typography>
-                    {room.playlistEmpty && <Typography component="span" sx={{color:'#d5cdcd', display:'block', width:'100%',ml:0, fontSize: '10px', textTransform:'uppercase' }}>  Playlist vide </Typography>}
-                    <Typography sx={{color:'#d5cdcd', display:'block', width:'100%',ml:0, fontSize: '10px', textTransform:'uppercase' }} >{room.actuallyPlaying ? 'En lecture ' : 'En pause :'} <span>{ room.playlistUrls[room.playing].title ? room.playlistUrls[room.playing].title : room.playlistUrls[room.playing].url.substring(0,25)+'..' }</span></Typography>
+                    {room.playlistEmpty && 
+                        <Typography component="span" sx={{color:'#d5cdcd', display:'block', width:'100%',ml:0, fontSize: '10px', textTransform:'uppercase' }}>  Playlist vide 
+                        </Typography>
+                    }
+                    <Typography sx={{color:'#d5cdcd', display:'flex',gap:'10px',flexDirection:'row', alignItems:'center', width:'100%',ml:1,mt:1, fontSize: '10px', textTransform:'uppercase' }} >
+                        <SoundWave waveNumber={7} isPlayingOrNo={room.actuallyPlaying}  /> 
+                        <span >
+                            { room.playlistUrls[room.playing].title ? room.playlistUrls[room.playing].title : room.playlistUrls[room.playing].url.substring(0,25)+'..' }
+                            </span>
+                    </Typography>
                 </Box>}
             </Grid>
             {OpenAddToPlaylistModal && <RoomModalAddMedia roomId={roomId} spotifyTokenProps={room.roomParams.spotifyToken} handleChangeSpotifyToken={handleChangeSpotifyToken} validatedObjectToAdd={handleAddValidatedObjectToPlaylist} /> }
@@ -611,72 +626,19 @@ const Room = ({ roomId }) => {
         <ModalForceSpotifyDisconnect open={openForceDisconnectSpotifyModal} changeOpen={setOpenForceDisconnectSpotifyModal} handleDisconnectSpotify={disconnectSpotify} />
 
 
-        {loaded && room.roomParams && <Grid className='room_bottom_interactions' item xs={3}>
-            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s animate__faster' title={!userCanMakeInteraction ? "Toutes les "+  (room.roomParams.interactionFrequence/1000) +" secondes": ''}>  
-                <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mr:1, ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('laugh') : ''}>
-                    <EmojiEmotionsIcon fontSize="small" sx={{color:'white'}} />
-                    {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
-                </Fab>
-            </Tooltip>
-            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s animate__fast' title={!userCanMakeInteraction ? "Toutes les "+  (room.roomParams.interactionFrequence/1000) +" secondes": ''}>  
-                <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{mr:1, ...(userCanMakeInteraction && {bgcolor: '#ff9c22 !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
-                    <CelebrationIcon fontSize="small" sx={{color:'white'}} />
-                    {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
-                </Fab>
-            </Tooltip>
-            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s' title={!userCanMakeInteraction ? "Toutes les "+  (room.roomParams.interactionFrequence/1000) +" secondes": ''}>  
-                <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mr:0, ...(userCanMakeInteraction && {bgcolor: '#ff5722 !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('heart') : ''}>
-                    <FavoriteIcon fontSize="small" sx={{color:'white'}} />
-                    {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
-                </Fab>
-            </Tooltip>
-
-            <Tooltip className='animate__animated animate__fadeInUp animate__delay-1s' placement="top" open={room && room.playlistEmpty && !OpenAddToPlaylistModal ? true : false} sx={{mt:-2}} title="Ajouter à la playlist" arrow>
-                <Fab sx={{width:'56px',height:'56px', transform:'translateY(-20px) !important'}} color="primary" className={`main_bg_color `} aria-label="add" onClick={(e) => setOpenAddToPlaylistModal(true)}>
-                    <SpeedDialIcon sx={{color:'white !important'}} className={room && room.playlistEmpty && !OpenAddToPlaylistModal ? 'main_add_media_button' : ''}/>
-                </Fab>
-            </Tooltip>
-            
-            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s' title="Paramètres">  
-            <Badge invisible={room.roomParams.spotifyIsLinked} variant="dot" sx={{'& .MuiBadge-badge': {
-                    right:'10px',
-                    bgcolor:'#ff5722',
-                    zIndex:10000
-                }}} >
-                <Fab size="small" variant="extended" className='room_small_button_interactions'  sx={{justifyContent: 'center', ml:0}} onClick={e => handleOpenRoomParamModal(true)} >
-                    <TuneIcon  fontSize="small" />
-                </Fab>
-            </Badge>
-            </Tooltip>
-            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s animate__fast' title="Partager la room">  
-                <Fab size="small" variant="extended" className='room_small_button_interactions'  sx={{justifyContent: 'center', ml:1}} onClick={e => handleOpenShareModal(true)} >
-                    <ShareIcon  fontSize="small" />
-                </Fab>
-            </Tooltip>
-            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s animate__faster' title="Quitter la room">  
-                <Fab size="small" variant="extended" className='room_small_button_interactions'  sx={{justifyContent: 'center', ml:1}} onClick={e => handleOpenLeaveRoomModal(true)} >
-                    <ExitToAppIcon  fontSize="small" />
-                </Fab>
-            </Tooltip>
-            {loaded && room.interactionsArray.length > 0 && <Snackbar
-                key = {room.interactionsArray[room.interactionsArray.length-1].timestamp+'_'+room.interactionsArray[room.interactionsArray.length-1].createdBy}
-                open={ ((room.interactionsArray[room.interactionsArray.length-1].createdBy !== localData.currentUserInfo) && ((Date.now() - room.interactionsArray[room.interactionsArray.length-1].timestamp) < 1000)) ? true:false}
-                autoHideDuration={1000}
-                sx={{borderRadius:'2px'}}
-                message= {room.interactionsArray[room.interactionsArray.length-1].createdBy +' a réagi :'+room.interactionsArray[room.interactionsArray.length-1].type+':' }
-            />}
-            <Snackbar
-            open={(Date.now() - room.roomParams.spotifyTokenTimestamp) < 8000}
-            autoHideDuration={8000}
-            sx={{bgcolor:'#2e7d32 !important', borderRadius:'2px'}}
-            message={room.roomParams.spotifyIsLinked ? room.roomParams.spotifyUserConnected + " a ajouté Spotify a la room !" : "La connexion spotify a expirée"}
-            action = {
-                <Button variant="extended" className='room_small_button_interactions' sx={{mr:1, ...(userCanMakeInteraction && {bgcolor: '#ff9c22 !important'}), ...(!room.roomParams.spotifyIsLinked && {display:'none'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
-                    <CelebrationIcon fontSize="small" sx={{color:'white'}} />
-                </Button>
-            }
-            />
-        </Grid>  } 
+        {loaded && room.roomParams && 
+            <BottomInteractions 
+                roomParams={room.roomParams}
+                userCanMakeInteraction={userCanMakeInteraction}
+                OpenAddToPlaylistModal={OpenAddToPlaylistModal}
+                setOpenAddToPlaylistModal={setOpenAddToPlaylistModal}
+                createNewRoomInteraction={createNewRoomInteraction}
+                handleOpenRoomParamModal={handleOpenRoomParamModal}
+                handleOpenShareModal={handleOpenShareModal}
+                handleOpenLeaveRoomModal={handleOpenLeaveRoomModal}
+                checkRoomExist={(room && room.playlistEmpty) ? true:false}
+                checkInterractionLength={(room.roomParams.interactionsArray && room.roomParams.interactionsArray.length > 0) ? true:false}
+            />  } 
     </div>
   );
 };
