@@ -52,20 +52,16 @@ import Slider from '@mui/material/Slider';
 import VolumeDown from '@mui/icons-material/VolumeDown';
 import VolumeUp from '@mui/icons-material/VolumeUp';
 
-import ActuallyPlaying from '../components/rooms/ActuallyPlaying'
-import RoomModalAddMedia from '../components/rooms/ModalAddMedia'
-import ModalShareRoom from '../components/rooms/ModalShareRoom'
+import RoomModalAddMedia from './rooms/modalsOrDialogs/ModalAddMedia'
+import ModalShareRoom from './rooms/modalsOrDialogs/ModalShareRoom'
+import ModalRoomParams from './rooms/modalsOrDialogs/ModalRoomParams'
+import ModalLeaveRoom from './rooms/modalsOrDialogs/ModalLeaveRoom';
+import ModalForceSpotifyDisconnect from "./rooms/modalsOrDialogs/ModalForceSpotifyDisconnect";
+
 import RoomPlaylist from "./rooms/RoomPlaylist";
 import RoomTopBar from "./general_template/RoomTopBar";
-import ModalRoomParams from '../components/rooms/ModalRoomParams'
 import { TransitionProps } from '@mui/material/transitions';
 
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Slide from '@mui/material/Slide';
-import zIndex from "@mui/material/styles/zIndex";
 const Room = ({ roomId }) => {
 
 
@@ -80,6 +76,7 @@ const Room = ({ roomId }) => {
 	const roomRef = db.collection("rooms").doc(roomId.toLowerCase());
     const [userCanMakeInteraction, setUserCanMakeInteraction]= useState(true);
     const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
+    const [openForceDisconnectSpotifyModal, setOpenForceDisconnectSpotifyModal] = useState(false);
     const [scrollPosition, setScrollPosition] = useState(0);
     const [playerReady, setPlayerReady] = useState(false);
     const [isFullScreen, setIsFullScreen] = useState(false);
@@ -204,6 +201,7 @@ const Room = ({ roomId }) => {
 
     async function disconnectSpotify() {
         roomRef.set({roomParams:{spotifyToken: '',spotifyIsLinked:false, spotifyTokenTimestamp: Date.now(), spotifyUserConnected:''}}, { merge: true });
+        setOpenForceDisconnectSpotifyModal(false);
     }
 
 
@@ -341,7 +339,7 @@ const Room = ({ roomId }) => {
         }
     }
 
-    function handleDisconnectFromSpotify() {
+    function handleDisconnectFromSpotify(type) {
         disconnectSpotify();
     }
 
@@ -413,7 +411,6 @@ const Room = ({ roomId }) => {
     <div className="flex flex-col w-full gap-0 relative " style={{height:'auto'}} >
         {loaded && room.roomParams !== undefined && <RoomTopBar localData={localData} roomId={roomId} roomAdmin={room.admin} isLinkedToSpotify={room.roomParams.spotifyIsLinked}/>}
         <Container maxWidth={false} sx={{ padding: '0 !important'}} >
-            { !<ActuallyPlaying roomRef={roomRef}/>}
             {loaded && room.playlistUrls && <div> 
                 {!room.playlistEmpty && room.playlistUrls.length > 0 && room.playing !== null && 
                     <Box sx={{bgcolor:'#303030',borderBottom: '2px solid #3e464d', padding:"0px 0em"}}>
@@ -613,28 +610,11 @@ const Room = ({ roomId }) => {
         </Dialog>
         
         {loaded && room.roomParams && <Dialog onClose={(e) => setOpenRoomParamModal(false)} open={openRoomParamModal}>
-            <ModalRoomParams handleDisconnectFromSpotify={handleDisconnectFromSpotify} roomParams={room.roomParams} />
+            <ModalRoomParams handleDisconnectFromSpotifyModal={setOpenForceDisconnectSpotifyModal} roomParams={room.roomParams} />
         </Dialog>} 
 
-        <Dialog open={openLeaveRoomModal} keepMounted onClose={(e) => setOpenLeaveRoomModal(false)} >
-            
-            <DialogTitle id="alert-dialog-title">
-                Quitter la room ?
-            </DialogTitle>
-            <DialogContent>
-                <DialogContentText >
-                Vous êtes sur le point de quitter la room pour retourner à l'accueil.
-                </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-                <Button variant="outlined" onClick={(e) => handleQuitRoom(false)}>
-                    Quitter
-                </Button>
-                <Button variant="outlined" onClick={(e) => setOpenLeaveRoomModal(false)} autoFocus>
-                    Rester
-                </Button>
-            </DialogActions>
-        </Dialog>
+        <ModalLeaveRoom open={openLeaveRoomModal} changeOpen={setOpenLeaveRoomModal} handleQuitRoom={handleQuitRoom} />
+        <ModalForceSpotifyDisconnect open={openForceDisconnectSpotifyModal} changeOpen={setOpenForceDisconnectSpotifyModal} handleDisconnectSpotify={disconnectSpotify} />
 
 
         {loaded && room.roomParams && <Grid className='room_bottom_interactions' item xs={3}>

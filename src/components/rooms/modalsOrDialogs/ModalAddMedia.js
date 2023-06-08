@@ -29,6 +29,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Button, Typography } from "@mui/material";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import InputBase from '@mui/material/InputBase';
+import { LoadingButton } from "@mui/lab";
+import { Icon } from '@iconify/react';
 
 const RoomModalAddMedia = ({ roomId, validatedObjectToAdd, spotifyTokenProps }) => {
 
@@ -140,7 +142,7 @@ const RoomModalAddMedia = ({ roomId, validatedObjectToAdd, spotifyTokenProps }) 
                  <Grid item xs={12} sx={{margin:0,padding:0,display:'flex', justifyContent:'center'}}>
                     {spotifyTokenProps.length !== 0 && <Alert severity="success" sx={{mt:1,color:'#d5cdcd', border:'1px solid #F27C24'}}>La room est connectée a Spotify</Alert>}
                     {spotifyTokenProps.length === 0 && 
-                    <Button variant="contained" color="success" sx={{mt:2}} onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
+                    <Button startIcon={<Icon style={{display:'inline',  marginRight:'0.5em'}} icon="mdi:spotify" />} variant="contained" color="success" sx={{mt:2}} onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
                     Connecter la room a Spotify
                     </Button>
                     }
@@ -178,14 +180,15 @@ const RoomModalAddMedia = ({ roomId, validatedObjectToAdd, spotifyTokenProps }) 
                             style={{ width: '100%', height:'100%', flexGrow:1,paddingRight:'0', bgcolor:'rgba(255, 255, 255, 0.1)', pl:2}}
                             />
                     </Typed> 
-                    <Button  sx={{
+                    <LoadingButton loading={isSearching} 
+                    sx={{
                         padding: "27.5px 14px",
                         backgroundColor: "#131416",
                         color:'white',
                         cursor:'pointer',
                         }} position="end" onClick={handleSearchForMedia}>
-                        {!isSearching ? <SearchIcon  /> : <RefreshIcon  />}
-                    </Button>
+                             <SearchIcon  />
+                    </LoadingButton>
                   </Grid>
                   {mediaSearchResultYoutube.length > 1 && <Grid item xs={12}>
                     <Tabs value={tabIndex} onChange={handleTabChange} sx={{bgcolor:'#202124'}}>
