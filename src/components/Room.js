@@ -43,6 +43,9 @@ import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
+import ReplayIcon from '@mui/icons-material/Replay';
 
 import Slider from '@mui/material/Slider';
 import VolumeDown from '@mui/icons-material/VolumeDown';
@@ -494,67 +497,75 @@ const Room = ({ roomId }) => {
                                     </Typography>
                                 </Grid> 
                                 <Grid className='player_button_container' item sm={12} sx={{ padding:0,pl:1.5,ml:0, pr:1.5,mb: 0 , mt:1, fill:'#f0f1f0'}}   >
-                                    {isActuallyAdmin && <Grid item sm={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:2, mb: 1.5 }}>
-                                        
-                                        {room.playing > 0 && <IconButton onClick={e => handleChangeActuallyPlaying(0)}>
-                                             <FirstPageIcon  fontSize="large" sx={{color:'#f0f1f0'}} />
-                                        </IconButton>}
-                                        {room.playing == 0 && <IconButton>
-                                             <FirstPageIcon  fontSize="large" sx={{color:'#303134'}} />
-                                        </IconButton>}
-                                        
-                                        {room.playing > 0 && <IconButton onClick={e => handleChangeActuallyPlaying(room.playing - 1)}>
-                                            <SkipPreviousIcon fontSize="large" sx={{color:'#f0f1f0'}} />
-                                        </IconButton>}
-                                        {room.playing == 0 &&<IconButton>
-                                            <SkipPreviousIcon fontSize="large" sx={{color:'#303134'}} />
-                                        </IconButton>}
-                                        { room.actuallyPlaying && <IconButton variant="contained" onClick={e => handlePlay(false)}sx={{position:'sticky', top:0, zIndex:2500}} >
-                                            <PauseCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />
-                                        </IconButton>}
-                                        { !room.actuallyPlaying && <IconButton variant="contained" onClick={e => handlePlay(true)} sx={{position:'sticky', top:0, zIndex:2500}}>
-                                            <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}}/>
-                                        </IconButton>}
-                                        {(room.playlistUrls.length -1) !== room.playing && <IconButton onClick={e => handleChangeActuallyPlaying(room.playing + 1)}>
-                                            <SkipNextIcon fontSize="large" sx={{color:'#f0f1f0'}} />
-                                        </IconButton>}
-                                        {(room.playlistUrls.length -1) == room.playing && <IconButton>
-                                            <SkipNextIcon fontSize="large" sx={{color:'#303134'}} />
-                                        </IconButton>}
+                                    {isActuallyAdmin && 
+                                        <Grid item sm={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:2, mb: 1.5 }}>
+                                            
+                                            {room.playing > 0 && <IconButton onClick={e => handleChangeActuallyPlaying(0)}>
+                                                <FirstPageIcon  fontSize="large" sx={{color:'#f0f1f0'}} />
+                                            </IconButton>}
+                                            {room.playing == 0 && <IconButton>
+                                                <FirstPageIcon  fontSize="large" sx={{color:'#303134'}} />
+                                            </IconButton>}
+                                            
+                                            {room.playing > 0 && <IconButton onClick={e => handleChangeActuallyPlaying(room.playing - 1)}>
+                                                <SkipPreviousIcon fontSize="large" sx={{color:'#f0f1f0'}} />
+                                            </IconButton>}
+                                            {room.playing == 0 &&<IconButton>
+                                                <SkipPreviousIcon fontSize="large" sx={{color:'#303134'}} />
+                                            </IconButton>}
+                                            { room.actuallyPlaying && <IconButton variant="contained" onClick={e => handlePlay(false)}sx={{position:'sticky', top:0, zIndex:2500}} >
+                                                <PauseCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />
+                                            </IconButton>}
+                                            { !room.actuallyPlaying && <IconButton variant="contained" onClick={e => handlePlay(true)} sx={{position:'sticky', top:0, zIndex:2500}}>
+                                                <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}}/>
+                                            </IconButton>}
+                                            {(room.playlistUrls.length -1) !== room.playing && <IconButton onClick={e => handleChangeActuallyPlaying(room.playing + 1)}>
+                                                <SkipNextIcon fontSize="large" sx={{color:'#f0f1f0'}} />
+                                            </IconButton>}
+                                            {(room.playlistUrls.length -1) == room.playing && <IconButton>
+                                                <SkipNextIcon fontSize="large" sx={{color:'#303134'}} />
+                                            </IconButton>}
 
-                                        
-                                        {room.playlistUrls[room.playing].source === 'spotify' &&
-                                            <IconButton>
-                                                <SettingsBackupRestoreIcon fontSize="large" sx={{color:'#303134'}} />
-                                            </IconButton>
-                                        }
-                                        {room.playlistUrls[room.playing].source !== 'spotify' &&
-                                            <IconButton onClick={e => setPercentagePlayed(0)} >
-                                                <SettingsBackupRestoreIcon fontSize="large" sx={{color:'#f0f1f0'}} />
-                                            </IconButton>
-                                        }
-                                        {isFullScreen &&
-                                            <IconButton onClick={e => setIsFullScreen(true)} >
-                                                <SettingsBackupRestoreIcon fontSize="large" sx={{color:'#f0f1f0'}} />
-                                            </IconButton>
-                                        }
-                                    </Grid>}
-                                    {room.playlistUrls[room.playing].source !== 'spotify' && <Grid item sm={12} sx={{ pt:0,pl:2,pr:2,ml:0, mb: 0, pb:1, mt:3 }}>
-                                        <Stack spacing={2} sm={8} direction="row" sx={{ mb: 1, mr:2 }} alignItems="center">
-                                            <VolumeDown />
-                                            <Slider step={0.01} min={0}  max={1} aria-label="Volume" value={localVolume} onChange={e => handleVolumeChange(e)} />
-                                            <VolumeUp />
-                                        </Stack>
-                                        
-                                        {isFullScreen &&
-                                            <IconButton onClick={e => setIsFullScreen(true)} >
-                                                <SettingsBackupRestoreIcon fontSize="large" sx={{color:'#f0f1f0'}} />
-                                            </IconButton>
-                                        }
-                                    </Grid> }
+                                            {room.playlistUrls[room.playing].source !== 'spotify' && 
+                                                <IconButton onClick={e => setPercentagePlayed(0)} >
+                                                    <ReplayIcon fontSize="large" sx={{color:'#f0f1f0'}} />
+                                                </IconButton>
+                                            }
+
+                                            {room.playlistUrls[room.playing].source !== 'spotify' && !isFullScreen &&
+                                                <IconButton onClick={e => setIsFullScreen(true)} >
+                                                    <FullscreenIcon fontSize="large" sx={{color:'#f0f1f0'}} />
+                                                </IconButton>
+                                            }
+                                        </Grid>
+                                    }
+                                    {!isActuallyAdmin && 
+                                        <Grid item sm={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:2, mb: 1.5 }}>
+                                            {room.playlistUrls[room.playing].source !== 'spotify' && !isFullScreen &&
+                                                <IconButton onClick={e => setIsFullScreen(true)} >
+                                                    <FullscreenIcon fontSize="large" sx={{color:'#f0f1f0'}} />
+                                                </IconButton>
+                                            }
+                                        </Grid>
+                                    }
+                                    {room.playlistUrls[room.playing].source !== 'spotify' && 
+                                        <Grid item sm={12} sx={{ pt:0,pl:2,pr:2,ml:0, mb: 0, pb:1, mt:3 }}>
+                                            <Stack spacing={2} sm={8} direction="row" sx={{ mb: 1, mr:2 }} alignItems="center">
+                                                <VolumeDown />
+                                                <Slider step={0.01} min={0}  max={1} aria-label="Volume" value={localVolume} onChange={e => handleVolumeChange(e)} />
+                                                <VolumeUp />
+                                            </Stack>
+                                        </Grid> 
+                                    }
                                 </Grid>
                             </Grid>
                         </Grid>
+                        
+                        {isFullScreen &&
+                            <IconButton className="fullscreenoff" onClick={e => setIsFullScreen(false)} >
+                                <FullscreenExitIcon fontSize="large" sx={{color:'#f0f1f0', position:'absolute'}} />
+                            </IconButton>
+                        }
                     </Box>
                 }
                 <Toolbar xs={12} sx={{ bgcolor: '#262626',borderBottom: '2px solid #3e464d', minHeight: '45px !important', fontFamily: 'Monospace', pl:'17px', pr:'25 px' }}>
