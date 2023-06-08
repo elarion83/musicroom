@@ -1,0 +1,31 @@
+.playlist_bloc {
+    position: relative;
+    margin:0 !important;
+}
+.playlist_bloc .MuiAccordionDetails-root {
+    background: var(--main-color);
+}
+
+.playlist_bloc .MuiAccordionSummary-expandIconWrapper {
+    z-index: 5; 
+}
+
+.playlist_bloc .MuiListItemButton-root{
+    background: rgb(79,79,79);
+    background: linear-gradient(180deg, rgba(79,79,79,1) 71%, rgba(85,85,85,1) 100%);
+}
+
+.playlist_bloc.mediaUnavailable .MuiListItemButton-root{
+    background: rgb(57, 43, 43);
+    background: linear-gradient(180deg, rgb(57, 43, 43) 71%, rgb(30, 23, 23) 100%);
+
+}
+
+.mediaForbiddenIcon {
+    display: inline;
+    margin-left: 0.5px;
+    margin-top: -1em;
+    color: var(--red);
+    font-size: 23px;
+    background: #392b2b;
+}

@@ -573,7 +573,7 @@ const Room = ({ roomId }) => {
                     <Alert severity="success" sx={{margin:2, border:'1px solid #F27C24'}}> Bienvenue dans la room ! <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} ><b>Ajoute quelque chose dans la playlist !</b></a></Alert>
                 }
                 {typeof(room.playlistUrls) !== 'undefined' && room.playlistUrls && room.playlistUrls.length > 0 && <Box sx={{ padding:"0em",marginBottom:0, paddingLeft:0}}>
-                    <RoomPlaylist isAdminView={isActuallyAdmin} roomPlaylist={room.playlistUrls} roomIdActuallyPlaying={room.playing} userVoteArray={localData.currentUserVotes} handleChangeIsActuallyPlaying={handlePlay} handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying}  handleVoteChange={handleVoteChange} roomIsActuallyPlaying={room.actuallyPlaying} roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayed} />
+                    <RoomPlaylist isSpotifyAvailable={room.roomParams.spotifyIsLinked} isAdminView={isActuallyAdmin} roomPlaylist={room.playlistUrls} roomIdActuallyPlaying={room.playing} userVoteArray={localData.currentUserVotes} handleChangeIsActuallyPlaying={handlePlay} handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying}  handleVoteChange={handleVoteChange} roomIsActuallyPlaying={room.actuallyPlaying} roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayed} />
                 </Box>}
             </div>
             } 

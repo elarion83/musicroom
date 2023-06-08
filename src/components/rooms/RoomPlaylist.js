@@ -28,7 +28,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { Icon } from '@iconify/react';
 
-const RoomPlaylist = ({ isAdminView, roomPlaylist, roomIdActuallyPlaying, handleVoteChange, userVoteArray, handleChangeIdActuallyPlaying, roomIsActuallyPlaying, roomPlayedActuallyPlayed}) => {
+const RoomPlaylist = ({isSpotifyAvailable, isAdminView, roomPlaylist, roomIdActuallyPlaying, handleVoteChange, userVoteArray, handleChangeIdActuallyPlaying, roomIsActuallyPlaying, roomPlayedActuallyPlayed}) => {
 
     const [idDisplaying, setIdDisplaying] = useState(roomIdActuallyPlaying);
 
@@ -45,6 +45,14 @@ const RoomPlaylist = ({ isAdminView, roomPlaylist, roomIdActuallyPlaying, handle
     function handleChangeIdActuallyDisplaying(idDisplaying) {
         setIdDisplaying(idDisplaying);
     }
+    
+    function handleChangeIdActuallyPlayingInComp(id) {
+        if(roomPlaylist[id].source == 'spotify' && !isSpotifyAvailable ) {
+            handleChangeIdActuallyPlayingInComp(id+1);
+        } else {
+            handleChangeIdActuallyPlaying(id);
+        }
+    }
     return (
         <Paper className={'scroll'} style={{borderRadius:0}}>
             <List sx={{height: '100%', padding:0}}>
@@ -52,7 +60,7 @@ const RoomPlaylist = ({ isAdminView, roomPlaylist, roomIdActuallyPlaying, handle
                     {roomPlaylist.map(function(d, idx){
                     return (
                         <Fade key={idx} in={true} xs={12} sx={{  width:'100%', padding:0, margin:0}}>
-                            <Grid item sx={{width:'100%', padding:0,pl:2, margin:0}} className='playlist_bloc'> 
+                            <Grid item sx={{width:'100%', padding:0,pl:2, margin:0}} className={`playlist_bloc ${(d.source == 'spotify') ? !isSpotifyAvailable ? 'mediaUnavailable' : '' : 'mediaAvailable'}`}> 
                                 
                                 <ListItemButton sx={{ alignItems:'flex-start',position:'relative',width:'100%', pt:1,pl:0,margin:0, backgroundColor:'var(--main-bg-color)',borderBottom: '2px solid #3e464d', color:'white', "&.Mui-selected": {
                                         backgroundColor: "#262626",
@@ -69,7 +77,9 @@ const RoomPlaylist = ({ isAdminView, roomPlaylist, roomIdActuallyPlaying, handle
                                     <ListItemIcon sx={{ pl:2,paddingTop:'5px',color:'white', zIndex:2, display:'flex', flexDirection:'column'}}>        
                                             {idx !== idDisplaying && idx !== roomIdActuallyPlaying && <ExpandMoreIcon sx={{display:'inline-block'}}  onClick={e => handleChangeIdActuallyDisplaying(idx)}/>}
                                             {idx === idDisplaying && idx !== roomIdActuallyPlaying && <ExpandLessIcon sx={{display:'inline-block'}} onClick={e => handleChangeIdActuallyDisplaying(-1)}  />}
-                                            {idx === idDisplaying && idx !== roomIdActuallyPlaying && isAdminView && <PlayCircleOutlineIcon sx={{mt:1}} onClick={e => handleChangeIdActuallyPlaying(idx)}  />}
+                                            {(idx === idDisplaying) && (idx !== roomIdActuallyPlaying) && isAdminView && <PlayCircleOutlineIcon sx={{mt:1}} onClick={e => handleChangeIdActuallyPlayingInComp(idx)}  />}
+                                            
+                                            {(d.source == 'spotify' && !isSpotifyAvailable) && (idx !== roomIdActuallyPlaying) && (idx === idDisplaying) && <Icon className='mediaForbiddenIcon' icon="ps:forbidden" />}
                                             {idx === roomIdActuallyPlaying && 
                                                 <>
                                                     <div className={roomIsActuallyPlaying ? 'animated soundWaveContainer' : 'waiting soundWaveContainer'}>
@@ -92,18 +102,22 @@ const RoomPlaylist = ({ isAdminView, roomPlaylist, roomIdActuallyPlaying, handle
                                             {d.source === 'dailymotion' && <Icon style={{display:'inline', marginRight:'0.5em'}} icon="bxl:dailymotion" />}
                                             {d.source === 'soundcloud' && <Icon style={{display:'inline', marginRight:'0.5em'}} icon="mdi:soundcloud" />}
                                             {d.source === 'url' && <Icon style={{display:'inline', marginRight:'0.5em'}} icon="mdi:link-variant" />}
+                                            {(d.source == 'spotify' && !isSpotifyAvailable) && <Icon style={{display:'inline', marginRight:'0.5em', color:'red'}} icon="ps:forbidden" />}
                                             {d.title.length > 50 ? d.title.substring(0, 50)+'...' : d.title}
                                         </ListItemText>}
                                         { (d.title && d.title.length === 0) || !d.title && 
-                                        <ListItemText onClick={e => (idx === idDisplaying) ? handleChangeIdActuallyDisplaying(-1) : handleChangeIdActuallyDisplaying(idx)} sx={{ pl:0,mb:0, wordBreak: 'break-all'}} primary={d.url.substring(0, 40)+'...'} />}
+                                            <ListItemText onClick={e => (idx === idDisplaying) ? handleChangeIdActuallyDisplaying(-1) : handleChangeIdActuallyDisplaying(idx)} sx={{ pl:0,mb:0, wordBreak: 'break-all'}} 
+                                            primary={d.url.substring(0, 40)+'...'} />
+                                        }
                                         
                                         {(idx === idDisplaying  || roomIdActuallyPlaying == idx)  && 
                                             <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, pt:1, fontSize: '10px', textTransform:'uppercase' }}>
-                                                Ajouté par : <b>{ roomPlaylist[idx].addedBy }</b>
+                                                Ajouté par : <b>{ d.addedBy }</b>
                                             </Typography>
                                         }
                                         {(idx === idDisplaying || roomIdActuallyPlaying == idx)  && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1, fontSize: '8px', textTransform:'uppercase' }}>
-                                                Source : { roomPlaylist[idx].source } 
+                                                Source : { d.source } 
+                                                {(d.source == 'spotify' && !isSpotifyAvailable) && <span style={{color:'var(--red) !important'}} > ( Non connecté )</span>}
                                             </Typography>
                                         }
                                         {idx === roomIdActuallyPlaying && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
@@ -116,28 +130,28 @@ const RoomPlaylist = ({ isAdminView, roomPlaylist, roomIdActuallyPlaying, handle
                                 </ListItemButton>
                                 
                                 {(idx === idDisplaying || idx === roomIdActuallyPlaying) && <Grid className='votebuttons' sx={{position:'absolute', right:'5px', bottom:'10px'}}>
-                                        {!userVoteArray.up.includes(roomPlaylist[idx].hashId) && 
-                                            <Button size="small" variant="contained" sx={{zIndex:5,mr:2, fontSize:'0.8em', color:'white', bgcolor:'#262626'}}  onClick={e => handleVotePositif(idx, roomPlaylist[idx].hashId)}>
+                                        {!userVoteArray.up.includes(d.hashId) && 
+                                            <Button size="small" variant="contained" sx={{zIndex:5,mr:2, fontSize:'0.8em', color:'white', bgcolor:'#262626'}}  onClick={e => handleVotePositif(idx, d.hashId)}>
                                                 <ThumbUpIcon  fontSize="small" sx={{mr:1}}/>
-                                                {roomPlaylist[idx].vote.up }
+                                                {d.vote.up }
                                             </Button>
                                         }
-                                        {userVoteArray.up.includes(roomPlaylist[idx].hashId) && 
+                                        {userVoteArray.up.includes(d.hashId) && 
                                             <Button size="small" variant="contained" sx={{zIndex:5,mr:2, fontSize:'0.8em', color:'white', bgcolor:'#262626'}}>
                                                 <ThumbUpIcon  fontSize="small" sx={{mr:1, color:'#66BB6A'}}/>
-                                                {roomPlaylist[idx].vote.up }
+                                                {d.vote.up }
                                             </Button>
                                         }
-                                        {!userVoteArray.down.includes(roomPlaylist[idx].hashId) &&
-                                                <Button size="small" variant="contained" sx={{zIndex:5, fontSize:'0.8em',  color:'white', bgcolor:'#262626'}}  onClick={e => handleVoteNegatif(idx, roomPlaylist[idx].hashId)}>
+                                        {!userVoteArray.down.includes(d.hashId) &&
+                                                <Button size="small" variant="contained" sx={{zIndex:5, fontSize:'0.8em',  color:'white', bgcolor:'#262626'}}  onClick={e => handleVoteNegatif(idx, d.hashId)}>
                                                     <ThumbDownAltIcon fontSize="small"  sx={{mr:1}}/>
-                                                    {roomPlaylist[idx].vote.down }
+                                                    {d.vote.down }
                                                 </Button>
                                         }
-                                        {userVoteArray.down.includes(roomPlaylist[idx].hashId) &&
+                                        {userVoteArray.down.includes(d.hashId) &&
                                                 <Button size="small" variant="contained" sx={{zIndex:5, fontSize:'0.8em',  color:'white', bgcolor:'#262626'}}>
                                                     <ThumbDownAltIcon fontSize="small"  sx={{mr:1,color:'#E91E63'}}/>
-                                                    {roomPlaylist[idx].vote.down }
+                                                    {d.vote.down }
                                                 </Button>
                                         }
                                 </Grid>}

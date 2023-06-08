@@ -18,14 +18,24 @@
         border-radius: 8px;
       }
 
-      .soundWaveContainer.animated .boxQuiet{
+    .soundWaveContainer.waiting .boxQuiet {
+        transform: scaleY(1);
+    }
+    .soundWaveContainer.waiting .boxNormal{
+        transform: scaleY(0.6);
+    }
+    
+    .soundWaveContainer.waiting .boxLoud{
+        transform: scaleY(0.4);
+    }
+    .soundWaveContainer.animated .boxQuiet{
         animation-name: quiet;
-      }
+    }
 
-      .soundWaveContainer.animated .boxNormal{
+    .soundWaveContainer.animated .boxNormal{
         animation-name: normal;
-      }
-      
-      .soundWaveContainer.animated .boxLoud{
+    }
+    
+    .soundWaveContainer.animated .boxLoud{
         animation-name: loud;
-      }
+    }
