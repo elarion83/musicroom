@@ -16,53 +16,28 @@ import FormControl from '@mui/material/FormControl';
 import Typography from '@mui/material/Typography';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-const ModalRoomParams = ({ roomParams,spotifyTokenProps }) => {
+const ModalRoomParams = ({ roomParams , handleDisconnectFromSpotify}) => {
 
-    
-    const CLIENT_ID = "cd4558d83dd845139f3dfffecf48b903"
     const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
-    const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
-    const RESPONSE_TYPE = "token"
 
-    const marks = [
-        {
-            value: 5000,
-            label: '5sec.',
-        },
-        {
-            value: 20000,
-            label: '20sec.',
-        },
-        {
-            value: 60000,
-            label: '1min.',
-        },
-        {
-            value: 90000,
-            label: '1min30',
-        },
-    ];
-
-    
-    function valuetext(value) {
-        return `${value}°C`;
-    }
-
-    function valueLabelFormat(value) {
-        return marks.findIndex((mark) => mark.value === value) + 1;
-    }
-
-
+    console.log(process);
     return(
         <Box sx={{ padding: '1em 2em 1em 1em' }} className='modal_share_room'>
-            <DialogTitle sx={{padding:0}}><TuneIcon  fontSize="small" /> Paramètres de la room </DialogTitle>  
-            {spotifyTokenProps.length !== 0 && <Alert severity="success" sx={{mt:1,color:'#d5cdcd', border:'1px solid #F27C24'}}>La room est connectée a Spotify</Alert>}
-            {spotifyTokenProps.length === 0 && 
-                <Button variant="contained" color="success" sx={{mt:2, display:'block'}} onClick={e => window.location.href = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>
+            <DialogTitle sx={{padding:0}}>
+            <TuneIcon  fontSize="small" /> Paramètres de la room </DialogTitle>  
+            {!roomParams.spotifyIsLinked && 
+                <Button variant="contained" color="success" sx={{mt:2, display:'block'}} onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
                 Connecter la room a Spotify
                 </Button>
+            }          
+            %REACT_APP_CLIENT_ID%
+            {process.env.REACT_APP_CLIENT_ID}  
+            {roomParams.spotifyIsLinked && 
+                <>
+                    <Typography>La room est connectée a Spotify</Typography>
+                    <Button color="success" onClick={e => handleDisconnectFromSpotify()}> forcer la déco</Button>
+                </>
             }
-            
         </Box>
     )
 };

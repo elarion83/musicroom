@@ -206,6 +206,8 @@ const Room = ({ roomId }) => {
         roomRef.set({roomParams:{spotifyToken: '',spotifyIsLinked:false, spotifyTokenTimestamp: Date.now(), spotifyUserConnected:''}}, { merge: true });
     }
 
+
+
     async function handleNonAdminPlay() {
     }
 
@@ -337,6 +339,10 @@ const Room = ({ roomId }) => {
                 localStorage.setItem("MusicRoom_UserInfoVotes",  JSON.stringify(localData.currentUserVotes));
             }
         }
+    }
+
+    function handleDisconnectFromSpotify() {
+        disconnectSpotify();
     }
 
     useEffect(() => {
@@ -607,7 +613,7 @@ const Room = ({ roomId }) => {
         </Dialog>
         
         {loaded && room.roomParams && <Dialog onClose={(e) => setOpenRoomParamModal(false)} open={openRoomParamModal}>
-            <ModalRoomParams  roomParams={room.roomParams} spotifyTokenProps={room.roomParams.spotifyToken} />
+            <ModalRoomParams handleDisconnectFromSpotify={handleDisconnectFromSpotify} roomParams={room.roomParams} />
         </Dialog>} 
 
         <Dialog open={openLeaveRoomModal} keepMounted onClose={(e) => setOpenLeaveRoomModal(false)} >
