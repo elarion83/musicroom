@@ -22,6 +22,7 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import Alert from '@mui/material/Alert';
 import 'animate.css';
 import SpotifyPlayer from 'react-spotify-web-playback';
+import useKeypress from 'react-use-keypress';
 
 
 import Fab from '@mui/material/Fab';
@@ -135,6 +136,12 @@ const Room = ({ roomId }) => {
             setLoaded(true);
 	};
 
+    useKeypress([' '], () => {
+        if(room) {
+            handlePlay(!room.actuallyPlaying);
+        }
+    });
+
 	useEffect(() => {
 		getRoomData(roomId); 
         
@@ -145,6 +152,7 @@ const Room = ({ roomId }) => {
         }
 
         document.title = 'Room ID:' + roomId + ' - MusicRoom';
+        
 	}, [roomId]);
     
 	useEffect(() => {
@@ -171,8 +179,8 @@ const Room = ({ roomId }) => {
     }, [loaded, localData,room]);
 
     async function handlePlay(playStatus) {
-        
-        if(room.roomParams.spotifyTokenTimestamp.length > 1 && (Date.now() - room.roomParams.spotifyTokenTimestamp) > 3600000) {
+        console.log(room.roomParams.spotifyTokenTimestamp);
+        if(room.roomParams.spotifyTokenTimestamp.length >= 1 && (Date.now() - room.roomParams.spotifyTokenTimestamp) > 3600000) {
             roomRef.set({roomParams:{spotifyToken: '',spotifyIsLinked:false, spotifyTokenTimestamp: Date.now(), spotifyUserConnected:''}}, { merge: true });
         }
         if(isActuallyAdmin) {
@@ -184,6 +192,7 @@ const Room = ({ roomId }) => {
             }
         }
     }
+
     
 
     async function handleNonAdminPlay() {
