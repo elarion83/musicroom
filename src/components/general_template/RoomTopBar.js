@@ -18,14 +18,8 @@ import Badge from '@mui/material/Badge';
 
 const RoomTopBar = ({localData, roomId, roomAdmin, isLinkedToSpotify }) => {
     
-    
-    const querystring = require('querystring');
-    const CLIENT_ID = "cd4558d83dd845139f3dfffecf48b903"
-    const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
-    const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
-    const RESPONSE_TYPE = "token"
 
-    const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
+    const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
 
     function handleClickMenu(event) {
         setAnchorEl(event.currentTarget);
@@ -76,7 +70,7 @@ const RoomTopBar = ({localData, roomId, roomAdmin, isLinkedToSpotify }) => {
                                                 <Switch disabled checked={true} /> 
                                                 Spotify connecté
                                             </Typography> 
-                                           : <Typography onClick={e => window.location.href = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>
+                                           : <Typography onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
                                                 <Switch checked={false} /> 
                                                     <Badge invisible={isLinkedToSpotify} variant="dot" sx={{'& .MuiBadge-badge': {
                                                             right:'0px',

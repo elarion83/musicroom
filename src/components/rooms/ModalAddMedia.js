@@ -42,10 +42,7 @@ const RoomModalAddMedia = ({ roomId, validatedObjectToAdd, spotifyTokenProps }) 
     const [isSearching, setIsSearching]= useState(false);
     const delay = ms => new Promise(res => setTimeout(res, ms));
 
-    const CLIENT_ID = "cd4558d83dd845139f3dfffecf48b903"
     const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
-    const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
-    const RESPONSE_TYPE = "token"
 
     const [addingObject, setAddingObject] = useState({title:'',source:'',url:'', addedBy: localStorage.getItem("MusicRoom_UserInfoPseudo")})
 
@@ -72,7 +69,7 @@ const RoomModalAddMedia = ({ roomId, validatedObjectToAdd, spotifyTokenProps }) 
     async function getYoutubeVideoInfosFromId(videoId, addingObject) {
         var params = {
             part: 'snippet',
-            key: 'AIzaSyAcFecOONJZvjwMnTB9Fv9x753KWsVUvWM',
+            key: process.env.REACT_APP_YOUTUBE_API_KEY,
             id: videoId,
         }; 
         
@@ -111,7 +108,7 @@ const RoomModalAddMedia = ({ roomId, validatedObjectToAdd, spotifyTokenProps }) 
                 setSearchTerm('');
                 setIsSearching(false);
             } else {
-                YTSearch({key: 'AIzaSyAcFecOONJZvjwMnTB9Fv9x753KWsVUvWM', term: searchTerm}, (videos) => {
+                YTSearch({key: process.env.REACT_APP_YOUTUBE_API_KEY, term: searchTerm}, (videos) => {
                     setMediaSearchResultYoutube(videos);
                     console.log(videos);
                 });
@@ -143,7 +140,7 @@ const RoomModalAddMedia = ({ roomId, validatedObjectToAdd, spotifyTokenProps }) 
                  <Grid item xs={12} sx={{margin:0,padding:0,display:'flex', justifyContent:'center'}}>
                     {spotifyTokenProps.length !== 0 && <Alert severity="success" sx={{mt:1,color:'#d5cdcd', border:'1px solid #F27C24'}}>La room est connectée a Spotify</Alert>}
                     {spotifyTokenProps.length === 0 && 
-                    <Button variant="contained" color="success" sx={{mt:2}} onClick={e => window.location.href = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>
+                    <Button variant="contained" color="success" sx={{mt:2}} onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
                     Connecter la room a Spotify
                     </Button>
                     }

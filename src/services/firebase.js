@@ -5,13 +5,13 @@ import "firebase/storage"
 
 // Firebase Configs
 const firebaseConfig = {
-  apiKey: "AIzaSyDZwf0QdHVOvKPg8n-rAXO2VXOhD4AfsDg",
-  authDomain: "musicroom-40637.firebaseapp.com",
-  projectId: "musicroom-40637",
-  storageBucket: "musicroom-40637.appspot.com",
-  messagingSenderId: "498439110710",
-  appId: "1:498439110710:web:eb84d5f2dc2bf58ca85897",
-  measurementId: "G-M9EKNNEXGJ"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 };
 
 // Checking if app already initialize then don't initialize again
