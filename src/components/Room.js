@@ -181,7 +181,7 @@ const Room = ({ roomId }) => {
     async function handlePlay(playStatus) {
         console.log(room.roomParams.spotifyTokenTimestamp);
         if(room.roomParams.spotifyTokenTimestamp.length >= 1 && (Date.now() - room.roomParams.spotifyTokenTimestamp) > 3600000) {
-            roomRef.set({roomParams:{spotifyToken: '',spotifyIsLinked:false, spotifyTokenTimestamp: Date.now(), spotifyUserConnected:''}}, { merge: true });
+            disconnectSpotify();
         }
         if(isActuallyAdmin) {
             roomRef.set({actuallyPlaying: playStatus, mediaActuallyPlayingAlreadyPlayed:room.mediaActuallyPlayingAlreadyPlayed}, { merge: true });
@@ -193,7 +193,9 @@ const Room = ({ roomId }) => {
         }
     }
 
-    
+    async function disconnectSpotify() {
+        roomRef.set({roomParams:{spotifyToken: '',spotifyIsLinked:false, spotifyTokenTimestamp: Date.now(), spotifyUserConnected:''}}, { merge: true });
+    }
 
     async function handleNonAdminPlay() {
     }
@@ -668,6 +670,13 @@ const Room = ({ roomId }) => {
                     <ExitToAppIcon  fontSize="small" />
                 </Fab>
             </Tooltip>
+            {loaded && room.interactionsArray.length > 0 && <Snackbar
+                key = {room.interactionsArray[room.interactionsArray.length-1].timestamp+'_'+room.interactionsArray[room.interactionsArray.length-1].createdBy}
+                open={ ((room.interactionsArray[room.interactionsArray.length-1].createdBy !== localData.currentUserInfo) && ((Date.now() - room.interactionsArray[room.interactionsArray.length-1].timestamp) < 1000)) ? true:false}
+                autoHideDuration={1000}
+                sx={{borderRadius:'2px'}}
+                message= {room.interactionsArray[room.interactionsArray.length-1].createdBy +' a réagi :'+room.interactionsArray[room.interactionsArray.length-1].type+':' }
+            />}
             <Snackbar
             open={(Date.now() - room.roomParams.spotifyTokenTimestamp) < 8000}
             autoHideDuration={8000}
