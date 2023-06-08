@@ -89,6 +89,7 @@ const RoomModalAddMedia = ({ roomId, validatedObjectToAdd, spotifyTokenProps }) 
         if(searchTerm !== '') {
             if (validator.isURL(searchTerm.trim())) {
                 addingObject.url = searchTerm.trim();
+                addingObject.source = "url";
                 if(addingObject.url.includes('youtube')) {
                     addingObject.source = "youtube";
                     var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;

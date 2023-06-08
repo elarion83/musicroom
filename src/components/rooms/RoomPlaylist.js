@@ -26,6 +26,7 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import { Icon } from '@iconify/react';
 
 const RoomPlaylist = ({ isAdminView, roomPlaylist, roomIdActuallyPlaying, handleVoteChange, userVoteArray, handleChangeIdActuallyPlaying, roomIsActuallyPlaying, roomPlayedActuallyPlayed}) => {
 
@@ -70,11 +71,17 @@ const RoomPlaylist = ({ isAdminView, roomPlaylist, roomIdActuallyPlaying, handle
                                             {idx === idDisplaying && idx !== roomIdActuallyPlaying && <ExpandLessIcon sx={{display:'inline-block'}} onClick={e => handleChangeIdActuallyDisplaying(-1)}  />}
                                             {idx === idDisplaying && idx !== roomIdActuallyPlaying && isAdminView && <PlayCircleOutlineIcon sx={{mt:1}} onClick={e => handleChangeIdActuallyPlaying(idx)}  />}
                                     </ListItemIcon>
-                                    <Grid item sx={{display:'block', zIndex:2, pl: '5px', pb:0.5, flexGrow:1}}>
+                                    <Grid item sx={{display:'block', zIndex:2, pl: 0, pb:0.5, flexGrow:1}}>
                                         { d.title && <ListItemText onClick={e => (idx === idDisplaying) ? handleChangeIdActuallyDisplaying(-1) : handleChangeIdActuallyDisplaying(idx)} sx={{ pl:0,mb:0, wordBreak: 'break-all'}}>
+                                            {d.source === 'spotify' && <Icon style={{display:'inline', marginRight:'0.5em'}} icon="mdi:spotify" />}
+                                            {d.source === 'youtube' && <Icon style={{display:'inline', marginRight:'0.5em'}} icon="mdi:youtube" />}
+                                            {d.source === 'dailymotion' && <Icon style={{display:'inline', marginRight:'0.5em'}} icon="bxl:dailymotion" />}
+                                            {d.source === 'soundcloud' && <Icon style={{display:'inline', marginRight:'0.5em'}} icon="mdi:soundcloud" />}
+                                            {d.source === 'url' && <Icon style={{display:'inline', marginRight:'0.5em'}} icon="mdi:link-variant" />}
                                             {d.title.length > 50 ? d.title.substring(0, 50)+'...' : d.title}
                                         </ListItemText>}
-                                        { (d.title && d.title.length === 0) || !d.title && <ListItemText onClick={e => (idx === idDisplaying) ? handleChangeIdActuallyDisplaying(-1) : handleChangeIdActuallyDisplaying(idx)} sx={{ pl:0,mb:0, wordBreak: 'break-all'}} primary={d.url.substring(0, 40)+'...'} />}
+                                        { (d.title && d.title.length === 0) || !d.title && 
+                                        <ListItemText onClick={e => (idx === idDisplaying) ? handleChangeIdActuallyDisplaying(-1) : handleChangeIdActuallyDisplaying(idx)} sx={{ pl:0,mb:0, wordBreak: 'break-all'}} primary={d.url.substring(0, 40)+'...'} />}
                                         
                                         {(idx === idDisplaying  || roomIdActuallyPlaying == idx)  && 
                                             <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, pt:1, fontSize: '10px', textTransform:'uppercase' }}>

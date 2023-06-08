@@ -61,6 +61,7 @@
     "development": []
   },
   "devDependencies": {
+    "@iconify/react": "^4.1.0",
     "autoprefixer": "^9.8.8",
     "express": "^4.18.2",
     "postcss": "^7.0.39",
