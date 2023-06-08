@@ -1,0 +1,76 @@
+@keyframes typedjsBlink { /* for the typing effect in the search bar */
+    50% {
+        opacity: 0.0;
+    }
+}
+
+@-webkit-keyframes typedjsBlink {  /* for the typing effect in the search bar */
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+   
+@keyframes fall { /* for the interactions */
+    5% {
+        opacity: 1;
+    }
+    to {
+        transform: translateY(101vh) translateX(15vw);
+    }
+}
+
+@keyframes rotate { /* for the time cooldown */
+    45% {
+        transform: rotate(180deg);
+    }
+    55% {
+        transform: rotate(180deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+
+@keyframes quiet { /* for the soundwave animation */
+  25%{
+    transform: scaleY(.6);
+  }
+  50%{
+    transform: scaleY(.4);
+  }
+  75%{
+    transform: scaleY(.8);
+  }
+}
+@keyframes normal { /* for the soundwave animation */
+  25%{
+    transform: scaleY(1);
+  }
+  50%{
+    transform: scaleY(.4);
+  }
+  75%{
+    transform: scaleY(.6);
+  }
+}
+@keyframes loud { /* for the soundwave animation */
+  25%{
+    transform: scaleY(1);
+  }
+  50%{
+    transform: scaleY(.4);
+  }
+  75%{
+    transform: scaleY(1.2);
+  }
+}

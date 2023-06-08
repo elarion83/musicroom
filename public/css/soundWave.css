@@ -1,0 +1,31 @@
+
+
+      .soundWaveContainer {
+        height: 25px;
+        display: flex;
+        margin-left: -7px;
+      }
+
+      .box{
+        transform: scaleY(.4);
+        height: 100%;
+        width: 3px;
+        margin-right: 2px;
+        background: var(--main-color);
+        animation-duration: 1.2s;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
+        border-radius: 8px;
+      }
+
+      .soundWaveContainer.animated .boxQuiet{
+        animation-name: quiet;
+      }
+
+      .soundWaveContainer.animated .boxNormal{
+        animation-name: normal;
+      }
+      
+      .soundWaveContainer.animated .boxLoud{
+        animation-name: loud;
+      }

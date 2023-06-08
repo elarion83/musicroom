@@ -31,6 +31,7 @@ import Stack from '@mui/material/Stack';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Notifications from './rooms/Notifications';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
+import LastPageIcon from '@mui/icons-material/LastPage';
 
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
@@ -145,6 +146,12 @@ const Room = ({ roomId }) => {
         }
     });
 
+    useKeypress(['Escape'], () => {
+        if(isFullScreen) {
+            setIsFullScreen(false);
+        }
+    });
+
 	useEffect(() => {
 		getRoomData(roomId); 
         
@@ -182,8 +189,7 @@ const Room = ({ roomId }) => {
     }, [loaded, localData,room]);
 
     async function handlePlay(playStatus) {
-        console.log(room.roomParams.spotifyTokenTimestamp);
-        if(room.roomParams.spotifyTokenTimestamp.length >= 1 && (Date.now() - room.roomParams.spotifyTokenTimestamp) > 3600000) {
+        if((typeof(room.roomParams.spotifyTokenTimestamp) === 'number') && ((Date.now() - room.roomParams.spotifyTokenTimestamp) > 3600000)) {   
             disconnectSpotify();
         }
         if(isActuallyAdmin) {
@@ -233,9 +239,6 @@ const Room = ({ roomId }) => {
     async function handleReady() {
         setPlayerReady(true);
         playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayed, 'seconds');
-        if(isActuallyAdmin) {
-            setLocalVolume(0.5);
-        }
     }
 
     function handleMediaEnd() {
@@ -419,9 +422,9 @@ const Room = ({ roomId }) => {
                                         play={room.actuallyPlaying}
                                         inlineVolume={localVolume}
                                         styles={{
-                                            activeColor: '#b39f74',
+                                            activeColor: 'var(--main-color)',
                                             bgColor: '#262626',
-                                            loaderColor: '#b39f74',
+                                            loaderColor: 'var(--main-color)',
                                             sliderColor: '#ff5722',
                                             trackArtistColor: '#262626',
                                             trackNameColor: '#262626',
@@ -500,42 +503,36 @@ const Room = ({ roomId }) => {
                                     {isActuallyAdmin && 
                                         <Grid item sm={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:2, mb: 1.5 }}>
                                             
-                                            {room.playing > 0 && <IconButton onClick={e => handleChangeActuallyPlaying(0)}>
-                                                <FirstPageIcon  fontSize="large" sx={{color:'#f0f1f0'}} />
-                                            </IconButton>}
-                                            {room.playing == 0 && <IconButton>
-                                                <FirstPageIcon  fontSize="large" sx={{color:'#303134'}} />
-                                            </IconButton>}
+                                            <IconButton onClick={e => room.playing > 0 ? handleChangeActuallyPlaying(0) : ''}>
+                                                <FirstPageIcon  fontSize="large" sx={{color:room.playing > 0 ? '#f0f1f0': '#303134'}} />
+                                            </IconButton>
                                             
-                                            {room.playing > 0 && <IconButton onClick={e => handleChangeActuallyPlaying(room.playing - 1)}>
-                                                <SkipPreviousIcon fontSize="large" sx={{color:'#f0f1f0'}} />
-                                            </IconButton>}
-                                            {room.playing == 0 &&<IconButton>
-                                                <SkipPreviousIcon fontSize="large" sx={{color:'#303134'}} />
-                                            </IconButton>}
-                                            { room.actuallyPlaying && <IconButton variant="contained" onClick={e => handlePlay(false)}sx={{position:'sticky', top:0, zIndex:2500}} >
-                                                <PauseCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />
-                                            </IconButton>}
-                                            { !room.actuallyPlaying && <IconButton variant="contained" onClick={e => handlePlay(true)} sx={{position:'sticky', top:0, zIndex:2500}}>
-                                                <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}}/>
-                                            </IconButton>}
-                                            {(room.playlistUrls.length -1) !== room.playing && <IconButton onClick={e => handleChangeActuallyPlaying(room.playing + 1)}>
-                                                <SkipNextIcon fontSize="large" sx={{color:'#f0f1f0'}} />
-                                            </IconButton>}
-                                            {(room.playlistUrls.length -1) == room.playing && <IconButton>
-                                                <SkipNextIcon fontSize="large" sx={{color:'#303134'}} />
-                                            </IconButton>}
+                                            <IconButton onClick={e => room.playing > 0 ? handleChangeActuallyPlaying(room.playing - 1) : ''}>
+                                                <FirstPageIcon  fontSize="large" sx={{color:room.playing > 0 ? '#f0f1f0': '#303134'}} />
+                                            </IconButton>
 
+                                            <IconButton variant="contained" onClick={e => handlePlay(!room.actuallyPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
+                                                { room.actuallyPlaying && <PauseCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
+                                                { !room.actuallyPlaying && <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
+                                            </IconButton>
+                                           
+                                            <IconButton onClick={e => (room.playlistUrls.length -1) !== room.playing ? handleChangeActuallyPlaying(room.playing + 1) : ''}>
+                                                <SkipNextIcon fontSize="large" sx={{color: (room.playlistUrls.length -1) !== room.playing ? '#f0f1f0' : '#303134'}} />
+                                            </IconButton>
+
+                                            <IconButton onClick={e => (room.playlistUrls.length -1) !== room.playing ? handleChangeActuallyPlaying(room.playlistUrls.length-1) : ''}>
+                                                <LastPageIcon  fontSize="large" sx={{color: (room.playlistUrls.length -1) !== room.playing ? '#f0f1f0' : '#303134'}} />
+                                            </IconButton>
+                                            
                                             {room.playlistUrls[room.playing].source !== 'spotify' && 
-                                                <IconButton onClick={e => setPercentagePlayed(0)} >
-                                                    <ReplayIcon fontSize="large" sx={{color:'#f0f1f0'}} />
-                                                </IconButton>
-                                            }
-
-                                            {room.playlistUrls[room.playing].source !== 'spotify' && !isFullScreen &&
-                                                <IconButton onClick={e => setIsFullScreen(true)} >
-                                                    <FullscreenIcon fontSize="large" sx={{color:'#f0f1f0'}} />
-                                                </IconButton>
+                                                <>
+                                                    <IconButton onClick={e => setPercentagePlayed(0)} >
+                                                        <ReplayIcon fontSize="large" sx={{color:'#f0f1f0'}} />
+                                                    </IconButton>
+                                                    {!isFullScreen && <IconButton onClick={e => setIsFullScreen(true)} >
+                                                        <FullscreenIcon fontSize="large" sx={{color:'#f0f1f0'}} />
+                                                    </IconButton>}
+                                                </>
                                             }
                                         </Grid>
                                     }
@@ -591,7 +588,7 @@ const Room = ({ roomId }) => {
                     sx={{bgcolor:'#131416', mr:2,borderRadius:0}}
                     xs={12}
                 >
-                    <ArrowBackIosNewIcon sx={{fontSize:'2em', color:'#b39f74', fill:'#b39f74'}} className='animate__animated animate__fadeInLeft animate__fast' />
+                    <ArrowBackIosNewIcon sx={{fontSize:'2em', color:'var(--main-color)', fill:'var(--main-color)'}} className='animate__animated animate__fadeInLeft animate__fast' />
                 </Button >
                 {room.playlistEmpty && <Box sx={{display:'flex',flexDirection:'column', padding:'1em'}}>
                     <Typography component="span"> Playlist vide </Typography>

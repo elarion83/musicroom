@@ -54,7 +54,7 @@ const RoomPlaylist = ({ isAdminView, roomPlaylist, roomIdActuallyPlaying, handle
                         <Fade key={idx} in={true} xs={12} sx={{  width:'100%', padding:0, margin:0}}>
                             <Grid item sx={{width:'100%', padding:0,pl:2, margin:0}} className='playlist_bloc'> 
                                 
-                                <ListItemButton sx={{ alignItems:'flex-start',position:'relative',width:'100%', pt:1,pl:0,margin:0, backgroundColor:'#4f4f4f',borderBottom: '2px solid #3e464d', color:'white', "&.Mui-selected": {
+                                <ListItemButton sx={{ alignItems:'flex-start',position:'relative',width:'100%', pt:1,pl:0,margin:0, backgroundColor:'var(--main-bg-color)',borderBottom: '2px solid #3e464d', color:'white', "&.Mui-selected": {
                                         backgroundColor: "#262626",
                                         transition: 'all 0.3s ease-out'
                                         },
@@ -70,6 +70,20 @@ const RoomPlaylist = ({ isAdminView, roomPlaylist, roomIdActuallyPlaying, handle
                                             {idx !== idDisplaying && idx !== roomIdActuallyPlaying && <ExpandMoreIcon sx={{display:'inline-block'}}  onClick={e => handleChangeIdActuallyDisplaying(idx)}/>}
                                             {idx === idDisplaying && idx !== roomIdActuallyPlaying && <ExpandLessIcon sx={{display:'inline-block'}} onClick={e => handleChangeIdActuallyDisplaying(-1)}  />}
                                             {idx === idDisplaying && idx !== roomIdActuallyPlaying && isAdminView && <PlayCircleOutlineIcon sx={{mt:1}} onClick={e => handleChangeIdActuallyPlaying(idx)}  />}
+                                            {idx === roomIdActuallyPlaying && 
+                                                <>
+                                                    <div className={roomIsActuallyPlaying ? 'animated soundWaveContainer' : 'waiting soundWaveContainer'}>
+                                                        <div class="box boxQuiet"></div>
+                                                        <div class="box boxNormal"></div>
+                                                        <div class="box boxQuiet"></div>
+                                                        <div class="box boxLoud"></div>
+                                                        <div class="box boxQuiet"></div>
+                                                        <div class="box boxNormal"></div>
+                                                        <div class="box boxLoud"></div>
+                                                    </div>
+                                                </>
+                                            }
+
                                     </ListItemIcon>
                                     <Grid item sx={{display:'block', zIndex:2, pl: 0, pb:0.5, flexGrow:1}}>
                                         { d.title && <ListItemText onClick={e => (idx === idDisplaying) ? handleChangeIdActuallyDisplaying(-1) : handleChangeIdActuallyDisplaying(idx)} sx={{ pl:0,mb:0, wordBreak: 'break-all'}}>
