@@ -242,9 +242,6 @@ const Room = ({ roomId }) => {
     }
 
     async function isSpotifyAndIsNotPlayableBySpotify(numberToPlay, spotifyIsLinked) {
-        if(spotifyIsLinked) {
-            return false;
-        }
         if(room.playlistUrls[numberToPlay].source == 'spotify' && !spotifyIsLinked) {
             return true;
         }
@@ -255,11 +252,8 @@ const Room = ({ roomId }) => {
     function handleChangeActuallyPlaying(numberToPlay) {
         if(room.playlistUrls[numberToPlay]) {
             if(isActuallyAdmin) {
-                if(isSpotifyAndIsNotPlayableBySpotify(numberToPlay, room.roomParams.spotifyIsLinked)) {
-                    handleChangeActuallyPlaying(numberToPlay+1);
-                } else { 
                     roomRef.set({playing: numberToPlay, actuallyPlaying:true,mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });  
-                }
+
             }
         } else {
             if(room.roomParams.isPlayingLooping) {
