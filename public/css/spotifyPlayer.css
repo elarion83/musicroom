@@ -25,7 +25,7 @@ margin-top: 1em;
     width: 15px !important;
     left: -5px !important;
     top: -5px !important;
-    background-color: #ff5722 !important;
+    background-color: var(--red-2) !important;
 }
 ._InfoRSWP {
 border:none !important;

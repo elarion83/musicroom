@@ -413,8 +413,8 @@ const Room = ({ roomId }) => {
         <Container maxWidth={false} sx={{ padding: '0 !important'}} >
             {loaded && room.playlistUrls && <div> 
                 {!room.playlistEmpty && room.playlistUrls.length > 0 && room.playing !== null && 
-                    <Box sx={{bgcolor:'#303030',borderBottom: '2px solid #3e464d', padding:"0px 0em"}}>
-                        <Grid container spacing={0} sx={{ bgcolor:'#262626',}}>
+                    <Box sx={{bgcolor:'#303030',borderBottom: '2px solid var(--border-color)', padding:"0px 0em"}}>
+                        <Grid container spacing={0} sx={{ bgcolor:'var(--grey-dark)',}}>
 
                             <Grid item className={isFullScreen ? 'fullscreen' : ''} sm={(room.playlistUrls[room.playing].source == 'spotify') ? 12 : 4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
                                 {spotifyPlayerShow && isActuallyAdmin && room.playlistUrls[room.playing].source == 'spotify' &&
@@ -426,11 +426,11 @@ const Room = ({ roomId }) => {
                                         inlineVolume={localVolume}
                                         styles={{
                                             activeColor: 'var(--main-color)',
-                                            bgColor: '#262626',
+                                            bgColor: 'var(--grey-dark)',
                                             loaderColor: 'var(--main-color)',
-                                            sliderColor: '#ff5722',
-                                            trackArtistColor: '#262626',
-                                            trackNameColor: '#262626',
+                                            sliderColor: 'var(--red-2)',
+                                            trackArtistColor: 'var(--grey-dark)',
+                                            trackNameColor: 'var(--grey-dark)',
                                         }}
                                     />}
                                 {!isActuallyAdmin && room.playlistUrls[room.playing].source == 'spotify' &&
@@ -568,7 +568,7 @@ const Room = ({ roomId }) => {
                         }
                     </Box>
                 }
-                <Toolbar xs={12} sx={{ bgcolor: '#262626',borderBottom: '2px solid #3e464d', minHeight: '45px !important', fontFamily: 'Monospace', pl:'17px', pr:'25 px' }}>
+                <Toolbar xs={12} sx={{ bgcolor: 'var(--grey-dark)',borderBottom: '2px solid var(--border-color)', minHeight: '45px !important', fontFamily: 'Monospace', pl:'17px', pr:'25 px' }}>
                     <Typography component="div" sx={{ flexGrow: 1, textTransform:'uppercase', fontSize:'12px', color:'white' }}> Playlist <b><span> ({ room.playlistUrls && room.playlistUrls.length } médias en playlist)</span></b>
                     </Typography>
                 </Toolbar>

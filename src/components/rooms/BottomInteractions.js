@@ -31,7 +31,7 @@ const BottomInteractions = ({ roomParams,userCanMakeInteraction, createNewRoomIn
                 </Fab>
             </Tooltip>
             <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s' title={!userCanMakeInteraction ? "Toutes les "+  (roomParams.interactionFrequence/1000) +" secondes": ''}>  
-                <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mr:0, ...(userCanMakeInteraction && {bgcolor: '#ff5722 !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('heart') : ''}>
+                <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mr:0, ...(userCanMakeInteraction && {bgcolor: 'var(--red-2) !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('heart') : ''}>
                     <FavoriteIcon fontSize="small" sx={{color:'var(--white)'}} />
                     {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
                 </Fab>
@@ -46,7 +46,7 @@ const BottomInteractions = ({ roomParams,userCanMakeInteraction, createNewRoomIn
             <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s' title="Paramètres">  
             <Badge invisible={roomParams.spotifyIsLinked} variant="dot" sx={{'& .MuiBadge-badge': {
                     right:'10px',
-                    bgcolor:'#ff5722',
+                    bgcolor:'var(--red-2)',
                     zIndex:10000
                 }}} >
                 <Fab size="small" variant="extended" className='room_small_button_interactions'  sx={{justifyContent: 'center', ml:0}} onClick={e => handleOpenRoomParamModal(true)} >

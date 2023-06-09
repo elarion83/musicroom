@@ -55,16 +55,16 @@ const RoomPlaylist = ({isSpotifyAvailable, isAdminView, roomPlaylist, roomIdActu
                         <Fade key={idx} in={true} xs={12} sx={{  width:'100%', p:0, m:0}}>
                             <Grid item sx={{width:'100%', p:0,pl:2, m:0}} className={`playlist_bloc ${(d.source == 'spotify') ? !isSpotifyAvailable ? 'mediaUnavailable' : '' : 'mediaAvailable'}`}> 
                                 
-                                <ListItemButton sx={{ alignItems:'flex-start',position:'relative',width:'100%', pt:1,pl:0,m:0, backgroundColor:'var(--main-bg-color)',borderBottom: '2px solid #3e464d', color:'var(--white)', "&.Mui-selected": {
-                                        backgroundColor: "#262626",
+                                <ListItemButton sx={{ alignItems:'flex-start',position:'relative',width:'100%', pt:1,pl:0,m:0, backgroundColor:'var(--main-bg-color)',borderBottom: '2px solid var(--border-color)', color:'var(--white)', "&.Mui-selected": {
+                                        backgroundColor: "var(--grey-dark)",
                                         transition: 'all 0.3s ease-out'
                                         },
                                         "&.Mui-focusVisible": {
-                                        backgroundColor: "#262626",
+                                        backgroundColor: "var(--grey-dark)",
                                         transition: 'all 0.3s ease-out'
                                         },
                                         ":hover": {
-                                        backgroundColor: "#262626",
+                                        backgroundColor: "var(--grey-dark)",
                                         transition: 'all 0.3s ease-out'
                                         } }} key={'playlist_'+idx} xs={12} selected={roomIdActuallyPlaying === idx}>
                                     <ListItemIcon sx={{ pl:2,pt:'5px',color:'var(--white)', zIndex:2, display:'flex', flexDirection:'column'}}>        
@@ -108,31 +108,31 @@ const RoomPlaylist = ({isSpotifyAvailable, isAdminView, roomPlaylist, roomIdActu
                                         </Typography>}
                                     </Grid>
                                    {idx === roomIdActuallyPlaying && <LinearProgress sx={{height:'10px',top:0, position:'absolute', width:'100%', height:'100%', zIndex:1, opacity:0.5, "& .MuiLinearProgress-barColorPrimary": {
-                                        backgroundColor: "#262626",
+                                        backgroundColor: "var(--grey-dark)",
                                     }}} variant="determinate" value={roomPlayedActuallyPlayed} /> }
                                 </ListItemButton>
                                 
                                 {(idx === idDisplaying || idx === roomIdActuallyPlaying) && <Grid className='votebuttons' sx={{position:'absolute', right:'5px', bottom:'10px'}}>
                                         {!userVoteArray.up.includes(d.hashId) && 
-                                            <Button size="small" variant="contained" sx={{zIndex:5,mr:2, fontSize:'0.8em', color:'var(--white)', bgcolor:'#262626'}}  onClick={e => handleVotePositif(idx, d.hashId)}>
+                                            <Button size="small" variant="contained" sx={{zIndex:5,mr:2, fontSize:'0.8em', color:'var(--white)', bgcolor:'var(--grey-dark)'}}  onClick={e => handleVotePositif(idx, d.hashId)}>
                                                 <ThumbUpIcon  fontSize="small" sx={{mr:1}}/>
                                                 {d.vote.up }
                                             </Button>
                                         }
                                         {userVoteArray.up.includes(d.hashId) && 
-                                            <Button size="small" variant="contained" sx={{zIndex:5,mr:2, fontSize:'0.8em', color:'var(--white)', bgcolor:'#262626'}}>
+                                            <Button size="small" variant="contained" sx={{zIndex:5,mr:2, fontSize:'0.8em', color:'var(--white)', bgcolor:'var(--grey-dark)'}}>
                                                 <ThumbUpIcon  fontSize="small" sx={{mr:1, color:'#66BB6A'}}/>
                                                 {d.vote.up }
                                             </Button>
                                         }
                                         {!userVoteArray.down.includes(d.hashId) &&
-                                                <Button size="small" variant="contained" sx={{zIndex:5, fontSize:'0.8em',  color:'var(--white)', bgcolor:'#262626'}}  onClick={e => handleVoteNegatif(idx, d.hashId)}>
+                                                <Button size="small" variant="contained" sx={{zIndex:5, fontSize:'0.8em',  color:'var(--white)', bgcolor:'var(--grey-dark)'}}  onClick={e => handleVoteNegatif(idx, d.hashId)}>
                                                     <ThumbDownAltIcon fontSize="small"  sx={{mr:1}}/>
                                                     {d.vote.down }
                                                 </Button>
                                         }
                                         {userVoteArray.down.includes(d.hashId) &&
-                                                <Button size="small" variant="contained" sx={{zIndex:5, fontSize:'0.8em',  color:'white', bgcolor:'#262626'}}>
+                                                <Button size="small" variant="contained" sx={{zIndex:5, fontSize:'0.8em',  color:'white', bgcolor:'var(--grey-dark)'}}>
                                                     <ThumbDownAltIcon fontSize="small"  sx={{mr:1,color:'#E91E63'}}/>
                                                     {d.vote.down }
                                                 </Button>

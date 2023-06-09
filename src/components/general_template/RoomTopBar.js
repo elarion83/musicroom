@@ -33,12 +33,12 @@ const RoomTopBar = ({localData, roomId, roomAdmin, isLinkedToSpotify }) => {
     
   return (
     <AppBar position="sticky" className='sticky_top' >
-        <Toolbar xs={12}sx={{ bgcolor: '#262626',borderBottom: '2px solid #3e464d', minHeight: '45px !important', fontFamily: 'Monospace', pl:'5px', pr:'25 px' }}>
+        <Toolbar xs={12}sx={{ bgcolor: 'var(--grey-dark)',borderBottom: '2px solid var(--border-color)', minHeight: '45px !important', fontFamily: 'Monospace', pl:'5px', pr:'25 px' }}>
                 
                 <Tooltip  className='animate__animated animate__fadeInLeft animate__delay-2s animate__fast' title="Paramètres de la room" sx={{ bgColor:'#30363c'}}>
                         <Badge invisible={isLinkedToSpotify} variant="dot" sx={{'& .MuiBadge-badge': {
                             right:'10px',
-                            bgcolor:'#ff5722'
+                            bgcolor:'var(--red-2)'
                         }}} >
                             <MoreVertIcon 
                             onClick={e => handleClickMenu(e)} 
@@ -74,7 +74,7 @@ const RoomTopBar = ({localData, roomId, roomAdmin, isLinkedToSpotify }) => {
                                                 <Switch checked={false} /> 
                                                     <Badge invisible={isLinkedToSpotify} variant="dot" sx={{'& .MuiBadge-badge': {
                                                             right:'0px',
-                                                            bgcolor:'#ff5722'
+                                                            bgcolor:'var(--red-2)'
                                                         }}} >
                                                         Spotify non connecté
                                                     </Badge>

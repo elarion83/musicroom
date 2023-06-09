@@ -45,7 +45,7 @@ const UserTopBar = ({ userInfoPseudo }) => {
                   aria-haspopup="true"
                   aria-expanded={open ? 'true' : undefined}
                 >
-                  <Avatar sx={{ bgcolor: '#ff5722', textTransform:'uppercase' }} >{userInfoPseudo.substring(0, 1) }</Avatar>
+                  <Avatar sx={{ bgcolor: 'var(--red-2)', textTransform:'uppercase' }} >{userInfoPseudo.substring(0, 1) }</Avatar>
                 </IconButton>
               </Tooltip>
               <Menu
