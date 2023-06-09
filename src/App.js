@@ -3,31 +3,26 @@ import Room from './components/Room';
 import UserTopBar from './components/general_template/userTopBar';
 
 import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import InputAdornment from '@mui/material/InputAdornment';
 import { v4 as uuid } from 'uuid';
 
 import AwesomeSlider from 'react-awesome-slider';
 import withAutoplay from 'react-awesome-slider/dist/autoplay';
 import 'react-awesome-slider/dist/styles.css';
 
-import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
-
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
-
-
-
-import CssBaseline from '@mui/material/CssBaseline';
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
+import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 
 function App() {
@@ -68,22 +63,8 @@ function App() {
     }
   }
 
-  // App.js
-  const font =  "'Quicksand', sans-serif";
-  const theme = createTheme({
-  container:{bgcolor:'red'},
-  typography: {
-    fontFamily: [
-      'Arial',
-      'sans-serif',
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(',')
-  }})
-
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <CssBaseline />
       <Container maxWidth={false} className='main_container' sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
          <AppBar position="static" sx={{bgcolor: '#202124'}}>
@@ -195,7 +176,8 @@ function App() {
               </DialogContentText>
             </DialogContent>
         </Dialog>}
-      </Container></ThemeProvider>
+      </Container>
+    </>
   );
 }
 

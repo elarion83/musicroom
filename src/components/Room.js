@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { db } from "../services/firebase";
 
+import { Icon } from '@iconify/react';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -10,17 +11,12 @@ import Container from '@mui/material/Container';
 import Dialog from '@mui/material/Dialog';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
-import Snackbar from '@mui/material/Snackbar';
-import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import Toolbar from '@mui/material/Toolbar';
-import Tooltip from '@mui/material/Tooltip';
 import 'animate.css';
 import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
-import { Icon } from '@iconify/react';
 
-import Fab from '@mui/material/Fab';
 import Stack from '@mui/material/Stack';
 //import screenfull from 'screenfull'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -29,12 +25,11 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import ReplayIcon from '@mui/icons-material/Replay';
-import SkipPrevious from '@mui/icons-material/SkipPrevious';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
+import SkipPrevious from '@mui/icons-material/SkipPrevious';
 import Typography from '@mui/material/Typography';
 
 import VolumeDown from '@mui/icons-material/VolumeDown';
@@ -47,11 +42,11 @@ import ModalLeaveRoom from './rooms/modalsOrDialogs/ModalLeaveRoom';
 import ModalRoomParams from './rooms/modalsOrDialogs/ModalRoomParams';
 import ModalShareRoom from './rooms/modalsOrDialogs/ModalShareRoom';
 
-import RoomTopBar from "./rooms/RoomTopBar";
-import RoomPlaylist from "./rooms/RoomPlaylist";
-import BottomInteractions from "./rooms/BottomInteractions";
-import SoundWave from "./rooms/SoundWave";
 import { AlertTitle } from "@mui/material";
+import BottomInteractions from "./rooms/BottomInteractions";
+import RoomPlaylist from "./rooms/RoomPlaylist";
+import RoomTopBar from "./rooms/RoomTopBar";
+import SoundWave from "./rooms/SoundWave";
 
 const Room = ({ roomId }) => {
 
@@ -242,7 +237,7 @@ const Room = ({ roomId }) => {
     }
 
     async function isSpotifyAndIsNotPlayableBySpotify(numberToPlay, spotifyIsLinked) {
-        if(room.playlistUrls[numberToPlay].source == 'spotify' && !spotifyIsLinked) {
+        if(room.playlistUrls[numberToPlay].source === 'spotify' && !spotifyIsLinked) {
             return true;
         }
         
@@ -252,7 +247,7 @@ const Room = ({ roomId }) => {
     function handleChangeActuallyPlaying(numberToPlay) {
         if(room.playlistUrls[numberToPlay]) {
             if(isActuallyAdmin) {
-                if(room.playlistUrls[numberToPlay].source == 'spotify' && !room.roomParams.spotifyIsLinked) {
+                if(room.playlistUrls[numberToPlay].source === 'spotify' && !room.roomParams.spotifyIsLinked) {
                     handleChangeActuallyPlaying(numberToPlay+1);
                     return
                 }
@@ -318,7 +313,7 @@ const Room = ({ roomId }) => {
     function handleVoteChange(idMedia, NewValue, mediaHashId, voteType) {
         room.playlistUrls[idMedia].vote = NewValue;
 
-        if('up' == voteType) {
+        if('up' === voteType) {
             if(!localData.currentUserVotes.up.includes(mediaHashId)) {
                 localData.currentUserVotes.up.push(mediaHashId);
                 roomRef.set({playlistUrls: room.playlistUrls}, { merge: true });
@@ -392,7 +387,7 @@ const Room = ({ roomId }) => {
 
     const [spotifyEndSwitchTempFix, setSpotifyEndSwitchTempFix] = useState(true);
     function SpotifyPlayerCallBack(e){
-        if(e.type == 'player_update') {
+        if(e.type === 'player_update') {
             if(e.previousTracks[0] && (e.track.id === e.previousTracks[0].id)) {
                 if((e.track.uri !== room.playlistUrls[room.playing].source) && spotifyEndSwitchTempFix) {
                     setSpotifyPlayerShow(false);
@@ -415,8 +410,8 @@ const Room = ({ roomId }) => {
                     <Box sx={{bgcolor:'#303030',borderBottom: '2px solid var(--border-color)', padding:"0px 0em"}}>
                         <Grid container spacing={0} sx={{ bgcolor:'var(--grey-dark)',}}>
 
-                            <Grid item className={isFullScreen ? 'fullscreen' : ''} sm={(room.playlistUrls[room.playing].source == 'spotify') ? 12 : 4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
-                                {spotifyPlayerShow && isActuallyAdmin && room.playlistUrls[room.playing].source == 'spotify' &&
+                            <Grid item className={isFullScreen ? 'fullscreen' : ''} sm={(room.playlistUrls[room.playing].source === 'spotify') ? 12 : 4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
+                                {spotifyPlayerShow && isActuallyAdmin && room.playlistUrls[room.playing].source === 'spotify' &&
                                     <SpotifyPlayer
                                         callback={SpotifyPlayerCallBack}
                                         token={room.roomParams.spotifyToken}
@@ -432,14 +427,14 @@ const Room = ({ roomId }) => {
                                             trackNameColor: 'var(--grey-dark)',
                                         }}
                                     />}
-                                {!isActuallyAdmin && room.playlistUrls[room.playing].source == 'spotify' &&
+                                {!isActuallyAdmin && room.playlistUrls[room.playing].source === 'spotify' &&
                                     <Alert severity="warning" sx={{m:2, border:'1px solid #F27C24'}}> Le lecteur Spotify n'est visible que par l'host de la room. 
                                         <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} sx={{color:'var(--main-color-darker)'}}>
                                             <b>Ajoute quelque chose dans la playlist en attendant !</b>
                                         </a>
                                     </Alert>
                                 }
-                                {isActuallyAdmin && room.playlistUrls[room.playing].source != 'spotify'  && <ReactPlayer sx={{ padding:0}}
+                                {isActuallyAdmin && room.playlistUrls[room.playing].source !== 'spotify'  && <ReactPlayer sx={{ padding:0}}
                                     ref={playerRef}
                                     className='react-player'
                                     width='100%'
@@ -463,7 +458,7 @@ const Room = ({ roomId }) => {
                                         }
                                     }}
                                 />}
-                                {!isActuallyAdmin && room.playlistUrls[room.playing].source != 'spotify'  && <ReactPlayer sx={{ padding:0}}
+                                {!isActuallyAdmin && room.playlistUrls[room.playing].source !== 'spotify'  && <ReactPlayer sx={{ padding:0}}
                                     ref={playerRef}
                                     className='react-player'
                                     width='100%'
@@ -484,7 +479,7 @@ const Room = ({ roomId }) => {
                                 />}
                                 {isActuallyAdmin && <div style={{width:'100%',height:'100%',opacity:0,top:0,position:'absolute'}}></div>}
                             </Grid>
-                            <Grid item sm={(room.playlistUrls[room.playing].source == 'spotify') ? 12 : 8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }} className={`player_right_side_container ${(room.playlistUrls[room.playing].source == 'spotify') ? "spotify_header" : ""}`}>
+                            <Grid item sm={(room.playlistUrls[room.playing].source === 'spotify') ? 12 : 8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }} className={`player_right_side_container ${(room.playlistUrls[room.playing].source === 'spotify') ? "spotify_header" : ""}`}>
                                 { /* pip ? 'Disable PiP' : 'Enable PiP' */ }
                                 <Grid item sm={12} sx={{ padding:0,pl:1.5,ml:0, mb: 0 , mt:1, fill:'#f0f1f0'}}>
                                     { room.playlistUrls[room.playing].title && <Typography component={'span'} sm={12} >
@@ -494,7 +489,7 @@ const Room = ({ roomId }) => {
                                     <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
                                         {room.actuallyPlaying ? 'En lecture' : 'En pause'}
                                     </Typography>
-                                    { room.playlistUrls[room.playing].url && room.playlistUrls[room.playing].url.length == 0 || !room.playlistUrls[room.playing].title && <Typography component={'span'} sm={12} >
+                                    { room.playlistUrls[room.playing].url && room.playlistUrls[room.playing].url.length === 0 || !room.playlistUrls[room.playing].title && <Typography component={'span'} sm={12} >
                                         {room.playlistUrls[room.playing].url.substring(0, 50)+'...'} 
                                     </Typography>}
                                     {playerReady && playerRef.current !== null && room.playlistUrls[room.playing].source !== 'spotify' && <Typography sx={{ ml:0, mb: 1}}> {~~(Math.round(playerRef.current.getCurrentTime())/60) + 'm'+Math.round(playerRef.current.getCurrentTime()) % 60+ 's / ' + formatNumberToMinAndSec(playerRef.current.getDuration())}</Typography>}
