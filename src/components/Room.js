@@ -35,6 +35,7 @@ import Typography from '@mui/material/Typography';
 import VolumeDown from '@mui/icons-material/VolumeDown';
 import VolumeUp from '@mui/icons-material/VolumeUp';
 import Slider from '@mui/material/Slider';
+import CloseIcon from '@mui/icons-material/Close';
 
 import RoomModalAddMedia from './rooms/modalsOrDialogs/ModalAddMedia';
 import ModalForceSpotifyDisconnect from "./rooms/modalsOrDialogs/ModalForceSpotifyDisconnect";
@@ -50,11 +51,12 @@ import SoundWave from "./rooms/SoundWave";
 
 const Room = ({ roomId }) => {
 
+    const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
 
     const [localData, setLocalData] = useState({domain:window.location.hostname, synchro:false, currentUserVotes:{up:[], down:[]}, currentUserInfo: useState(localStorage.getItem("MusicRoom_UserInfoPseudo")) });
 	const [loaded, setLoaded] = useState(false);
 	const [room, setRoom] = useState({});
-    const [OpenInvitePeopleToRoomModal, setOpenInvitePeopleToRoomModal] = useState(false);
+    const [openInvitePeopleToRoomModal, setOpenInvitePeopleToRoomModal] = useState(false);
     const [OpenAddToPlaylistModal, setOpenAddToPlaylistModal] = useState(false);
     const [openRoomParamModal, setOpenRoomParamModal] = useState(false);
     const [localVolume, setLocalVolume] = useState(0);
@@ -572,13 +574,33 @@ const Room = ({ roomId }) => {
                 </Toolbar>
                 { room.playlistEmpty && 
                     <>
-                        <Alert severity="success" variant="filled" icon={<Icon icon="bx:happy-beaming"/>} sx={{m:2, border:'1px solid var(--green-2)'}}> 
+                        <Alert severity="success" variant="filled" 
+                            icon={<Icon icon="uil:smile-beam" width="35"/>} 
+                            className='animate__animated animate__fadeInUp animate__slow'
+                            onClick={(e) => setOpenInvitePeopleToRoomModal(true)}
+                            sx={{m:2, border:'2px solid var(--green-2)', cursor:'pointer'}}> 
                             <AlertTitle sx={{mb:0}}>Bienvenue dans la room ! </AlertTitle> 
+                            <p style={{color:'var(--white)', margin:0}}>Clique ici pour la partager</p>
                         </Alert>
-                        <Alert severity="warning" variant="filled" icon={<Icon icon="material-symbols:playlist-remove-rounded" width="35" />} sx={{m:2, border:'1px solid #F27C24',cursor:'pointer'}} onClick={(e) => setOpenAddToPlaylistModal(true)} >
+                        <Alert severity="warning" 
+                            variant="filled" 
+                            icon={<Icon icon="iconoir:music-double-note-add" width="35" />} 
+                            sx={{m:2, border:'2px solid #febc21', cursor:'pointer'}} 
+                            className='animate__animated animate__fadeInUp animate__slow'
+                            onClick={(e) => setOpenAddToPlaylistModal(true)} >
                             <AlertTitle>La Playlist est vide !</AlertTitle>
-                            <p style={{color:'var(--white)', margin:0}}>Clique ici pour ajouter quelque chose</p>
+                            <p style={{color:'var(--white)', margin:0}}>Clique ici pour commencer</p>
                         </Alert>
+                        
+                        {!room.roomParams.spotifyIsLinked && 
+                            <Alert severity="warning" variant="filled" 
+                            icon={<Icon icon="mdi:spotify" width="30" />} 
+                            sx={{m:2, border:'2px solid #febc21',cursor:'pointer'}} 
+                            className='animate__animated animate__fadeInUp animate__slow'
+                            onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
+                            <AlertTitle>Spotify n'est pas lié à la room !</AlertTitle>
+                            <p style={{color:'var(--white)', margin:0}}> Clique ici pour lier les deux <br /> <b>Spotify Premium requis</b> </p>
+                        </Alert>}
                     </>
                 }
                 {typeof(room.playlistUrls) !== 'undefined' && room.playlistUrls && room.playlistUrls.length > 0 && <Box sx={{ p:0,mb:0}}>
@@ -620,7 +642,7 @@ const Room = ({ roomId }) => {
         </Dialog>
         
         {loaded && room.roomParams && <ModalRoomParams open={openRoomParamModal} changeOpen={setOpenRoomParamModal} handleChangeRoomParams={handleChangeRoomParams} handleDisconnectFromSpotifyModal={setOpenForceDisconnectSpotifyModal} roomParams={room.roomParams} />} 
-        <ModalShareRoom open={OpenInvitePeopleToRoomModal} changeOpen={setOpenInvitePeopleToRoomModal} roomUrl={ localData.domain +'/?rid='+roomId} />
+        <ModalShareRoom open={openInvitePeopleToRoomModal} changeOpen={setOpenInvitePeopleToRoomModal} roomUrl={ localData.domain +'/?rid='+roomId} />
         <ModalLeaveRoom open={openLeaveRoomModal} changeOpen={setOpenLeaveRoomModal} handleQuitRoom={handleQuitRoom} />
         <ModalForceSpotifyDisconnect open={openForceDisconnectSpotifyModal} changeOpen={setOpenForceDisconnectSpotifyModal} handleDisconnectSpotify={disconnectSpotify} />
 

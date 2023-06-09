@@ -22,7 +22,11 @@
 
 h1,h2,h3,h4,h5,h6,span {
     color: var(--main-color) !important;
-    font-family: roboto, sans-serif !important;
+    font-family: var(--main-typo-family), sans-serif !important;
+}
+
+b, * {
+  font-family: var(--main-typo-family), sans-serif;
 }
 
 .main_bg_color, .MuiInputAdornment-root {

@@ -14,6 +14,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import 'animate.css';
 import Switch from '@mui/material/Switch';
 import Badge from '@mui/material/Badge';
+import { Icon } from '@iconify/react';
+import { Divider, MenuList } from '@mui/material';
 
 
 const RoomTopBar = ({localData, roomId, roomAdmin, isLinkedToSpotify }) => {
@@ -47,37 +49,32 @@ const RoomTopBar = ({localData, roomId, roomAdmin, isLinkedToSpotify }) => {
                 <Menu
                     id="menu-appbar"
                     anchorEl={anchorEl}
-                    anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                    }}
-                    
                     onClose={handleClose}
                     onClick={handleClose}
                     open={Boolean(anchorEl)}
-                >
-                    <MenuItem>
-                        <ListItemIcon>
-                            <InfoIcon  fontSize="small" />
+                >   
+                    <MenuItem >
+                        <ListItemIcon >
+                            <InfoIcon />
                         </ListItemIcon>
                         <Typography>
                         Hosté par <b>{roomAdmin}</b>
                         </Typography>
                     </MenuItem>
-                    <MenuItem sx={{pl:0}}>
-                        {isLinkedToSpotify ? <Typography>
-                                                <Switch disabled checked={true} /> 
-                                                Spotify connecté
-                                            </Typography> 
-                                           : <Typography onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
-                                                <Switch checked={false} /> 
-                                                    <Badge invisible={isLinkedToSpotify} variant="dot" sx={{'& .MuiBadge-badge': {
-                                                            right:'0px',
-                                                            bgcolor:'var(--red-2)'
-                                                        }}} >
-                                                        Spotify non connecté
-                                                    </Badge>
-                                              </Typography> }
+                    <Divider />
+                    <MenuItem >
+                        <ListItemIcon sx={{ml:'-3px', mr:'3px'}}>
+                            <Badge invisible={isLinkedToSpotify} variant="dot" 
+                                sx={{'& .MuiBadge-badge': {
+                                        right:'0px',
+                                        bgcolor:'var(--red-2)'
+                                    }}} >
+                                    <Icon icon="mdi:spotify" width="27" />
+                                </Badge>
+                        </ListItemIcon>
+                        <Typography> 
+                            {isLinkedToSpotify ? 'Spotify relié' : 'Spotify non relié'}
+                        </Typography> 
                     </MenuItem>
                 </Menu>
 
