@@ -52,10 +52,10 @@ const RoomPlaylist = ({isSpotifyAvailable, isAdminView, roomPlaylist, roomIdActu
                 
                     {roomPlaylist.map(function(d, idx){
                     return (
-                        <Fade key={idx} in={true} xs={12} sx={{  width:'100%', padding:0, margin:0}}>
-                            <Grid item sx={{width:'100%', padding:0,pl:2, margin:0}} className={`playlist_bloc ${(d.source == 'spotify') ? !isSpotifyAvailable ? 'mediaUnavailable' : '' : 'mediaAvailable'}`}> 
+                        <Fade key={idx} in={true} xs={12} sx={{  width:'100%', p:0, m:0}}>
+                            <Grid item sx={{width:'100%', p:0,pl:2, m:0}} className={`playlist_bloc ${(d.source == 'spotify') ? !isSpotifyAvailable ? 'mediaUnavailable' : '' : 'mediaAvailable'}`}> 
                                 
-                                <ListItemButton sx={{ alignItems:'flex-start',position:'relative',width:'100%', pt:1,pl:0,margin:0, backgroundColor:'var(--main-bg-color)',borderBottom: '2px solid #3e464d', color:'var(--white)', "&.Mui-selected": {
+                                <ListItemButton sx={{ alignItems:'flex-start',position:'relative',width:'100%', pt:1,pl:0,m:0, backgroundColor:'var(--main-bg-color)',borderBottom: '2px solid #3e464d', color:'var(--white)', "&.Mui-selected": {
                                         backgroundColor: "#262626",
                                         transition: 'all 0.3s ease-out'
                                         },
@@ -67,7 +67,7 @@ const RoomPlaylist = ({isSpotifyAvailable, isAdminView, roomPlaylist, roomIdActu
                                         backgroundColor: "#262626",
                                         transition: 'all 0.3s ease-out'
                                         } }} key={'playlist_'+idx} xs={12} selected={roomIdActuallyPlaying === idx}>
-                                    <ListItemIcon sx={{ pl:2,paddingTop:'5px',color:'var(--white)', zIndex:2, display:'flex', flexDirection:'column'}}>        
+                                    <ListItemIcon sx={{ pl:2,pt:'5px',color:'var(--white)', zIndex:2, display:'flex', flexDirection:'column'}}>        
                                             {idx !== idDisplaying && idx !== roomIdActuallyPlaying && <ExpandMoreIcon sx={{display:'inline-block'}}  onClick={e => handleChangeIdActuallyDisplaying(idx)}/>}
                                             {idx === idDisplaying && idx !== roomIdActuallyPlaying && <ExpandLessIcon sx={{display:'inline-block'}} onClick={e => handleChangeIdActuallyDisplaying(-1)}  />}
                                             {(idx === idDisplaying) && (idx !== roomIdActuallyPlaying) && isAdminView && <PlayCircleOutlineIcon sx={{mt:1}} onClick={e => handleChangeIdActuallyPlayingInComp(idx)}  />}

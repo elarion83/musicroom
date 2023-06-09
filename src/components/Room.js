@@ -434,7 +434,7 @@ const Room = ({ roomId }) => {
                                         }}
                                     />}
                                 {!isActuallyAdmin && room.playlistUrls[room.playing].source == 'spotify' &&
-                                    <Alert severity="warning" sx={{margin:2, border:'1px solid #F27C24'}}> Le lecteur Spotify n'est visible que par l'host de la room. <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} ><b>Ajoute quelque chose dans la playlist en attendant !</b></a></Alert>
+                                    <Alert severity="warning" sx={{m:2, border:'1px solid #F27C24'}}> Le lecteur Spotify n'est visible que par l'host de la room. <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} ><b>Ajoute quelque chose dans la playlist en attendant !</b></a></Alert>
                                 }
                                 {isActuallyAdmin && room.playlistUrls[room.playing].source != 'spotify'  && <ReactPlayer sx={{ padding:0}}
                                     ref={playerRef}
@@ -569,13 +569,13 @@ const Room = ({ roomId }) => {
                     </Box>
                 }
                 <Toolbar xs={12} sx={{ bgcolor: '#262626',borderBottom: '2px solid #3e464d', minHeight: '45px !important', fontFamily: 'Monospace', pl:'17px', pr:'25 px' }}>
-                <Typography component="div" sx={{ flexGrow: 1, textTransform:'uppercase', fontSize:'12px', color:'white' }}> Playlist <b><span> ({ room.playlistUrls && room.playlistUrls.length } médias en playlist)</span></b>
-                </Typography>
+                    <Typography component="div" sx={{ flexGrow: 1, textTransform:'uppercase', fontSize:'12px', color:'white' }}> Playlist <b><span> ({ room.playlistUrls && room.playlistUrls.length } médias en playlist)</span></b>
+                    </Typography>
                 </Toolbar>
                 { room.playlistEmpty && 
-                    <Alert severity="success" sx={{margin:2, border:'1px solid #F27C24'}}> Bienvenue dans la room ! <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} ><b>Ajoute quelque chose dans la playlist !</b></a></Alert>
+                    <Alert severity="success" sx={{m:2, border:'1px solid #F27C24'}}> Bienvenue dans la room ! <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} ><b>Ajoute quelque chose dans la playlist !</b></a></Alert>
                 }
-                {typeof(room.playlistUrls) !== 'undefined' && room.playlistUrls && room.playlistUrls.length > 0 && <Box sx={{ padding:"0em",marginBottom:0, paddingLeft:0}}>
+                {typeof(room.playlistUrls) !== 'undefined' && room.playlistUrls && room.playlistUrls.length > 0 && <Box sx={{ p:0,mb:0}}>
                     <RoomPlaylist isSpotifyAvailable={room.roomParams.spotifyIsLinked} isAdminView={isActuallyAdmin} roomPlaylist={room.playlistUrls} roomIdActuallyPlaying={room.playing} userVoteArray={localData.currentUserVotes} handleChangeIsActuallyPlaying={handlePlay} handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying}  handleVoteChange={handleVoteChange} roomIsActuallyPlaying={room.actuallyPlaying} roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayed} />
                 </Box>}
             </div>
@@ -588,39 +588,36 @@ const Room = ({ roomId }) => {
                     className='modal_full_screen_close_left'
                     onClick={(e) => setOpenAddToPlaylistModal(false)}
                     aria-label="close"
-                    sx={{bgcolor:'#131416', mr:2,borderRadius:0}}
+                    sx={{bgcolor:'#131416', mr:1,borderRadius:0}}
                     xs={12}
                 >
                     <ArrowBackIosNewIcon sx={{fontSize:'2em', color:'var(--main-color)', fill:'var(--main-color)'}} className='animate__animated animate__fadeInLeft animate__fast' />
                 </Button >
-                {room.playlistEmpty && <Box sx={{display:'flex',flexDirection:'column', padding:'1em'}}>
-                    <Typography component="span"> Playlist vide </Typography>
-                    <Typography sx={{color:'#d5cdcd', display:'block', width:'100%',ml:0, fontSize: '12px', textTransform:'uppercase' }} > Room n° { roomId }</Typography>
-                </Box>}
-                {typeof(room.playlistUrls) !== 'undefined' && loaded && !room.playlistEmpty && <Box sx={{display:'flex',flexDirection:'column',padding:'1em'}}>
-                    <Typography sx={{color:'#d5cdcd', display:'block', width:'100%',ml:0, fontSize: '12px', textTransform:'uppercase' }} > Room n° { roomId }</Typography>
-                    {room.playlistEmpty && 
-                        <Typography component="span" sx={{color:'#d5cdcd', display:'block', width:'100%',ml:0, fontSize: '10px', textTransform:'uppercase' }}>  Playlist vide 
-                        </Typography>
-                    }
-                    <Typography sx={{color:'#d5cdcd', display:'flex',gap:'10px',flexDirection:'row', alignItems:'center', width:'100%',ml:1,mt:1, fontSize: '10px', textTransform:'uppercase' }} >
-                        <SoundWave waveNumber={7} isPlayingOrNo={room.actuallyPlaying}  /> 
-                        <span >
-                            { room.playlistUrls[room.playing].title ? room.playlistUrls[room.playing].title : room.playlistUrls[room.playing].url.substring(0,25)+'..' }
+                {room.playlistEmpty && 
+                    <Box sx={{display:'flex',flexDirection:'column', padding:'1em'}}>
+                        <Typography component="span"> Playlist vide </Typography>
+                        <Typography sx={{color:'var(--white)', display:'block', width:'100%',ml:0, fontSize: '12px', textTransform:'uppercase' }} > Room n° { roomId }</Typography>
+                    </Box>}
+                {typeof(room.playlistUrls) !== 'undefined' && loaded && !room.playlistEmpty && 
+                    <Box sx={{display:'flex',flexDirection:'column',p:'8px'}}>
+                        <Typography sx={{color:'var(--white)', display:'block', width:'100%',ml:0, pl:0,fontSize: '12px', textTransform:'uppercase' }} > Room n° { roomId }</Typography>
+
+                        <Typography sx={{color:'var(--white)', display:'flex',gap:'10px',flexDirection:'row', alignItems:'center', width:'100%',ml:1,mt:1, fontSize: '10px', textTransform:'uppercase' }} >
+                            <SoundWave waveNumber={7} isPlayingOrNo={room.actuallyPlaying}  /> 
+                            <span >
+                                { room.playlistUrls[room.playing].title ? room.playlistUrls[room.playing].title : room.playlistUrls[room.playing].url.substring(0,25)+'..' }
                             </span>
-                    </Typography>
-                </Box>}
+                        </Typography>
+                    </Box>}
             </Grid>
             {OpenAddToPlaylistModal && <RoomModalAddMedia roomId={roomId} spotifyTokenProps={room.roomParams.spotifyToken} handleChangeSpotifyToken={handleChangeSpotifyToken} validatedObjectToAdd={handleAddValidatedObjectToPlaylist} /> }
-        </Dialog>
-        <Dialog onClose={(e) => setOpenInvitePeopleToRoomModal(false)} open={OpenInvitePeopleToRoomModal}>
-            <ModalShareRoom roomUrl={ localData.domain +'/?rid='+roomId} />
         </Dialog>
         
         {loaded && room.roomParams && <Dialog onClose={(e) => setOpenRoomParamModal(false)} open={openRoomParamModal}>
             <ModalRoomParams handleDisconnectFromSpotifyModal={setOpenForceDisconnectSpotifyModal} roomParams={room.roomParams} />
         </Dialog>} 
 
+        <ModalShareRoom open={OpenInvitePeopleToRoomModal} changeOpen={setOpenInvitePeopleToRoomModal} roomUrl={ localData.domain +'/?rid='+roomId} />
         <ModalLeaveRoom open={openLeaveRoomModal} changeOpen={setOpenLeaveRoomModal} handleQuitRoom={handleQuitRoom} />
         <ModalForceSpotifyDisconnect open={openForceDisconnectSpotifyModal} changeOpen={setOpenForceDisconnectSpotifyModal} handleDisconnectSpotify={disconnectSpotify} />
 
