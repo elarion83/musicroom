@@ -13,6 +13,7 @@
     <title>Music Room</title>
     <style>
       @import 'css/var.css';
+      @import 'css/globalStyle.css';
 
       @import 'css/animations.css';
 
@@ -29,24 +30,12 @@
         position: sticky;
         top: 20px;
       }
-      body {
-        font-family: 'roboto';
-      }
       
       .votebuttons > button {
         padding: 2px !important;
         min-width: 50px;
       }
 
-      #root {
-        background:var(--main-bg-color);
-        height: 100vh;
-        width: 100vw;
-        background-image:url('img/textura.png');
-        background-size: cover;
-        background-position: 50% 50%;
-        padding-top: 0vw;
-      }
 
         #root > div {
             overflow-y: scroll;
@@ -80,16 +69,7 @@
         height: auto !important;
       }
 
-      h1,h2,h3,h4,h5,h6,span {
-        color: var(--main-color) !important;
-      }
-
-      .main_bg_color, .MuiInputAdornment-root {
-        background-color: var(--main-color) !important;
-      }
-      .main_bg_color:hover {
-        background-color: #786b4d !important;
-      }
+     
       .MuiLinearProgress-root {
         background-color: #786b4d !important;
       }

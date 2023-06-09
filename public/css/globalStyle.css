@@ -1,0 +1,33 @@
+
+#root {
+    background:var(--main-bg-color);
+    height: 100vh;
+    width: 100vw;
+    background-image:url('img/textura.png');
+    background-size: cover;
+    background-position: 50% 50%;
+    padding-top: 0vw;
+}
+
+.flexRowCenterH {
+  display: flex;
+  flex-direction: revert;
+  align-items: center;
+}
+
+.hidden {
+  display: none;
+  opacity: 0;
+}
+
+h1,h2,h3,h4,h5,h6,span {
+    color: var(--main-color) !important;
+    font-family: roboto, sans-serif !important;
+}
+
+.main_bg_color, .MuiInputAdornment-root {
+    background-color: var(--main-color) !important;
+}
+.main_bg_color:hover {
+    background-color: #786b4d !important;
+}

@@ -18,7 +18,6 @@ import Badge from '@mui/material/Badge';
 
 const RoomTopBar = ({localData, roomId, roomAdmin, isLinkedToSpotify }) => {
     
-
     const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
 
     function handleClickMenu(event) {

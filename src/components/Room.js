@@ -47,7 +47,7 @@ import ModalLeaveRoom from './rooms/modalsOrDialogs/ModalLeaveRoom';
 import ModalRoomParams from './rooms/modalsOrDialogs/ModalRoomParams';
 import ModalShareRoom from './rooms/modalsOrDialogs/ModalShareRoom';
 
-import RoomTopBar from "./general_template/RoomTopBar";
+import RoomTopBar from "./rooms/RoomTopBar";
 import RoomPlaylist from "./rooms/RoomPlaylist";
 import BottomInteractions from "./rooms/BottomInteractions";
 import SoundWave from "./rooms/SoundWave";
@@ -129,7 +129,7 @@ const Room = ({ roomId }) => {
 	};
 
     useKeypress([' '], () => {
-        if(room) {
+        if(room && !OpenAddToPlaylistModal) {
             handlePlay(!room.actuallyPlaying);
         }
     });
@@ -194,8 +194,6 @@ const Room = ({ roomId }) => {
         setOpenForceDisconnectSpotifyModal(false);
     }
 
-
-
     async function handleNonAdminPlay() {
     }
 
@@ -253,7 +251,6 @@ const Room = ({ roomId }) => {
     function handleChangeActuallyPlaying(numberToPlay) {
         if(room.playlistUrls[numberToPlay]) {
             if(isActuallyAdmin) {
-                
                 if(room.playlistUrls[numberToPlay].source == 'spotify' && !room.roomParams.spotifyIsLinked) {
                     handleChangeActuallyPlaying(numberToPlay+1);
                     return
@@ -275,6 +272,7 @@ const Room = ({ roomId }) => {
     }
 
     function handleFastForward(percentagePlayed, room) {
+//        setRoom({playing:false}, {merge:true});
    //     room.mediaActuallyPlayingAlreadyPlayed = percentagePlayed;
   //      setPercentagePlayed(room.mediaActuallyPlayingAlreadyPlayed);
     }
@@ -300,10 +298,6 @@ const Room = ({ roomId }) => {
             window.location.reload(false);
         } 
         window.location.href = "/";
-    }
-
-    function handleFullScreen() {
-        //findDOMNode(playerRef).requestFullscreen();
     }
 
 // NEW FUNCTIONS FROM CHILD COMP
@@ -337,6 +331,10 @@ const Room = ({ roomId }) => {
                 localStorage.setItem("MusicRoom_UserInfoVotes",  JSON.stringify(localData.currentUserVotes));
             }
         }
+    }
+
+    function handleChangeRoomParams(newParams) {
+        roomRef.set({roomParams: newParams}, { merge: true });
     }
 
     function handleDisconnectFromSpotify(type) {
@@ -456,7 +454,7 @@ const Room = ({ roomId }) => {
                                     light={false}
                                     config={{
                                         youtube: {
-                                            playerVars: { showinfo: 0, preload:1 }
+                                            playerVars: { showinfo: 0, preload:0 }
                                         }
                                     }}
                                 />}
@@ -613,10 +611,7 @@ const Room = ({ roomId }) => {
             {OpenAddToPlaylistModal && <RoomModalAddMedia roomId={roomId} spotifyTokenProps={room.roomParams.spotifyToken} handleChangeSpotifyToken={handleChangeSpotifyToken} validatedObjectToAdd={handleAddValidatedObjectToPlaylist} /> }
         </Dialog>
         
-        {loaded && room.roomParams && <Dialog onClose={(e) => setOpenRoomParamModal(false)} open={openRoomParamModal}>
-            <ModalRoomParams handleDisconnectFromSpotifyModal={setOpenForceDisconnectSpotifyModal} roomParams={room.roomParams} />
-        </Dialog>} 
-
+        {loaded && room.roomParams && <ModalRoomParams open={openRoomParamModal} changeOpen={setOpenRoomParamModal} handleChangeRoomParams={handleChangeRoomParams} handleDisconnectFromSpotifyModal={setOpenForceDisconnectSpotifyModal} roomParams={room.roomParams} />} 
         <ModalShareRoom open={OpenInvitePeopleToRoomModal} changeOpen={setOpenInvitePeopleToRoomModal} roomUrl={ localData.domain +'/?rid='+roomId} />
         <ModalLeaveRoom open={openLeaveRoomModal} changeOpen={setOpenLeaveRoomModal} handleQuitRoom={handleQuitRoom} />
         <ModalForceSpotifyDisconnect open={openForceDisconnectSpotifyModal} changeOpen={setOpenForceDisconnectSpotifyModal} handleDisconnectSpotify={disconnectSpotify} />

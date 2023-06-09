@@ -1,19 +1,26 @@
 import Button from '@mui/material/Button';
 import React from "react";
 
-import { Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/material";
+import { Dialog, DialogActions, DialogContent, DialogContentText, Typography } from "@mui/material";
 import DialogTitle from '@mui/material/DialogTitle';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 const ModalForceSpotifyDisconnect = ({ open , changeOpen,handleQuitRoom }) => {
 
     return(
         <Dialog open={open} keepMounted onClose={(e) => changeOpen(false)} > 
-            <DialogTitle id="alert-dialog-title">
-                Quitter la room ?
-            </DialogTitle>
-            <DialogContent>
-                <DialogContentText >
-                Vous êtes sur le point de quitter la room pour retourner à l'accueil.
+        
+            <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
+                <ExitToAppIcon fontSize="small" sx={{mr:1}} /> Quitter la room ? 
+            </DialogTitle>  
+            <DialogContent dividers>
+                <DialogContentText>
+                    <Typography>
+                        Vous êtes sur le point de quitter la room pour retourner à l'accueil.
+                    </Typography>
+                    <Typography sx={{mt:3}}>
+                        Êtes-vous sûrs ?
+                    </Typography>
                 </DialogContentText>
             </DialogContent>
             <DialogActions>

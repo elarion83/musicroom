@@ -17,20 +17,23 @@ import { Icon } from '@iconify/react';
 const BottomInteractions = ({ roomParams,userCanMakeInteraction, createNewRoomInteraction, setOpenAddToPlaylistModal, handleOpenRoomParamModal,handleOpenShareModal,handleOpenLeaveRoomModal, OpenAddToPlaylistModal, checkRoomExist, checkInterractionLength }) => {
 
     return(
-        <Grid className='room_bottom_interactions' item xs={3}>
-            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s animate__faster' title={!userCanMakeInteraction ? "Toutes les "+  (roomParams.interactionFrequence/1000) +" secondes": ''}>  
+        <Grid className='room_bottom_interactions'>
+            <Tooltip className={!roomParams.interactionsAllowed ? 'hidden' : 'animate__animated animate__fadeInUp animate__delay-2s animate__faster'}
+                title={!userCanMakeInteraction ? "Toutes les "+  (roomParams.interactionFrequence/1000) +" secondes": ''}>  
                 <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mr:1, ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('laugh') : ''}>
                     <EmojiEmotionsIcon fontSize="small" sx={{color:'var(--white)'}} />
                     {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
                 </Fab>
             </Tooltip>
-            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s animate__fast' title={!userCanMakeInteraction ? "Toutes les "+  (roomParams.interactionFrequence/1000) +" secondes": ''}>  
+            <Tooltip className={!roomParams.interactionsAllowed ? 'hidden' : 'animate__animated animate__fadeInUp animate__delay-2s animate__fast'}
+                title={!userCanMakeInteraction ? "Toutes les "+  (roomParams.interactionFrequence/1000) +" secondes": ''}>  
                 <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{mr:1, ...(userCanMakeInteraction && {bgcolor: '#ff9c22 !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
                     <CelebrationIcon fontSize="small" sx={{color:'var(--white)'}} />
                     {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
                 </Fab>
             </Tooltip>
-            <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s' title={!userCanMakeInteraction ? "Toutes les "+  (roomParams.interactionFrequence/1000) +" secondes": ''}>  
+            <Tooltip className={!roomParams.interactionsAllowed ? 'hidden' : 'animate__animated animate__fadeInUp animate__delay-2s '}
+                title={!userCanMakeInteraction ? "Toutes les "+  (roomParams.interactionFrequence/1000) +" secondes": ''}>  
                 <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mr:0, ...(userCanMakeInteraction && {bgcolor: 'var(--red-2) !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('heart') : ''}>
                     <FavoriteIcon fontSize="small" sx={{color:'var(--white)'}} />
                     {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}

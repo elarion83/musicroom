@@ -13,6 +13,11 @@
     background-color: 'greylight';
 }
 
+.hidden.room_small_button_interactions {
+    height: 0;
+    width: 0;
+}
+
 .addMediaIcon {
     display:inline;
     color:var(--main-color-darker) ;
