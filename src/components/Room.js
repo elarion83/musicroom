@@ -18,7 +18,7 @@ import 'animate.css';
 import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
-
+import { Icon } from '@iconify/react';
 
 import Fab from '@mui/material/Fab';
 import Stack from '@mui/material/Stack';
@@ -51,6 +51,7 @@ import RoomTopBar from "./rooms/RoomTopBar";
 import RoomPlaylist from "./rooms/RoomPlaylist";
 import BottomInteractions from "./rooms/BottomInteractions";
 import SoundWave from "./rooms/SoundWave";
+import { AlertTitle } from "@mui/material";
 
 const Room = ({ roomId }) => {
 
@@ -432,7 +433,11 @@ const Room = ({ roomId }) => {
                                         }}
                                     />}
                                 {!isActuallyAdmin && room.playlistUrls[room.playing].source == 'spotify' &&
-                                    <Alert severity="warning" sx={{m:2, border:'1px solid #F27C24'}}> Le lecteur Spotify n'est visible que par l'host de la room. <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} ><b>Ajoute quelque chose dans la playlist en attendant !</b></a></Alert>
+                                    <Alert severity="warning" sx={{m:2, border:'1px solid #F27C24'}}> Le lecteur Spotify n'est visible que par l'host de la room. 
+                                        <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} sx={{color:'var(--main-color-darker)'}}>
+                                            <b>Ajoute quelque chose dans la playlist en attendant !</b>
+                                        </a>
+                                    </Alert>
                                 }
                                 {isActuallyAdmin && room.playlistUrls[room.playing].source != 'spotify'  && <ReactPlayer sx={{ padding:0}}
                                     ref={playerRef}
@@ -571,7 +576,15 @@ const Room = ({ roomId }) => {
                     </Typography>
                 </Toolbar>
                 { room.playlistEmpty && 
-                    <Alert severity="success" sx={{m:2, border:'1px solid #F27C24'}}> Bienvenue dans la room ! <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} ><b>Ajoute quelque chose dans la playlist !</b></a></Alert>
+                    <>
+                        <Alert severity="success" variant="filled" icon={<Icon icon="bx:happy-beaming"/>} sx={{m:2, border:'1px solid var(--green-2)'}}> 
+                            <AlertTitle sx={{mb:0}}>Bienvenue dans la room ! </AlertTitle> 
+                        </Alert>
+                        <Alert severity="warning" variant="filled" icon={<Icon icon="material-symbols:playlist-remove-rounded" width="35" />} sx={{m:2, border:'1px solid #F27C24',cursor:'pointer'}} onClick={(e) => setOpenAddToPlaylistModal(true)} >
+                            <AlertTitle>La Playlist est vide !</AlertTitle>
+                            <p style={{color:'var(--white)', margin:0}}>Clique ici pour ajouter quelque chose</p>
+                        </Alert>
+                    </>
                 }
                 {typeof(room.playlistUrls) !== 'undefined' && room.playlistUrls && room.playlistUrls.length > 0 && <Box sx={{ p:0,mb:0}}>
                     <RoomPlaylist isSpotifyAvailable={room.roomParams.spotifyIsLinked} isAdminView={isActuallyAdmin} roomPlaylist={room.playlistUrls} roomIdActuallyPlaying={room.playing} userVoteArray={localData.currentUserVotes} handleChangeIsActuallyPlaying={handlePlay} handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying}  handleVoteChange={handleVoteChange} roomIsActuallyPlaying={room.actuallyPlaying} roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayed} />
