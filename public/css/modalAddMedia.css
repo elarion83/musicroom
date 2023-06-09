@@ -1,0 +1,28 @@
+.modal_full_screen_close_left {
+    padding:'25px';
+}
+
+.input_big.typed {
+    padding-left: 1em;
+}
+
+.input_big.typed::placeholder {
+    color:var(--main-color) !important;
+}
+
+.autowriter_container {
+    display: flex;
+    flex-direction: row;
+}
+
+.autowriter_container > span{
+    flex-grow: 1 !important;
+}
+
+      
+.typed-cursor {
+    opacity: 1;
+    animation: typedjsBlink 0.7s infinite;
+    -webkit-animation: typedjsBlink 0.7s infinite;
+    animation: typedjsBlink 0.7s infinite;
+}

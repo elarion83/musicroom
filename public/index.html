@@ -22,19 +22,13 @@
       @import 'css/spotifyPlayer.css';
 
       @import 'css/roomBottomSection.css';
-
-      .modal_share_room .makeStyles-container-1 {
-        padding: 0 !important;
-      }
+      @import 'css/modalShareRoom.css';
+      @import 'css/modalAddMedia.css';
 
       .player_button_container {
         position: sticky;
         top: 20px;
       }
-      .modal_share_room .makeStyles-copyContainer-5 {
-        display: none !important;
-      }
-
       body {
         font-family: 'roboto';
       }
@@ -107,10 +101,6 @@
         border:none !important;
       }
 
-      .modal_full_screen_close_left {
-        padding:'25px';
-      }
-
       .black_style_dialog .MuiPaper-root {
         background:var(--main-bg-color);
         background-image:url('img/textura.png');
@@ -125,22 +115,6 @@
         background-color:rgba(255, 255, 255, 0.1) !important;
       }
 
-      .input_big.typed {
-        padding-left: 1em;
-      }
-      
-      .input_big.typed::placeholder {
-        color:var(--main-color) !important;
-      }
-
-      .autowriter_container {
-        display: flex;
-        flex-direction: row;
-      }
-
-      .autowriter_container > span{
-        flex-grow: 1 !important;
-      }
 
       @media (max-width: 500px) { 
         
@@ -167,20 +141,6 @@
         }
       }
 
-      
-      .typed-cursor {
-          opacity: 1;
-          animation: typedjsBlink 0.7s infinite;
-          -webkit-animation: typedjsBlink 0.7s infinite;
-          animation: typedjsBlink 0.7s infinite;
-      }
-
-     
-      
-      .animate__infinite:hover {
-        animation: none;
-      }
-
       .interactionImageContainer {
         position: fixed;
         top: 70vh;
@@ -193,32 +153,12 @@
       }
 
 
-      .room_bottom_interactions {
-        position: fixed;
-        display: flex;
-        justify-content: center;
-        bottom: 30px;
-        width: 100%;
-        z-index: 1300;
-        align-items: flex-end;
-      }
-
       .icon_overlay {
         position: absolute;
         width: 70%;
         opacity: .6;
         transform: rotate(0deg);
         animation : rotate 4s ease-in-out infinite;
-      }
-
-
-      .room_small_button_interactions {
-        justify-content: 'center';
-        background-color: 'greylight';
-      }
-
-      .main_add_media_button {
-        animation : rotate 6s ease infinite;
       }
 
       .fullscreen {    

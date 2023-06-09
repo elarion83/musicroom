@@ -1,3 +1,18 @@
+.room_bottom_interactions {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    bottom: 15px;
+    width: 100%;
+    z-index: 1300;
+    align-items: flex-end;
+}
+
+.room_small_button_interactions {
+    justify-content: 'center';
+    background-color: 'greylight';
+}
+
 .addMediaIcon {
     display:inline;
     color:var(--main-color-darker) ;
