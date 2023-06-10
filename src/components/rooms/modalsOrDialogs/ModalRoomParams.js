@@ -11,7 +11,7 @@ import { Button, Dialog, DialogContent, FormControlLabel, FormGroup, Switch } fr
 import Alert from '@mui/material/Alert';
 import Tooltip from '@mui/material/Tooltip';
 
-const ModalRoomParams = ({ open, changeOpen, roomParams , handleDisconnectFromSpotifyModal, handleChangeRoomParams}) => {
+const ModalRoomParams = ({ adminView, open, changeOpen, roomParams , handleDisconnectFromSpotifyModal, handleChangeRoomParams}) => {
 
     const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
 
@@ -72,6 +72,7 @@ const ModalRoomParams = ({ open, changeOpen, roomParams , handleDisconnectFromSp
                         sx={{mt:1}}
                         control={
                             <Switch checked={roomParams.isPlayingLooping} onChange={handleChangeIsPlayingLooping} 
+                            disabled={adminView? false:true}
                             name="switchIsPlayingLooping" />
                         }
                         label="Lire la playlist en boucle"
@@ -80,6 +81,7 @@ const ModalRoomParams = ({ open, changeOpen, roomParams , handleDisconnectFromSp
                     <FormControlLabel
                         control={
                             <Switch checked={roomParams.interactionsAllowed} onChange={handleChangeIsInterractionsAllowed} 
+                            disabled={adminView? false:true}
                             name="switchInteractionsAllowed" />
                         }
                         label="Autoriser les interactions"
@@ -88,6 +90,7 @@ const ModalRoomParams = ({ open, changeOpen, roomParams , handleDisconnectFromSp
                     <FormControlLabel
                         control={
                             <Switch checked={roomParams.allowEverybodyToAddMedia} onChange={handleChangeAllowEverybodyToAddMedia} 
+                            disabled={adminView? false:true}
                             name="switchAllowEverybodyToAddMedia" />
                         }
                         label="Tout le monde peut ajouter des médias"
@@ -96,6 +99,7 @@ const ModalRoomParams = ({ open, changeOpen, roomParams , handleDisconnectFromSp
                     <FormControlLabel
                         control={
                             <Switch checked={roomParams.isOnInvitation} onChange={handleChangeIsOnInvitation} 
+                            disabled={adminView? false:true}
                             name="switchIsOnInvitation" />
                         }
                         label="Room accessible sur invitation uniquement"
