@@ -212,7 +212,7 @@ const Room = ({ roomId }) => {
     async function createNewRoomInteraction(type) {
         
 		getRoomData(roomId); 
-        room.interactionsArray.push({timestamp:Date.now(), type:type, createdBy: localData.currentUserInfo[0]});
+        room.interactionsArray.push({timestamp:Date.now(), type:type, createdBy: localStorage.getItem("MusicRoom_UserInfoPseudo")});
         roomRef.update({interactionsArray: room.interactionsArray});
 
         setUserCanMakeInteraction(false);
