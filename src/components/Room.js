@@ -539,7 +539,7 @@ const Room = ({ roomId }) => {
                                             }
                                         </Grid>
                                     }
-                                    {!isActuallyAdmin && 
+                                    {isActuallyAdmin && 
                                         <Grid item sm={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:2, mb: 1.5 }}>
                                             {room.playlistUrls[room.playing].source !== 'spotify' && !isFullScreen &&
                                                 <IconButton onClick={e => setIsFullScreen(true)} >
