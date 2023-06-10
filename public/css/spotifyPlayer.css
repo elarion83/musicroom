@@ -39,9 +39,9 @@ display: block;
     text-align: center;
 }
 
-@media (min-width: 500px) { 
+@media (min-width: 800px) { 
     .spotify_header .player_button_container>div {
         margin: 0 auto !important;
-        max-width: 20%;
+        max-width: 70%;
     }
 }

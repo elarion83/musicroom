@@ -2,8 +2,11 @@
     padding:'25px';
 }
 
-.input_big.typed {
+.input_big.typed, 
+.input_big.typed:focus,
+.input_big.typed:focus-visible {
     padding-left: 1em;
+    border:2px solid var(--main-color);
 }
 
 .input_big.typed::placeholder {

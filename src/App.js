@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Room from './components/Room';
-import UserTopBar from './components/general_template/userTopBar';
+import UserTopBar from './components/generalsTemplates/userTopBar';
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -16,14 +16,12 @@ import AwesomeSlider from 'react-awesome-slider';
 import withAutoplay from 'react-awesome-slider/dist/autoplay';
 import 'react-awesome-slider/dist/styles.css';
 
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import LoginModal from './components/generalsTemplates/modals/LoginModal';
 
 import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
+import { Icon } from "@iconify/react";
 
 function App() {
   const [roomId, setRoomId] = useState(localStorage.getItem("MusicRoom_RoomId"));
@@ -55,12 +53,10 @@ function App() {
     window.scrollTo(0, 0);
   }
 
-  function checkForNewPseudo() {
-    if(userInfoPseudoInput.length > 1) {
-      setUserInfoPseudo(userInfoPseudoInput);
-      localStorage.setItem("MusicRoom_UserInfoPseudo", userInfoPseudoInput);
-      window.scrollTo(0, 0);
-    }
+  function logIn(newPseudo) {
+    setUserInfoPseudo(newPseudo);
+    localStorage.setItem("MusicRoom_UserInfoPseudo", newPseudo);
+    window.scrollTo(0, 0);
   }
 
   return (
@@ -142,40 +138,12 @@ function App() {
         </Box>
         }
         {roomId && <Room className='room_bloc' roomId={roomId}></Room>}
-        {(!userInfoPseudo || userInfoPseudo === '' || userInfoPseudo.length === 0 || userInfoPseudo == 'null') && 
-        <Dialog open={true}>
-            <DialogTitle>Hey ! Choisis toi un pseudo ! </DialogTitle>  
-            <DialogContent>
-              <DialogContentText>
-                <TextField
-                    id="UserChoosePseudoInput"
-                    type="text"
-                    onKeyPress={(ev) => {
-                      if (ev.key === 'Enter')  { checkForNewPseudo()}
-                    }}
-                    label="Créez votre pseudo !"
-                    helperText="Bien qu'anonyme, il est nécessaire d'avoir un pseudo pour utiliser les rooms!"
-                    value={userInfoPseudoInput}
-                    onChange={e => setUserInfoPseudoInput(e.target.value)}
-                    sx={{ width: '100%', paddingRight:'0', "& .MuiOutlinedInput-root": {
-                        paddingRight: 0
-                    } }}
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment  sx={{
-                            padding: "27.5px 14px",
-                            backgroundColor: "#23282d",
-                            color:'var(--white)',
-                            cursor:'pointer',
-                            }} position="end" onClick={e=> checkForNewPseudo()}>
-                            <DoubleArrowIcon  />
-                            </InputAdornment>
-                        ),
-                    }}
-                />
-              </DialogContentText>
-            </DialogContent>
-        </Dialog>}
+
+        {(!userInfoPseudo || userInfoPseudo === '' || userInfoPseudo.length === 0 || userInfoPseudo == 'null') && <LoginModal 
+        open={true} 
+        handleSetPseudo={logIn} 
+        />}
+
       </Container>
     </>
   );

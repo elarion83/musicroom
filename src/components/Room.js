@@ -48,6 +48,7 @@ import BottomInteractions from "./rooms/BottomInteractions";
 import RoomPlaylist from "./rooms/RoomPlaylist";
 import RoomTopBar from "./rooms/RoomTopBar";
 import SoundWave from "./rooms/SoundWave";
+import ControlButtons from "./rooms/playerSection/ControlButtons";
 
 const Room = ({ roomId }) => {
 
@@ -150,9 +151,6 @@ const Room = ({ roomId }) => {
         
 	}, [roomId]);
     
-	useEffect(() => {
-    }, [scrollPosition]);
-
 	useEffect(() => {
         if(localData.currentUserInfo[0] === room.admin || localData.currentUserInfo === room.admin) {
             setIsActuallyAdmin(true);
@@ -402,14 +400,16 @@ const Room = ({ roomId }) => {
             } 
         }
     }
+
+   
   // transitions
   return (
-    <div className="flex flex-col w-full gap-0 relative " style={{height:'auto'}} >
+    <div className="flex flex-col w-full gap-0 relative " style={{height:'auto'}} > 
         {loaded && room.roomParams !== undefined && <RoomTopBar localData={localData} roomId={roomId} roomAdmin={room.admin} isLinkedToSpotify={room.roomParams.spotifyIsLinked}/>}
         <Container maxWidth={false} sx={{ padding: '0 !important'}} >
-            {loaded && room.playlistUrls && <div> 
+            {loaded && room.playlistUrls && <div>
                 {!room.playlistEmpty && room.playlistUrls.length > 0 && room.playing !== null && 
-                    <Box sx={{bgcolor:'#303030',borderBottom: '2px solid var(--border-color)', padding:"0px 0em"}}>
+                    <Box sx={{bgcolor:'#303030',borderBottom: '2px solid var(--border-color)', padding:"0px 0em"}}> 
                         <Grid container spacing={0} sx={{ bgcolor:'var(--grey-dark)',}}>
 
                             <Grid item className={isFullScreen ? 'fullscreen' : ''} sm={(room.playlistUrls[room.playing].source === 'spotify') ? 12 : 4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
