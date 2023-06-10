@@ -248,7 +248,7 @@ const RoomModalAddMedia = ({ roomId, validatedObjectToAdd, spotifyTokenProps }) 
                   <Snackbar
                     open={recentlyAdded}
                     autoHideDuration={6000}
-                    sx={{bgcolor:'#2e7d32 !important', borderRadius:'2px'}}
+                    sx={{borderRadius:'2px'}}
                     message={recentlyAddedTitle +" ajouté !"}
                     />
     </Container>

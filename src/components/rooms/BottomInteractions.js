@@ -77,7 +77,7 @@ const BottomInteractions = ({ roomParams,userCanMakeInteraction, createNewRoomIn
             <Snackbar
                 open={((Date.now() - roomParams.spotifyTokenTimestamp) < 8000) && roomParams.spotifyAlreadyHaveBeenLinked}
                 autoHideDuration={8000}
-                sx={{bgcolor:'#2e7d32 !important', borderRadius:'2px'}}
+                sx={{ borderRadius:'2px'}}
                 message={roomParams.spotifyIsLinked ? roomParams.spotifyUserConnected + " a ajouté Spotify a la room !" : "La connexion spotify a expirée"}
                 action = {
                     <Button variant="extended" className='room_small_button_interactions' sx={{mr:1, ...(userCanMakeInteraction && {bgcolor: '#ff9c22 !important'}), ...(!roomParams.spotifyIsLinked && {display:'none'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
