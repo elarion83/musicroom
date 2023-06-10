@@ -4,6 +4,7 @@ import React, { useState } from "react";
 
 import { Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/material";
 import DialogTitle from '@mui/material/DialogTitle';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 const ModalForceSpotifyDisconnect = ({ open, changeOpen, handleDisconnectSpotify }) => {
 
@@ -18,12 +19,12 @@ const ModalForceSpotifyDisconnect = ({ open, changeOpen, handleDisconnectSpotify
 
     return(
         <Dialog open={open} keepMounted onClose={(e) => changeOpen(false)} sx={{zIndex:10000}}> 
-            <DialogTitle id="alert-dialog-title">
-                Forcer la deconnexion de Spotify ?
-            </DialogTitle>
-            <DialogContent>
+            <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
+                <ExitToAppIcon fontSize="small" sx={{mr:1}} />Forcer la deconnexion de Spotify ? 
+            </DialogTitle>  
+            <DialogContent dividers>
                 <DialogContentText >
-                La lecture et la recherche de médias sur Spotify ne sera plus disponible.
+                La lecture et la recherche via Spotify ne sera plus disponible.
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
