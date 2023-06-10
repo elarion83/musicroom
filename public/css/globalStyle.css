@@ -9,11 +9,12 @@
     padding-top: 0vw;
 }
 
-.flexRowCenterH {
-  display: flex;
-  flex-direction: revert;
+.flexRowCenterH, .flexRowCenterHDirectChild>* {
+  display: flex !important;
+  flex-direction: row;
   align-items: center;
 }
+
 
 .hidden {
   display: none;

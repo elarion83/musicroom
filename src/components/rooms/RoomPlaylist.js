@@ -79,7 +79,7 @@ const RoomPlaylist = ({isSpotifyAvailable, isAdminView, roomPlaylist, roomIdActu
 
                                     </ListItemIcon>
                                     <Grid item sx={{display:'block', zIndex:2, pl: 0, pb:0.5, flexGrow:1}}>
-                                        { d.title && <ListItemText onClick={e => (idx === idDisplaying) ? handleChangeIdActuallyDisplaying(-1) : handleChangeIdActuallyDisplaying(idx)} sx={{ pl:0,mb:0, wordBreak: 'break-all'}}>
+                                        { d.title && <ListItemText className="flexRowCenterHDirectChild" onClick={e => (idx === idDisplaying) ? handleChangeIdActuallyDisplaying(-1) : handleChangeIdActuallyDisplaying(idx)} sx={{ pl:0,mb:0, wordBreak: 'break-all'}}>
                                             {d.source === 'spotify' && <Icon style={{display:'inline', marginRight:'0.5em'}} icon="mdi:spotify" />}
                                             {d.source === 'youtube' && <Icon style={{display:'inline', marginRight:'0.5em'}} icon="mdi:youtube" />}
                                             {d.source === 'dailymotion' && <Icon style={{display:'inline', marginRight:'0.5em'}} icon="bxl:dailymotion" />}
@@ -95,7 +95,7 @@ const RoomPlaylist = ({isSpotifyAvailable, isAdminView, roomPlaylist, roomIdActu
                                         
                                         {(idx === idDisplaying  || roomIdActuallyPlaying == idx)  && 
                                             <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, pt:1, fontSize: '10px', textTransform:'uppercase' }}>
-                                                Ajouté par : <b>{ d.addedBy }</b>
+                                                Ajouté par <span>{ d.addedBy }</span>
                                             </Typography>
                                         }
                                         {(idx === idDisplaying || roomIdActuallyPlaying == idx)  && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1, fontSize: '8px', textTransform:'uppercase' }}>
