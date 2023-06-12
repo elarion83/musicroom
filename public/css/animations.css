@@ -40,6 +40,11 @@
 }
 
 
+@keyframes angleRotate {
+  to {
+    --angle: 360deg;
+  }
+}
 
 @keyframes quiet { /* for the soundwave animation */
   25%{

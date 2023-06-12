@@ -6,31 +6,22 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import InputAdornment from '@mui/material/InputAdornment';
-import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import { v4 as uuid } from 'uuid';
-
-import AwesomeSlider from 'react-awesome-slider';
-import withAutoplay from 'react-awesome-slider/dist/autoplay';
-import 'react-awesome-slider/dist/styles.css';
 
 import LoginModal from './components/generalsTemplates/modals/LoginModal';
 
-import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
-import { Icon } from "@iconify/react";
 import JoinRoomModal from "./components/generalsTemplates/modals/JoinRoomModal";
+import Contentslider from "./components/homePage/ContentSlider";
 
 function App() {
   const [roomId, setRoomId] = useState(localStorage.getItem("MusicRoom_RoomId"));
   const [userInfoPseudo, setUserInfoPseudo] = useState(localStorage.getItem("MusicRoom_UserInfoPseudo"));
-  const [joinRoomRoomId, setJoinRoomRoomId] = useState('');
+  
   const [joinRoomModalOpen, setJoinRoomModalOpen] = useState(false);
 
-  const AutoplaySlider = withAutoplay(AwesomeSlider);
 	const queryParameters = new URLSearchParams(window.location.search)
 	const rid = queryParameters.get("rid");
 
@@ -76,35 +67,12 @@ function App() {
         {!roomId && <Box sx={{  paddingBottom:'10px !important', bgcolor:'rgba(48, 48, 48, 0)',height: 'auto', pl:2, pr:2 }} >
           <Container maxWidth="sm">
             <Grid container sx={{display:'flex', justifyContent:'center', pt:3,mb:5}}>
-              <AutoplaySlider
-              fillParent={false}
-                  play={true}
-                  interval={6000}
-                  organicArrows={false}
-                >
-                  <Box> 
-                    <Typography  sx={{pl:2,pr:2}} variant="h5" gutterBottom>
-                      Crée ta room ou rejoins en une !
-                    </Typography>
-                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} >
-                      Tous les membres d'une room peuvent ajouter une musique ou une vidéo à la playlist quand ils le désirent depuis leur téléphone ! 
-                      La playlist est partagée entre tout le monde en temps réel et l'hôte de la room est maître de la soirée !
-                    </Typography>
-                  </Box>
-                  <Box > 
-                    <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
-                      Soyez tous synchronisés !
-                    </Typography>
-                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} >
-                      La playlist est partagée en temps réel entre tous les utilisateurs, vous pouvez ainsi regarder la même chose, en même temps a des endroits différents !
-                    </Typography>
-                  </Box>
-              </AutoplaySlider>
+              <Contentslider />
             </Grid>
             
-            <Button variant="filled" className='main_bg_color' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em'}} 
+            <Button variant="filled" className='main_bg_color buttonBorder' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em'}} 
               onClick={createNewRoom}> Créer une Room </Button> 
-            <Button variant="filled" className='main_bg_color' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em', mb:'2em'}} 
+            <Button variant="filled" className='main_bg_color buttonBorder' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em', mb:'2em'}} 
               onClick={(e) => setJoinRoomModalOpen(true)}> Rejoindre une Room </Button> 
 
             <JoinRoomModal open={joinRoomModalOpen} changeOpen={setJoinRoomModalOpen} handleJoinRoom={handleJoinRoomByRoomId} />
