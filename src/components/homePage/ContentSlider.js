@@ -31,6 +31,14 @@ const Contentslider = ({ }) => {
                     Ajoutez des vidéo Youtube, Dailymotion et Viméo ou bien des musiques Soundcloud ou Spotify via Spotify Premium.
                 </Typography>
             </Box>
+            <Box > 
+                <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
+                    L'outil parfait pour les soirées
+                </Typography>
+                <Typography sx={{pl:2,pr:2, color:'var(--white)'}} >
+                    Créez une room, partagez la à vos amis et laissez les ajouter des sons depuis leur téléphone ! 
+                </Typography>
+            </Box>
         </AutoplaySlider>
     )
 };
