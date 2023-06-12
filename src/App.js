@@ -9,6 +9,7 @@ import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
 import { v4 as uuid } from 'uuid';
 
+import { Icon } from '@iconify/react';
 import LoginModal from './components/generalsTemplates/modals/LoginModal';
 
 import CssBaseline from '@mui/material/CssBaseline';
@@ -71,9 +72,13 @@ function App() {
             </Grid>
             
             <Button variant="filled" className='main_bg_color buttonBorder' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em'}} 
-              onClick={createNewRoom}> Créer une Room </Button> 
+              onClick={createNewRoom}>
+                <Icon icon="carbon:intent-request-create" width="30" style={{marginRight:'20px'}}/> 
+                Créer une Room </Button> 
             <Button variant="filled" className='main_bg_color buttonBorder' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em', mb:'2em'}} 
-              onClick={(e) => setJoinRoomModalOpen(true)}> Rejoindre une Room </Button> 
+              onClick={(e) => setJoinRoomModalOpen(true)}> 
+                <Icon icon="icon-park-outline:connect"  width="30" style={{marginRight:'20px'}}/>
+                Rejoindre une Room </Button> 
 
             <JoinRoomModal open={joinRoomModalOpen} changeOpen={setJoinRoomModalOpen} handleJoinRoom={handleJoinRoomByRoomId} />
            

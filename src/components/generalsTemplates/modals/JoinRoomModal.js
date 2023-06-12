@@ -28,7 +28,7 @@ const JoinRoomModal = ({ open, handleJoinRoom, changeOpen}) => {
     return(
          <Dialog open={open} onClose={(e) => changeOpen(false)} >
             <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
-                <Icon icon='carbon:user-avatar' style={{marginRight:'10px'}} /> Rejoindre une room
+                <Icon icon='icon-park-outline:connect' style={{marginRight:'10px'}} /> Rejoindre une room
             </DialogTitle>  
             <DialogContent dividers>
               <DialogContentText>
@@ -50,6 +50,7 @@ const JoinRoomModal = ({ open, handleJoinRoom, changeOpen}) => {
                         <input inputMode="decimal" {...digits[4]} />
                     </div>
                 </Box>
+                <Typography fontSize="small"> Ex : 5454S, E45FR</Typography>
               </DialogContentText>
             </DialogContent>
             <DialogActions>
