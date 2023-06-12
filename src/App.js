@@ -22,12 +22,13 @@ import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import { Icon } from "@iconify/react";
+import JoinRoomModal from "./components/generalsTemplates/modals/JoinRoomModal";
 
 function App() {
   const [roomId, setRoomId] = useState(localStorage.getItem("MusicRoom_RoomId"));
   const [userInfoPseudo, setUserInfoPseudo] = useState(localStorage.getItem("MusicRoom_UserInfoPseudo"));
   const [joinRoomRoomId, setJoinRoomRoomId] = useState('');
-  const [userInfoPseudoInput, setUserInfoPseudoInput] = useState('');
+  const [joinRoomModalOpen, setJoinRoomModalOpen] = useState(false);
 
   const AutoplaySlider = withAutoplay(AwesomeSlider);
 	const queryParameters = new URLSearchParams(window.location.search)
@@ -48,10 +49,11 @@ function App() {
     window.scrollTo(0, 0);
   }
 
-  function handleJoinRoomByRoomId() {
-    window.location.href = "/?rid="+joinRoomRoomId.replace(/\s/g,'');
+  function handleJoinRoomByRoomId(idRoom) {
+    window.location.href = "/?rid="+idRoom.replace(/\s/g,'');
     window.scrollTo(0, 0);
   }
+  
 
   function logIn(newPseudo) {
     setUserInfoPseudo(newPseudo);
@@ -100,41 +102,14 @@ function App() {
               </AutoplaySlider>
             </Grid>
             
-            <Button variant="filled" className='main_bg_color' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em', mb:'2em'}} onClick={createNewRoom}> Créer une Room </Button> 
-            <Typography sx={{mb:2}}></Typography>
-            <Typography variant="h5" gutterBottom>
-              Rejoindre une room 
-            </Typography>
-            <Typography variant="subtitle1" gutterBottom>
-              Tu as l'ID d'une room qui existe déjà ? <br /> Renseignes-le ici pour la rejoindre !
-            </Typography>
-            <TextField
-                  id="joinRoomIdField"
-                  type="text"
-                  label="ID de la room"
-                  helperText="Insérez l'id d'une room"
-                  value={joinRoomRoomId}
-                  onKeyPress={(ev) => {
-                  if (ev.key === 'Enter')  { handleJoinRoomByRoomId()}
-                  }}
-                  onChange={e => setJoinRoomRoomId(e.target.value)}
-                  sx={{ width: '100%', paddingRight:'0', "& .MuiOutlinedInput-root": {
-                      paddingRight: 0
-                  } }}
-                  InputProps={{
-                      endAdornment: (
-                          <InputAdornment  sx={{
-                          padding: "27.5px 14px",
-                          backgroundColor: "#23282d",
-                          color:'var(--white)',
-                          cursor:'pointer'}} position="end" onClick={e => handleJoinRoomByRoomId()}>
-                          <DoubleArrowIcon />
-                          </InputAdornment>
-                      ),
-                  }}
-              />
+            <Button variant="filled" className='main_bg_color' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em'}} 
+              onClick={createNewRoom}> Créer une Room </Button> 
+            <Button variant="filled" className='main_bg_color' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em', mb:'2em'}} 
+              onClick={(e) => setJoinRoomModalOpen(true)}> Rejoindre une Room </Button> 
+
+            <JoinRoomModal open={joinRoomModalOpen} changeOpen={setJoinRoomModalOpen} handleJoinRoom={handleJoinRoomByRoomId} />
+           
             </Container>
-             
         </Box>
         }
         {roomId && <Room className='room_bloc' roomId={roomId}></Room>}
