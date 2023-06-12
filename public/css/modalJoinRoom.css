@@ -5,15 +5,17 @@
 .joinRoomForm .input {
     position: relative;
     width: 50px;
-    height: 70px;
+    height: auto;
     margin-left: 5px;
     margin-right: 5px;
+    background-color: #3182ce;
+    border-radius: 3px;
 }
 .joinRoomForm .input input{
+    border-radius: 3px;
     border: none;
     text-transform: uppercase;
-    border-radius: 3px;
-    background-color: #3182ce;
+    background-color: transparent;
     font-family: var(--main-typo-family);
     font-size: 3em;
     font-weight: bold;
@@ -30,13 +32,9 @@
 .joinRoomForm .input::after {
     position: absolute;
     content: '';
-    bottom: 13px;
+    bottom: 3px;
     width: 84%;
     height: 2px;
     background-color: var(--white);
     left: 4px;
-}
-
-.joinRoomForm .input:has(input:focus){
-    background-color: red;
 }
