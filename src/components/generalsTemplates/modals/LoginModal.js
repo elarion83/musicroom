@@ -30,7 +30,7 @@ const LoginModal = ({ open, handleSetPseudo}) => {
                     onKeyPress={(ev) => {
                       if (ev.key === 'Enter')  { handleSetPseudoInComp()}
                     }}
-                    label="Entres un pseudo"
+                    label="Entre un pseudo"
                     helperText="Ton pseudo est a titre indicatif et est affiché dans l'interface."
                     value={pseudoInput}
                     onChange={e => setPseudoInput(e.target.value)}

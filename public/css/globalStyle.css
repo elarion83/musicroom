@@ -40,3 +40,13 @@ b, * {
 .buttonBorder {
   border:4px solid #786b4d !important;
 }
+
+.MuiDialogTitle-root.flexRowCenterH {
+    color: var(--white) !important;
+    background: var(--main-color);
+}
+
+.MuiDialogTitle-root.flexRowCenterH .iconify {
+  transform: scale(1.5);
+  margin-left: 0.3em;
+}
