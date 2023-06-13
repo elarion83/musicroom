@@ -35,19 +35,19 @@ const JoinRoomModal = ({ open, handleJoinRoom, changeOpen}) => {
                 <Typography sx={{mb:1}}> ID de la room a rejoindre</Typography>
                 <Box className='joinRoomForm'>
                     <div className='input'>
-                        <input inputMode="decimal" autoFocus {...digits[0]} />
+                        <input  autoFocus {...digits[0]} />
                     </div>
                     <div className='input'>
-                        <input inputMode="decimal" {...digits[1]} />
+                        <input {...digits[1]} />
                     </div>
                     <div className='input'>
-                        <input inputMode="decimal" {...digits[2]} />
+                        <input {...digits[2]} />
                     </div>
                     <div className='input'>
-                        <input inputMode="decimal" {...digits[3]} />
+                        <input {...digits[3]} />
                     </div>
                     <div className='input'>
-                        <input inputMode="decimal" {...digits[4]} />
+                        <input {...digits[4]} />
                     </div>
                 </Box>
                 <Typography fontSize="small"> Ex : 5454S, E45FR</Typography>
