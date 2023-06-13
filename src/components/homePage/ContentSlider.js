@@ -20,7 +20,7 @@ const Contentslider = ({ }) => {
                     Une playlist a plusieurs en temps réel
                 </Typography>
                 <Typography sx={{pl:2,pr:2, color:'var(--white)'}} >
-                    Chaque Room dispose d'une playlist lue en temps réel et modifiable par tous les participants ! Chacun peut voter et interragir avec les autres membres de la room
+                    Chaque Room dispose d'une playlist lue en temps réel et modifiable par tous les participants ! Chacun peut voter et interagir avec les autres membres de la room
                 </Typography>
             </Box>
             <Box > 

@@ -131,16 +131,15 @@ const RoomModalAddMedia = ({ roomId, validatedObjectToAdd, spotifyTokenProps }) 
     return(
             <Container sx={{padding:'3em',pt:0, height:'100vh', zIndex:3}} className="full_width_modal_content_container">
                  <Grid item xs={12} sx={{margin:0,padding:0,display:'flex', justifyContent:'center'}}>
-                    {spotifyTokenProps.length !== 0 && <Alert severity="success" sx={{mt:1,color:'#d5cdcd', border:'1px solid #F27C24'}}>La room est connectée a Spotify</Alert>}
-                    {spotifyTokenProps.length === 0 && 
-                    <Button startIcon={<Icon style={{display:'inline',  marginRight:'0.5em'}} icon="mdi:spotify" />} variant="contained" color="success" sx={{mt:2}} onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
-                    Connecter la room a Spotify
-                    </Button>
+                    {spotifyTokenProps.length === 0 && searchTerm.length === 0 &&
+                        <Button startIcon={<Icon style={{display:'inline', marginRight:'0.5em'}} icon="mdi:spotify" />} 
+                        variant="contained" color="success" sx={{mb:2,mt:2}} onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
+                        Connecter la room a Spotify
+                        </Button>
                     }
                  </Grid>
 
-
-                  <Grid item xs={12} sx={{ mt:2, display:'flex', flexDirection:'row'}} className="autowriter_container">
+                  <Grid item xs={12} sx={{display:'flex', flexDirection:'row'}} className="autowriter_container">
                      <Typed
                         strings={[
                             'CHERCHE SUR YOUTUBE ',
@@ -187,9 +186,9 @@ const RoomModalAddMedia = ({ roomId, validatedObjectToAdd, spotifyTokenProps }) 
                         <Tab sx={{ color:'var(--white)'}} label="Spotify" disabled={mediaSearchResultSpotify.length > 1 ? '' : 'disabled'}/>
                         <Tab sx={{ color:'var(--white)'}} label="Dailymotion" disabled={mediaSearchResultDailyMotion.length > 1 ? '' : 'disabled'}/>
                     </Tabs>
-                    <Box sx={{ lineHeight:"15px", p:0, pt:1, mb:3 }}>
+                    <Box sx={{ lineHeight:"15px", p:0, pt:0, mb:0 }}>
                         {tabIndex === 0 && (
-                        <Box >  
+                        <Box>  
                             {mediaSearchResultYoutube.length > 1 && <Grid item xs={12}>
                                 <List component="nav">
                                     { mediaSearchResultYoutube.map(function(media, idyt){
