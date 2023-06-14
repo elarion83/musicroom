@@ -142,6 +142,8 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
 
 	useEffect(() => {
 		getRoomData(roomId); 
+        
+        localStorage.setItem("MusicRoom_SpotifyRoomId", roomId)
         if(null === localStorage.getItem("MusicRoom_UserInfoVotes")) {
             localStorage.setItem("MusicRoom_UserInfoVotes", JSON.stringify({up:[], down:[]}));
         } else {
@@ -333,10 +335,9 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
 
     useEffect(() => {
         const hash = window.location.hash
-
         if (hash) {
             var token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
-            
+
             window.location.hash = ""
             window.localStorage.setItem("MusicRoom_SpotifyToken", token)
             handleChangeSpotifyToken(token)
@@ -345,6 +346,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
 
 
     async function handleChangeSpotifyToken(newToken) {
+        
         roomRef.set({roomParams:{spotifyToken: newToken,spotifyIsLinked:true,spotifyAlreadyHaveBeenLinked:true, spotifyTokenTimestamp: Date.now(), spotifyUserConnected:currentUser.displayName}}, { merge: true });
         
         await delay(2000);

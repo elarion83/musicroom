@@ -17,15 +17,16 @@ import Grid from '@mui/material/Grid';
 import JoinRoomModal from "./components/generalsTemplates/modals/JoinRoomModal";
 import Contentslider from "./components/homePage/ContentSlider";
 
-import { auth } from "./services/firebase";
+import { auth, googleProvider } from "./services/firebase";
 import firebase from "firebase";
 
 import {PseudoGenerated} from './services/pseudoGenerator';
+import { Snackbar } from "@mui/material";
 
 function App() {
-  // general app infos
+  // general app statuts
   const [isAppLoading, setIsAppLoading] = useState(true);
-
+  const [isGoogleLoginLoading, setIsGoogleLoginLoading] = useState(false);
   // room infos
 	const queryParameters = new URLSearchParams(window.location.search)
   const [roomId, setRoomId] = useState(queryParameters.get("rid") ? queryParameters.get("rid") : '');
@@ -34,8 +35,13 @@ function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [userInfos, setUserInfo] = useState({});
   
-  // modal infos
+  // modal statuts
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [joinRoomModalOpen, setJoinRoomModalOpen] = useState(false);
+
+  // snackbar statuts
+  const [loginOkSnackBarOpen, setLoginOkSnackBarOpen] = useState(false);
+  const [logoutOkSnackBarOpen, setLogoutOkSnackBarOpen] = useState(false);
 
   useEffect(() => {
     const unregisterAuthObserver = auth.onAuthStateChanged(user => {
@@ -63,6 +69,21 @@ function App() {
     return () => unregisterAuthObserver()
   }, [])
   
+
+    useEffect(() => {
+        const hash = window.location.hash
+        if (hash) {
+            var token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
+
+            if(localStorage.getItem("MusicRoom_SpotifyRoomId")) {
+              console.log('aa');
+              joinRoomByRoomId(localStorage.getItem("MusicRoom_SpotifyRoomId"));
+            replaceCurrentUrlWithRoomUrl(localStorage.getItem("MusicRoom_SpotifyRoomId"));
+            }
+        }
+    }, [])
+
+
   function createNewRoom() {
     var newRoomId = uuid().slice(0,5).toLowerCase()
     joinRoomByRoomId(newRoomId);
@@ -72,35 +93,65 @@ function App() {
     setRoomId(idRoom.toLowerCase().trim());
     replaceCurrentUrlWithRoomUrl(idRoom);
     window.scrollTo(0, 0);
+    setJoinRoomModalOpen(false);
   }
   
 
-  function anonymousLogin(temporaryPseudo) {
-    setUserInfo({displayName:temporaryPseudo});
+  function anonymousLogin() {
+    setUserInfo({displayName:PseudoGenerated});
 
-    localStorage.setItem("MusicRoom_AnonymouslyPseudo",  temporaryPseudo);
+    localStorage.setItem("MusicRoom_AnonymouslyPseudo",  PseudoGenerated);
     localStorage.setItem("MusicRoom_AnonymouslyLoggedIn",  true);
 
     setIsSignedIn(true);
+    handleLoginOkSnack();
     window.scrollTo(0, 0);
+  }
+
+  async function handleGoogleLogin() {
+    setIsGoogleLoginLoading(true);
+    await auth.signInWithPopup(googleProvider)
+        .then((result) => { 
+          if(result.additionalUserInfo.isNewUser) {
+            result.user.updateProfile({displayName: PseudoGenerated}).then((result) => { 
+              setUserInfo({displayName:PseudoGenerated});        
+              handleLoginOkSnack();
+              setIsGoogleLoginLoading(false);
+            });
+          } else {
+            handleLoginOkSnack();
+            setIsGoogleLoginLoading(false);
+          }
+        })
+        .catch((err) => {
+         //   setErrorMessage('Une erreur est survenue');
+        });
+  }
+
+  function handleLoginOkSnack() {
+    setLoginOkSnackBarOpen(true);
   }
 
   function logOut() {
     setRoomId();
     setUserInfo({});
     setIsSignedIn(false);
+    localStorage.removeItem("MusicRoom_SpotifyRoomId");
     localStorage.removeItem("MusicRoom_SpotifyToken");
     localStorage.removeItem("MusicRoom_AnonymouslyLoggedIn");
     localStorage.removeItem("MusicRoom_AnonymouslyPseudo");
     auth.signOut();
+    setLogoutOkSnackBarOpen(true);
     replaceCurrentUrlWithHomeUrl();    
   }
 
   function handleQuitRoomMain() {
     setRoomId();
+    localStorage.removeItem("MusicRoom_SpotifyRoomId");
     localStorage.removeItem("MusicRoom_SpotifyToken");
     replaceCurrentUrlWithHomeUrl();
   }
+
 
   function replaceCurrentUrlWithHomeUrl() {
     window.history.replaceState('string','', window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : ''));
@@ -109,6 +160,7 @@ function App() {
   function replaceCurrentUrlWithRoomUrl(roomId) {
     window.history.replaceState('string','', window.location.href+"?rid="+roomId.replace(/\s/g,''));
   }
+
 
   return (
     <>
@@ -129,11 +181,11 @@ function App() {
             </Grid>
             
             <Button variant="filled" className='main_bg_color buttonBorder' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em'}} 
-              onClick={createNewRoom}>
+              onClick={(e) => isSignedIn ? createNewRoom() : setLoginModalOpen(true)}>
                 <Icon icon="carbon:intent-request-create" width="30" style={{marginRight:'20px'}}/> 
                 Créer une Room </Button> 
             <Button variant="filled" className='main_bg_color buttonBorder' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em', mb:'2em'}} 
-              onClick={(e) => setJoinRoomModalOpen(true)}> 
+              onClick={(e) => isSignedIn ? setJoinRoomModalOpen(true) : setLoginModalOpen(true)}> 
                 <Icon icon="icon-park-outline:connect"  width="30" style={{marginRight:'20px'}}/>
                 Rejoindre une Room </Button> 
 
@@ -142,13 +194,30 @@ function App() {
             </Container>
         </Box>
         }
-        {roomId && <Room currentUser={userInfos} className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain}></Room>}
+        {roomId && isSignedIn && <Room currentUser={userInfos} className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain}></Room>}
 
-        {!isSignedIn && !isAppLoading && <LoginModal 
+        {!isSignedIn && !isAppLoading && (roomId || loginModalOpen) && <LoginModal 
         open={true} 
-        handleSetPseudo={anonymousLogin} 
+        handleLoginOkSnack={handleLoginOkSnack}
+        handleAnonymousLogin={anonymousLogin}
+        googleLoginLoading={isGoogleLoginLoading}
+        signInWithGoogle={handleGoogleLogin}
         />}
 
+        <Snackbar
+          open={loginOkSnackBarOpen}
+          autoHideDuration={3000}
+          onClose={() => setLoginOkSnackBarOpen(false)}
+          sx={{borderRadius:'2px'}}
+          message={"Bienvenue "+userInfos.displayName+" !"}
+          />
+        <Snackbar
+          open={logoutOkSnackBarOpen}
+          autoHideDuration={3000}
+          onClose={() => setLogoutOkSnackBarOpen(false)}
+          sx={{borderRadius:'2px'}}
+          message={"A bientôt !"}
+          />
       </Container>
     </>
   );

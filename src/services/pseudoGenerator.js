@@ -233,8 +233,10 @@ const secondPartArray = [
 	]
 
 const firstPartPseudo = Math.floor(Math.random() * (firstPartArray.length - 2 + 1) + 0)
-const secondPartPseudo = Math.floor(Math.random() * (secondPartArray.length - 2 + 1) + 0)
+var secondPartPseudo = Math.floor(Math.random() * (secondPartArray.length - 2 + 1) + 0)
 
-const PseudoGenerated = firstPartArray[firstPartPseudo]+''+secondPartArray[secondPartPseudo];
+var secondPartPseudoClean = secondPartArray[secondPartPseudo].charAt(0).toUpperCase() + secondPartArray[secondPartPseudo].slice(1)
+
+const PseudoGenerated = firstPartArray[firstPartPseudo]+''+secondPartPseudoClean;
 
 export {PseudoGenerated};
