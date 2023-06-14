@@ -50,11 +50,11 @@ import RoomTopBar from "./rooms/RoomTopBar";
 import SoundWave from "./rooms/SoundWave";
 import ControlButtons from "./rooms/playerSection/ControlButtons";
 
-const Room = ({ roomId, handleQuitRoom }) => {
+const Room = ({ currentUser, roomId, handleQuitRoom }) => {
 
     const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
 
-    const [localData, setLocalData] = useState({domain:window.location.hostname, synchro:false, currentUserVotes:{up:[], down:[]}, currentUserInfo: useState(localStorage.getItem("MusicRoom_UserInfoPseudo")) });
+    const [localData, setLocalData] = useState({domain:window.location.hostname, synchro:false, currentUserVotes:{up:[], down:[]} });
 	const [loaded, setLoaded] = useState(false);
 	const [room, setRoom] = useState({});
     const [openInvitePeopleToRoomModal, setOpenInvitePeopleToRoomModal] = useState(false);
@@ -62,7 +62,7 @@ const Room = ({ roomId, handleQuitRoom }) => {
     const [openRoomParamModal, setOpenRoomParamModal] = useState(false);
     const [localVolume, setLocalVolume] = useState(0);
     const [pip, setPip] = useState(true);
-	const roomRef = db.collection("rooms").doc(roomId.toLowerCase());
+	const roomRef = db.collection("rooms").doc(roomId);
     const [userCanMakeInteraction, setUserCanMakeInteraction]= useState(true);
     const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
     const [openForceDisconnectSpotifyModal, setOpenForceDisconnectSpotifyModal] = useState(false);
@@ -98,7 +98,7 @@ const Room = ({ roomId, handleQuitRoom }) => {
                 } else {
                     var docData = {
                         id: roomId.toLowerCase(),
-                        admin:localStorage.getItem("MusicRoom_UserInfoPseudo"),
+                        admin:currentUser.displayName,
                         playing:0,
                         mediaActuallyPlayingAlreadyPlayed:0,
                         actuallyPlaying:false,
@@ -121,7 +121,7 @@ const Room = ({ roomId, handleQuitRoom }) => {
                         interactionsArray:[],
                         creationTimeStamp	: Date.now()
                     };
-                    db.collection("rooms").doc(roomId.toLowerCase()).set(docData).then(() => {});
+                    db.collection("rooms").doc(roomId).set(docData).then(() => {});
                     setRoom(docData);
                 }
             });
@@ -142,6 +142,7 @@ const Room = ({ roomId, handleQuitRoom }) => {
 
 	useEffect(() => {
 		getRoomData(roomId); 
+        console.log(room);
         if(null === localStorage.getItem("MusicRoom_UserInfoVotes")) {
             localStorage.setItem("MusicRoom_UserInfoVotes", JSON.stringify({up:[], down:[]}));
         } else {
@@ -153,9 +154,6 @@ const Room = ({ roomId, handleQuitRoom }) => {
 	}, [roomId]);
     
 	useEffect(() => {
-        if(localData.currentUserInfo[0] === room.admin || localData.currentUserInfo === room.admin) {
-            setIsActuallyAdmin(true);
-        }
         if(room.actuallyPlaying) {
             document.title = 'En lecture - Room ID:' + roomId + ' - MusicRoom';
         } else {
@@ -213,7 +211,7 @@ const Room = ({ roomId, handleQuitRoom }) => {
     async function createNewRoomInteraction(type) {
         
 		getRoomData(roomId); 
-        room.interactionsArray.push({timestamp:Date.now(), type:type, createdBy: localStorage.getItem("MusicRoom_UserInfoPseudo")});
+        room.interactionsArray.push({timestamp:Date.now(), type:type, createdBy: currentUser.displayName});
         roomRef.update({interactionsArray: room.interactionsArray});
 
         setUserCanMakeInteraction(false);
@@ -346,7 +344,7 @@ const Room = ({ roomId, handleQuitRoom }) => {
 
 
     async function handleChangeSpotifyToken(newToken) {
-        roomRef.set({roomParams:{spotifyToken: newToken,spotifyIsLinked:true,spotifyAlreadyHaveBeenLinked:true, spotifyTokenTimestamp: Date.now(), spotifyUserConnected:localStorage.getItem("MusicRoom_UserInfoPseudo")}}, { merge: true });
+        roomRef.set({roomParams:{spotifyToken: newToken,spotifyIsLinked:true,spotifyAlreadyHaveBeenLinked:true, spotifyTokenTimestamp: Date.now(), spotifyUserConnected:currentUser.displayName}}, { merge: true });
         
         await delay(2000);
         window.location.href = "/?rid="+roomId.replace(/\s/g,'');
@@ -633,7 +631,7 @@ const Room = ({ roomId, handleQuitRoom }) => {
                         </Typography>
                     </Box>}
             </Grid>
-            {OpenAddToPlaylistModal && <RoomModalAddMedia roomId={roomId} spotifyTokenProps={room.roomParams.spotifyToken} handleChangeSpotifyToken={handleChangeSpotifyToken} validatedObjectToAdd={handleAddValidatedObjectToPlaylist} /> }
+            {OpenAddToPlaylistModal && <RoomModalAddMedia roomId={roomId} currentUser={currentUser} spotifyTokenProps={room.roomParams.spotifyToken} handleChangeSpotifyToken={handleChangeSpotifyToken} validatedObjectToAdd={handleAddValidatedObjectToPlaylist} /> }
         </Dialog>
         
         {loaded && room.roomParams && <ModalRoomParams adminView={isActuallyAdmin} open={openRoomParamModal} changeOpen={setOpenRoomParamModal} handleChangeRoomParams={handleChangeRoomParams} handleDisconnectFromSpotifyModal={setOpenForceDisconnectSpotifyModal} roomParams={room.roomParams} />} 

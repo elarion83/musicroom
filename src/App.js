@@ -20,8 +20,9 @@ import Contentslider from "./components/homePage/ContentSlider";
 import { auth } from "./services/firebase";
 import firebase from "firebase";
 
-function App() {
+import {PseudoGenerated} from './services/pseudoGenerator';
 
+function App() {
   // general app infos
   const [isAppLoading, setIsAppLoading] = useState(true);
 
@@ -32,7 +33,6 @@ function App() {
   // user infos
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [userInfos, setUserInfo] = useState({});
-  const [userInfoPseudo, setUserInfoPseudo] = useState(localStorage.getItem("MusicRoom_UserInfoPseudo"));
   
   // modal infos
   const [joinRoomModalOpen, setJoinRoomModalOpen] = useState(false);
@@ -42,15 +42,21 @@ function App() {
 
       if (user) {
         setUserInfo(user);
+        if(user.displayName === null) {
+          user.updateProfile({displayName: PseudoGenerated});
+          setUserInfo({displayName:PseudoGenerated});
+        }
+        
         setIsSignedIn(true);
       }
       else if(localStorage.getItem("MusicRoom_AnonymouslyLoggedIn")) {
-        setUserInfo({email:localStorage.getItem("MusicRoom_AnonymouslyPseudo")});
+        setUserInfo({displayName:localStorage.getItem("MusicRoom_AnonymouslyPseudo")});
         setIsSignedIn(true);
       }
       else {
         setIsSignedIn(false);
       }
+
       setIsAppLoading(false);
     }
     )
@@ -63,14 +69,14 @@ function App() {
   }
 
   function joinRoomByRoomId(idRoom) {
-    setRoomId(idRoom);
+    setRoomId(idRoom.toLowerCase());
     replaceCurrentUrlWithRoomUrl(idRoom);
     window.scrollTo(0, 0);
   }
   
 
   function anonymousLogin(temporaryPseudo) {
-    setUserInfo({email:temporaryPseudo});
+    setUserInfo({displayName:temporaryPseudo});
 
     localStorage.setItem("MusicRoom_AnonymouslyPseudo",  temporaryPseudo);
     localStorage.setItem("MusicRoom_AnonymouslyLoggedIn",  true);
@@ -111,8 +117,8 @@ function App() {
          <AppBar position="static" sx={{bgcolor: '#202124'}}>
             <Toolbar>
               <img src="img/logo_small.png" style={{ width: '250px', maxWidth:'50%'}} alt="MusicRoom logo"/>
-              {isSignedIn && (
-                <UserTopBar userInfoPseudo={userInfos.email} handleLogout={logOut} />
+              {userInfos.displayName !== undefined && isSignedIn && !isAppLoading && (
+                <UserTopBar userInfoPseudo={userInfos.displayName} handleLogout={logOut} />
               )}
             </Toolbar>
           </AppBar>
@@ -136,7 +142,7 @@ function App() {
             </Container>
         </Box>
         }
-        {roomId && <Room className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain}></Room>}
+        {roomId && <Room currentUser={userInfos} className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain}></Room>}
 
         {!isSignedIn && !isAppLoading && <LoginModal 
         open={true} 

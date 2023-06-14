@@ -40,7 +40,7 @@ const UserTopBar = ({ userInfoPseudo, handleLogout }) => {
                   aria-haspopup="true"
                   aria-expanded={open ? 'true' : undefined}
                 >
-                  <Avatar sx={{ bgcolor: 'var(--red-2)', textTransform:'uppercase' }} >{userInfoPseudo.substring(0, 1) }</Avatar>
+                  {userInfoPseudo && <Avatar sx={{ bgcolor: 'var(--red-2)', textTransform:'uppercase' }} >{userInfoPseudo.substring(0, 1) }</Avatar>}
                 </IconButton>
               </Tooltip>
               <Menu

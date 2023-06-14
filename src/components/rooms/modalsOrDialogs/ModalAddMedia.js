@@ -21,7 +21,7 @@ import Tabs from '@mui/material/Tabs';
 import validator from 'validator';
 import YTSearch from 'youtube-api-search';
 
-const RoomModalAddMedia = ({ roomId, validatedObjectToAdd, spotifyTokenProps }) => {
+const RoomModalAddMedia = ({ currentUser, roomId, validatedObjectToAdd, spotifyTokenProps }) => {
 
     const [mediaSearchResultYoutube, setMediaSearchResultYoutube] = useState([]);
     const [mediaSearchResultDailyMotion, setMediaSearchResultDailyMotion] = useState([]);
@@ -41,7 +41,7 @@ const RoomModalAddMedia = ({ roomId, validatedObjectToAdd, spotifyTokenProps }) 
 
     const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
 
-    const [addingObject, setAddingObject] = useState({title:'',source:'',url:'', addedBy: localStorage.getItem("MusicRoom_UserInfoPseudo")})
+    const [addingObject, setAddingObject] = useState({title:'',source:'',url:'', addedBy: currentUser.displayName})
 
 
     async function handleCheckAndAddObjectToPlaylistFromObject(objectFormatted) {
