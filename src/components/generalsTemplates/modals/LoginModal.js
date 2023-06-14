@@ -34,7 +34,7 @@ const LoginModal = ({ open, handleSetPseudo}) => {
         .then(() => {
         })
         .catch((err) => {
-            console.log(err);
+            setErrorMessage('Une erreur est survenue');
         });
     }
        

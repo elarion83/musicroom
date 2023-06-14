@@ -102,7 +102,6 @@ const RoomModalAddMedia = ({ currentUser, roomId, validatedObjectToAdd, spotifyT
             } else {
                 YTSearch({key: process.env.REACT_APP_YOUTUBE_API_KEY, term: searchTerm}, (videos) => {
                     setMediaSearchResultYoutube(videos);
-                    console.log(videos);
                 });
 
                 fetch('https://api.dailymotion.com/videos?fields=id,thumbnail_url%2Ctitle&country=fr&search='+searchTerm+'&limit=5')
