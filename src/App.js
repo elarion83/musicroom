@@ -22,20 +22,24 @@ import firebase from "firebase";
 
 function App() {
 
+	const queryParameters = new URLSearchParams(window.location.search)
+  const [roomId, setRoomId] = useState(queryParameters.get("rid") ? queryParameters.get("rid") : '');
+
   const [isSignedIn, setIsSignedIn] = useState(false);
-  const [roomId, setRoomId] = useState(localStorage.getItem("MusicRoom_RoomId"));
   const [userInfos, setUserInfo] = useState({});
   const [userInfoPseudo, setUserInfoPseudo] = useState(localStorage.getItem("MusicRoom_UserInfoPseudo"));
   
   const [joinRoomModalOpen, setJoinRoomModalOpen] = useState(false);
 
-	const queryParameters = new URLSearchParams(window.location.search)
-	const rid = queryParameters.get("rid");
   
   useEffect(() => {
     const unregisterAuthObserver = auth.onAuthStateChanged(user => {
       if (user) {
         setUserInfo(user);
+        setIsSignedIn(true);
+      }
+      else if(localStorage.getItem("MusicRoom_AnonymouslyLoggedIn")) {
+        setUserInfo({email:localStorage.getItem("MusicRoom_AnonymouslyPseudo")});
         setIsSignedIn(true);
       }
       else {
@@ -46,35 +50,52 @@ function App() {
     return () => unregisterAuthObserver()
   }, [])
 
-  useEffect(() => {  
-    if(rid) {
-      setRoomId(rid);
-    }
-  }, [rid]);
-
+  
   function createNewRoom() {
-    var unique_id = uuid();
-    var small_id = unique_id.slice(0,5).toLowerCase()
-    setRoomId(small_id);
-    window.scrollTo(0, 0);
+    var newRoomId = uuid().slice(0,5).toLowerCase()
+    joinRoomByRoomId(newRoomId);
   }
 
-  function handleJoinRoomByRoomId(idRoom) {
-    window.location.href = "/?rid="+idRoom.replace(/\s/g,'');
+  function joinRoomByRoomId(idRoom) {
+    setRoomId(idRoom);
+    replaceCurrentUrlWithRoomUrl(idRoom);
     window.scrollTo(0, 0);
   }
   
 
-  function logIn(newPseudo) {
-    setUserInfoPseudo(newPseudo);
-    localStorage.setItem("MusicRoom_UserInfoPseudo", newPseudo);
+  function anonymousLogin(temporaryPseudo) {
+    setUserInfo({email:temporaryPseudo});
+
+    localStorage.setItem("MusicRoom_AnonymouslyPseudo",  temporaryPseudo);
+    localStorage.setItem("MusicRoom_AnonymouslyLoggedIn",  true);
+
+    setIsSignedIn(true);
     window.scrollTo(0, 0);
   }
 
   function logOut() {
     setRoomId();
+    setUserInfo({});
+    setIsSignedIn(false);
     localStorage.removeItem("MusicRoom_SpotifyToken");
+    localStorage.removeItem("MusicRoom_AnonymouslyLoggedIn");
+    localStorage.removeItem("MusicRoom_AnonymouslyPseudo");
     auth.signOut();
+    replaceCurrentUrlWithHomeUrl();    
+  }
+
+  function handleQuitRoomMain() {
+    setRoomId();
+    localStorage.removeItem("MusicRoom_SpotifyToken");
+    replaceCurrentUrlWithHomeUrl();
+  }
+
+  function replaceCurrentUrlWithHomeUrl() {
+    window.history.replaceState('string','', window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : ''));
+  }
+
+  function replaceCurrentUrlWithRoomUrl(roomId) {
+    window.history.replaceState('string','', window.location.href+"?rid="+roomId.replace(/\s/g,''));
   }
 
   return (
@@ -104,16 +125,16 @@ function App() {
                 <Icon icon="icon-park-outline:connect"  width="30" style={{marginRight:'20px'}}/>
                 Rejoindre une Room </Button> 
 
-                <JoinRoomModal open={joinRoomModalOpen} changeOpen={setJoinRoomModalOpen} handleJoinRoom={handleJoinRoomByRoomId} />
+                <JoinRoomModal open={joinRoomModalOpen} changeOpen={setJoinRoomModalOpen} handleJoinRoom={joinRoomByRoomId} />
            
             </Container>
         </Box>
         }
-        {roomId && <Room className='room_bloc' roomId={roomId} handleQuitRoom={setRoomId()}></Room>}
+        {roomId && <Room className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain}></Room>}
 
         {!isSignedIn && <LoginModal 
         open={true} 
-        handleSetPseudo={logIn} 
+        handleSetPseudo={anonymousLogin} 
         />}
 
       </Container>
