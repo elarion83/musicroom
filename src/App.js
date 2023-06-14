@@ -27,6 +27,7 @@ function App() {
   // general app statuts
   const [isAppLoading, setIsAppLoading] = useState(true);
   const [isGoogleLoginLoading, setIsGoogleLoginLoading] = useState(false);
+  const [loginErrorMessage, setLoginErrorMessage] = useState();
   // room infos
 	const queryParameters = new URLSearchParams(window.location.search)
   const [roomId, setRoomId] = useState(queryParameters.get("rid") ? queryParameters.get("rid") : '');
@@ -77,7 +78,6 @@ function App() {
 
 
             if(localStorage.getItem("MusicRoom_SpotifyRoomId")) {
-              console.log('aa');
               joinRoomByRoomId(localStorage.getItem("MusicRoom_SpotifyRoomId"));
             replaceCurrentUrlWithRoomUrl(localStorage.getItem("MusicRoom_SpotifyRoomId"));
             }
@@ -125,8 +125,30 @@ function App() {
           }
         })
         .catch((err) => {
-         //   setErrorMessage('Une erreur est survenue');
+            setLoginErrorMessage('Une erreur est survenue');
         });
+  }
+
+  async function handlePasswordAndMailLogin(email,password) {
+    await auth.createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                handleLoginOkSnack();
+            })
+            .catch((error) => {
+                if(error.code === "auth/email-already-in-use") {
+                    auth.signInWithEmailAndPassword(email, password)
+                        .then((userCredential) => {
+                            // Signed in
+                            handleLoginOkSnack();
+                            return userCredential.user;
+                        })
+                        .catch((error) => {
+                            setLoginErrorMessage(error.message);
+                        })
+                } else {
+                    setLoginErrorMessage(error.message);
+                }
+            })
   }
 
   function handleLoginOkSnack() {
@@ -202,8 +224,10 @@ function App() {
         changeOpen={(e) => setLoginModalOpen(false)}
         handleLoginOkSnack={handleLoginOkSnack}
         handleAnonymousLogin={anonymousLogin}
+        handleGoogleLogin={handleGoogleLogin}
+        handlePasswordAndMailLogin={handlePasswordAndMailLogin}
+        loginErrorMessage={loginErrorMessage}
         googleLoginLoading={isGoogleLoginLoading}
-        signInWithGoogle={handleGoogleLogin}
         redirectToHome={handleQuitRoomMain}
         roomId={roomId}
         />}

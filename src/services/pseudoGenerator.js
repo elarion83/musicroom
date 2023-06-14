@@ -232,11 +232,15 @@ const secondPartArray = [
 		"wrath"
 	]
 
-const firstPartPseudo = Math.floor(Math.random() * (firstPartArray.length - 2 + 1) + 0)
-var secondPartPseudo = Math.floor(Math.random() * (secondPartArray.length - 2 + 1) + 0)
 
-var secondPartPseudoClean = secondPartArray[secondPartPseudo].charAt(0).toUpperCase() + secondPartArray[secondPartPseudo].slice(1)
+function returnPseudo() {
 
-const PseudoGenerated = firstPartArray[firstPartPseudo]+''+secondPartPseudoClean;
+    const firstPartPseudo = Math.floor(Math.random() * (firstPartArray.length - 2 + 1) + 0)
+    var secondPartPseudo = Math.floor(Math.random() * (secondPartArray.length - 2 + 1) + 0)
+
+    var secondPartPseudoClean = secondPartArray[secondPartPseudo].charAt(0).toUpperCase() + secondPartArray[secondPartPseudo].slice(1);
+    return firstPartArray[firstPartPseudo]+''+secondPartPseudoClean;
+}
+const PseudoGenerated = returnPseudo();
 
 export {PseudoGenerated};

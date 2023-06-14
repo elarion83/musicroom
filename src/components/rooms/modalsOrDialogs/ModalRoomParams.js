@@ -42,7 +42,7 @@ const ModalRoomParams = ({ adminView, open, changeOpen, roomParams , handleDisco
             <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
                 <TuneIcon fontSize="small" sx={{mr:1}} /> Paramètres de la room 
             </DialogTitle>  
-            <DialogContent dividers sx={{pt:1}}>
+            <DialogContent dividers sx={{pt:0}}>
                 <FormGroup>
                     {!roomParams.spotifyIsLinked && 
                             <Button
@@ -88,6 +88,7 @@ const ModalRoomParams = ({ adminView, open, changeOpen, roomParams , handleDisco
                     />
                     
                     <FormControlLabel
+                    sx={{display:'none'}}
                         control={
                             <Switch checked={roomParams.allowEverybodyToAddMedia} onChange={handleChangeAllowEverybodyToAddMedia} 
                             disabled={adminView? false:true}
@@ -97,6 +98,7 @@ const ModalRoomParams = ({ adminView, open, changeOpen, roomParams , handleDisco
                     />
                     
                     <FormControlLabel
+                    sx={{display:'none'}}
                         control={
                             <Switch checked={roomParams.isOnInvitation} onChange={handleChangeIsOnInvitation} 
                             disabled={adminView? false:true}

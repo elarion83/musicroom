@@ -8,30 +8,14 @@ import TextField from '@mui/material/TextField';
 import { auth, googleProvider } from "../../../services/firebase";
 import { LoadingButton } from "@mui/lab";
 
-const LoginModal = ({ open, changeOpen, handleAnonymousLogin, signInWithGoogle, googleLoginLoading, redirectToHome, roomId}) => {
+const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin, handlePasswordAndMailLogin, googleLoginLoading, redirectToHome, roomId, loginErrorMessage}) => {
     
     const [errorMessage, setErrorMessage] = useState();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
         
-    async function onSubmit() {
-        await auth.createUserWithEmailAndPassword(email, password)
-            .then((userCredential) => {
-            })
-            .catch((error) => {
-                if(error.code === "auth/email-already-in-use") {
-                    auth.signInWithEmailAndPassword(email, password)
-                        .then((userCredential) => {
-                            // Signed in
-                            return userCredential.user;
-                        })
-                        .catch((error) => {
-                            setErrorMessage(error.message);
-                        })
-                } else {
-                    setErrorMessage(error.message);
-                }
-            })
+    async function onEmailAndPasswordSubmit() {
+        handlePasswordAndMailLogin(email, password); 
     }
 
     return(
@@ -53,7 +37,7 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, signInWithGoogle, 
             <DialogContent dividers sx={{pt:0}}>
                 <DialogContentText sx={{pt:2}}>
                 
-                {errorMessage && <Alert severity="error" sx={{mb:2}}>{errorMessage}</Alert>}     
+                {loginErrorMessage && <Alert severity="error" sx={{mb:2}}>{loginErrorMessage}</Alert>}     
                     <Grid container direction="column" >
                         <Box sx={{display:'flex', flexDirection:'column'}}>     
                             <TextField
@@ -73,7 +57,7 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, signInWithGoogle, 
                                 id="loginMailAndPass_PassField"
                                 label="Mot de passe"
                             />           
-                            <Button variant="contained" className='main_bg_color buttonBorder' sx={{mt:2}} onClick={e => onSubmit()}> Go ! </Button>                  
+                            <Button variant="contained" className='main_bg_color buttonBorder' sx={{mt:2}} onClick={e => onEmailAndPasswordSubmit()}> Go ! </Button>                  
                         </Box> 
                         
                         <Divider sx={{mt:2,mb:2}}>
@@ -94,7 +78,7 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, signInWithGoogle, 
                                     className='borderMainColor'
                                     startIcon={<Icon icon="ri:google-fill" />}
                                     variant="outlined"
-                                    onClick={signInWithGoogle}>
+                                    onClick={handleGoogleLogin}>
                                 Connexion Google
                             </LoadingButton>  
                     </Grid> 
