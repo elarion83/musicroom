@@ -42,14 +42,13 @@ const ModalRoomParams = ({ adminView, open, changeOpen, roomParams , handleDisco
             <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
                 <TuneIcon fontSize="small" sx={{mr:1}} /> Paramètres de la room 
             </DialogTitle>  
-            <DialogContent dividers sx={{pt:0}}>
+            <DialogContent dividers sx={{pt:2}}>
                 <FormGroup>
                     {!roomParams.spotifyIsLinked && 
                             <Button
                                 startIcon={<Icon style={{display:'inline',  marginRight:'0.5em'}} icon="mdi:spotify" />}
                                 variant="contained" 
-                                color="success" 
-                                sx={{mt:2}} 
+                                color="success"  
                                 onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
                                 Connecter a Spotify
                             </Button>

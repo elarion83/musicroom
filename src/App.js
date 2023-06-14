@@ -27,6 +27,7 @@ function App() {
   // general app statuts
   const [isAppLoading, setIsAppLoading] = useState(true);
   const [isGoogleLoginLoading, setIsGoogleLoginLoading] = useState(false);
+  const [isEmailandPassLoading, setIsEmailandPassLoading] = useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = useState();
   // room infos
 	const queryParameters = new URLSearchParams(window.location.search)
@@ -93,7 +94,6 @@ function App() {
   function joinRoomByRoomId(idRoom) {
     setRoomId(idRoom.toLowerCase().trim());
     replaceCurrentUrlWithRoomUrl(idRoom);
-    window.scrollTo(0, 0);
     setJoinRoomModalOpen(false);
   }
   
@@ -130,6 +130,7 @@ function App() {
   }
 
   async function handlePasswordAndMailLogin(email,password) {
+    setIsEmailandPassLoading(true);
     await auth.createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 handleLoginOkSnack();
@@ -140,13 +141,16 @@ function App() {
                         .then((userCredential) => {
                             // Signed in
                             handleLoginOkSnack();
+                            setIsEmailandPassLoading(false);
                             return userCredential.user;
                         })
                         .catch((error) => {
                             setLoginErrorMessage(error.message);
+                            setIsEmailandPassLoading(false);
                         })
                 } else {
                     setLoginErrorMessage(error.message);
+                    setIsEmailandPassLoading(false);
                 }
             })
   }
@@ -228,6 +232,7 @@ function App() {
         handlePasswordAndMailLogin={handlePasswordAndMailLogin}
         loginErrorMessage={loginErrorMessage}
         googleLoginLoading={isGoogleLoginLoading}
+        EmailandPassLoading={isEmailandPassLoading}
         redirectToHome={handleQuitRoomMain}
         roomId={roomId}
         />}

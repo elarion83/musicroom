@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField';
 import { auth, googleProvider } from "../../../services/firebase";
 import { LoadingButton } from "@mui/lab";
 
-const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin, handlePasswordAndMailLogin, googleLoginLoading, redirectToHome, roomId, loginErrorMessage}) => {
+const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin, handlePasswordAndMailLogin, googleLoginLoading, EmailandPassLoading, redirectToHome, roomId, loginErrorMessage}) => {
     
     const [errorMessage, setErrorMessage] = useState();
     const [email, setEmail] = useState('')
@@ -57,7 +57,13 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin,
                                 id="loginMailAndPass_PassField"
                                 label="Mot de passe"
                             />           
-                            <Button variant="contained" className='main_bg_color buttonBorder' sx={{mt:2}} onClick={e => onEmailAndPasswordSubmit()}> Go ! </Button>                  
+                            <LoadingButton
+                                    loading={EmailandPassLoading}
+                                    variant="contained" 
+                                    className='main_bg_color buttonBorder' 
+                            sx={{mt:2}} onClick={e => onEmailAndPasswordSubmit()}> 
+                            Go ! 
+                            </LoadingButton>                  
                         </Box> 
                         
                         <Divider sx={{mt:2,mb:2}}>
