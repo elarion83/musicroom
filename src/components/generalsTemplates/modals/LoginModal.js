@@ -29,7 +29,6 @@ const LoginModal = ({ open, handleSetPseudo}) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
  
-
     async function signInWithGoogle() {
         await auth.signInWithPopup(googleProvider)
         .then(() => {
@@ -39,12 +38,9 @@ const LoginModal = ({ open, handleSetPseudo}) => {
         });
     }
        
-
     async function onSubmit() {
         await auth.createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {
-                // Signed in
-                return userCredential.user;
             })
             .catch((error) => {
                 if(error.code === "auth/email-already-in-use") {
@@ -72,13 +68,7 @@ const LoginModal = ({ open, handleSetPseudo}) => {
             <DialogContent dividers sx={{pt:0}}>
                 {errorMessage}
                 <Grid container sx={{pr:1, pt:1, pb:2}} direction="row" justifyContent={tabIndex === 0 ? "flex-end": "flex-start"}  alignItems="center" >
-                    {tabIndex == 0 && 
-                        <Button 
-                            endIcon={<Icon icon="raphael:arrowright" />}
-                            size="small" 
-                            onClick={e => handleTabChange(1)}>
-                        Connexion temporaire
-                    </Button>}
+                    
                     {tabIndex == 1 && 
                         <Button 
                             startIcon={<Icon icon="raphael:arrowleft" /> }
@@ -87,25 +77,14 @@ const LoginModal = ({ open, handleSetPseudo}) => {
                         Connexion Classique
                     </Button>}
                 </Grid>
-                <DialogContentText sx={{p:0,pl:5,pr:5}}>
+                <DialogContentText sx={{p:0,ml:7,mr:7}}>
                 
                 {tabIndex == 0 && 
                 
                     <Grid container direction="column" >
-                        <Button 
-                                startIcon={<Icon icon="devicon:google" />}
-                                size="large" 
-                                variant="contained"
-                                onClick={signInWithGoogle}>
-                            Connexion Google
-                        </Button>
-                        
-                        <Divider sx={{mt:2,mb:2}}>
-                            OU
-                        </Divider>     
                         <Box sx={{display:'flex', flexDirection:'column'}}>     
                             <TextField
-                                helperText="Adresse Email"
+                                helperText="bienlebonjour@mail.fr"
                                 id="loginMailAndPass_EmailField"
                                 label="Adresse Email"
                                 value={email}    
@@ -118,8 +97,27 @@ const LoginModal = ({ open, handleSetPseudo}) => {
                                 id="loginMailAndPass_PassField"
                                 label="Mot de passe"
                             />           
-                            <Button variant="filled" sx={{mt:2}} onClick={e => onSubmit()}>Go </Button>                  
-                    </Box> 
+                            <Button variant="filled" className='main_bg_color buttonBorder' sx={{mt:2}} onClick={e => onSubmit()}>Go </Button>                  
+                        </Box> 
+                        
+                        <Divider sx={{mt:2,mb:2}}>
+                            OU
+                        </Divider>  
+                        <Button 
+                                startIcon={<Icon icon="devicon:google" />}
+                                size="large" 
+                                variant="contained"
+                                onClick={signInWithGoogle}>
+                            Connexion Google
+                        </Button>   
+                        <Divider sx={{mt:2,mb:2}}>
+                        </Divider> 
+                        <Button 
+                                endIcon={<Icon icon="raphael:arrowright" />}
+                                size="small" 
+                                onClick={e => handleTabChange(1)}>
+                            Connexion anonyme
+                        </Button>  
                 </Grid>}
                 
                 {tabIndex == 1 && 
