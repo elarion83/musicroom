@@ -62,7 +62,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
     const [openRoomParamModal, setOpenRoomParamModal] = useState(false);
     const [localVolume, setLocalVolume] = useState(0);
     const [pip, setPip] = useState(true);
-	const roomRef = db.collection("rooms").doc(roomId);
+	const roomRef = db.collection("rooms").doc(roomId.trim());
     const [userCanMakeInteraction, setUserCanMakeInteraction]= useState(true);
     const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
     const [openForceDisconnectSpotifyModal, setOpenForceDisconnectSpotifyModal] = useState(false);
@@ -142,7 +142,6 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
 
 	useEffect(() => {
 		getRoomData(roomId); 
-        console.log(room);
         if(null === localStorage.getItem("MusicRoom_UserInfoVotes")) {
             localStorage.setItem("MusicRoom_UserInfoVotes", JSON.stringify({up:[], down:[]}));
         } else {
@@ -154,6 +153,9 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
 	}, [roomId]);
     
 	useEffect(() => {
+        if(currentUser.displayName === room.admin || currentUser.displayName === room.admin) {
+            setIsActuallyAdmin(true);
+        }
         if(room.actuallyPlaying) {
             document.title = 'En lecture - Room ID:' + roomId + ' - MusicRoom';
         } else {
@@ -226,7 +228,6 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
 
     function handleMediaEnd() {
         if(room.playlistUrls[room.playing+1]) {
-            console.log('a');
             handleChangeActuallyPlaying(room.playing+1);
         } else {
             if(room.roomParams.isPlayingLooping) {
@@ -373,10 +374,6 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
         return minute+' '+seconde;
     }
 
-    function handleUpdateRoomParams(newParams) {
-
-        console.log(newParams);
-    }
 
     const [spotifyEndSwitchTempFix, setSpotifyEndSwitchTempFix] = useState(true);
     function SpotifyPlayerCallBack(e){
