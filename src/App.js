@@ -204,6 +204,8 @@ function App() {
         handleAnonymousLogin={anonymousLogin}
         googleLoginLoading={isGoogleLoginLoading}
         signInWithGoogle={handleGoogleLogin}
+        redirectToHome={handleQuitRoomMain}
+        roomId={roomId}
         />}
 
         <Snackbar

@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField';
 import { auth, googleProvider } from "../../../services/firebase";
 import { LoadingButton } from "@mui/lab";
 
-const LoginModal = ({ open, changeOpen, handleAnonymousLogin, signInWithGoogle, googleLoginLoading}) => {
+const LoginModal = ({ open, changeOpen, handleAnonymousLogin, signInWithGoogle, googleLoginLoading, redirectToHome, roomId}) => {
     
     const [errorMessage, setErrorMessage] = useState();
     const [email, setEmail] = useState('')
@@ -96,9 +96,17 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, signInWithGoogle, 
                                     variant="outlined"
                                     onClick={signInWithGoogle}>
                                 Connexion Google
-                            </LoadingButton>    
-                             
+                            </LoadingButton>  
                     </Grid> 
+                    <Grid sx={{mt:2}}>
+                        {roomId && 
+                            <Button
+                                    startIcon={<Icon icon="raphael:arrowleft" />}
+                                    size="small"
+                                    onClick={redirectToHome}>
+                                Vers l'accueil
+                            </Button> }
+                    </Grid>
                 </DialogContentText>
             </DialogContent>
         </Dialog>
