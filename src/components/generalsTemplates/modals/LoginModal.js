@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField';
 import { auth, googleProvider } from "../../../services/firebase";
 import { LoadingButton } from "@mui/lab";
 
-const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin, handlePasswordAndMailLogin, googleLoginLoading, EmailandPassLoading, redirectToHome, roomId, loginErrorMessage}) => {
+const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin, handlePasswordAndMailLogin, googleLoginLoading, anonymousLoginLoading, EmailandPassLoading, redirectToHome, roomId, loginErrorMessage}) => {
     
     const [errorMessage, setErrorMessage] = useState();
     const [email, setEmail] = useState('')
@@ -69,13 +69,14 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin,
                         <Divider sx={{mt:3,mb:2}}>
                             OU
                         </Divider>  
-                            <Button 
+                            <LoadingButton 
+                                    loading={anonymousLoginLoading}
                                     className='borderMainColor btnIconFixToLeft'
                                     variant="outlined"
                                     startIcon={<Icon icon="mdi:anonymous" />}
                                     onClick={e => handleAnonymousLogin()}>
                                     Connexion anonyme
-                            </Button>
+                            </LoadingButton>
                         <Divider sx={{mt:2,mb:2}}>
                             OU
                         </Divider>  

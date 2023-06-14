@@ -28,7 +28,9 @@ function App() {
   const [isAppLoading, setIsAppLoading] = useState(true);
   const [isGoogleLoginLoading, setIsGoogleLoginLoading] = useState(false);
   const [isEmailandPassLoading, setIsEmailandPassLoading] = useState(false);
+  const [isAnonymousLoginLoading, setIsAnonymousLoginLoading] = useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = useState();
+
   // room infos
 	const queryParameters = new URLSearchParams(window.location.search)
   const [roomId, setRoomId] = useState(queryParameters.get("rid") ? queryParameters.get("rid") : '');
@@ -46,6 +48,9 @@ function App() {
   const [loginOkSnackBarOpen, setLoginOkSnackBarOpen] = useState(false);
   const [logoutOkSnackBarOpen, setLogoutOkSnackBarOpen] = useState(false);
 
+  // tools
+  const delay = ms => new Promise(res => setTimeout(res, ms));
+  
   useEffect(() => {
     const unregisterAuthObserver = auth.onAuthStateChanged(user => {
 
@@ -99,7 +104,10 @@ function App() {
   }
   
 
-  function anonymousLogin() {
+  async function anonymousLogin() {
+    setIsAnonymousLoginLoading(true);
+    await delay(500);
+    setIsAnonymousLoginLoading(false);
     setUserInfo({displayName:PseudoGenerated});
 
     localStorage.setItem("MusicRoom_AnonymouslyPseudo",  PseudoGenerated);
@@ -246,6 +254,7 @@ function App() {
         loginErrorMessage={loginErrorMessage}
         googleLoginLoading={isGoogleLoginLoading}
         EmailandPassLoading={isEmailandPassLoading}
+        anonymousLoginLoading={isAnonymousLoginLoading}
         redirectToHome={handleQuitRoomMain}
         roomId={roomId}
         />}
