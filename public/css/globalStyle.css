@@ -44,6 +44,15 @@ b, * {
   border:4px solid #786b4d !important;
 }
 
+.btnIconFixToLeft .MuiButton-startIcon{
+  position: absolute;
+  left: 10px;
+  transition: var(--transition-smooth-all);
+}
+
+.btnIconFixToLeft:hover .MuiButton-startIcon{
+  left: calc(100% - 5%);
+}
 .borderMainColor {
   border-color: var(--main-color) !important;
 }

@@ -221,11 +221,11 @@ function App() {
               <Contentslider />
             </Grid>
             
-            <Button variant="filled" className='main_bg_color buttonBorder' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em'}} 
+            <Button variant="filled" className='main_bg_color  buttonBorder' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em'}} 
               onClick={(e) => isSignedIn ? createNewRoom() : setLoginModalOpen(true)}>
                 <Icon icon="carbon:intent-request-create" width="30" style={{marginRight:'20px'}}/> 
                 Créer une Room </Button> 
-            <Button variant="filled" className='main_bg_color buttonBorder' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em', mb:'2em'}} 
+            <Button variant="filled" className='main_bg_color  buttonBorder' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em', mb:'2em'}} 
               onClick={(e) => isSignedIn ? setJoinRoomModalOpen(true) : setLoginModalOpen(true)}> 
                 <Icon icon="icon-park-outline:connect"  width="30" style={{marginRight:'20px'}}/>
                 Rejoindre une Room </Button> 

@@ -60,7 +60,7 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin,
                                     loading={EmailandPassLoading}
                                     variant="contained" 
                                     startIcon={<Icon icon="material-symbols:login" />}
-                                    className='main_bg_color buttonBorder' 
+                                    className='main_bg_color buttonBorder btnIconFixToLeft' 
                             sx={{mt:2}} onClick={e => onEmailAndPasswordSubmit()}> 
                             Continuer 
                             </LoadingButton>                  
@@ -70,7 +70,7 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin,
                             OU
                         </Divider>  
                             <Button 
-                                    className='borderMainColor'
+                                    className='borderMainColor btnIconFixToLeft'
                                     variant="outlined"
                                     startIcon={<Icon icon="mdi:anonymous" />}
                                     onClick={e => handleAnonymousLogin()}>
@@ -82,7 +82,7 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin,
                             <LoadingButton
                                     loadingPosition='start'
                                     loading={googleLoginLoading}
-                                    className='borderMainColor'
+                                    className='borderMainColor btnIconFixToLeft'
                                     startIcon={<Icon icon="ri:google-fill" />}
                                     variant="outlined"
                                     onClick={handleGoogleLogin}>
