@@ -289,7 +289,6 @@ const Room = ({ roomId, handleQuitRoom }) => {
     
     function handleQuitRoomInComp() {
         handleQuitRoom();
-        localStorage.removeItem("MusicRoom_SpotifyToken");
     }
 
 // NEW FUNCTIONS FROM CHILD COMP

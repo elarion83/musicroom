@@ -24,7 +24,7 @@ const ModalForceSpotifyDisconnect = ({ open , changeOpen,handleQuitRoom }) => {
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button variant="outlined" onClick={(e) => handleQuitRoom(false)}>
+                <Button variant="outlined" onClick={(e) => handleQuitRoom()}>
                     Quitter
                 </Button>
                 <Button variant="outlined" onClick={(e) => changeOpen(false)} autoFocus>

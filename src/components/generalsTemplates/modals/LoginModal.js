@@ -47,8 +47,18 @@ const LoginModal = ({ open, handleSetPseudo}) => {
                 return userCredential.user;
             })
             .catch((error) => {
-                console.log(error.message);
-                setErrorMessage(error.message);
+                if(error.code === "auth/email-already-in-use") {
+                    auth.signInWithEmailAndPassword(email, password)
+                        .then((userCredential) => {
+                            // Signed in
+                            return userCredential.user;
+                        })
+                        .catch((error) => {
+                            setErrorMessage(error.message);
+                        })
+                } else {
+                    setErrorMessage(error.message);
+                }
             })
     }
 
