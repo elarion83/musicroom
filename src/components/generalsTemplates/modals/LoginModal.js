@@ -61,7 +61,8 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin,
                                     variant="contained" 
                                     startIcon={<Icon icon="material-symbols:login" />}
                                     className='main_bg_color buttonBorder btnIconFixToLeft' 
-                            sx={{mt:2}} onClick={e => onEmailAndPasswordSubmit()}> 
+                                    sx={{mt:2}} 
+                            onClick={e => onEmailAndPasswordSubmit()}> 
                             Continuer 
                             </LoadingButton>                  
                         </Box> 
@@ -72,11 +73,11 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin,
                             <LoadingButton 
                                     loading={loginLoading}
                                     loadingPosition='start'
-                                    className='borderMainColor btnIconFixToLeft'
+                                    className='borderMainColor mainColor btnIconFixToLeft'
                                     variant="outlined"
                                     startIcon={<Icon icon="mdi:anonymous" />}
                                     onClick={e => handleAnonymousLogin()}>
-                                    Connexion anonyme
+                                    Continuer en anonyme
                             </LoadingButton>
                         <Divider sx={{mt:2,mb:2}}>
                             OU
@@ -84,11 +85,11 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin,
                             <LoadingButton
                                     loadingPosition='start'
                                     loading={loginLoading}
-                                    className='borderMainColor btnIconFixToLeft'
+                                    className='borderMainColor mainColor btnIconFixToLeft'
                                     startIcon={<Icon icon="ri:google-fill" />}
                                     variant="outlined"
                                     onClick={handleGoogleLogin}>
-                                Connexion Google
+                                Continuer avec Google
                             </LoadingButton>  
                     </Grid> 
                     <Grid sx={{mt:2}}>
