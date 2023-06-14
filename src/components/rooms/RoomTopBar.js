@@ -36,7 +36,7 @@ const RoomTopBar = ({localData, roomId, roomAdmin, isLinkedToSpotify }) => {
     <AppBar position="sticky" className='sticky_top' >
         <Toolbar xs={12}sx={{ bgcolor: 'var(--grey-dark)',borderBottom: '2px solid var(--border-color)', minHeight: '45px !important', fontFamily: 'Monospace', pl:'5px', pr:'25 px' }}>
                 
-                <Tooltip  className='animate__animated animate__fadeInLeft animate__delay-2s animate__fast' title="Paramètres de la room" sx={{ bgColor:'#30363c'}}>
+                <Tooltip  className='animate__animated animate__fadeInLeft animate__delay-1s animate__fast' title="Paramètres de la room" sx={{ bgColor:'#30363c'}}>
                         <Badge invisible={isLinkedToSpotify} variant="dot" sx={{'& .MuiBadge-badge': {
                             right:'10px',
                             bgcolor:'var(--red-2)'
@@ -78,7 +78,7 @@ const RoomTopBar = ({localData, roomId, roomAdmin, isLinkedToSpotify }) => {
                     </MenuItem>
                 </Menu>
 
-            <Typography  className='animate__animated animate__fadeInLeft animate__delay-1s animate__fast' component="div" sx={{ flexGrow: 1 , textTransform:'uppercase', fontSize:'12px',}}>
+            <Typography  className='animate__animated animate__fadeInLeft animate__fast' component="div" sx={{ flexGrow: 1 , textTransform:'uppercase', fontSize:'12px',}}>
                 Room : <b><span>{ roomId }</span> </b> 
             </Typography>
             

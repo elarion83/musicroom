@@ -75,6 +75,7 @@ function App() {
         if (hash) {
             var token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
 
+
             if(localStorage.getItem("MusicRoom_SpotifyRoomId")) {
               console.log('aa');
               joinRoomByRoomId(localStorage.getItem("MusicRoom_SpotifyRoomId"));
@@ -198,6 +199,7 @@ function App() {
 
         {!isSignedIn && !isAppLoading && (roomId || loginModalOpen) && <LoginModal 
         open={true} 
+        changeOpen={(e) => setLoginModalOpen(false)}
         handleLoginOkSnack={handleLoginOkSnack}
         handleAnonymousLogin={anonymousLogin}
         googleLoginLoading={isGoogleLoginLoading}

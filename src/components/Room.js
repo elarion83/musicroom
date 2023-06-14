@@ -150,7 +150,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
             localData.currentUserVotes = JSON.parse(localStorage.getItem("MusicRoom_UserInfoVotes"));
         }
 
-        document.title = 'Room ID:' + roomId + ' - MusicRoom';
+        document.title = 'Room ' + roomId + ' - MusicRoom';
         
 	}, [roomId]);
     
@@ -159,9 +159,9 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
             setIsActuallyAdmin(true);
         }
         if(room.actuallyPlaying) {
-            document.title = 'En lecture - Room ID:' + roomId + ' - MusicRoom';
+            document.title = 'En lecture - Room ' + roomId + ' - MusicRoom';
         } else {
-            document.title = 'Room ID:' + roomId + ' - MusicRoom';
+            document.title = 'Room ' + roomId + ' - MusicRoom';
         }
 
         if(room.interactionsArray && room.interactionsArray.length > 0) {

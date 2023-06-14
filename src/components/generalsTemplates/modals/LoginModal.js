@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField';
 import { auth, googleProvider } from "../../../services/firebase";
 import { LoadingButton } from "@mui/lab";
 
-const LoginModal = ({ open, handleAnonymousLogin, signInWithGoogle, googleLoginLoading}) => {
+const LoginModal = ({ open, changeOpen, handleAnonymousLogin, signInWithGoogle, googleLoginLoading}) => {
     
     const [errorMessage, setErrorMessage] = useState();
     const [email, setEmail] = useState('')
@@ -37,7 +37,7 @@ const LoginModal = ({ open, handleAnonymousLogin, signInWithGoogle, googleLoginL
     return(
 
 
-        <Dialog open={open} 
+        <Dialog open={open} onClose={() => changeOpen(false)}
         sx={{
             "& .MuiDialog-container": {
                 "& .MuiPaper-root": {
