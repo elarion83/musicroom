@@ -21,6 +21,7 @@ const app = !firebase.apps.length
 
 const db = app.firestore();
 const auth = firebase.auth();
+const mailAndPassProvider = new firebase.auth.EmailAuthProvider();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 const storage = firebase.storage();
-export { db, auth, googleProvider, storage };
+export { db, auth,mailAndPassProvider, googleProvider, storage };

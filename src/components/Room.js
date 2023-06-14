@@ -50,7 +50,7 @@ import RoomTopBar from "./rooms/RoomTopBar";
 import SoundWave from "./rooms/SoundWave";
 import ControlButtons from "./rooms/playerSection/ControlButtons";
 
-const Room = ({ roomId }) => {
+const Room = ({ roomId, handleQuitRoom }) => {
 
     const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
 
@@ -287,14 +287,9 @@ const Room = ({ roomId }) => {
     }
 
     
-    function handleQuitRoom() {
-        if(localStorage.getItem("MusicRoom_RoomId")) {
-            
-            localStorage.removeItem("MusicRoom_SpotifyToken");
-            localStorage.removeItem("MusicRoom_RoomId");
-            window.location.reload(false);
-        } 
-        window.location.href = "/";
+    function handleQuitRoomInComp() {
+        handleQuitRoom();
+        localStorage.removeItem("MusicRoom_SpotifyToken");
     }
 
 // NEW FUNCTIONS FROM CHILD COMP
@@ -644,7 +639,7 @@ const Room = ({ roomId }) => {
         
         {loaded && room.roomParams && <ModalRoomParams adminView={isActuallyAdmin} open={openRoomParamModal} changeOpen={setOpenRoomParamModal} handleChangeRoomParams={handleChangeRoomParams} handleDisconnectFromSpotifyModal={setOpenForceDisconnectSpotifyModal} roomParams={room.roomParams} />} 
         <ModalShareRoom open={openInvitePeopleToRoomModal} changeOpen={setOpenInvitePeopleToRoomModal} roomUrl={ localData.domain +'/?rid='+roomId} />
-        <ModalLeaveRoom open={openLeaveRoomModal} changeOpen={setOpenLeaveRoomModal} handleQuitRoom={handleQuitRoom} />
+        <ModalLeaveRoom open={openLeaveRoomModal} changeOpen={setOpenLeaveRoomModal} handleQuitRoom={handleQuitRoomInComp} />
         <ModalForceSpotifyDisconnect open={openForceDisconnectSpotifyModal} changeOpen={setOpenForceDisconnectSpotifyModal} handleDisconnectSpotify={disconnectSpotify} />
 
 

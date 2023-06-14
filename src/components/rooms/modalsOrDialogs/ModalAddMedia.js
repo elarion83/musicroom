@@ -31,17 +31,18 @@ const RoomModalAddMedia = ({ roomId, validatedObjectToAdd, spotifyTokenProps }) 
     const [recentlyAdded, setRecentlyAdded]= useState(false);
     const [recentlyAddedTitle, setRecentlyAddedTitle]= useState('');
     const [isSearching, setIsSearching]= useState(false);
+
+    const [tabIndex, setTabIndex] = useState(0);
+    const handleTabChange = (event, newTabIndex) => {
+        setTabIndex(newTabIndex);
+    };
+    
     const delay = ms => new Promise(res => setTimeout(res, ms));
 
     const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
 
     const [addingObject, setAddingObject] = useState({title:'',source:'',url:'', addedBy: localStorage.getItem("MusicRoom_UserInfoPseudo")})
 
-    const handleTabChange = (event, newTabIndex) => {
-        setTabIndex(newTabIndex);
-    };
-
-    const [tabIndex, setTabIndex] = useState(0);
 
     async function handleCheckAndAddObjectToPlaylistFromObject(objectFormatted) {
         validatedObjectToAdd(objectFormatted);

@@ -17,19 +17,38 @@ import Grid from '@mui/material/Grid';
 import JoinRoomModal from "./components/generalsTemplates/modals/JoinRoomModal";
 import Contentslider from "./components/homePage/ContentSlider";
 
+import { auth } from "./services/firebase";
+import firebase from "firebase";
+
 function App() {
+
+  const [isSignedIn, setIsSignedIn] = useState(false);
   const [roomId, setRoomId] = useState(localStorage.getItem("MusicRoom_RoomId"));
+  const [userInfos, setUserInfo] = useState({});
   const [userInfoPseudo, setUserInfoPseudo] = useState(localStorage.getItem("MusicRoom_UserInfoPseudo"));
   
   const [joinRoomModalOpen, setJoinRoomModalOpen] = useState(false);
 
 	const queryParameters = new URLSearchParams(window.location.search)
 	const rid = queryParameters.get("rid");
+  
+  useEffect(() => {
+    const unregisterAuthObserver = auth.onAuthStateChanged(user => {
+      if (user) {
+        setUserInfo(user);
+        setIsSignedIn(true);
+      }
+      else {
+        setIsSignedIn(false);
+      }
+    }
+    )
+    return () => unregisterAuthObserver()
+  }, [])
 
-  useEffect(() => {   
+  useEffect(() => {  
     if(rid) {
       setRoomId(rid);
-      localStorage.setItem("MusicRoom_RoomId", rid);
     }
   }, [rid]);
 
@@ -37,7 +56,6 @@ function App() {
     var unique_id = uuid();
     var small_id = unique_id.slice(0,5).toLowerCase()
     setRoomId(small_id);
-    localStorage.setItem("MusicRoom_RoomId", small_id);
     window.scrollTo(0, 0);
   }
 
@@ -53,6 +71,12 @@ function App() {
     window.scrollTo(0, 0);
   }
 
+  function logOut() {
+    setRoomId();
+    localStorage.removeItem("MusicRoom_SpotifyToken");
+    auth.signOut();
+  }
+
   return (
     <>
       <CssBaseline />
@@ -60,8 +84,8 @@ function App() {
          <AppBar position="static" sx={{bgcolor: '#202124'}}>
             <Toolbar>
               <img src="img/logo_small.png" style={{ width: '250px', maxWidth:'50%'}} alt="MusicRoom logo"/>
-              {userInfoPseudo && (
-                <UserTopBar userInfoPseudo={userInfoPseudo} />
+              {isSignedIn && (
+                <UserTopBar userInfoPseudo={userInfos.email} handleLogout={logOut} />
               )}
             </Toolbar>
           </AppBar>
@@ -80,14 +104,14 @@ function App() {
                 <Icon icon="icon-park-outline:connect"  width="30" style={{marginRight:'20px'}}/>
                 Rejoindre une Room </Button> 
 
-            <JoinRoomModal open={joinRoomModalOpen} changeOpen={setJoinRoomModalOpen} handleJoinRoom={handleJoinRoomByRoomId} />
+                <JoinRoomModal open={joinRoomModalOpen} changeOpen={setJoinRoomModalOpen} handleJoinRoom={handleJoinRoomByRoomId} />
            
             </Container>
         </Box>
         }
-        {roomId && <Room className='room_bloc' roomId={roomId}></Room>}
+        {roomId && <Room className='room_bloc' roomId={roomId} handleQuitRoom={setRoomId()}></Room>}
 
-        {(!userInfoPseudo || userInfoPseudo === '' || userInfoPseudo.length === 0 || userInfoPseudo == 'null') && <LoginModal 
+        {!isSignedIn && <LoginModal 
         open={true} 
         handleSetPseudo={logIn} 
         />}

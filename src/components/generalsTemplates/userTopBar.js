@@ -13,7 +13,9 @@ import Grid from '@mui/material/Grid';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Typography from '@mui/material/Typography';
 
-const UserTopBar = ({ userInfoPseudo }) => {
+import { auth } from './../../services/firebase';
+
+const UserTopBar = ({ userInfoPseudo, handleLogout }) => {
 
     function handleClickMenu(event) {
         setAnchorEl(event.currentTarget);
@@ -21,13 +23,6 @@ const UserTopBar = ({ userInfoPseudo }) => {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
-
-    function handleLogout() {
-        localStorage.removeItem("MusicRoom_RoomId");
-        localStorage.removeItem("MusicRoom_SpotifyToken");
-        localStorage.removeItem("MusicRoom_UserInfoPseudo");
-        window.location.reload();
-    }
 
     const handleClose = () => {
         setAnchorEl(null);
