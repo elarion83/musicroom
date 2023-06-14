@@ -61,14 +61,13 @@ const LoginModal = ({ open, handleSetPseudo}) => {
     return(
 
 
-        <Dialog open={open}>
+        <Dialog open={open} maxWidth='xl'>
             <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
                     <Icon icon='carbon:user-avatar' style={{marginRight:'10px'}} /> Connexion
             </DialogTitle>  
             <DialogContent dividers sx={{pt:0}}>
                 {errorMessage}
                 <Grid container sx={{pr:1, pt:1, pb:2}} direction="row" justifyContent={tabIndex === 0 ? "flex-end": "flex-start"}  alignItems="center" >
-                    
                     {tabIndex == 1 && 
                         <Button 
                             startIcon={<Icon icon="raphael:arrowleft" /> }
@@ -77,7 +76,7 @@ const LoginModal = ({ open, handleSetPseudo}) => {
                         Connexion Classique
                     </Button>}
                 </Grid>
-                <DialogContentText sx={{p:0,ml:7,mr:7}}>
+                <DialogContentText sx={{p:0}}>
                 
                 {tabIndex == 0 && 
                 

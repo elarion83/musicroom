@@ -62,7 +62,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
     const [openRoomParamModal, setOpenRoomParamModal] = useState(false);
     const [localVolume, setLocalVolume] = useState(0);
     const [pip, setPip] = useState(true);
-	const roomRef = db.collection("rooms").doc(roomId.trim());
+	const roomRef = db.collection("rooms").doc(roomId);
     const [userCanMakeInteraction, setUserCanMakeInteraction]= useState(true);
     const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
     const [openForceDisconnectSpotifyModal, setOpenForceDisconnectSpotifyModal] = useState(false);

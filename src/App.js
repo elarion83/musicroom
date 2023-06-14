@@ -69,7 +69,7 @@ function App() {
   }
 
   function joinRoomByRoomId(idRoom) {
-    setRoomId(idRoom.toLowerCase());
+    setRoomId(idRoom.toLowerCase().trim());
     replaceCurrentUrlWithRoomUrl(idRoom);
     window.scrollTo(0, 0);
   }
