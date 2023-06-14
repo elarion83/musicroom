@@ -26,9 +26,7 @@ import { Snackbar } from "@mui/material";
 function App() {
   // general app statuts
   const [isAppLoading, setIsAppLoading] = useState(true);
-  const [isGoogleLoginLoading, setIsGoogleLoginLoading] = useState(false);
-  const [isEmailandPassLoading, setIsEmailandPassLoading] = useState(false);
-  const [isAnonymousLoginLoading, setIsAnonymousLoginLoading] = useState(false);
+  const [isLoginLoading, setIsLoginLoading] = useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = useState();
 
   // room infos
@@ -105,9 +103,9 @@ function App() {
   
 
   async function anonymousLogin() {
-    setIsAnonymousLoginLoading(true);
+    setIsLoginLoading(true);
     await delay(500);
-    setIsAnonymousLoginLoading(false);
+    setIsLoginLoading(false);
     setUserInfo({displayName:PseudoGenerated});
 
     localStorage.setItem("MusicRoom_AnonymouslyPseudo",  PseudoGenerated);
@@ -119,28 +117,28 @@ function App() {
   }
 
   async function handleGoogleLogin() {
-    setIsGoogleLoginLoading(true);
+    setIsLoginLoading(true);
     await auth.signInWithPopup(googleProvider)
         .then((result) => { 
           if(result.additionalUserInfo.isNewUser) {
             result.user.updateProfile({displayName: PseudoGenerated}).then((result) => { 
-              setIsGoogleLoginLoading(false);
+              setIsLoginLoading(false);
               setUserInfo({displayName:PseudoGenerated});        
               handleLoginOkSnackNewUser();
             });
           } else {
-            setIsGoogleLoginLoading(false);
+            setIsLoginLoading(false);
             handleLoginOkSnack();
           }
         })
         .catch((err) => {
-            setIsGoogleLoginLoading(false);
+            setIsLoginLoading(false);
             setLoginErrorMessage('Une erreur est survenue');
         });
   }
 
   async function handlePasswordAndMailLogin(email,password) {
-    setIsEmailandPassLoading(true);
+    setIsLoginLoading(true);
     await auth.createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 handleLoginOkSnackNewUser();
@@ -151,16 +149,16 @@ function App() {
                         .then((userCredential) => {
                             // Signed in
                             handleLoginOkSnack();
-                            setIsEmailandPassLoading(false);
+                            setIsLoginLoading(false);
                             return userCredential.user;
                         })
                         .catch((error) => {
                             setLoginErrorMessage(error.message);
-                            setIsEmailandPassLoading(false);
+                            setIsLoginLoading(false);
                         })
                 } else {
                     setLoginErrorMessage(error.message);
-                    setIsEmailandPassLoading(false);
+                    setIsLoginLoading(false);
                 }
             })
   }
@@ -177,8 +175,7 @@ function App() {
 
   function resetLoginModalAfterSuccessfullLogin() {
     setLoginErrorMessage();
-    setIsEmailandPassLoading(false);
-    setIsGoogleLoginLoading(false);
+    setIsLoginLoading(false);
   }
 
   function logOut() {
@@ -252,9 +249,7 @@ function App() {
         handleGoogleLogin={handleGoogleLogin}
         handlePasswordAndMailLogin={handlePasswordAndMailLogin}
         loginErrorMessage={loginErrorMessage}
-        googleLoginLoading={isGoogleLoginLoading}
-        EmailandPassLoading={isEmailandPassLoading}
-        anonymousLoginLoading={isAnonymousLoginLoading}
+        loginLoading={isLoginLoading}
         redirectToHome={handleQuitRoomMain}
         roomId={roomId}
         />}

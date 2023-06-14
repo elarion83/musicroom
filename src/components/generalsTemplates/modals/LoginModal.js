@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField';
 import { auth, googleProvider } from "../../../services/firebase";
 import { LoadingButton } from "@mui/lab";
 
-const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin, handlePasswordAndMailLogin, googleLoginLoading, anonymousLoginLoading, EmailandPassLoading, redirectToHome, roomId, loginErrorMessage}) => {
+const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin, handlePasswordAndMailLogin, loginLoading, redirectToHome, roomId, loginErrorMessage}) => {
     
     const [errorMessage, setErrorMessage] = useState();
     const [email, setEmail] = useState('')
@@ -57,7 +57,7 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin,
                             />           
                             <LoadingButton
                                     loadingPosition='start'
-                                    loading={EmailandPassLoading}
+                                    loading={loginLoading}
                                     variant="contained" 
                                     startIcon={<Icon icon="material-symbols:login" />}
                                     className='main_bg_color buttonBorder btnIconFixToLeft' 
@@ -70,7 +70,8 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin,
                             OU
                         </Divider>  
                             <LoadingButton 
-                                    loading={anonymousLoginLoading}
+                                    loading={loginLoading}
+                                    loadingPosition='start'
                                     className='borderMainColor btnIconFixToLeft'
                                     variant="outlined"
                                     startIcon={<Icon icon="mdi:anonymous" />}
@@ -82,7 +83,7 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin,
                         </Divider>  
                             <LoadingButton
                                     loadingPosition='start'
-                                    loading={googleLoginLoading}
+                                    loading={loginLoading}
                                     className='borderMainColor btnIconFixToLeft'
                                     startIcon={<Icon icon="ri:google-fill" />}
                                     variant="outlined"
