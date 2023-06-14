@@ -346,11 +346,8 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
 
 
     async function handleChangeSpotifyToken(newToken) {
-        
         roomRef.set({roomParams:{spotifyToken: newToken,spotifyIsLinked:true,spotifyAlreadyHaveBeenLinked:true, spotifyTokenTimestamp: Date.now(), spotifyUserConnected:currentUser.displayName}}, { merge: true });
-        
-        await delay(2000);
-        window.location.href = "/?rid="+roomId.replace(/\s/g,'');
+        window.history.replaceState('string','', window.location.href.replace('#','')+"?rid="+roomId.replace(/\s/g,''));
     }
 
 
