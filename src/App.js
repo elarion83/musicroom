@@ -22,18 +22,24 @@ import firebase from "firebase";
 
 function App() {
 
+  // general app infos
+  const [isAppLoading, setIsAppLoading] = useState(true);
+
+  // room infos
 	const queryParameters = new URLSearchParams(window.location.search)
   const [roomId, setRoomId] = useState(queryParameters.get("rid") ? queryParameters.get("rid") : '');
 
+  // user infos
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [userInfos, setUserInfo] = useState({});
   const [userInfoPseudo, setUserInfoPseudo] = useState(localStorage.getItem("MusicRoom_UserInfoPseudo"));
   
+  // modal infos
   const [joinRoomModalOpen, setJoinRoomModalOpen] = useState(false);
 
-  
   useEffect(() => {
     const unregisterAuthObserver = auth.onAuthStateChanged(user => {
+
       if (user) {
         setUserInfo(user);
         setIsSignedIn(true);
@@ -45,11 +51,11 @@ function App() {
       else {
         setIsSignedIn(false);
       }
+      setIsAppLoading(false);
     }
     )
     return () => unregisterAuthObserver()
   }, [])
-
   
   function createNewRoom() {
     var newRoomId = uuid().slice(0,5).toLowerCase()
@@ -132,7 +138,7 @@ function App() {
         }
         {roomId && <Room className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain}></Room>}
 
-        {!isSignedIn && <LoginModal 
+        {!isSignedIn && !isAppLoading && <LoginModal 
         open={true} 
         handleSetPseudo={anonymousLogin} 
         />}
