@@ -42,6 +42,7 @@ function App() {
   const [joinRoomModalOpen, setJoinRoomModalOpen] = useState(false);
 
   // snackbar statuts
+  const [loginNewUserOkSnackBarOpen, setLoginNewUserOkSnackBarOpen] = useState(false);
   const [loginOkSnackBarOpen, setLoginOkSnackBarOpen] = useState(false);
   const [logoutOkSnackBarOpen, setLogoutOkSnackBarOpen] = useState(false);
 
@@ -80,7 +81,7 @@ function App() {
 
             if(localStorage.getItem("MusicRoom_SpotifyRoomId")) {
               joinRoomByRoomId(localStorage.getItem("MusicRoom_SpotifyRoomId"));
-            replaceCurrentUrlWithRoomUrl(localStorage.getItem("MusicRoom_SpotifyRoomId"));
+              replaceCurrentUrlWithRoomUrl(localStorage.getItem("MusicRoom_SpotifyRoomId"));
             }
         }
     }, [])
@@ -105,7 +106,7 @@ function App() {
     localStorage.setItem("MusicRoom_AnonymouslyLoggedIn",  true);
 
     setIsSignedIn(true);
-    handleLoginOkSnack();
+    handleLoginOkSnackNewUser();
     window.scrollTo(0, 0);
   }
 
@@ -115,16 +116,17 @@ function App() {
         .then((result) => { 
           if(result.additionalUserInfo.isNewUser) {
             result.user.updateProfile({displayName: PseudoGenerated}).then((result) => { 
-              setUserInfo({displayName:PseudoGenerated});        
-              handleLoginOkSnack();
               setIsGoogleLoginLoading(false);
+              setUserInfo({displayName:PseudoGenerated});        
+              handleLoginOkSnackNewUser();
             });
           } else {
-            handleLoginOkSnack();
             setIsGoogleLoginLoading(false);
+            handleLoginOkSnack();
           }
         })
         .catch((err) => {
+            setIsGoogleLoginLoading(false);
             setLoginErrorMessage('Une erreur est survenue');
         });
   }
@@ -133,7 +135,7 @@ function App() {
     setIsEmailandPassLoading(true);
     await auth.createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {
-                handleLoginOkSnack();
+                handleLoginOkSnackNewUser();
             })
             .catch((error) => {
                 if(error.code === "auth/email-already-in-use") {
@@ -157,6 +159,18 @@ function App() {
 
   function handleLoginOkSnack() {
     setLoginOkSnackBarOpen(true);
+    resetLoginModalAfterSuccessfullLogin();
+  }
+
+  function handleLoginOkSnackNewUser() {
+    setLoginNewUserOkSnackBarOpen(true);
+    resetLoginModalAfterSuccessfullLogin();
+  }
+
+  function resetLoginModalAfterSuccessfullLogin() {
+    setLoginErrorMessage();
+    setIsEmailandPassLoading(false);
+    setIsGoogleLoginLoading(false);
   }
 
   function logOut() {
@@ -226,7 +240,6 @@ function App() {
         {!isSignedIn && !isAppLoading && (roomId || loginModalOpen) && <LoginModal 
         open={true} 
         changeOpen={(e) => setLoginModalOpen(false)}
-        handleLoginOkSnack={handleLoginOkSnack}
         handleAnonymousLogin={anonymousLogin}
         handleGoogleLogin={handleGoogleLogin}
         handlePasswordAndMailLogin={handlePasswordAndMailLogin}
@@ -243,6 +256,13 @@ function App() {
           onClose={() => setLoginOkSnackBarOpen(false)}
           sx={{borderRadius:'2px'}}
           message={"Bienvenue "+userInfos.displayName+" !"}
+          />
+          <Snackbar
+          open={loginNewUserOkSnackBarOpen}
+          autoHideDuration={3000}
+          onClose={() => setLoginNewUserOkSnackBarOpen(false)}
+          sx={{borderRadius:'2px'}}
+          message={"Bienvenue "+userInfos.displayName+", 1e connexion !"}
           />
         <Snackbar
           open={logoutOkSnackBarOpen}

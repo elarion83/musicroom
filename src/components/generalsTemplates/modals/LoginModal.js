@@ -41,7 +41,6 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin,
                     <Grid container direction="column" >
                         <Box sx={{display:'flex', flexDirection:'column'}}>     
                             <TextField
-                                helperText="bienlebonjour@mail.fr"
                                 id="loginMailAndPass_EmailField"
                                 label="Adresse Email"
                                 value={email}  
@@ -52,21 +51,22 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin,
                                 value={password}
                                 type='password'  
                                 onChange={(e) => setPassword(e.target.value)}   
-                                helperText="Mot de passe"
                                 sx={{mt:2}}
                                 id="loginMailAndPass_PassField"
                                 label="Mot de passe"
                             />           
                             <LoadingButton
+                                    loadingPosition='start'
                                     loading={EmailandPassLoading}
                                     variant="contained" 
+                                    startIcon={<Icon icon="material-symbols:login" />}
                                     className='main_bg_color buttonBorder' 
                             sx={{mt:2}} onClick={e => onEmailAndPasswordSubmit()}> 
-                            Go ! 
+                            Continuer 
                             </LoadingButton>                  
                         </Box> 
                         
-                        <Divider sx={{mt:2,mb:2}}>
+                        <Divider sx={{mt:3,mb:2}}>
                             OU
                         </Divider>  
                             <Button 
@@ -80,6 +80,7 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin,
                             OU
                         </Divider>  
                             <LoadingButton
+                                    loadingPosition='start'
                                     loading={googleLoginLoading}
                                     className='borderMainColor'
                                     startIcon={<Icon icon="ri:google-fill" />}
