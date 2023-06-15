@@ -398,12 +398,21 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
   // transitions
   return (
     <div className="flex flex-col w-full gap-0 relative " style={{height:'auto'}} > 
-        {loaded && room.roomParams !== undefined && <RoomTopBar localData={localData} roomId={roomId} roomAdmin={room.admin} isLinkedToSpotify={room.roomParams.spotifyIsLinked}/>}
+        {loaded && room.roomParams !== undefined && 
+            <RoomTopBar 
+                handleOpenRoomParamModal={handleOpenRoomParamModal}
+                handleOpenShareModal={handleOpenShareModal}
+                handleOpenLeaveRoomModal={handleOpenLeaveRoomModal}
+                localData={localData} 
+                roomId={roomId} 
+                roomAdmin={room.admin} 
+                isLinkedToSpotify={room.roomParams.spotifyIsLinked}/>
+        }
         <Container maxWidth={false} sx={{ padding: '0 !important'}} >
             {loaded && room.playlistUrls && <div>
                 {!room.playlistEmpty && room.playlistUrls.length > 0 && room.playing !== null && 
                     <Box sx={{bgcolor:'#303030',borderBottom: '2px solid var(--border-color)', padding:"0px 0em"}}> 
-                        <Grid container spacing={0} sx={{ bgcolor:'var(--grey-dark)',}} className={viewPlayer ? 'playerShow' : 'playerHide'}>
+                        <Grid container spacing={0} sx={{ bgcolor:'var(--grey-dark)'}} className={viewPlayer ? 'playerShow' : 'playerHide'}>
 
                             <Grid item className={isFullScreen ? 'fullscreen' : 'playerContainer'} sm={(room.playlistUrls[room.playing].source === 'spotify' ) ? 12 : 4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
                                 {spotifyPlayerShow && isActuallyAdmin && room.playlistUrls[room.playing].source === 'spotify' &&
@@ -642,6 +651,8 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
 
         {loaded && room.roomParams && 
             <BottomInteractions 
+                currentUser={currentUser}
+                roomId={roomId}
                 roomParams={room.roomParams}
                 roomNotifs={(room.notifsArray) ? room.notifsArray: ''}
                 userCanMakeInteraction={userCanMakeInteraction}

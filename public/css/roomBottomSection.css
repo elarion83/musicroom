@@ -2,7 +2,7 @@
     position: fixed;
     display: flex;
     justify-content: center;
-    bottom: 15px;
+    bottom: 0;
     width: 100%;
     z-index: 1300;
     align-items: flex-end;
@@ -29,4 +29,8 @@
 
 .addMediaIcon:hover {
     color:var(--white);
+}
+
+.awssld__content {
+    align-items: end !important;
 }

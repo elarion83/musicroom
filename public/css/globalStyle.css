@@ -18,7 +18,12 @@
 
 .hidden, .jss5 {
   display: none !important;
-  opacity: 0;
+}
+
+.hiddenButPresent {
+  opacity: 0 !important;
+  height: 0 !important;
+  overflow: hidden;
 }
 
 h1,h2,h3,h4,h5,h6,span {
