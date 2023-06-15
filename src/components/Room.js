@@ -124,9 +124,8 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                     db.collection("rooms").doc(roomId).set(docData).then(() => {});
                     setRoom(docData);
                 }
-        
+                setLoaded(true);
             });
-            setLoaded(true);
 	};
 
     useKeypress([' '], () => {
@@ -143,9 +142,6 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
 
 	useEffect(() => {
         
-        var tempNotifArray = []
-        tempNotifArray.push({type: 'userArrived', timestamp: Date.now(), createdBy: currentUser.displayName});
-        roomRef.set({notifsArray: tempNotifArray},{merge:true})
 		getRoomData(roomId); 
         localStorage.setItem("MusicRoom_SpotifyRoomId", roomId)
         if(null === localStorage.getItem("MusicRoom_UserInfoVotes")) {
@@ -157,7 +153,14 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
         document.title = 'Room ' + roomId + ' - MusicRoom';
 
 	}, [roomId]);
-    
+
+    useEffect(() => {
+        if(loaded) {
+            room.notifsArray.push({type: 'userArrived', timestamp: Date.now(), createdBy: currentUser.displayName});
+            roomRef.set({notifsArray: room.notifsArray},{merge:true});
+        } 
+    }, [loaded]);
+
 	useEffect(() => {
         if(currentUser.displayName === room.admin || currentUser.displayName === room.admin) {
             setIsActuallyAdmin(true);
@@ -293,7 +296,8 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
 
     
     function handleQuitRoomInComp() {
-        handleQuitRoom();
+        room.notifsArray.push({type: 'userLeaved', timestamp: Date.now(), createdBy: currentUser.displayName});
+        roomRef.set({notifsArray: room.notifsArray},{merge:true}).then(() => {handleQuitRoom();});
     }
 
 // NEW FUNCTIONS FROM CHILD COMP

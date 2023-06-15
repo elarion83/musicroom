@@ -16,6 +16,7 @@ import { Icon } from '@iconify/react';
 
 const BottomInteractions = ({ roomParams, roomNotifs, userCanMakeInteraction, createNewRoomInteraction, setOpenAddToPlaylistModal, handleOpenRoomParamModal,handleOpenShareModal,handleOpenLeaveRoomModal, OpenAddToPlaylistModal, checkRoomExist, checkInterractionLength,checkNotificationsLength }) => {
 
+
     return(
         <Grid className='room_bottom_interactions'>
             <Tooltip className={!roomParams.interactionsAllowed ? 'hidden' : 'animate__animated animate__fadeInUp animate__delay-2s animate__faster'}
@@ -67,22 +68,22 @@ const BottomInteractions = ({ roomParams, roomNotifs, userCanMakeInteraction, cr
                     <ExitToAppIcon  fontSize="small" />
                 </Fab>
             </Tooltip>
-            {checkInterractionLength && <Snackbar
-                key = {roomParams.interactionsArray[roomParams.interactionsArray.length-1].timestamp+'_'+roomParams.interactionsArray[roomParams.interactionsArray.length-1].createdBy}
-                open={ (((Date.now() - roomParams.interactionsArray[roomParams.interactionsArray.length-1].timestamp) < 1000)) ? true:false}
-                autoHideDuration={1000}
-                sx={{borderRadius:'2px'}}
-                message= {roomParams.interactionsArray[roomParams.interactionsArray.length-1].createdBy +' a réagi :'+roomParams.interactionsArray[roomParams.interactionsArray.length-1].type+':' }
-            />}
             
-            {checkNotificationsLength && <Snackbar
-                open={((Date.now() - roomNotifs[roomNotifs.length - 1].timestamp) < 2000)}
-              //  open={true}
-                autoHideDuration={8000}
+            {checkNotificationsLength && roomNotifs[roomNotifs.length - 1].type == 'userArrived' && <Snackbar
+                open={((Date.now() - roomNotifs[roomNotifs.length - 1].timestamp) < 4000)}
+                key={'notif'+roomNotifs[roomNotifs.length - 1].timestamp}
+                autoHideDuration={4000}
                 sx={{ borderRadius:'2px'}}
                 message={roomNotifs[roomNotifs.length - 1].createdBy+" a rejoins la room !"}
-               
             />}
+            {checkNotificationsLength && roomNotifs[roomNotifs.length - 1].type == 'userLeaved' && <Snackbar
+                open={((Date.now() - roomNotifs[roomNotifs.length - 1].timestamp) < 4000)}
+                key={'notif'+roomNotifs[roomNotifs.length - 1].timestamp}
+                autoHideDuration={4000}
+                sx={{ borderRadius:'2px'}}
+                message={roomNotifs[roomNotifs.length - 1].createdBy+" a quitté la room !"}
+            />}
+
             <Snackbar
                 open={((Date.now() - roomParams.spotifyTokenTimestamp) < 8000) && roomParams.spotifyAlreadyHaveBeenLinked}
                 autoHideDuration={8000}
