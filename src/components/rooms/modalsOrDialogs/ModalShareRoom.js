@@ -1,14 +1,13 @@
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
 import React, { useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
-import Button from '@mui/material/Button';
-import Alert from '@mui/material/Alert';
-import Box from '@mui/material/Box';
-import {ShareSocial} from 'react-share-social' 
+import { ShareSocial } from 'react-share-social';
 
-import DialogTitle from '@mui/material/DialogTitle';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { Dialog, DialogContent, DialogContentText } from "@mui/material";
 import ShareIcon from '@mui/icons-material/Share';
+import { Dialog, DialogContent } from "@mui/material";
+import DialogTitle from '@mui/material/DialogTitle';
 
 const ModalShareRoom = ({ roomUrl, open, changeOpen }) => {
 

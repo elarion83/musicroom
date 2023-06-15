@@ -2,7 +2,7 @@ import { Grid, IconButton } from "@mui/material";
 
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 
-const ControlButtons = ({ }) => {
+const ControlButtons = () => {
    
     return(
           <Grid item sm={12} sx={{ bgcolor:'red', position:'sticky', top:'30px', zIndex:8000}}   >

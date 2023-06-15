@@ -40,7 +40,7 @@ const RoomPlaylist = ({isSpotifyAvailable, isAdminView, roomPlaylist, roomIdActu
     }
     
     function handleChangeIdActuallyPlayingInComp(id) {
-        if(roomPlaylist[id].source == 'spotify' && !isSpotifyAvailable ) {
+        if(roomPlaylist[id].source === 'spotify' && !isSpotifyAvailable ) {
             handleChangeIdActuallyPlayingInComp(id+1);
         } else {
             handleChangeIdActuallyPlaying(id);
@@ -53,7 +53,7 @@ const RoomPlaylist = ({isSpotifyAvailable, isAdminView, roomPlaylist, roomIdActu
                     {roomPlaylist.map(function(d, idx){
                     return (
                         <Fade key={idx} in={true} xs={12} sx={{  width:'100%', p:0, m:0}}>
-                            <Grid item sx={{width:'100%', p:0,pl:2, m:0}} className={`playlist_bloc ${(d.source == 'spotify') ? !isSpotifyAvailable ? 'mediaUnavailable' : '' : 'mediaAvailable'}`}> 
+                            <Grid item sx={{width:'100%', p:0,pl:2, m:0}} className={`playlist_bloc ${(d.source === 'spotify') ? !isSpotifyAvailable ? 'mediaUnavailable' : '' : 'mediaAvailable'}`}> 
                                 
                                 <ListItemButton sx={{ alignItems:'flex-start',position:'relative',width:'100%', pt:1,pl:0,m:0, backgroundColor:'var(--main-bg-color)',borderBottom: '2px solid var(--border-color)', color:'var(--white)', "&.Mui-selected": {
                                         backgroundColor: "var(--grey-dark)",
@@ -72,7 +72,7 @@ const RoomPlaylist = ({isSpotifyAvailable, isAdminView, roomPlaylist, roomIdActu
                                             {idx === idDisplaying && idx !== roomIdActuallyPlaying && <ExpandLessIcon sx={{display:'inline-block'}} onClick={e => handleChangeIdActuallyDisplaying(-1)}  />}
                                             {(idx === idDisplaying) && (idx !== roomIdActuallyPlaying) && isAdminView && <PlayCircleOutlineIcon sx={{mt:1}} onClick={e => handleChangeIdActuallyPlayingInComp(idx)}  />}
                                             
-                                            {(d.source == 'spotify' && !isSpotifyAvailable) && (idx !== roomIdActuallyPlaying) && (idx === idDisplaying) && <Icon className='mediaForbiddenIcon' icon="ps:forbidden" />}
+                                            {(d.source === 'spotify' && !isSpotifyAvailable) && (idx !== roomIdActuallyPlaying) && (idx === idDisplaying) && <Icon className='mediaForbiddenIcon' icon="ps:forbidden" />}
                                             {idx === roomIdActuallyPlaying && 
                                                 <SoundWave waveNumber={7}  isPlayingOrNo={roomIsActuallyPlaying} />
                                             }
@@ -85,7 +85,7 @@ const RoomPlaylist = ({isSpotifyAvailable, isAdminView, roomPlaylist, roomIdActu
                                             {d.source === 'dailymotion' && <Icon style={{display:'inline', marginRight:'0.5em'}} icon="bxl:dailymotion" />}
                                             {d.source === 'soundcloud' && <Icon style={{display:'inline', marginRight:'0.5em'}} icon="mdi:soundcloud" />}
                                             {d.source === 'url' && <Icon style={{display:'inline', marginRight:'0.5em'}} icon="mdi:link-variant" />}
-                                            {(d.source == 'spotify' && !isSpotifyAvailable) && <Icon style={{display:'inline', marginRight:'0.5em', color:'red'}} icon="ps:forbidden" />}
+                                            {(d.source === 'spotify' && !isSpotifyAvailable) && <Icon style={{display:'inline', marginRight:'0.5em', color:'red'}} icon="ps:forbidden" />}
                                             {d.title.length > 50 ? d.title.substring(0, 50)+'...' : d.title}
                                         </ListItemText>}
                                         { (d.title && d.title.length === 0) || !d.title && 
@@ -93,21 +93,21 @@ const RoomPlaylist = ({isSpotifyAvailable, isAdminView, roomPlaylist, roomIdActu
                                             primary={d.url.substring(0, 40)+'...'} />
                                         }
                                         
-                                        {(idx === idDisplaying  || roomIdActuallyPlaying == idx)  && 
+                                        {(idx === idDisplaying  || roomIdActuallyPlaying === idx)  && 
                                             <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, pt:1, fontSize: '10px', textTransform:'uppercase' }}>
                                                 Ajouté par <span>{ d.addedBy }</span>
                                             </Typography>
                                         }
-                                        {(idx === idDisplaying || roomIdActuallyPlaying == idx)  && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1, fontSize: '8px', textTransform:'uppercase' }}>
+                                        {(idx === idDisplaying || roomIdActuallyPlaying === idx)  && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1, fontSize: '8px', textTransform:'uppercase' }}>
                                                 Source : { d.source } 
-                                                {(d.source == 'spotify' && !isSpotifyAvailable) && <span style={{color:'var(--red) !important'}} > ( Non connecté )</span>}
+                                                {(d.source === 'spotify' && !isSpotifyAvailable) && <span style={{color:'var(--red) !important'}} > ( Non connecté )</span>}
                                             </Typography>
                                         }
                                         {idx === roomIdActuallyPlaying && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
                                             {roomIsActuallyPlaying ? 'En lecture' : 'En pause'}
                                         </Typography>}
                                     </Grid>
-                                   {idx === roomIdActuallyPlaying && <LinearProgress sx={{height:'10px',top:0, position:'absolute', width:'100%', height:'100%', zIndex:1, opacity:0.5, "& .MuiLinearProgress-barColorPrimary": {
+                                   {idx === roomIdActuallyPlaying && <LinearProgress sx={{top:0, position:'absolute', width:'100%', height:'100%', zIndex:1, opacity:0.5, "& .MuiLinearProgress-barColorPrimary": {
                                         backgroundColor: "var(--grey-dark)",
                                     }}} variant="determinate" value={roomPlayedActuallyPlayed} /> }
                                 </ListItemButton>

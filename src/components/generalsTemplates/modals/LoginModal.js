@@ -1,16 +1,13 @@
 import { Icon } from "@iconify/react";
-import { Alert, AlertTitle, Box, Button, Card, Chip, Dialog, DialogContent, DialogContentText, DialogTitle, Divider, Grid, InputAdornment, Tab, Tabs, Typography } from "@mui/material";
+import { Alert, Box, Button, Dialog, DialogContent, DialogContentText, DialogTitle, Divider, Grid } from "@mui/material";
 import { useState } from "react";
 
-import DoubleArrowIcon from '@mui/icons-material/DoubleArrow';
 import TextField from '@mui/material/TextField';
 
-import { auth, googleProvider } from "../../../services/firebase";
 import { LoadingButton } from "@mui/lab";
 
 const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin, handlePasswordAndMailLogin, loginLoading, redirectToHome, roomId, loginErrorMessage}) => {
     
-    const [errorMessage, setErrorMessage] = useState();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
         

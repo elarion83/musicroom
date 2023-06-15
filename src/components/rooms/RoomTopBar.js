@@ -1,26 +1,21 @@
 import Typography from '@mui/material/Typography';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+import { Icon } from '@iconify/react';
+import InfoIcon from '@mui/icons-material/Info';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { Divider } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Badge from '@mui/material/Badge';
+import ListItemIcon from '@mui/material/ListItemIcon';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import Button from '@mui/material/Button';
-import InfoIcon from '@mui/icons-material/Info';
-import ListItemIcon from '@mui/material/ListItemIcon';
+import Toolbar from '@mui/material/Toolbar';
+import Tooltip from '@mui/material/Tooltip';
 import 'animate.css';
-import Switch from '@mui/material/Switch';
-import Badge from '@mui/material/Badge';
-import { Icon } from '@iconify/react';
-import { Divider, MenuList } from '@mui/material';
 
 
-const RoomTopBar = ({localData, roomId, roomAdmin, isLinkedToSpotify }) => {
-    
-    const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
+const RoomTopBar = ({roomId, roomAdmin, isLinkedToSpotify }) => {
 
     function handleClickMenu(event) {
         setAnchorEl(event.currentTarget);

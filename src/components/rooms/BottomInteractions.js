@@ -1,15 +1,14 @@
-import { Fab, Grid, Snackbar, Tooltip } from '@mui/material';
-import Button from '@mui/material/Button';
-import React from "react";
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import CelebrationIcon from '@mui/icons-material/Celebration';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import { Fab, Grid, Snackbar, Tooltip } from '@mui/material';
+import Button from '@mui/material/Button';
+import React from "react";
 
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import ShareIcon from '@mui/icons-material/Share';
 import TuneIcon from '@mui/icons-material/Tune';
-import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import Badge from '@mui/material/Badge';
 
 import { Icon } from '@iconify/react';
@@ -69,14 +68,14 @@ const BottomInteractions = ({ roomParams, roomNotifs, userCanMakeInteraction, cr
                 </Fab>
             </Tooltip>
             
-            {checkNotificationsLength && roomNotifs[roomNotifs.length - 1].type == 'userArrived' && <Snackbar
+            {checkNotificationsLength && roomNotifs[roomNotifs.length - 1].type === 'userArrived' && <Snackbar
                 open={((Date.now() - roomNotifs[roomNotifs.length - 1].timestamp) < 4000)}
                 key={'notif'+roomNotifs[roomNotifs.length - 1].timestamp}
                 autoHideDuration={4000}
                 sx={{ borderRadius:'2px'}}
                 message={roomNotifs[roomNotifs.length - 1].createdBy+" a rejoins la room !"}
             />}
-            {checkNotificationsLength && roomNotifs[roomNotifs.length - 1].type == 'userLeaved' && <Snackbar
+            {checkNotificationsLength && roomNotifs[roomNotifs.length - 1].type === 'userLeaved' && <Snackbar
                 open={((Date.now() - roomNotifs[roomNotifs.length - 1].timestamp) < 4000)}
                 key={'notif'+roomNotifs[roomNotifs.length - 1].timestamp}
                 autoHideDuration={4000}

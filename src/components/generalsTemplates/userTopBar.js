@@ -1,19 +1,17 @@
-import React, { useState } from "react";
 import Box from '@mui/material/Box';
+import React, { useState } from "react";
 
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Logout from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
-import Logout from '@mui/icons-material/Logout';
-import Grid from '@mui/material/Grid';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Typography from '@mui/material/Typography';
 
-import { auth } from './../../services/firebase';
 
 const UserTopBar = ({ userInfoPseudo, handleLogout }) => {
 

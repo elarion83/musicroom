@@ -18,7 +18,6 @@ import JoinRoomModal from "./components/generalsTemplates/modals/JoinRoomModal";
 import Contentslider from "./components/homePage/ContentSlider";
 
 import { auth, googleProvider } from "./services/firebase";
-import firebase from "firebase";
 
 import {PseudoGenerated} from './services/pseudoGenerator';
 import { Snackbar } from "@mui/material";

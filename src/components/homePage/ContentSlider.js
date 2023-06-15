@@ -5,7 +5,7 @@ import { Box } from "@mui/system";
 import AwesomeSlider from 'react-awesome-slider';
 import withAutoplay from 'react-awesome-slider/dist/autoplay';
 import 'react-awesome-slider/dist/styles.css';
-const Contentslider = ({ }) => {
+const Contentslider = () => {
  
     const AutoplaySlider = withAutoplay(AwesomeSlider);
     return(

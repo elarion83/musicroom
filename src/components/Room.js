@@ -35,7 +35,6 @@ import Typography from '@mui/material/Typography';
 import VolumeDown from '@mui/icons-material/VolumeDown';
 import VolumeUp from '@mui/icons-material/VolumeUp';
 import Slider from '@mui/material/Slider';
-import CloseIcon from '@mui/icons-material/Close';
 
 import RoomModalAddMedia from './rooms/modalsOrDialogs/ModalAddMedia';
 import ModalForceSpotifyDisconnect from "./rooms/modalsOrDialogs/ModalForceSpotifyDisconnect";
@@ -43,12 +42,11 @@ import ModalLeaveRoom from './rooms/modalsOrDialogs/ModalLeaveRoom';
 import ModalRoomParams from './rooms/modalsOrDialogs/ModalRoomParams';
 import ModalShareRoom from './rooms/modalsOrDialogs/ModalShareRoom';
 
-import { AlertTitle, Snackbar, Tooltip } from "@mui/material";
+import { AlertTitle, Tooltip } from "@mui/material";
 import BottomInteractions from "./rooms/BottomInteractions";
 import RoomPlaylist from "./rooms/RoomPlaylist";
 import RoomTopBar from "./rooms/RoomTopBar";
 import SoundWave from "./rooms/SoundWave";
-import ControlButtons from "./rooms/playerSection/ControlButtons";
 
 const Room = ({ currentUser, roomId, handleQuitRoom }) => {
 
@@ -357,8 +355,6 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
         roomRef.set({roomParams:{spotifyToken: newToken,spotifyIsLinked:true,spotifyAlreadyHaveBeenLinked:true, spotifyTokenTimestamp: Date.now(), spotifyUserConnected:currentUser.displayName}}, { merge: true });
         window.history.replaceState('string','', window.location.href.replace('#','')+"?rid="+roomId.replace(/\s/g,''));
     }
-
-
 
     function handleOpenShareModal(ShareModalIsOpen) {
         setOpenInvitePeopleToRoomModal(ShareModalIsOpen);

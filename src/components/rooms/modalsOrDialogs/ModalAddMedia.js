@@ -1,4 +1,3 @@
-import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -26,7 +25,6 @@ const RoomModalAddMedia = ({ currentUser, roomId, validatedObjectToAdd, spotifyT
     const [mediaSearchResultYoutube, setMediaSearchResultYoutube] = useState([]);
     const [mediaSearchResultDailyMotion, setMediaSearchResultDailyMotion] = useState([]);
     const [mediaSearchResultSpotify, setMediaSearchResultSpotify] = useState([]);
-    const [addingUrl, setAddingUrl] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [recentlyAdded, setRecentlyAdded]= useState(false);
     const [recentlyAddedTitle, setRecentlyAddedTitle]= useState('');
@@ -193,7 +191,7 @@ const RoomModalAddMedia = ({ currentUser, roomId, validatedObjectToAdd, spotifyT
                                 <List component="nav">
                                     { mediaSearchResultYoutube.map(function(media, idyt){
                                         return (<ListItemButton sx={{m:0, p:0, pr:1,borderBottom: '2px solid var(--border-color)'}}  key={idyt} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.snippet.title, source:'youtube', url:'https://www.youtube.com/watch?v='+media.id.videoId, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
-                                            <img src={media.snippet.thumbnails.default.url} />
+                                            <img alt={media.snippet.title.substring(0, 50)} src={media.snippet.thumbnails.default.url} />
                                             <Grid sx={{display:'flex',flexDirection:'column',pl:2}}>
                                                 <ListItemText primary={media.snippet.title.substring(0, 50)} className='video_title_list' sx={{ mt:0, fontSize:'0.9em'}}/>
                                                 <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>Par <b>{media.snippet.channelTitle} </b></Typography>
@@ -211,7 +209,7 @@ const RoomModalAddMedia = ({ currentUser, roomId, validatedObjectToAdd, spotifyT
                             <List component="nav">
                                 { mediaSearchResultSpotify.map(function(media, idsp){
                                     return (<ListItemButton sx={{margin:0,padding:0, pr:1,borderBottom: '2px solid var(--border-color)'}} key={idsp} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.artists[0].name + ' - ' +media.name, source:'spotify', url:media.uri, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
-                                        <img src={media.album.images[2].url} />
+                                        <img alt={media.name.substring(0, 50)} src={media.album.images[2].url} />
                                         <Grid sx={{display:'flex',flexDirection:'column',pl:2}}>
                                             <ListItemText primary={media.name} sx={{ mt:0, fontSize:'0.9em'}}/>
                                             <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}> 
@@ -235,8 +233,8 @@ const RoomModalAddMedia = ({ currentUser, roomId, validatedObjectToAdd, spotifyT
                             <List component="nav">
                                 { mediaSearchResultDailyMotion.map(function(media, iddm){
                                     return (<ListItemButton sx={{margin:0,padding:0, pr:1,borderBottom: '2px solid var(--border-color)'}} key={iddm} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.title, source:'dailymotion', url:'https://www.dailymotion.com/video/'+media.id, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
-                                        <img src={media.thumbnail_url} style={{width:'120px', height:'90px'}}/>
-                                        <ListItemText primary={media.title} sx={{ml:2, mt:0, fontSize:'0.9em'}}/></ListItemButton>)
+                                        <img alt={media.title.substring(0, 50)}  src={media.thumbnail_url} style={{width:'120px', height:'90px'}}/>
+                                        <ListItemText primary={media.title.substring(0, 50)} sx={{ml:2, mt:0, fontSize:'0.9em'}}/></ListItemButton>)
                                 }) }
                             </List>
                         </Grid>}

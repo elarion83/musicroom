@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import { Icon } from "@iconify/react";
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from "@mui/material";
 import useDigitInput from 'react-digit-input';
@@ -19,7 +18,7 @@ const JoinRoomModal = ({ open, handleJoinRoom, changeOpen}) => {
     });
     
     React.useEffect(() => {   
-        if(digits[0].value != '' && digits[1].value != '' && digits[2].value != '' && digits[3].value != '' && digits[4].value != '') {
+        if(digits[0].value !== '' && digits[1].value !== '' && digits[2].value !== '' && digits[3].value !== '' && digits[4].value !== '') {
             setIsJoining(true);
             handleJoinRoom(value.toLowerCase());
         }
