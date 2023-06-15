@@ -14,7 +14,7 @@ import Badge from '@mui/material/Badge';
 
 import { Icon } from '@iconify/react';
 
-const BottomInteractions = ({ roomParams,userCanMakeInteraction, createNewRoomInteraction, setOpenAddToPlaylistModal, handleOpenRoomParamModal,handleOpenShareModal,handleOpenLeaveRoomModal, OpenAddToPlaylistModal, checkRoomExist, checkInterractionLength }) => {
+const BottomInteractions = ({ roomParams, roomNotifs, userCanMakeInteraction, createNewRoomInteraction, setOpenAddToPlaylistModal, handleOpenRoomParamModal,handleOpenShareModal,handleOpenLeaveRoomModal, OpenAddToPlaylistModal, checkRoomExist, checkInterractionLength,checkNotificationsLength }) => {
 
     return(
         <Grid className='room_bottom_interactions'>
@@ -73,6 +73,15 @@ const BottomInteractions = ({ roomParams,userCanMakeInteraction, createNewRoomIn
                 autoHideDuration={1000}
                 sx={{borderRadius:'2px'}}
                 message= {roomParams.interactionsArray[roomParams.interactionsArray.length-1].createdBy +' a réagi :'+roomParams.interactionsArray[roomParams.interactionsArray.length-1].type+':' }
+            />}
+            
+            {checkNotificationsLength && <Snackbar
+                open={((Date.now() - roomNotifs[roomNotifs.length - 1].timestamp) < 2000)}
+              //  open={true}
+                autoHideDuration={8000}
+                sx={{ borderRadius:'2px'}}
+                message={roomNotifs[roomNotifs.length - 1].createdBy+" a rejoins la room !"}
+               
             />}
             <Snackbar
                 open={((Date.now() - roomParams.spotifyTokenTimestamp) < 8000) && roomParams.spotifyAlreadyHaveBeenLinked}

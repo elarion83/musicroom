@@ -82,7 +82,7 @@ const firstPartArray =  [
 		"Rat",
 		"Raven",
 		"Red",
-		"Refreshingbeverage",
+		"Refresh",
 		"Ring",
 		"Rime",
 		"Rock",

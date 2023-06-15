@@ -43,7 +43,7 @@ import ModalLeaveRoom from './rooms/modalsOrDialogs/ModalLeaveRoom';
 import ModalRoomParams from './rooms/modalsOrDialogs/ModalRoomParams';
 import ModalShareRoom from './rooms/modalsOrDialogs/ModalShareRoom';
 
-import { AlertTitle, Tooltip } from "@mui/material";
+import { AlertTitle, Snackbar, Tooltip } from "@mui/material";
 import BottomInteractions from "./rooms/BottomInteractions";
 import RoomPlaylist from "./rooms/RoomPlaylist";
 import RoomTopBar from "./rooms/RoomTopBar";
@@ -124,6 +124,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                     db.collection("rooms").doc(roomId).set(docData).then(() => {});
                     setRoom(docData);
                 }
+        
             });
             setLoaded(true);
 	};
@@ -141,8 +142,11 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
     });
 
 	useEffect(() => {
-		getRoomData(roomId); 
         
+        var tempNotifArray = []
+        tempNotifArray.push({type: 'userArrived', timestamp: Date.now(), createdBy: currentUser.displayName});
+        roomRef.set({notifsArray: tempNotifArray},{merge:true})
+		getRoomData(roomId); 
         localStorage.setItem("MusicRoom_SpotifyRoomId", roomId)
         if(null === localStorage.getItem("MusicRoom_UserInfoVotes")) {
             localStorage.setItem("MusicRoom_UserInfoVotes", JSON.stringify({up:[], down:[]}));
@@ -151,7 +155,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
         }
 
         document.title = 'Room ' + roomId + ' - MusicRoom';
-        
+
 	}, [roomId]);
     
 	useEffect(() => {
@@ -639,6 +643,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
         {loaded && room.roomParams && 
             <BottomInteractions 
                 roomParams={room.roomParams}
+                roomNotifs={(room.notifsArray) ? room.notifsArray: ''}
                 userCanMakeInteraction={userCanMakeInteraction}
                 OpenAddToPlaylistModal={OpenAddToPlaylistModal}
                 setOpenAddToPlaylistModal={setOpenAddToPlaylistModal}
@@ -648,7 +653,9 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                 handleOpenLeaveRoomModal={handleOpenLeaveRoomModal}
                 checkRoomExist={(room && room.playlistEmpty) ? true:false}
                 checkInterractionLength={(room.roomParams.interactionsArray && room.roomParams.interactionsArray.length > 0) ? true:false}
+                checkNotificationsLength={(room.notifsArray && room.notifsArray.length > 0) ? true:false}
             />  } 
+
     </div>
   );
 };

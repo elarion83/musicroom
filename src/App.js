@@ -58,7 +58,6 @@ function App() {
           user.updateProfile({displayName: PseudoGenerated});
           setUserInfo({displayName:PseudoGenerated});
         }
-        
         setIsSignedIn(true);
       }
       else if(localStorage.getItem("MusicRoom_AnonymouslyLoggedIn")) {
@@ -80,15 +79,12 @@ function App() {
         const hash = window.location.hash
         if (hash) {
             var token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
-
-
             if(localStorage.getItem("MusicRoom_SpotifyRoomId")) {
               joinRoomByRoomId(localStorage.getItem("MusicRoom_SpotifyRoomId"));
               replaceCurrentUrlWithRoomUrl(localStorage.getItem("MusicRoom_SpotifyRoomId"));
             }
         }
     }, [])
-
 
   function createNewRoom() {
     var newRoomId = uuid().slice(0,5).toLowerCase()

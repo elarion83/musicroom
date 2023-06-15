@@ -16,8 +16,8 @@
 }
 
 
-.hidden {
-  display: none;
+.hidden, .jss5 {
+  display: none !important;
   opacity: 0;
 }
 

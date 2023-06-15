@@ -27,7 +27,7 @@ const ModalShareRoom = ({ roomUrl, open, changeOpen }) => {
                 <ShareIcon fontSize="small" sx={{mr:1}} /> Partager la room ! 
             </DialogTitle>  
             <DialogContent dividers sx={{pt:0}}>
-                <ShareSocial sx={{maxHeight:'none'}}
+                <ShareSocial sx={{maxHeight:'none', p:0}}
                     url ={roomUrl}
                     socialTypes={['facebook','whatsapp','twitter','reddit','email']}
                 />
