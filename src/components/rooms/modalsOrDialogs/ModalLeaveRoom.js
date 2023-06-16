@@ -15,12 +15,10 @@ const ModalForceSpotifyDisconnect = ({ open , changeOpen,handleQuitRoom }) => {
             </DialogTitle>  
             <DialogContent dividers>
                 <DialogContentText>
-                    <Typography>
                         Vous êtes sur le point de quitter la room pour retourner à l'accueil.
-                    </Typography>
-                    <Typography sx={{mt:3}}>
+                </DialogContentText>
+                <DialogContentText>
                         Êtes-vous sûrs ?
-                    </Typography>
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
