@@ -14,33 +14,41 @@ import Chat from './Chat'
 import { Icon } from '@iconify/react';
 import { useState } from 'react';
 
-import AwesomeSlider from 'react-awesome-slider';
-import 'react-awesome-slider/dist/styles.css';
+import {returnAnimateReplace} from './../../services/animateReplace'
 
 const BottomInteractions = ({ currentUser, roomId, roomParams, roomNotifs, userCanMakeInteraction, createNewRoomInteraction, setOpenAddToPlaylistModal, handleOpenRoomParamModal,handleOpenShareModal,handleOpenLeaveRoomModal, OpenAddToPlaylistModal, checkRoomExist, checkInterractionLength,checkNotificationsLength }) => {
 
     const [isChatExpanded, setIsChatExpanded] = useState(false);
+    const animatedElementsRef = [];
+
+    async function expandTchatAnimation() {
+        returnAnimateReplace(animatedElementsRef, {In:"Out",Up:'Down', animate__delay:''}, /In|Up|animate__delay/gi);
+        setTimeout(() => {
+            setIsChatExpanded(true);
+        }, 500);
+    }
+
     return(
         <Grid 
          className={`room_bottom_interactions ${isChatExpanded ? "chatExpanded" : ""}`}
         >
             
             {!isChatExpanded && <div>
-                <Tooltip className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-2s animate__faster'}
+                <Tooltip ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-1s animate__faster'}
                     title={!userCanMakeInteraction ? "Toutes les "+  (roomParams.interactionFrequence/1000) +" secondes": ''}>  
                     <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mr:1, ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('laugh') : ''}>
                         <EmojiEmotionsIcon fontSize="small" sx={{color:'var(--white)'}} />
                         {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
                     </Fab>
                 </Tooltip>
-                <Tooltip className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-2s animate__fast'}
+                <Tooltip ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-1s animate__fast'}
                     title={!userCanMakeInteraction ? "Toutes les "+  (roomParams.interactionFrequence/1000) +" secondes": ''}>  
                     <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{mr:1, ...(userCanMakeInteraction && {bgcolor: '#ff9c22 !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
                         <CelebrationIcon fontSize="small" sx={{color:'var(--white)'}} />
                         {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
                     </Fab>
                 </Tooltip>
-                <Tooltip className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-2s '}
+                <Tooltip ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-1s '}
                     title={!userCanMakeInteraction ? "Toutes les "+  (roomParams.interactionFrequence/1000) +" secondes": ''}>  
                     <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mr:0, ...(userCanMakeInteraction && {bgcolor: 'var(--red-2) !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('heart') : ''}>
                         <FavoriteIcon fontSize="small" sx={{color:'var(--white)'}} />
@@ -48,19 +56,20 @@ const BottomInteractions = ({ currentUser, roomId, roomParams, roomNotifs, userC
                     </Fab>
                 </Tooltip>
 
-                <Tooltip className='animate__animated animate__fadeInUp animate__delay-1s' placement="top" open={checkRoomExist && !OpenAddToPlaylistModal ? true : false} sx={{mt:-2}} title="Ajouter à la playlist" arrow>
-                    <Fab sx={{width:'56px',height:'56px', transform:'translateY(-20px) !important'}} color="primary" className={`main_bg_color `} aria-label="add" onClick={(e) => setOpenAddToPlaylistModal(true)}>
-                        <Icon className='addMediaIcon' icon="iconoir:music-double-note-add" />
-                    </Fab>
-                </Tooltip>
+                <Fab ref={el => animatedElementsRef.push(el)}
+                    sx={{width:'56px',height:'56px', mt:'-4em'}}
+                    className='main_bg_color animate__animated animate__fadeInUp'
+                    aria-label="add" onClick={(e) => setOpenAddToPlaylistModal(true)}>
+                    <Icon className='addMediaIcon' icon="iconoir:music-double-note-add" />
+                </Fab>
 
-                <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s' title="Afficher le Chat">  
+                <Tooltip ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUp animate__delay-1s' title="Afficher le Chat">  
                     <Fab size="small" variant="extended" className='room_small_button_interactions'  
-                        sx={{justifyContent: 'center', ml:0}} onClick={e => setIsChatExpanded(!isChatExpanded)} >
+                        sx={{justifyContent: 'center', ml:0}} onClick={e => expandTchatAnimation()} >
                         <Icon icon="tabler:messages" width='20'/>
                     </Fab>
                 </Tooltip>
-                <Tooltip className='animate__animated animate__fadeInUp animate__delay-2s' title="Paramètres">  
+                <Tooltip ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUp animate__delay-1s' title="Paramètres">  
                     <Badge invisible={roomParams.spotifyIsLinked} variant="dot" sx={{'& .MuiBadge-badge': {
                             right:'10px',
                             bgcolor:'var(--red-2)',

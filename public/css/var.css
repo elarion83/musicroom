@@ -12,6 +12,8 @@
   --white:#efeff1;
   --white-2:#efeff1;
   --grey-dark:#262626;
+  --grey-dark-rgb:38, 38, 38;
+  --transition-fast-easeIn:all 0.1s ease-in;
   --transition-smooth-all:all 0.3s ease-out;
   --main-typo-family:roboto;
 }
