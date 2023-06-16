@@ -6,8 +6,6 @@ import { Box, Fab, Grid, Snackbar, Tooltip } from '@mui/material';
 import Button from '@mui/material/Button';
 import React from "react";
 
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import ShareIcon from '@mui/icons-material/Share';
 import TuneIcon from '@mui/icons-material/Tune';
 import Badge from '@mui/material/Badge';
 import Chat from './Chat'
@@ -34,23 +32,31 @@ const BottomInteractions = ({ currentUser, roomId, roomParams, roomNotifs, userC
         >
             
             {!isChatExpanded && <div>
-                <Tooltip ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-1s animate__faster'}
+                <Tooltip 
+                    ref={el => animatedElementsRef.push(el)} 
+                    className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-1s animate__faster'}
                     title={!userCanMakeInteraction ? "Toutes les "+  (roomParams.interactionFrequence/1000) +" secondes": ''}>  
-                    <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mr:1, ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('laugh') : ''}>
+                    <Fab size="small" variant="extended" className='room_small_button_interactions' 
+                        sx={{ boxShadow:20,mr:1, ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} 
+                        onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('laugh') : ''}>
                         <EmojiEmotionsIcon fontSize="small" sx={{color:'var(--white)'}} />
                         {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
                     </Fab>
                 </Tooltip>
                 <Tooltip ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-1s animate__fast'}
                     title={!userCanMakeInteraction ? "Toutes les "+  (roomParams.interactionFrequence/1000) +" secondes": ''}>  
-                    <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{mr:1, ...(userCanMakeInteraction && {bgcolor: '#ff9c22 !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
+                    <Fab size="small" variant="extended" className='room_small_button_interactions' 
+                        sx={{mr:1, ...(userCanMakeInteraction && {bgcolor: '#ff9c22 !important'}) }} 
+                        onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
                         <CelebrationIcon fontSize="small" sx={{color:'var(--white)'}} />
                         {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
                     </Fab>
                 </Tooltip>
                 <Tooltip ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-1s '}
                     title={!userCanMakeInteraction ? "Toutes les "+  (roomParams.interactionFrequence/1000) +" secondes": ''}>  
-                    <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mr:0, ...(userCanMakeInteraction && {bgcolor: 'var(--red-2) !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('heart') : ''}>
+                    <Fab size="small" variant="extended" className='room_small_button_interactions' 
+                        sx={{ mr:0, ...(userCanMakeInteraction && {bgcolor: 'var(--red-2) !important'}) }} 
+                        onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('heart') : ''}>
                         <FavoriteIcon fontSize="small" sx={{color:'var(--white)'}} />
                         {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
                     </Fab>

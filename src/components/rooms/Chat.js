@@ -16,6 +16,7 @@ import {returnAnimateReplace} from './../../services/animateReplace'
 
 const Chat = ({roomParams, currentUser, roomId, userCanMakeInteraction,createNewRoomInteraction, hideTchat}) => {
 
+    const [isChatUltraExpanded, setIsChatUltraExpanded] = useState(false);
     const chatBoxRef = useRef([]);
     const animatedElementsRef = [];
     const scrollToLastMessage = () => {
@@ -85,54 +86,61 @@ const Chat = ({roomParams, currentUser, roomId, userCanMakeInteraction,createNew
 
     return(
         <Box sx={{ flexGrow: 1 , pl:1, pr:1, mb:1}}>
-            <Grid container spacing={0} >
-                <Grid item xs={2} md={1} sx={{display:'flex', flexDirection:'column', justifyContent:'space-evenly', alignItems:'center'}}>
-                    <Tooltip ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInLeft animate__faster' title="Fermer le chat">  
+            <Grid container spacing={2} sx={{alignItems:'end'}}>
+                <Grid item xs={2} md={1} 
+                sx={{display:'flex', flexDirection:'column', 
+                justifyContent:'space-between', alignItems:'center'}}>
+                    <Tooltip  ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInLeft animate__faster' title="Fermer le chat">  
                         <Fab size="small" variant="extended" className='room_small_button_interactions'  
                             sx={{justifyContent: 'center', ml:0}} onClick={e => hideTchatInComp()} >
                             <Icon icon="tabler:messages-off" width='20' />
                         </Fab>
                     </Tooltip> 
-                    <Tooltip ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInLeft animate__fast'}
+                    <Tooltip  ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInLeft animate__fast'}
                         title={!userCanMakeInteraction ? "Toutes les "+  (roomParams.interactionFrequence/1000) +" secondes": ''}>  
-                        <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mr:0, ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('laugh') : ''}>
+                        <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mt:1,mr:0, ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('laugh') : ''}>
                             <EmojiEmotionsIcon fontSize="small" sx={{color:'var(--white)'}} />
                             {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
                         </Fab>
                     </Tooltip>
-                    <Tooltip ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInLeft '}
+                    <Tooltip  ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInLeft '}
                         title={!userCanMakeInteraction ? "Toutes les "+  (roomParams.interactionFrequence/1000) +" secondes": ''}>  
-                        <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{mr:0, ...(userCanMakeInteraction && {bgcolor: '#ff9c22 !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
+                        <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{mt:1,mr:0, ...(userCanMakeInteraction && {bgcolor: '#ff9c22 !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
                             <CelebrationIcon fontSize="small" sx={{color:'var(--white)'}} />
                             {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
                         </Fab>
                     </Tooltip>
-                    <Tooltip ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInLeft'}
+                    <Tooltip  ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInLeft'}
                         title={!userCanMakeInteraction ? "Toutes les "+  (roomParams.interactionFrequence/1000) +" secondes": ''}>  
-                        <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mr:0, ...(userCanMakeInteraction && {bgcolor: 'var(--red-2) !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('heart') : ''}>
+                        <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mt:1,mr:0, ...(userCanMakeInteraction && {bgcolor: 'var(--red-2) !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('heart') : ''}>
                             <FavoriteIcon fontSize="small" sx={{color:'var(--white)'}} />
                             {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
                         </Fab>
                     </Tooltip>  
                 </Grid>
-                <Grid item xs={10} md={11}>
+                <Grid item xs={10} md={11} sx={{pr:'4vw'}}>
                     <Box 
                     ref={el => animatedElementsRef.push(el)} 
                     className='animate__animated animate__fadeInUp animate__fast chatBox' 
                     sx={{
-                        bgcolor:'rgba(var(--grey-dark-rgb) ,0.8)', 
+                        bgcolor:isChatUltraExpanded ? 'rgba(var(--grey-dark-rgb) ,0.9)': 'rgba(var(--grey-dark-rgb) ,0.8)' , 
                         p:1,
                         borderTop:'4px solid var(--grey-dark-rgb)', 
                         boxShadow:20
                         }} >
-                        <Box sx={{height:'150px',p:0,m:0, overflowY:'scroll',}} ref={chatBoxRef}>
+                        <Box sx={{height:isChatUltraExpanded ? '70vh': '150px',p:0,m:0, overflowY:'scroll', transition:'var(--transition-smooth-all)'}} ref={chatBoxRef}>
+                            <Box key='welCome' sx={{display:'flex',mb:1, justifyContent:'start'}}>
+                                <Typography fontSize='small' sx={{color:'var(--grey-light)', fontWeight:'bold'}}> 
+                                    Bienvenue sur le chat !
+                                </Typography>
+                            </Box>
                             {Object.entries(messagesToDisplay).map(([key, value]) => {
                                 return(
                                 <Box key={key} sx={{display:'flex',mb:1, justifyContent:'start'}}>
                                     <Typography fontSize='small' sx={{color:'var(--main-color)', fontWeight:'bold'}}> 
                                         {value.author}: 
                                     </Typography>
-                                    <Typography fontSize='small' sx={{ml:1, color:'var(--white-2)'}}>
+                                    <Typography fontSize='small' sx={{ml:1, color:'var(--white)'}}>
                                         {value.text}
                                     </Typography>
                                 </Box>
@@ -150,7 +158,7 @@ const Chat = ({roomParams, currentUser, roomId, userCanMakeInteraction,createNew
                                 transition: 'var(--transition-fast-easeIn)',
                                 pr:0,
                                 borderWidth:'2px !important', 
-                                borderColor: isMessageSentOk ? 'var(--green) !important' : 'var(--white) !important' 
+                                borderColor: isMessageSentOk ? 'var(--green) !important' : 'var(--grey-light) !important' 
                             },
                             input: {
                                 color:'var(--white) !important',
@@ -160,7 +168,8 @@ const Chat = ({roomParams, currentUser, roomId, userCanMakeInteraction,createNew
                             position:'sticky', 
                             bottom:0, 
                             width:'100%', 
-                            bgcolor:'var(--main-bg-color)'}}
+                            bgcolor:'rgba(var(--grey-dark-rgb) ,0.9)'
+                            }}
                         placeholder={canSendMessage ? 'Envoyer un message' : cantSendMessageReason}
                         type="text"
                         id="chatSendMessageText"
@@ -168,21 +177,44 @@ const Chat = ({roomParams, currentUser, roomId, userCanMakeInteraction,createNew
                         onKeyPress={(ev) => {if (ev.key === 'Enter' && canSendMessage)  { sendMessage()}}}   
                         onChange={(e) => canSendMessage ? setMessageToSend(e.target.value): ''} 
                         InputProps={{
+                            startAdornment: (
+                                <Box sx={{
+                                    pr:'7px',
+                                    mr:2,
+                                    ml:'-5px', 
+                                    pt:'5px', 
+                                    cursor:'pointer', 
+                                    transition: 'var(--transition-fast-easeIn)',
+                                    borderRight:'1px solid var(--grey-light)',
+                                    borderColor: isMessageSentOk ? 'var(--green)' : 'var(--grey-light)',
+                                    }}>
+                                        <Icon 
+                                            onClick={(e) => setIsChatUltraExpanded(!isChatUltraExpanded)}
+                                            icon={ isChatUltraExpanded ? 'material-symbols:unfold-less-double-rounded' :'material-symbols:unfold-more-double-rounded'}
+                                            width='20'
+                                            style={{
+                                                transition: 'var(--transition-fast-easeIn)',
+                                                color: isMessageSentOk ? 'var(--green)' : 'var(--grey-light)',
+                                            }}
+                                            />
+                                </Box>
+                            ),
                             endAdornment: (
                                 <LoadingButton 
-                                    loading={isSendingMessage} onClick={(e) => sendMessage()}
-                                    variant="outlined"
+                                    loading={isSendingMessage || !canSendMessage} 
+                                    onClick={(e) => sendMessage()}
                                     size="small"
                                     sx={{
+                                        mr:-3,
                                         transition: 'var(--transition-fast-easeIn)',
                                         bgcolor: isMessageSentOk ? 'var(--green)' : '',
                                         borderColor: isMessageSentOk ? 'var(--green)' : 'var(--white)',
                                         color:'var(--white)'}} 
-                                    position="end"
+                                        position="end"
                                     >
                                         <Icon 
                                             icon='material-symbols:send'
-                                            width='17'
+                                            width='20'
                                          />
                                 </LoadingButton>
                             ),

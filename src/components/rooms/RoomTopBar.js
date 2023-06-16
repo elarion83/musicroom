@@ -1,19 +1,17 @@
 import { useState } from "react";
 
 import { Icon } from '@iconify/react';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import InfoIcon from '@mui/icons-material/Info';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Divider, Drawer, IconButton, List, ListItem, ListItemButton, Typography } from '@mui/material';
+import ShareIcon from '@mui/icons-material/Share';
+import TuneIcon from '@mui/icons-material/Tune';
+import { Divider, Drawer, List, ListItem, ListItemButton, Typography } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Badge from '@mui/material/Badge';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import Menu from '@mui/material/Menu';
-import TuneIcon from '@mui/icons-material/Tune';
-import ShareIcon from '@mui/icons-material/Share';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import Tooltip from '@mui/material/Tooltip';
 import 'animate.css';
 
@@ -37,12 +35,13 @@ const RoomTopBar = ({roomId, roomAdmin, isLinkedToSpotify,handleOpenRoomParamMod
             open={roomDrawerOpen}
         >
             <List sx={{pt:0}}>  
-                <ListItem key='roomDrawClose' disablePadding>
+                <ListItem sx={{bgcolor:'var(--white)'}} key='roomDrawClose' disablePadding>
                     <ListItemButton onClick={(e) => setRoomDrawerOpen(false)} sx={{display:'flex',justifyContent:'flex-end'}}>
                         <ChevronLeftIcon />
+                        <Typography fontSize="small" sx={{pl:1, textTransform:'uppercase'}}>Room <b style={{textTransform:'uppercase'}}>{ roomId } </b> </Typography>
                     </ListItemButton>
                 </ListItem> 
-                <Divider />
+                <Divider sx={{mb:2}}/>
                 <ListItem key='roomDrawHostedBy' disablePadding>
                     <ListItemButton>
                         <ListItemIcon>
@@ -66,7 +65,7 @@ const RoomTopBar = ({roomId, roomAdmin, isLinkedToSpotify,handleOpenRoomParamMod
                         <Typography>{isLinkedToSpotify ? 'Spotify relié' : 'Spotify non relié'}</Typography>
                     </ListItemButton>
                 </ListItem>
-                <Divider />
+                <Divider sx={{mb:2, mt:2}}/>
                 
                 <ListItem key='roomDrawRoomParams' disablePadding>
                     <ListItemButton onClick={e => handleOpenRoomParamModal(true)}>
@@ -84,7 +83,7 @@ const RoomTopBar = ({roomId, roomAdmin, isLinkedToSpotify,handleOpenRoomParamMod
                         <Typography>Partager la room</Typography>
                     </ListItemButton>
                 </ListItem>
-                <Divider />
+                <Divider  sx={{mt:2}}/>
                 <ListItem key='roomDrawRoomLeave' disablePadding>
                     <ListItemButton onClick={e => handleOpenLeaveRoomModal(true)}>
                         <ListItemIcon>
@@ -100,15 +99,15 @@ const RoomTopBar = ({roomId, roomAdmin, isLinkedToSpotify,handleOpenRoomParamMod
                             right:'10px',
                             bgcolor:'var(--red-2)'
                         }}} >
-                            <MoreVertIcon 
+                            <TuneIcon 
                             onClick={e => handleClickMenu(e)} 
-                            sx={{mr:1, cursor:'pointer'}}/>
+                            sx={{mr:1, cursor:'pointer', color:'var(--white)'}}/>
                         </Badge>
                 </Tooltip>
                 
 
             <Typography  className='animate__animated animate__fadeInLeft animate__fast' component="div" sx={{ flexGrow: 1 , textTransform:'uppercase', fontSize:'12px',}}>
-                Room : <b><span>{ roomId }</span> </b> 
+                Room <b style={{textTransform:'uppercase'}}><span>{ roomId }</span> </b> 
             </Typography>
             
         </Toolbar>
