@@ -160,9 +160,7 @@ const RoomModalAddMedia = ({ currentUser, roomId, validatedObjectToAdd, spotifyT
                             className="input_big typed"
                             type='text' 
                             variant="standard" 
-                            onKeyPress={(ev) => {
-                            if (ev.key === 'Enter')  { handleSearchForMedia()}
-                            }}                         
+                            onKeyPress={(ev) => {if (ev.key === 'Enter')  { handleSearchForMedia()}}}                         
                             onChange={e => setSearchTerm(e.target.value)}
                             value={searchTerm} 
                             style={{ width: '100%', height:'100%', flexGrow:1,paddingRight:'0', bgcolor:'rgba(255, 255, 255, 0.1)', pl:2}}
