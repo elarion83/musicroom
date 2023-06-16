@@ -92,7 +92,7 @@ function App() {
 
   function joinRoomByRoomId(idRoom) {
     setRoomId(idRoom.toLowerCase().trim());
-    replaceCurrentUrlWithRoomUrl(idRoom);
+    replaceCurrentUrlWithRoomUrl(idRoom.toLowerCase().trim());
     setJoinRoomModalOpen(false);
   }
   
@@ -210,8 +210,8 @@ function App() {
          <AppBar position="static" sx={{bgcolor: '#202124'}}>
             <Toolbar>
               <img src="img/logo_small.png" style={{ width: '250px', maxWidth:'50%'}} alt="MusicRoom logo"/>
-              {userInfos.displayName !== undefined && isSignedIn && !isAppLoading && (
-                <UserTopBar userInfoPseudo={userInfos.displayName} handleLogout={logOut} />
+              {!isAppLoading && (
+                <UserTopBar userInfoPseudo={userInfos.displayName} handleOpenLoginModal={setLoginModalOpen} handleLogout={logOut} />
               )}
             </Toolbar>
           </AppBar>

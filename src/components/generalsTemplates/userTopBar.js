@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import React, { useState } from "react";
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LoginIcon from '@mui/icons-material/Login';
 import Logout from '@mui/icons-material/Logout';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
@@ -11,9 +12,10 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import { Button } from '@mui/material';
 
 
-const UserTopBar = ({ userInfoPseudo, handleLogout }) => {
+const UserTopBar = ({ userInfoPseudo, handleLogout, handleOpenLoginModal }) => {
 
     function handleClickMenu(event) {
         setAnchorEl(event.currentTarget);
@@ -29,7 +31,7 @@ const UserTopBar = ({ userInfoPseudo, handleLogout }) => {
     return(
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', textAlign: 'center', width:'100%' }}>
               
-              <Tooltip title="Paramètres du compte" sx={{ bgColor:'#30363c'}}>
+              {userInfoPseudo && <Tooltip title="Paramètres du compte" sx={{ bgColor:'#30363c'}}>
                 <IconButton
                   onClick={e => handleClickMenu(e)}
                   size="small"
@@ -38,9 +40,16 @@ const UserTopBar = ({ userInfoPseudo, handleLogout }) => {
                   aria-haspopup="true"
                   aria-expanded={open ? 'true' : undefined}
                 >
-                  {userInfoPseudo && <Avatar sx={{ bgcolor: 'var(--red-2)', textTransform:'uppercase' }} >{userInfoPseudo.substring(0, 1) }</Avatar>}
+                  <Avatar sx={{ bgcolor: 'var(--red-2)', textTransform:'uppercase' }} >{userInfoPseudo.substring(0, 1) }</Avatar>
                 </IconButton>
-              </Tooltip>
+              </Tooltip>}
+              {!userInfoPseudo && 
+                <Button 
+                  variant="outlined" 
+                  sx={{color:'var(--white)', borderColor:'var(--white)'}}
+                  startIcon={<LoginIcon sx={{color:'var(--white)'}}/>}
+                  onClick={(e) => {handleOpenLoginModal(true)}} > Login </Button>
+                }
               <Menu
                 anchorEl={anchorEl}
                 id="account-menu"
