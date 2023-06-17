@@ -434,7 +434,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
         await axios.get('https://www.googleapis.com/youtube/v3/search', { params: params })
             .then(function(response) {
                 var suggestMedia = {
-                    addedBy : 'AutoPlay',
+                    addedBy : 'App_AutoPlay',
                     hashId: uuid().slice(0,10).toLowerCase(),
                     source: 'youtube',
                     platformId:response.data.items[0].id.videoId,
