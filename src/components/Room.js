@@ -124,6 +124,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                         playlistEmpty: true,
                         notifsArray:[],
                         roomParams:{
+                            isChatActivated:true,
                             isPrivate:false,
                             isOnInvitation:false,
                             isPlayingLooping:true,

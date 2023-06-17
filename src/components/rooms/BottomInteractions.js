@@ -69,7 +69,7 @@ const BottomInteractions = ({ paramDrawerIsOpen, handleOpenDrawerParam, currentU
                     <Icon className='addMediaIcon' icon="iconoir:music-double-note-add" />
                 </Fab>
 
-                <Tooltip ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUp animate__delay-1s' title="Afficher le Chat">  
+                <Tooltip ref={el => animatedElementsRef.push(el)} className={!roomParams.isChatActivated ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-1s'} title="Afficher le Chat">  
                     <Fab size="small" variant="extended" className='room_small_button_interactions'  
                         sx={{justifyContent: 'center', ml:0}} onClick={e => expandTchatAnimation()} >
                         <Icon icon="tabler:messages" width='20'/>

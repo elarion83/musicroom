@@ -32,9 +32,9 @@ const RoomTopBar = ({
                 paramDrawerIsOpen, handleOpenDrawerParam, roomId, roomAdmin, isLinkedToSpotify,handleOpenRoomParamModal,handleOpenShareModal,handleOpenLeaveRoomModal, }) => {
 
   return (
-    <AppBar sx={{position: (isShowSticky) ? "fixed": 'initial', top:0}} >
+    <AppBar sx={{position: (isShowSticky) ? "fixed": 'initial', top:0, bgcolor: 'var(--grey-dark)',borderBottom: '2px solid var(--border-color)'}} >
         
-        <Toolbar xs={12}sx={{ bgcolor: 'var(--grey-dark)',borderBottom: '2px solid var(--border-color)', minHeight: '45px !important', fontFamily: 'Monospace', pl:'5px', 
+        <Toolbar xs={12} sx={{ minHeight: '45px !important', fontFamily: 'Monospace', pl:'5px', 
         pr:(isShowSticky)? 0: '25 px' }}>
                 <Drawer
             id="menu-appbar"

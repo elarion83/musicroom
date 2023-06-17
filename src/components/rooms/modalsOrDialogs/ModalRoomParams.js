@@ -6,7 +6,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Icon } from '@iconify/react';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import TuneIcon from '@mui/icons-material/Tune';
-import { Button, Dialog, DialogContent, Divider, FormControlLabel, FormGroup, Switch } from "@mui/material";
+import { AlertTitle, Button, Dialog, DialogContent, Divider, FormControlLabel, FormGroup, Switch, Typography } from "@mui/material";
 import Alert from '@mui/material/Alert';
 import Tooltip from '@mui/material/Tooltip';
 
@@ -41,6 +41,11 @@ const ModalRoomParams = ({ adminView, open, changeOpen, roomParams , handleDisco
         handleChangeRoomParams(roomParams);
     }
 
+    async function handleChangeIsChatActivated() {
+        roomParams.isChatActivated = !roomParams.isChatActivated;
+        handleChangeRoomParams(roomParams);
+    }
+
     return(
         <Dialog open={open} onClose={(e) => changeOpen(false)}>
             <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
@@ -71,53 +76,34 @@ const ModalRoomParams = ({ adminView, open, changeOpen, roomParams , handleDisco
                         </Alert>
                     }
 
-                    <FormControlLabel
-                        sx={{mt:3}}
-                        control={
-                            <Switch checked={roomParams.isPlayingLooping} onChange={handleChangeIsPlayingLooping} 
+                    <Alert sx={{pl:0, mt:3, mb:2}} icon={<Switch checked={roomParams.isPlayingLooping} onChange={handleChangeIsPlayingLooping} 
                             disabled={adminView? false:true}
-                            name="switchIsPlayingLooping" />
-                        }
-                        label="Lire la playlist en boucle"
-                    />
+                            name="switchIsPlayingLooping" />} severity={roomParams.isPlayingLooping ? 'success' : 'warning'}>
+                        <AlertTitle sx={{fontWeight:'bold'}}>Lecture en boucle</AlertTitle>
+                        <Typography fontSize='small'>Si la playlist est finie, le lecteur reviens au premier média.</Typography>
+                    </Alert>
 
-                    <FormControlLabel
-                        control={
-                            <Switch checked={roomParams.interactionsAllowed} onChange={handleChangeIsInterractionsAllowed} 
+                    <Alert sx={{pl:0, mb:2}} icon={<Switch checked={roomParams.interactionsAllowed} onChange={handleChangeIsInterractionsAllowed} 
                             disabled={adminView? false:true}
-                            name="switchInteractionsAllowed" />
-                        }
-                        label="Autoriser les interactions"
-                    />
+                            name="switchInteractionsAllowed" />} severity={roomParams.interactionsAllowed ? 'success' : 'warning'}>
+                        <AlertTitle sx={{fontWeight:'bold'}}>Autoriser les interactions</AlertTitle>
+                        <Typography fontSize='small'>Permet aux membres de la room d'intéragir avec les emoticones.</Typography>
+                    </Alert>
                     
-                    <FormControlLabel
-                    sx={{display:'none'}}
-                        control={
-                            <Switch checked={roomParams.allowEverybodyToAddMedia} onChange={handleChangeAllowEverybodyToAddMedia} 
+                    <Alert sx={{pl:0, mb:2}} icon={<Switch checked={roomParams.isAutoPlayActivated} onChange={handleChangeIsAutoPlayActivated} 
                             disabled={adminView? false:true}
-                            name="switchAllowEverybodyToAddMedia" />
-                        }
-                        label="Tout le monde peut ajouter des médias"
-                    />
+                            name="switchIsAutoPlayActivated" />} severity={roomParams.isAutoPlayActivated ? 'success' : 'warning'}>
+                        <AlertTitle sx={{fontWeight:'bold'}}>Lecture automatique</AlertTitle>
+                        <Typography fontSize='small'>Le lecteur ajoutera automatiquement des médias à la playlist.</Typography>
+                    </Alert>
+
+                    <Alert sx={{pl:0, mb:2}} icon={<Switch checked={roomParams.isChatActivated} onChange={handleChangeIsChatActivated} 
+                            disabled={adminView? false:true}
+                            name="switchIsChatActivated" />} severity={roomParams.isChatActivated ? 'success' : 'warning'}>
+                        <AlertTitle sx={{fontWeight:'bold'}}>Activer le chat de room</AlertTitle>
+                        <Typography fontSize='small'>Active le chat de la room.</Typography>
+                    </Alert>
                     
-                    <FormControlLabel
-                        control={
-                            <Switch checked={roomParams.isAutoPlayActivated} onChange={handleChangeIsAutoPlayActivated} 
-                            disabled={adminView? false:true}
-                            name="switchIsAutoPlayActivated" />
-                        }
-                        label="Playlist infinie"
-                    />
-                    
-                    <FormControlLabel
-                    sx={{display:'none'}}
-                        control={
-                            <Switch checked={roomParams.isOnInvitation} onChange={handleChangeIsOnInvitation} 
-                            disabled={adminView? false:true}
-                            name="switchIsOnInvitation" />
-                        }
-                        label="Room accessible sur invitation uniquement"
-                    />
                 </FormGroup>
             </DialogContent>
         </Dialog>
