@@ -260,12 +260,11 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
             handleChangeActuallyPlaying(room.playing+1);
         } 
         else {
-            if(room.roomParams.isPlayingLooping) {
-                if(room.roomParams.isAutoPlayActivated) {
-                    addMediaForAutoPlay();
-                } else {
-                    handleChangeActuallyPlaying(0);
-                }
+            if(room.roomParams.isAutoPlayActivated && isActuallyAdmin) {
+                addMediaForAutoPlay();
+            }
+            else if(room.roomParams.isPlayingLooping) {
+                handleChangeActuallyPlaying(0);
             }
         }
     }
@@ -287,10 +286,12 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                 roomRef.set({playing: numberToPlay, actuallyPlaying:true,mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });  
             }
         } else {
-            if(room.roomParams.isPlayingLooping) {
-                roomRef.set({playing: 0, actuallyPlaying:true,mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });
-            } else {    
-                roomRef.set({actuallyPlaying:false}, { merge: true });
+            if(isActuallyAdmin) {
+                if(room.roomParams.isPlayingLooping) {
+                    roomRef.set({playing: 0, actuallyPlaying:true,mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });
+                } else {    
+                    roomRef.set({actuallyPlaying:false}, { merge: true });
+                }
             }
         }
     }
