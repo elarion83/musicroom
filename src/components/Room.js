@@ -647,10 +647,10 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                         }
                     </Box>
                 }
-                <Toolbar xs={12} sx={{ bgcolor: 'var(--grey-dark)',borderBottom: '2px solid var(--border-color)', minHeight: '45px !important', fontFamily: 'Monospace', pl:'17px', pr:'25 px' }}>
-                    <Typography component="div" sx={{ flexGrow: 1, textTransform:'uppercase', fontSize:'12px', color:'white' }}> Playlist <b><span> ({ room.playlistUrls && room.playlistUrls.length } médias en playlist)</span></b>
+                { !room.playlistEmpty && <Toolbar xs={12} sx={{ bgcolor: 'var(--grey-dark)',borderBottom: '2px solid var(--border-color)', minHeight: '45px !important', fontFamily: 'Monospace', pl:'17px', pr:'25 px' }}>
+                     <Typography component="div" sx={{ flexGrow: 1, textTransform:'uppercase', fontSize:'12px', color:'white' }}> Playlist <b><span> ({ room.playlistUrls && room.playlistUrls.length } médias en playlist)</span></b>
                     </Typography>
-                </Toolbar>
+                </Toolbar>}
                 { room.playlistEmpty && 
                     <>
                         <Alert severity="success" variant="filled" 

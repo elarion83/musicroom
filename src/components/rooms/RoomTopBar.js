@@ -92,7 +92,7 @@ const RoomTopBar = ({
                         <Typography>Partager la room</Typography>
                     </ListItemButton>
                 </ListItem>
-                <Divider  sx={{mt:2}}/>
+                <Divider  sx={{mt:2, mb:2}}/>
                 <ListItem key='roomDrawRoomLeave' disablePadding>
                     <ListItemButton onClick={e => handleOpenLeaveRoomModal(true)}>
                         <ListItemIcon>

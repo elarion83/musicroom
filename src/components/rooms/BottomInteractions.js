@@ -124,11 +124,6 @@ const BottomInteractions = ({ paramDrawerIsOpen, handleOpenDrawerParam, currentU
                 autoHideDuration={8000}
                 sx={{ borderRadius:'2px'}}
                 message={roomParams.spotifyIsLinked ? roomParams.spotifyUserConnected + " a ajouté Spotify a la room !" : "La connexion spotify a expirée"}
-                action = {
-                    <Button variant="extended" className='room_small_button_interactions' sx={{mr:1, ...(userCanMakeInteraction && {bgcolor: '#ff9c22 !important'}), ...(!roomParams.spotifyIsLinked && {display:'none'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
-                        <CelebrationIcon fontSize="small" sx={{color:'var(--white)'}} />
-                    </Button>
-                }
             />
         </Grid>
     )
