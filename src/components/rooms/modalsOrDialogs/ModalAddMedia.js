@@ -92,6 +92,9 @@ const RoomModalAddMedia = ({ currentUser, roomId, validatedObjectToAdd, spotifyT
                 if(addingObject.url.includes('soundcloud')) {
                     addingObject.source = "soundcloud";
                 }
+                if(addingObject.url.includes('vimeo')) {
+                    addingObject.source = "vimeo";
+                }
 
                 addingObject.vote= {'up':0,'down':0};
                 addingObject.hashId = uuid().slice(0,10).toLowerCase()
