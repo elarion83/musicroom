@@ -192,6 +192,9 @@ const RoomModalAddMedia = ({ currentUser, roomId, validatedObjectToAdd, spotifyT
                             {mediaSearchResultYoutube.length > 1 && <Grid item xs={12}>
                                 <List component="nav">
                                     { mediaSearchResultYoutube.map(function(media, idyt){
+                                        var txt = document.createElement("textarea");
+                                        txt.innerHTML = media.snippet.title;
+                                        media.snippet.title = txt.innerHTML;
                                         return (<ListItemButton sx={{m:0, p:0, pr:1,borderBottom: '2px solid var(--border-color)'}}  key={idyt} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.snippet.title, source:'youtube', platformId:media.id.videoId, url:'https://www.youtube.com/watch?v='+media.id.videoId, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
                                             <img alt={media.snippet.title.substring(0, 50)} src={media.snippet.thumbnails.default.url} />
                                             <Grid sx={{display:'flex',flexDirection:'column',pl:2}}>

@@ -450,11 +450,12 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
     async function addMediaForAutoPlay() {
             if('youtube' !== room.playlistUrls[room.playing].source) {
                 YTSearch({key: process.env.REACT_APP_YOUTUBE_API_KEY, term: room.playlistUrls[room.playing].title}, (videos) => {
-                    addMediaForAutoPlayByYoutubeId(videos[1].id.videoId);   
+                    if(videos[1]) {
+                        addMediaForAutoPlayByYoutubeId(videos[1].id.videoId);   
+                    } 
                 });
             } else {
                 addMediaForAutoPlayByYoutubeId(room.playlistUrls[room.playing].platformId);
-
             } 
     }
    
