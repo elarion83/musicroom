@@ -6,7 +6,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Icon } from '@iconify/react';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import TuneIcon from '@mui/icons-material/Tune';
-import { Button, Dialog, DialogContent, FormControlLabel, FormGroup, Switch } from "@mui/material";
+import { Button, Dialog, DialogContent, Divider, FormControlLabel, FormGroup, Switch } from "@mui/material";
 import Alert from '@mui/material/Alert';
 import Tooltip from '@mui/material/Tooltip';
 
@@ -28,6 +28,11 @@ const ModalRoomParams = ({ adminView, open, changeOpen, roomParams , handleDisco
     
     async function handleChangeAllowEverybodyToAddMedia() {
         roomParams.allowEverybodyToAddMedia = !roomParams.allowEverybodyToAddMedia;
+        handleChangeRoomParams(roomParams);
+    }
+
+    async function handleChangeIsAutoPlayActivated() {
+        roomParams.isAutoPlayActivated = !roomParams.isAutoPlayActivated;
         handleChangeRoomParams(roomParams);
     }
 
@@ -67,7 +72,7 @@ const ModalRoomParams = ({ adminView, open, changeOpen, roomParams , handleDisco
                     }
 
                     <FormControlLabel
-                        sx={{mt:1}}
+                        sx={{mt:3}}
                         control={
                             <Switch checked={roomParams.isPlayingLooping} onChange={handleChangeIsPlayingLooping} 
                             disabled={adminView? false:true}
@@ -93,6 +98,15 @@ const ModalRoomParams = ({ adminView, open, changeOpen, roomParams , handleDisco
                             name="switchAllowEverybodyToAddMedia" />
                         }
                         label="Tout le monde peut ajouter des médias"
+                    />
+                    
+                    <FormControlLabel
+                        control={
+                            <Switch checked={roomParams.isAutoPlayActivated} onChange={handleChangeIsAutoPlayActivated} 
+                            disabled={adminView? false:true}
+                            name="switchIsAutoPlayActivated" />
+                        }
+                        label="Playlist infinie"
                     />
                     
                     <FormControlLabel

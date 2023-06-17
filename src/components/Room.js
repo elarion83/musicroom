@@ -12,10 +12,14 @@ import Dialog from '@mui/material/Dialog';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
+import axios from "axios";
 import 'animate.css';
+import { v4 as uuid } from 'uuid';  
 import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
+
+import YTSearch from 'youtube-api-search';
 
 import Stack from '@mui/material/Stack';
 //import screenfull from 'screenfull'
@@ -58,6 +62,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
     const [openInvitePeopleToRoomModal, setOpenInvitePeopleToRoomModal] = useState(false);
     const [OpenAddToPlaylistModal, setOpenAddToPlaylistModal] = useState(false);
     const [openRoomParamModal, setOpenRoomParamModal] = useState(false);
+    const [openRoomDrawer, setOpenRoomDrawer] = useState(false);
     const [localVolume, setLocalVolume] = useState(0);
     const [pip, setPip] = useState(true);
 	const roomRef = db.collection("rooms").doc(roomId);
@@ -107,6 +112,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                             isPrivate:false,
                             isOnInvitation:false,
                             isPlayingLooping:true,
+                            isAutoPlayActivated:true,
                             allowEverybodyToAddMedia:true,
                             interactionsAllowed:true,
                             interactionFrequence:20000,
@@ -233,16 +239,21 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
         playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayed, 'seconds');
     }
 
-    function handleMediaEnd() {
+    
+    async function handleMediaEnd() {
         if(room.playlistUrls[room.playing+1]) {
             handleChangeActuallyPlaying(room.playing+1);
-        } else {
+        } 
+        else {
             if(room.roomParams.isPlayingLooping) {
-                handleChangeActuallyPlaying(0);
+                if(room.roomParams.isAutoPlayActivated) {
+                    addMediaForAutoPlay();
+                } else {
+                    handleChangeActuallyPlaying(0);
+                }
             }
         }
     }
-
     async function isSpotifyAndIsNotPlayableBySpotify(numberToPlay, spotifyIsLinked) {
         if(room.playlistUrls[numberToPlay].source === 'spotify' && !spotifyIsLinked) {
             return true;
@@ -291,7 +302,6 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
     function handleVolumeChange(e) {
         setLocalVolume(e.target.value);
     }
-
     
     function handleQuitRoomInComp() {
         room.notifsArray.push({type: 'userLeaved', timestamp: Date.now(), createdBy: currentUser.displayName});
@@ -385,15 +395,59 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                 if((e.track.uri !== room.playlistUrls[room.playing].source) && spotifyEndSwitchTempFix) {
                     setSpotifyPlayerShow(false);
                     setSpotifyEndSwitchTempFix(false);
-                    handleChangeActuallyPlaying(room.playing+1);
+                    handleMediaEnd();
                     setSpotifyPlayerShow(true);
                 } else {
+                    handleMediaEnd();
                     setSpotifyEndSwitchTempFix(true);
                 }
             } 
         }
     }
 
+    async function addMediaForAutoPlayByYoutubeId(params) {
+        await axios.get('https://www.googleapis.com/youtube/v3/search', { params: params })
+            .then(function(response) {
+                var suggestMedia = {
+                    addedBy : 'suggestion',
+                    hashId: uuid().slice(0,10).toLowerCase(),
+                    source:'youtube',
+                    title:response.data.items[0].snippet.title,
+                    url:'https://www.youtube.com/watch?v='+response.data.items[0].id.videoId, 
+                    vote: {'up':0,'down':0}
+                }
+                handleAddValidatedObjectToPlaylist(suggestMedia);
+                handleChangeActuallyPlaying(room.playing+1);  
+            })
+        .catch(function(error) {
+        });
+    }
+
+    async function addMediaForAutoPlay() {
+            
+            if('youtube' !== room.playlistUrls[room.playing].source) {
+                YTSearch({key: process.env.REACT_APP_YOUTUBE_API_KEY, term: room.playlistUrls[room.playing].title}, (videos) => {
+                    var params = {
+                        part: 'snippet',
+                        key: process.env.REACT_APP_YOUTUBE_API_KEY,
+                        type:'video',
+                        relatedToVideoId: videos[1].id.videoId,
+                    };
+                    addMediaForAutoPlayByYoutubeId(params); 
+                    
+                });
+            } else {
+                var params = {
+                    part: 'snippet',
+                    key: process.env.REACT_APP_YOUTUBE_API_KEY,
+                    type:'video',
+                    relatedToVideoId: room.playlistUrls[room.playing].platformId,
+                }; 
+                addMediaForAutoPlayByYoutubeId(params);
+
+            }
+           
+    }
    
   // transitions
   return (
@@ -402,6 +456,8 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
             <RoomTopBar 
                 handleOpenRoomParamModal={handleOpenRoomParamModal}
                 handleOpenShareModal={handleOpenShareModal}
+                paramDrawerIsOpen={openRoomDrawer}
+                handleOpenDrawerParam={setOpenRoomDrawer}
                 handleOpenLeaveRoomModal={handleOpenLeaveRoomModal}
                 localData={localData} 
                 roomId={roomId} 
@@ -659,7 +715,8 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                 OpenAddToPlaylistModal={OpenAddToPlaylistModal}
                 setOpenAddToPlaylistModal={setOpenAddToPlaylistModal}
                 createNewRoomInteraction={createNewRoomInteraction}
-                handleOpenRoomParamModal={handleOpenRoomParamModal}
+                paramDrawerIsOpen={openRoomDrawer}
+                handleOpenDrawerParam={setOpenRoomDrawer}
                 handleOpenShareModal={handleOpenShareModal}
                 handleOpenLeaveRoomModal={handleOpenLeaveRoomModal}
                 checkRoomExist={(room && room.playlistEmpty) ? true:false}

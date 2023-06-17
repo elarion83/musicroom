@@ -49,6 +49,7 @@ const RoomModalAddMedia = ({ currentUser, roomId, validatedObjectToAdd, spotifyT
         addingObject.title='';
         addingObject.source='';
         addingObject.url='';
+        addingObject.platformId='';
         setRecentlyAdded(false);
         await delay(100);
         setRecentlyAdded(true);
@@ -102,7 +103,7 @@ const RoomModalAddMedia = ({ currentUser, roomId, validatedObjectToAdd, spotifyT
                     setMediaSearchResultYoutube(videos);
                 });
 
-                fetch('https://api.dailymotion.com/videos?fields=id,thumbnail_url%2Ctitle&country=fr&search='+searchTerm+'&limit=5')
+                fetch('https://api.dailymotion.com/videos?fields=id,thumbnail_url%2Ctitle&country=fr&search='+searchTerm+'&limit=10')
                     .then((response) => response.json())
                     .then((responseJson) => {
                         setMediaSearchResultDailyMotion(responseJson.list);
@@ -178,9 +179,9 @@ const RoomModalAddMedia = ({ currentUser, roomId, validatedObjectToAdd, spotifyT
                   </Grid>
                   {mediaSearchResultYoutube.length > 1 && <Grid item xs={12}>
                     <Tabs value={tabIndex} onChange={handleTabChange} sx={{bgcolor:'#202124'}}>
-                        <Tab sx={{ color:'var(--white)'}} label="Youtube" disabled={mediaSearchResultYoutube.length > 1 ? '' : 'disabled'}/>
-                        <Tab sx={{ color:'var(--white)'}} label="Spotify" disabled={mediaSearchResultSpotify.length > 1 ? '' : 'disabled'}/>
-                        <Tab sx={{ color:'var(--white)'}} label="Dailymotion" disabled={mediaSearchResultDailyMotion.length > 1 ? '' : 'disabled'}/>
+                        <Tab sx={{ color:'var(--white)'}} label="Youtube" disabled={mediaSearchResultYoutube.length > 1 ? false : true}/>
+                        <Tab sx={{ color:'var(--white)'}} label="Spotify" disabled={mediaSearchResultSpotify.length > 1 ? false : true}/>
+                        <Tab sx={{ color:'var(--white)'}} label="Dailymotion" disabled={mediaSearchResultDailyMotion.length > 1 ? false : true}/>
                     </Tabs>
                     <Box sx={{ lineHeight:"15px", p:0, pt:0, mb:0 }}>
                         {tabIndex === 0 && (
@@ -188,7 +189,7 @@ const RoomModalAddMedia = ({ currentUser, roomId, validatedObjectToAdd, spotifyT
                             {mediaSearchResultYoutube.length > 1 && <Grid item xs={12}>
                                 <List component="nav">
                                     { mediaSearchResultYoutube.map(function(media, idyt){
-                                        return (<ListItemButton sx={{m:0, p:0, pr:1,borderBottom: '2px solid var(--border-color)'}}  key={idyt} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.snippet.title, source:'youtube', url:'https://www.youtube.com/watch?v='+media.id.videoId, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
+                                        return (<ListItemButton sx={{m:0, p:0, pr:1,borderBottom: '2px solid var(--border-color)'}}  key={idyt} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.snippet.title, source:'youtube', platformId:media.id.videoId, url:'https://www.youtube.com/watch?v='+media.id.videoId, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
                                             <img alt={media.snippet.title.substring(0, 50)} src={media.snippet.thumbnails.default.url} />
                                             <Grid sx={{display:'flex',flexDirection:'column',pl:2}}>
                                                 <ListItemText primary={media.snippet.title.substring(0, 50)} className='video_title_list' sx={{ mt:0, fontSize:'0.9em'}}/>
@@ -206,7 +207,7 @@ const RoomModalAddMedia = ({ currentUser, roomId, validatedObjectToAdd, spotifyT
                             {mediaSearchResultSpotify.length > 1 && <Grid item xs={12}>
                             <List component="nav">
                                 { mediaSearchResultSpotify.map(function(media, idsp){
-                                    return (<ListItemButton sx={{margin:0,padding:0, pr:1,borderBottom: '2px solid var(--border-color)'}} key={idsp} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.artists[0].name + ' - ' +media.name, source:'spotify', url:media.uri, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
+                                    return (<ListItemButton sx={{margin:0,padding:0, pr:1,borderBottom: '2px solid var(--border-color)'}} key={idsp} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.artists[0].name + ' - ' +media.name, source:'spotify', platformId:media.uri, url:media.uri, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
                                         <img alt={media.name.substring(0, 50)} src={media.album.images[2].url} />
                                         <Grid sx={{display:'flex',flexDirection:'column',pl:2}}>
                                             <ListItemText primary={media.name} sx={{ mt:0, fontSize:'0.9em'}}/>
@@ -230,7 +231,7 @@ const RoomModalAddMedia = ({ currentUser, roomId, validatedObjectToAdd, spotifyT
                             {mediaSearchResultDailyMotion.length > 1 && <Grid item xs={12}>
                             <List component="nav">
                                 { mediaSearchResultDailyMotion.map(function(media, iddm){
-                                    return (<ListItemButton sx={{margin:0,padding:0, pr:1,borderBottom: '2px solid var(--border-color)'}} key={iddm} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.title, source:'dailymotion', url:'https://www.dailymotion.com/video/'+media.id, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
+                                    return (<ListItemButton sx={{margin:0,padding:0, pr:1,borderBottom: '2px solid var(--border-color)'}} key={iddm} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.title, source:'dailymotion', platformId:media.id, url:'https://www.dailymotion.com/video/'+media.id, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
                                         <img alt={media.title.substring(0, 50)}  src={media.thumbnail_url} style={{width:'120px', height:'90px'}}/>
                                         <ListItemText primary={media.title.substring(0, 50)} sx={{ml:2, mt:0, fontSize:'0.9em'}}/></ListItemButton>)
                                 }) }
