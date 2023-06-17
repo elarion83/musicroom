@@ -405,13 +405,22 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
         }
     }
 
-    async function addMediaForAutoPlayByYoutubeId(params) {
+    async function addMediaForAutoPlayByYoutubeId(mediaYoutubeId) {
+        
+        var params = {
+            part: 'snippet',
+            key: process.env.REACT_APP_YOUTUBE_API_KEY,
+            type:'video',
+            relatedToVideoId: mediaYoutubeId,
+        }; 
+
         await axios.get('https://www.googleapis.com/youtube/v3/search', { params: params })
             .then(function(response) {
                 var suggestMedia = {
-                    addedBy : 'suggestion',
+                    addedBy : 'AutoPlay',
                     hashId: uuid().slice(0,10).toLowerCase(),
-                    source:'youtube',
+                    source: 'youtube',
+                    platformId:response.data.items[0].id.videoId,
                     title:response.data.items[0].snippet.title,
                     url:'https://www.youtube.com/watch?v='+response.data.items[0].id.videoId, 
                     vote: {'up':0,'down':0}
@@ -424,29 +433,14 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
     }
 
     async function addMediaForAutoPlay() {
-            
             if('youtube' !== room.playlistUrls[room.playing].source) {
                 YTSearch({key: process.env.REACT_APP_YOUTUBE_API_KEY, term: room.playlistUrls[room.playing].title}, (videos) => {
-                    var params = {
-                        part: 'snippet',
-                        key: process.env.REACT_APP_YOUTUBE_API_KEY,
-                        type:'video',
-                        relatedToVideoId: videos[1].id.videoId,
-                    };
-                    addMediaForAutoPlayByYoutubeId(params); 
-                    
+                    addMediaForAutoPlayByYoutubeId(videos[1].id.videoId);   
                 });
             } else {
-                var params = {
-                    part: 'snippet',
-                    key: process.env.REACT_APP_YOUTUBE_API_KEY,
-                    type:'video',
-                    relatedToVideoId: room.playlistUrls[room.playing].platformId,
-                }; 
-                addMediaForAutoPlayByYoutubeId(params);
+                addMediaForAutoPlayByYoutubeId(room.playlistUrls[room.playing].platformId);
 
-            }
-           
+            } 
     }
    
   // transitions
