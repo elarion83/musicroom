@@ -28,8 +28,6 @@
       @import 'css/modalJoinRoom.css';
       @import 'css/modalAddMedia.css';
 
-
-
       body,html {
         margin: 0 !important;
         padding: 0 !important;
@@ -39,7 +37,7 @@
         top: 20px;
       }
       .playerHide .playerContainer{
-        display: none;
+        height: 0;
       }
       
       .votebuttons > button {
@@ -47,25 +45,10 @@
         min-width: 50px;
       }
 
-
-        #root > div {
-            overflow-y: scroll;
-            scrollbar-width:thin !important;
-            scroll-behavior: smooth;
-            border-radius: 0px;
-        }
-        .main_container {
-          height: 100vh;
-        }
-
-        .player_button_container {
-          margin-top: 0 !important;
-        }
-
-        .player_button_container>div {
-          margin: 0 !important;
-          padding: 0 !important;
-        }
+      #root > div {
+          overflow-x: hidden;
+          max-width: 100vw;
+      }
 
       .scroll  {
         scrollbar-width:thin !important;

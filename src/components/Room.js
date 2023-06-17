@@ -54,6 +54,21 @@ import SoundWave from "./rooms/SoundWave";
 
 const Room = ({ currentUser, roomId, handleQuitRoom }) => {
 
+    const [scrollFromTopTrigger, setScrollFromTopTrigger] = useState(window.screen.height/4);
+    const [isShowSticky, setIsShowSticky] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = (event) => {
+            if(window.scrollY >= scrollFromTopTrigger) {
+                setIsShowSticky(true);
+            } else {
+                setIsShowSticky(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+    }, []);
     const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
 
     const [localData, setLocalData] = useState({domain:window.location.hostname, synchro:false, currentUserVotes:{up:[], down:[]} });
@@ -443,11 +458,17 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
             } 
     }
    
-  // transitions
   return (
     <div className="flex flex-col w-full gap-0 relative " style={{height:'auto'}} > 
         {loaded && room.roomParams !== undefined && 
-            <RoomTopBar 
+            <RoomTopBar     
+                room={room}
+                isAdminView={isActuallyAdmin}
+                isShowSticky={isShowSticky}
+                handlePlay={handlePlay}
+                isSpotifyAndIsNotPlayableBySpotify={isSpotifyAndIsNotPlayableBySpotify}
+                handleChangeActuallyPlaying={handleChangeActuallyPlaying}
+                handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying}
                 handleOpenRoomParamModal={handleOpenRoomParamModal}
                 handleOpenShareModal={handleOpenShareModal}
                 paramDrawerIsOpen={openRoomDrawer}
@@ -535,12 +556,13 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                             </Grid>
                             <Grid item sm={(room.playlistUrls[room.playing].source === 'spotify' || !viewPlayer) ? 12 : 8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }} className={`player_right_side_container ${(room.playlistUrls[room.playing].source === 'spotify') ? "spotify_header" : ""}`}>
                                 { /* pip ? 'Disable PiP' : 'Enable PiP' */ }
-                                <Grid item sm={12} sx={{ padding:0,pl:1.5,ml:0, mb: 0 , mt:1, fill:'#f0f1f0'}}>
+                                 <Grid item sm={12} sx={{ padding:0,pl:1.5,ml:0, mb: 0 , mt:1, fill:'#f0f1f0'}}>
                                     <Grid item 
                                     sx={[{pb:1}, room.playlistUrls[room.playing].source === 'spotify' &&  { justifyContent: 'center' } ]} 
                                     className="flexRowCenterH">
                                         <Tooltip title="Afficher / Cacher le lecteur">
-                                                <Icon icon={viewPlayer ? 'ep:view' : 'carbon:view-off'} style={{cursor:'pointer',marginRight:'20px'}} onClick={e => setViewPlayer(!viewPlayer)} />
+                                                <Icon icon={viewPlayer ? 'ep:view' : 'carbon:view-off'} 
+                                                style={{flexShrink:0,cursor:'pointer',marginRight:'20px'}} onClick={e => setViewPlayer(!viewPlayer)} />
                                         </Tooltip>
                                         { room.playlistUrls[room.playing].title && <Typography component={'span'}>
                                         {room.playlistUrls[room.playing].title} 
@@ -549,19 +571,21 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                                         <Typography component={'span'}  >
                                             {room.playlistUrls[room.playing].url.substring(0, 50)+'...'} 
                                         </Typography>} 
-                                    </Grid>
+                                        </Grid>
                                     
-                                    <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
-                                        {room.actuallyPlaying ? 'En lecture' : 'En pause'}
-                                    </Typography>
-                                    {playerReady && playerRef.current !== null && room.playlistUrls[room.playing].source !== 'spotify' && 
-                                    <Typography sx={{ fontSize: '10px', ml:0, mb: 1}}> {~~(Math.round(playerRef.current.getCurrentTime())/60) + 'm'+Math.round(playerRef.current.getCurrentTime()) % 60+ 's / ' + formatNumberToMinAndSec(playerRef.current.getDuration())}</Typography>}
-                                    <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
-                                        Source : { room.playlistUrls[room.playing].source }
-                                    </Typography>
-                                    <Typography sx={{ ml:0, mb: 1.5, fontSize: '10px', textTransform:'uppercase' }}>
-                                        Ajouté par : { room.playlistUrls[room.playing].addedBy }
-                                    </Typography>
+                                    <Grid item sm={12} md={12} >
+                                        <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
+                                            {room.actuallyPlaying ? 'En lecture' : 'En pause'}
+                                        </Typography>
+                                        {playerReady && playerRef.current !== null && room.playlistUrls[room.playing].source !== 'spotify' && 
+                                        <Typography sx={{ fontSize: '10px', ml:0, mb: 1}}> {~~(Math.round(playerRef.current.getCurrentTime())/60) + 'm'+Math.round(playerRef.current.getCurrentTime()) % 60+ 's / ' + formatNumberToMinAndSec(playerRef.current.getDuration())}</Typography>}
+                                        <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
+                                            Source : { room.playlistUrls[room.playing].source }
+                                        </Typography>
+                                        <Typography sx={{ ml:0, mb: 1.5, fontSize: '10px', textTransform:'uppercase' }}>
+                                            Ajouté par : { room.playlistUrls[room.playing].addedBy }
+                                        </Typography>
+                                    </Grid>
                                 </Grid> 
                                 <Grid className='player_button_container' item sm={12} sx={{ padding:0,pl:1.5,ml:0, pr:1.5,mb: 0 , mt:1, fill:'#f0f1f0'}}   >
                                     {isActuallyAdmin && 

@@ -5,23 +5,37 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import InfoIcon from '@mui/icons-material/Info';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import IconButton from '@mui/material/IconButton';
 import ShareIcon from '@mui/icons-material/Share';
+import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import TuneIcon from '@mui/icons-material/Tune';
-import { Divider, Drawer, List, ListItem, ListItemButton, Typography } from '@mui/material';
+import { Divider, Drawer, Grid, List, ListItem, ListItemButton, Typography } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Badge from '@mui/material/Badge';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+import SkipPrevious from '@mui/icons-material/SkipPrevious';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import 'animate.css';
 
 
-const RoomTopBar = ({paramDrawerIsOpen, handleOpenDrawerParam, roomId, roomAdmin, isLinkedToSpotify,handleOpenRoomParamModal,handleOpenShareModal,handleOpenLeaveRoomModal, }) => {
+const RoomTopBar = ({
+                isShowSticky,
+                handlePlay,
+                isAdminView,
+                room,
+                handleChangeActuallyPlaying,
+                isSpotifyAndIsNotPlayableBySpotify,
+                handleChangeIdActuallyPlaying,
+                paramDrawerIsOpen, handleOpenDrawerParam, roomId, roomAdmin, isLinkedToSpotify,handleOpenRoomParamModal,handleOpenShareModal,handleOpenLeaveRoomModal, }) => {
 
   return (
-    <AppBar position="sticky" className='sticky_top' >
+    <AppBar sx={{position: (isShowSticky) ? "fixed": 'initial', top:0}} >
         
-        <Toolbar xs={12}sx={{ bgcolor: 'var(--grey-dark)',borderBottom: '2px solid var(--border-color)', minHeight: '45px !important', fontFamily: 'Monospace', pl:'5px', pr:'25 px' }}>
+        <Toolbar xs={12}sx={{ bgcolor: 'var(--grey-dark)',borderBottom: '2px solid var(--border-color)', minHeight: '45px !important', fontFamily: 'Monospace', pl:'5px', 
+        pr:(isShowSticky)? 0: '25 px' }}>
                 <Drawer
             id="menu-appbar"
             anchor='left'
@@ -105,6 +119,21 @@ const RoomTopBar = ({paramDrawerIsOpen, handleOpenDrawerParam, roomId, roomAdmin
                 Room <b style={{textTransform:'uppercase'}}><span>{ roomId }</span> </b> 
             </Typography>
             
+            {isShowSticky && isAdminView &&
+                <Grid className="animate__animated animate__fadeInDown"> 
+                    <IconButton onClick={e => ((room.playing > 0) && isSpotifyAndIsNotPlayableBySpotify(room.playing-1, room.roomParams.isLinkedToSpotify)) ? handleChangeActuallyPlaying(room.playing - 1) : ''}>
+                        <SkipPrevious fontSize="large" sx={{color:((room.playing > 0) && isSpotifyAndIsNotPlayableBySpotify(room.playing-1, room.roomParams.isLinkedToSpotify)) ? '#f0f1f0': '#303134'}} />
+                    </IconButton>
+
+                    <IconButton variant="contained" onClick={e => handlePlay(!room.actuallyPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
+                        { room.actuallyPlaying && <PauseCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
+                        { !room.actuallyPlaying && <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
+                    </IconButton>
+                    
+                    <IconButton onClick={e => (room.playlistUrls.length -1) !== room.playing ? handleChangeActuallyPlaying(room.playing + 1) : ''}>
+                        <SkipNextIcon fontSize="large" sx={{color: (room.playlistUrls.length -1) !== room.playing ? '#f0f1f0' : '#303134'}} />
+                    </IconButton> 
+                </Grid>}
         </Toolbar>
         
        
