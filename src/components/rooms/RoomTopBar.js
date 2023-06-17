@@ -16,12 +16,7 @@ import Tooltip from '@mui/material/Tooltip';
 import 'animate.css';
 
 
-const RoomTopBar = ({roomId, roomAdmin, isLinkedToSpotify,handleOpenRoomParamModal,handleOpenShareModal,handleOpenLeaveRoomModal, }) => {
-
-    const [roomDrawerOpen, setRoomDrawerOpen] = useState(false);
-    function handleClickMenu() {
-        setRoomDrawerOpen(true);
-    };
+const RoomTopBar = ({paramDrawerIsOpen, handleOpenDrawerParam, roomId, roomAdmin, isLinkedToSpotify,handleOpenRoomParamModal,handleOpenShareModal,handleOpenLeaveRoomModal, }) => {
 
   return (
     <AppBar position="sticky" className='sticky_top' >
@@ -30,13 +25,13 @@ const RoomTopBar = ({roomId, roomAdmin, isLinkedToSpotify,handleOpenRoomParamMod
                 <Drawer
             id="menu-appbar"
             anchor='left'
-            onClick={(e) => setRoomDrawerOpen(false)}
-            onClose={(e) => setRoomDrawerOpen(false)}
-            open={roomDrawerOpen}
+            onClick={(e) => handleOpenDrawerParam(false)}
+            onClose={(e) => handleOpenDrawerParam(false)}
+            open={paramDrawerIsOpen}
         >
             <List sx={{pt:0}}>  
                 <ListItem sx={{bgcolor:'var(--white)'}} key='roomDrawClose' disablePadding>
-                    <ListItemButton onClick={(e) => setRoomDrawerOpen(false)} sx={{display:'flex',justifyContent:'flex-end'}}>
+                    <ListItemButton onClick={(e) => handleOpenDrawerParam(false)} sx={{display:'flex',justifyContent:'flex-end'}}>
                         <ChevronLeftIcon />
                         <Typography fontSize="small" sx={{pl:1, textTransform:'uppercase'}}>Room <b style={{textTransform:'uppercase'}}>{ roomId } </b> </Typography>
                     </ListItemButton>
@@ -100,7 +95,7 @@ const RoomTopBar = ({roomId, roomAdmin, isLinkedToSpotify,handleOpenRoomParamMod
                             bgcolor:'var(--red-2)'
                         }}} >
                             <TuneIcon 
-                            onClick={e => handleClickMenu(e)} 
+                            onClick={e => handleOpenDrawerParam(!paramDrawerIsOpen)} 
                             sx={{mr:1, cursor:'pointer', color:'var(--white)'}}/>
                         </Badge>
                 </Tooltip>

@@ -12,9 +12,9 @@ import Chat from './Chat'
 import { Icon } from '@iconify/react';
 import { useState } from 'react';
 
-import {returnAnimateReplace} from './../../services/animateReplace'
+import {returnAnimateReplace } from './../../services/animateReplace';
 
-const BottomInteractions = ({ currentUser, roomId, roomParams, roomNotifs, userCanMakeInteraction, createNewRoomInteraction, setOpenAddToPlaylistModal, handleOpenRoomParamModal,handleOpenShareModal,handleOpenLeaveRoomModal, OpenAddToPlaylistModal, checkRoomExist, checkInterractionLength,checkNotificationsLength }) => {
+const BottomInteractions = ({ paramDrawerIsOpen, handleOpenDrawerParam, currentUser, roomId, roomParams, roomNotifs, userCanMakeInteraction, createNewRoomInteraction, setOpenAddToPlaylistModal,handleOpenShareModal,handleOpenLeaveRoomModal, OpenAddToPlaylistModal, checkRoomExist, checkInterractionLength,checkNotificationsLength }) => {
 
     const [isChatExpanded, setIsChatExpanded] = useState(false);
     const animatedElementsRef = [];
@@ -81,7 +81,8 @@ const BottomInteractions = ({ currentUser, roomId, roomParams, roomNotifs, userC
                             bgcolor:'var(--red-2)',
                             zIndex:10000
                         }}} >
-                        <Fab size="small" variant="extended" className='room_small_button_interactions'  sx={{justifyContent: 'center', ml:1}} onClick={e => handleOpenRoomParamModal(true)} >
+                        <Fab size="small" variant="extended" className='room_small_button_interactions' 
+                        sx={{justifyContent: 'center', ml:1}} onClick={e => handleOpenDrawerParam(!paramDrawerIsOpen)} >
                             <TuneIcon fontSize="small" />
                         </Fab>
                     </Badge>
