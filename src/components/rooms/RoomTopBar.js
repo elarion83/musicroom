@@ -56,7 +56,7 @@ const RoomTopBar = ({
                         <ListItemIcon>
                             <InfoIcon />
                         </ListItemIcon>
-                        <Typography>Hosté par <b>{roomAdmin}</b></Typography>
+                        <Typography>{isAdminView ? 'Vous êtes l\'hôte' : 'Hosté par'} {!isAdminView ? <b>{roomAdmin}</b> : '' }</Typography>
                     </ListItemButton>
                 </ListItem>
                 
