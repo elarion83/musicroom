@@ -76,28 +76,28 @@ const ModalRoomParams = ({ adminView, open, changeOpen, roomParams , handleDisco
                         </Alert>
                     }
 
-                    <Alert sx={{pl:0, mt:3, mb:2}} icon={<Switch checked={roomParams.isPlayingLooping} onChange={handleChangeIsPlayingLooping} 
+                    <Alert sx={{pl:0, mt:3, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.isPlayingLooping} onChange={handleChangeIsPlayingLooping} 
                             disabled={adminView? false:true}
                             name="switchIsPlayingLooping" />} severity={roomParams.isPlayingLooping ? 'success' : 'warning'}>
                         <AlertTitle sx={{fontWeight:'bold'}}>Lecture en boucle</AlertTitle>
                         <Typography fontSize='small'>Si la playlist est finie, le lecteur reviens au premier média.</Typography>
                     </Alert>
 
-                    <Alert sx={{pl:0, mb:2}} icon={<Switch checked={roomParams.interactionsAllowed} onChange={handleChangeIsInterractionsAllowed} 
+                    <Alert sx={{pl:0, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.interactionsAllowed} onChange={handleChangeIsInterractionsAllowed} 
                             disabled={adminView? false:true}
                             name="switchInteractionsAllowed" />} severity={roomParams.interactionsAllowed ? 'success' : 'warning'}>
                         <AlertTitle sx={{fontWeight:'bold'}}>Autoriser les interactions</AlertTitle>
                         <Typography fontSize='small'>Permet aux membres de la room d'intéragir avec les emoticones.</Typography>
                     </Alert>
                     
-                    <Alert sx={{pl:0, mb:2}} icon={<Switch checked={roomParams.isAutoPlayActivated} onChange={handleChangeIsAutoPlayActivated} 
+                    <Alert sx={{pl:0, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.isAutoPlayActivated} onChange={handleChangeIsAutoPlayActivated} 
                             disabled={adminView? false:true}
                             name="switchIsAutoPlayActivated" />} severity={roomParams.isAutoPlayActivated ? 'success' : 'warning'}>
                         <AlertTitle sx={{fontWeight:'bold'}}>Lecture automatique</AlertTitle>
                         <Typography fontSize='small'>Le lecteur ajoutera automatiquement des médias à la playlist.</Typography>
                     </Alert>
 
-                    <Alert sx={{pl:0, mb:2}} icon={<Switch checked={roomParams.isChatActivated} onChange={handleChangeIsChatActivated} 
+                    <Alert sx={{pl:0, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.isChatActivated} onChange={handleChangeIsChatActivated} 
                             disabled={adminView? false:true}
                             name="switchIsChatActivated" />} severity={roomParams.isChatActivated ? 'success' : 'warning'}>
                         <AlertTitle sx={{fontWeight:'bold'}}>Activer le chat de room</AlertTitle>

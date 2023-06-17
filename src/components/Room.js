@@ -80,7 +80,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
     const [openRoomDrawer, setOpenRoomDrawer] = useState(false);
     const [localVolume, setLocalVolume] = useState(0);
     const [pip, setPip] = useState(true);
-	const roomRef = db.collection("rooms").doc(roomId);
+	const roomRef = db.collection(process.env.REACT_APP_ROOM_COLLECTION).doc(roomId);
     const [userCanMakeInteraction, setUserCanMakeInteraction]= useState(true);
     const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
     const [openForceDisconnectSpotifyModal, setOpenForceDisconnectSpotifyModal] = useState(false);
@@ -141,7 +141,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                         interactionsArray:[],
                         creationTimeStamp	: Date.now()
                     };
-                    db.collection("rooms").doc(roomId).set(docData).then(() => {});
+                    db.collection(process.env.REACT_APP_ROOM_COLLECTION).doc(roomId).set(docData).then(() => {});
                     setRoom(docData);
                 }
                 setLoaded(true);

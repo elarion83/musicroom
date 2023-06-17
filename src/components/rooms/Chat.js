@@ -27,7 +27,7 @@ const Chat = ({roomParams, currentUser, roomId, userCanMakeInteraction,createNew
     const [alreadyScrolledOnInit, setAlreadyScrolledOnInit] = useState(false);
 
     const [messagesToDisplay, setMessagesToDisplay] = useState({});
-    db.collection("messages").where('roomId', '==', roomId).orderBy("timestamp", "asc").get().then((querySnapshot) => {
+    db.collection(process.env.REACT_APP_MESSAGE_COLLECTION).where('roomId', '==', roomId).orderBy("timestamp", "asc").get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
             if(messagesToDisplay[doc.id]) {}
             else {
@@ -49,7 +49,7 @@ const Chat = ({roomParams, currentUser, roomId, userCanMakeInteraction,createNew
         if(messageToSend.length > 0) {
             setIsSendingMessage(true);
             setCantSendMessageReason('Attendre '+sendMessageTimeToWait+' secondes');
-            db.collection("messages").add({
+            db.collection(process.env.REACT_APP_MESSAGE_COLLECTION).add({
                 author: currentUser.displayName,
                 roomId: roomId,
                 text:messageToSend,
