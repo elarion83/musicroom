@@ -36,6 +36,7 @@ function App() {
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [userInfos, setUserInfo] = useState({});
   
+  
   // modal statuts
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [joinRoomModalOpen, setJoinRoomModalOpen] = useState(false);
