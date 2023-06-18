@@ -60,8 +60,8 @@ function App() {
         }
         setIsSignedIn(true);
       }
-      else if(localStorage.getItem("MusicRoom_AnonymouslyLoggedIn")) {
-        setUserInfo({displayName:localStorage.getItem("MusicRoom_AnonymouslyPseudo")});
+      else if(localStorage.getItem("PlayIt_AnonymouslyLoggedIn")) {
+        setUserInfo({displayName:localStorage.getItem("PlayIt_AnonymouslyPseudo")});
         setIsSignedIn(true);
       }
       else {
@@ -79,9 +79,9 @@ function App() {
         const hash = window.location.hash
         if (hash) {
             var token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
-            if(localStorage.getItem("MusicRoom_SpotifyRoomId")) {
-              joinRoomByRoomId(localStorage.getItem("MusicRoom_SpotifyRoomId"));
-              replaceCurrentUrlWithRoomUrl(localStorage.getItem("MusicRoom_SpotifyRoomId"));
+            if(localStorage.getItem("PlayIt_SpotifyRoomId")) {
+              joinRoomByRoomId(localStorage.getItem("PlayIt_SpotifyRoomId"));
+              replaceCurrentUrlWithRoomUrl(localStorage.getItem("PlayIt_SpotifyRoomId"));
             }
         }
     }, [])
@@ -104,8 +104,8 @@ function App() {
     setIsLoginLoading(false);
     setUserInfo({displayName:PseudoGenerated});
 
-    localStorage.setItem("MusicRoom_AnonymouslyPseudo",  PseudoGenerated);
-    localStorage.setItem("MusicRoom_AnonymouslyLoggedIn",  true);
+    localStorage.setItem("PlayIt_AnonymouslyPseudo",  PseudoGenerated);
+    localStorage.setItem("PlayIt_AnonymouslyLoggedIn",  true);
 
     setIsSignedIn(true);
     handleLoginOkSnackNewUser();
@@ -178,10 +178,10 @@ function App() {
     setRoomId();
     setUserInfo({});
     setIsSignedIn(false);
-    localStorage.removeItem("MusicRoom_SpotifyRoomId");
-    localStorage.removeItem("MusicRoom_SpotifyToken");
-    localStorage.removeItem("MusicRoom_AnonymouslyLoggedIn");
-    localStorage.removeItem("MusicRoom_AnonymouslyPseudo");
+    localStorage.removeItem("PlayIt_SpotifyRoomId");
+    localStorage.removeItem("PlayIt_SpotifyToken");
+    localStorage.removeItem("PlayIt_AnonymouslyLoggedIn");
+    localStorage.removeItem("PlayIt_AnonymouslyPseudo");
     auth.signOut();
     setLogoutOkSnackBarOpen(true);
     replaceCurrentUrlWithHomeUrl();    
@@ -189,8 +189,8 @@ function App() {
 
   function handleQuitRoomMain() {
     setRoomId();
-    localStorage.removeItem("MusicRoom_SpotifyRoomId");
-    localStorage.removeItem("MusicRoom_SpotifyToken");
+    localStorage.removeItem("PlayIt_SpotifyRoomId");
+    localStorage.removeItem("PlayIt_SpotifyToken");
     replaceCurrentUrlWithHomeUrl();
   }
 
@@ -210,7 +210,7 @@ function App() {
       <Container maxWidth={false} className='main_container' sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
          <AppBar position="static" sx={{bgcolor: '#202124'}}>
             <Toolbar>
-              <img src="img/logo_small.png" style={{ width: '250px', maxWidth:'50%'}} alt="MusicRoom logo"/>
+              <img src="img/logo_small.png" style={{ width: '250px', maxWidth:'50%'}} alt="PlayIt logo"/>
               {!isAppLoading && (
                 <UserTopBar userInfoPseudo={userInfos.displayName} handleOpenLoginModal={setLoginModalOpen} handleLogout={logOut} />
               )}
