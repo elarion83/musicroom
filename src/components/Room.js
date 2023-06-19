@@ -163,14 +163,14 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
 	useEffect(() => {
         
 		getRoomData(roomId); 
-        localStorage.setItem("PlayIt_SpotifyRoomId", roomId)
-        if(null === localStorage.getItem("PlayIt_UserInfoVotes")) {
-            localStorage.setItem("PlayIt_UserInfoVotes", JSON.stringify({up:[], down:[]}));
+        localStorage.setItem("Play-It_SpotifyRoomId", roomId)
+        if(null === localStorage.getItem("Play-It_UserInfoVotes")) {
+            localStorage.setItem("Play-It_UserInfoVotes", JSON.stringify({up:[], down:[]}));
         } else {
-            localData.currentUserVotes = JSON.parse(localStorage.getItem("PlayIt_UserInfoVotes"));
+            localData.currentUserVotes = JSON.parse(localStorage.getItem("Play-It_UserInfoVotes"));
         }
 
-        document.title = 'Room ' + roomId + ' - PlayIt';
+        document.title = 'Room ' + roomId + ' - Play-It';
 
 	}, [roomId]);
 
@@ -186,9 +186,9 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
             setIsActuallyAdmin(true);
         }
         if(room.actuallyPlaying) {
-            document.title = 'En lecture - Room ' + roomId + ' - PlayIt';
+            document.title = 'En lecture - Room ' + roomId + ' - Play-It';
         } else {
-            document.title = 'Room ' + roomId + ' - PlayIt';
+            document.title = 'Room ' + roomId + ' - Play-It';
         }
 
         if(room.interactionsArray && room.interactionsArray.length > 0) {
@@ -347,14 +347,14 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
             if(!localData.currentUserVotes.up.includes(mediaHashId)) {
                 localData.currentUserVotes.up.push(mediaHashId);
                 roomRef.set({playlistUrls: room.playlistUrls}, { merge: true });
-                localStorage.setItem("PlayIt_UserInfoVotes",  JSON.stringify(localData.currentUserVotes));
+                localStorage.setItem("Play-It_UserInfoVotes",  JSON.stringify(localData.currentUserVotes));
             }
         }
         else {
             if(!localData.currentUserVotes.down.includes(mediaHashId)) {
                 localData.currentUserVotes.down.push(mediaHashId);
                 roomRef.set({playlistUrls: room.playlistUrls}, { merge: true });
-                localStorage.setItem("PlayIt_UserInfoVotes",  JSON.stringify(localData.currentUserVotes));
+                localStorage.setItem("Play-It_UserInfoVotes",  JSON.stringify(localData.currentUserVotes));
             }
         }
     }
@@ -373,7 +373,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
             var token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
 
             window.location.hash = ""
-            window.localStorage.setItem("PlayIt_SpotifyToken", token)
+            window.localStorage.setItem("Play-It_SpotifyToken", token)
             handleChangeSpotifyToken(token)
         }
     }, [])

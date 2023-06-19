@@ -17,6 +17,8 @@ import Grid from '@mui/material/Grid';
 import JoinRoomModal from "./components/generalsTemplates/modals/JoinRoomModal";
 import Contentslider from "./components/homePage/ContentSlider";
 
+import Footer from './components/generalsTemplates/Footer';
+
 import { auth, googleProvider } from "./services/firebase";
 
 import {PseudoGenerated} from './services/pseudoGenerator';
@@ -60,8 +62,8 @@ function App() {
         }
         setIsSignedIn(true);
       }
-      else if(localStorage.getItem("PlayIt_AnonymouslyLoggedIn")) {
-        setUserInfo({displayName:localStorage.getItem("PlayIt_AnonymouslyPseudo")});
+      else if(localStorage.getItem("Play-It_AnonymouslyLoggedIn")) {
+        setUserInfo({displayName:localStorage.getItem("Play-It_AnonymouslyPseudo")});
         setIsSignedIn(true);
       }
       else {
@@ -79,9 +81,9 @@ function App() {
         const hash = window.location.hash
         if (hash) {
             var token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
-            if(localStorage.getItem("PlayIt_SpotifyRoomId")) {
-              joinRoomByRoomId(localStorage.getItem("PlayIt_SpotifyRoomId"));
-              replaceCurrentUrlWithRoomUrl(localStorage.getItem("PlayIt_SpotifyRoomId"));
+            if(localStorage.getItem("Play-It_SpotifyRoomId")) {
+              joinRoomByRoomId(localStorage.getItem("Play-It_SpotifyRoomId"));
+              replaceCurrentUrlWithRoomUrl(localStorage.getItem("Play-It_SpotifyRoomId"));
             }
         }
     }, [])
@@ -104,8 +106,8 @@ function App() {
     setIsLoginLoading(false);
     setUserInfo({displayName:PseudoGenerated});
 
-    localStorage.setItem("PlayIt_AnonymouslyPseudo",  PseudoGenerated);
-    localStorage.setItem("PlayIt_AnonymouslyLoggedIn",  true);
+    localStorage.setItem("Play-It_AnonymouslyPseudo",  PseudoGenerated);
+    localStorage.setItem("Play-It_AnonymouslyLoggedIn",  true);
 
     setIsSignedIn(true);
     handleLoginOkSnackNewUser();
@@ -178,10 +180,10 @@ function App() {
     setRoomId();
     setUserInfo({});
     setIsSignedIn(false);
-    localStorage.removeItem("PlayIt_SpotifyRoomId");
-    localStorage.removeItem("PlayIt_SpotifyToken");
-    localStorage.removeItem("PlayIt_AnonymouslyLoggedIn");
-    localStorage.removeItem("PlayIt_AnonymouslyPseudo");
+    localStorage.removeItem("Play-It_SpotifyRoomId");
+    localStorage.removeItem("Play-It_SpotifyToken");
+    localStorage.removeItem("Play-It_AnonymouslyLoggedIn");
+    localStorage.removeItem("Play-It_AnonymouslyPseudo");
     auth.signOut();
     setLogoutOkSnackBarOpen(true);
     replaceCurrentUrlWithHomeUrl();    
@@ -189,8 +191,8 @@ function App() {
 
   function handleQuitRoomMain() {
     setRoomId();
-    localStorage.removeItem("PlayIt_SpotifyRoomId");
-    localStorage.removeItem("PlayIt_SpotifyToken");
+    localStorage.removeItem("Play-It_SpotifyRoomId");
+    localStorage.removeItem("Play-It_SpotifyToken");
     replaceCurrentUrlWithHomeUrl();
   }
 
@@ -210,7 +212,7 @@ function App() {
       <Container maxWidth={false} className='main_container' sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
          <AppBar position="static" sx={{bgcolor: '#202124'}}>
             <Toolbar>
-              <img src="img/logo_small.png" style={{ width: '250px', maxWidth:'50%'}} alt="PlayIt logo"/>
+              <img src="img/logo_py1.png" style={{ width: 'auto', maxWidth:'50%', maxHeight:'30px'}} alt="Play-It logo"/>
               {!isAppLoading && (
                 <UserTopBar userInfoPseudo={userInfos.displayName} handleOpenLoginModal={setLoginModalOpen} handleLogout={logOut} />
               )}
@@ -256,21 +258,23 @@ function App() {
           onClose={() => setLoginOkSnackBarOpen(false)}
           sx={{borderRadius:'2px'}}
           message={"Bienvenue "+userInfos.displayName+" !"}
-          />
-          <Snackbar
+        />
+        <Snackbar
           open={loginNewUserOkSnackBarOpen}
           autoHideDuration={3000}
           onClose={() => setLoginNewUserOkSnackBarOpen(false)}
           sx={{borderRadius:'2px'}}
           message={"Bienvenue "+userInfos.displayName+", 1e connexion !"}
-          />
+        />
         <Snackbar
           open={logoutOkSnackBarOpen}
           autoHideDuration={3000}
           onClose={() => setLogoutOkSnackBarOpen(false)}
           sx={{borderRadius:'2px'}}
           message={"A bientôt !"}
-          />
+        />
+
+        {!roomId && <Footer />}
       </Container>
     </>
   );
