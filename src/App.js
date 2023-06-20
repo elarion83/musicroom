@@ -24,8 +24,13 @@ import { auth, googleProvider } from "./services/firebase";
 import {PseudoGenerated} from './services/pseudoGenerator';
 import { Snackbar } from "@mui/material";
 
+import ReactGA from "react-ga";
+import ReactGA4 from "react-ga4";
 
 function App() {
+  
+  ReactGA4.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_KEY);
+  
   // general app statuts
   const [isAppLoading, setIsAppLoading] = useState(true);
   const [isLoginLoading, setIsLoginLoading] = useState(false);
@@ -78,20 +83,26 @@ function App() {
   }, [])
   
 
-    useEffect(() => {
-        const hash = window.location.hash
-        if (hash) {
-            var token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
-            if(localStorage.getItem("Play-It_SpotifyRoomId")) {
-              joinRoomByRoomId(localStorage.getItem("Play-It_SpotifyRoomId"));
-              replaceCurrentUrlWithRoomUrl(localStorage.getItem("Play-It_SpotifyRoomId"));
-            }
-        }
-    }, [])
+  useEffect(() => {
+      const hash = window.location.hash
+      if (hash) {
+          var token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
+          if(localStorage.getItem("Play-It_SpotifyRoomId")) {
+            joinRoomByRoomId(localStorage.getItem("Play-It_SpotifyRoomId"));
+            replaceCurrentUrlWithRoomUrl(localStorage.getItem("Play-It_SpotifyRoomId"));
+          }
+      }
+  }, [])
+
+  async function CreateGoogleAnalyticsEvent(category,action,label) {
+    ReactGA4.event({category: category,action: action,label: label});
+  }
 
   function createNewRoom() {
     var newRoomId = uuid().slice(0,5).toLowerCase()
     joinRoomByRoomId(newRoomId);
+
+    CreateGoogleAnalyticsEvent('Actions','Création room','Création room');
   }
 
   function joinRoomByRoomId(idRoom) {
@@ -113,6 +124,8 @@ function App() {
     setIsSignedIn(true);
     handleLoginOkSnackNewUser();
     window.scrollTo(0, 0);
+
+    CreateGoogleAnalyticsEvent('Actions','Anonym. login','Anonym. login');
   }
 
   async function handleGoogleLogin() {
@@ -124,6 +137,7 @@ function App() {
               setIsLoginLoading(false);
               setUserInfo({displayName:PseudoGenerated});        
               handleLoginOkSnackNewUser();
+              CreateGoogleAnalyticsEvent('Actions','Google login','Google login');
             });
           } else {
             setIsLoginLoading(false);
@@ -134,6 +148,7 @@ function App() {
             setIsLoginLoading(false);
             setLoginErrorMessage('Une erreur est survenue');
         });
+
   }
 
   async function handlePasswordAndMailLogin(email,password) {
@@ -149,6 +164,7 @@ function App() {
                             // Signed in
                             handleLoginOkSnack();
                             setIsLoginLoading(false);
+                            CreateGoogleAnalyticsEvent('Actions','Mail login','Mail login');
                             return userCredential.user;
                         })
                         .catch((error) => {
@@ -160,6 +176,7 @@ function App() {
                     setIsLoginLoading(false);
                 }
             })
+
   }
 
   function handleLoginOkSnack() {
@@ -188,6 +205,8 @@ function App() {
     auth.signOut();
     setLogoutOkSnackBarOpen(true);
     replaceCurrentUrlWithHomeUrl();    
+
+    CreateGoogleAnalyticsEvent('Actions','Logout','Logout');
   }
 
   function handleQuitRoomMain() {
@@ -195,6 +214,8 @@ function App() {
     localStorage.removeItem("Play-It_SpotifyRoomId");
     localStorage.removeItem("Play-It_SpotifyToken");
     replaceCurrentUrlWithHomeUrl();
+    
+    CreateGoogleAnalyticsEvent('Actions','Quit room','Quit room');
   }
 
 
