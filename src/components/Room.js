@@ -118,11 +118,15 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                         id: roomId.toLowerCase(),
                         admin:currentUser.displayName,
                         playing:0,
-                        mediaActuallyPlayingAlreadyPlayed:0,
                         actuallyPlaying:false,
                         playlistUrls: [],
                         playlistEmpty: true,
                         notifsArray:[],
+                        mediaActuallyPlayingAlreadyPlayedData:{
+                            playedSeconds:0,
+                            playedPercentage:0,
+                            played:0
+                        },
                         roomParams:{
                             isChatActivated:true,
                             isPrivate:false,
@@ -206,10 +210,14 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
             disconnectSpotify();
         }
         if(isActuallyAdmin) {
-            roomRef.set({actuallyPlaying: playStatus, mediaActuallyPlayingAlreadyPlayed:room.mediaActuallyPlayingAlreadyPlayed}, { merge: true });
+            roomRef.set({actuallyPlaying: playStatus,mediaActuallyPlayingAlreadyPlayedData:{
+                        playedSeconds:room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds,
+                        playedPercentage:room.mediaActuallyPlayingAlreadyPlayedData.played*100,
+                        played:room.mediaActuallyPlayingAlreadyPlayedData.played
+                    }}, { merge: true });
         } else {
             if(!localData.synchro) { // if pas synchro et lance la lecture et lecture en cours synchro
-                playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayed, 'portion');
+                playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds');
                 localData.synchro = true;
             }
         }
@@ -252,7 +260,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
 
     async function handleReady() {
         setPlayerReady(true);
-        playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayed, 'seconds');
+        playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds');
     }
 
     
@@ -284,12 +292,20 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                     handleChangeActuallyPlaying(numberToPlay+1);
                     return
                 }
-                roomRef.set({playing: numberToPlay, actuallyPlaying:true,mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });  
+                roomRef.set({playing: numberToPlay, actuallyPlaying:true,mediaActuallyPlayingAlreadyPlayedData:{
+                        playedSeconds:0,
+                        playedPercentage:0,
+                        played:0
+                    }}, { merge: true });  
             }
         } else {
             if(isActuallyAdmin) {
                 if(room.roomParams.isPlayingLooping) {
-                    roomRef.set({playing: 0, actuallyPlaying:true,mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });
+                    roomRef.set({playing: 0, actuallyPlaying:true,mediaActuallyPlayingAlreadyPlayedData:{
+                        playedSeconds:0,
+                        playedPercentage:0,
+                        played:0
+                    }}, { merge: true });
                 } else {    
                     roomRef.set({actuallyPlaying:false}, { merge: true });
                 }
@@ -298,7 +314,12 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
     }
 
     function setPercentagePlayed(percentagePlayed) {
-        roomRef.set({mediaActuallyPlayingAlreadyPlayed: percentagePlayed}, { merge: true });
+        
+        roomRef.set({mediaActuallyPlayingAlreadyPlayedData:{
+            playedSeconds:percentagePlayed,
+            playedPercentage:percentagePlayed,
+            played:percentagePlayed
+        }}, { merge: true });
         playerRef.current.seekTo(percentagePlayed, 'seconds');
     }
 
@@ -309,10 +330,14 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
     }
 
     function handleProgress(event) {
-        console.log(event);
         if(room.actuallyPlaying) {
             if(isActuallyAdmin) {
-                roomRef.set({mediaActuallyPlayingAlreadyPlayed: Math.round(event.played*100) }, { merge: true });
+                roomRef.set({
+                    mediaActuallyPlayingAlreadyPlayedData:{
+                        playedSeconds:event.playedSeconds,
+                        playedPercentage:event.played*100,
+                        played:event.played
+                    } }, { merge: true });
             } 
         }
     }
@@ -335,8 +360,13 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
 
     function handleChangeIdActuallyPlaying(newIdToPlay) {
         if(isActuallyAdmin) {
-            room.mediaActuallyPlayingAlreadyPlayed = 0;
-            roomRef.set({playing: newIdToPlay, mediaActuallyPlayingAlreadyPlayed: 0}, { merge: true });
+            roomRef.set({playing: newIdToPlay, 
+            mediaActuallyPlayingAlreadyPlayedData:{
+                playedSeconds:0,
+                playedPercentage:0,
+                played:0
+            }
+            }, { merge: true });
         }
     }
 
@@ -684,7 +714,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                     </>
                 }
                 {typeof(room.playlistUrls) !== 'undefined' && room.playlistUrls && room.playlistUrls.length > 0 && <Box sx={{ p:0,mb:0}}>
-                    <RoomPlaylist isSpotifyAvailable={room.roomParams.spotifyIsLinked} isAdminView={isActuallyAdmin} roomPlaylist={room.playlistUrls} roomIdActuallyPlaying={room.playing} userVoteArray={localData.currentUserVotes} handleChangeIsActuallyPlaying={handlePlay} handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying}  handleVoteChange={handleVoteChange} roomIsActuallyPlaying={room.actuallyPlaying} roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayed} />
+                    <RoomPlaylist isSpotifyAvailable={room.roomParams.spotifyIsLinked} isAdminView={isActuallyAdmin} roomPlaylist={room.playlistUrls} roomIdActuallyPlaying={room.playing} userVoteArray={localData.currentUserVotes} handleChangeIsActuallyPlaying={handlePlay} handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying}  handleVoteChange={handleVoteChange} roomIsActuallyPlaying={room.actuallyPlaying} roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayedData.playedPercentage} />
                 </Box>}
             </div>
             } 

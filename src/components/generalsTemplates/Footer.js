@@ -9,9 +9,9 @@ const Footer = () => {
     const [legalMentionsModal, setLegalMentionsModal] = useState(false);
 
     return(
-            <Box sx={{ position:'absolute', bottom:0, display: 'flex', justifyContent: 'center', width:'100%' }}>
+            <Box sx={{ mt:5, display: 'flex', justifyContent: 'center', width:'100%' }}>
                 
-                <Typography onClick={(e) => setLegalMentionsModal(true)} href="" style={{cursor:'pointer',color:'var(--main-color)'}}> 
+                <Typography fontSize="small" onClick={(e) => setLegalMentionsModal(true)} href="" style={{cursor:'pointer',color:'var(--main-color)'}}> 
                     Mentions légales 
                 </Typography>
 

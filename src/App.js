@@ -24,6 +24,7 @@ import { auth, googleProvider } from "./services/firebase";
 import {PseudoGenerated} from './services/pseudoGenerator';
 import { Snackbar } from "@mui/material";
 
+
 function App() {
   // general app statuts
   const [isAppLoading, setIsAppLoading] = useState(true);
@@ -218,7 +219,7 @@ function App() {
               )}
             </Toolbar>
           </AppBar>
-        {!roomId && <Box sx={{  paddingBottom:'10px !important', bgcolor:'rgba(48, 48, 48, 0)',height: 'auto', pl:2, pr:2 }} >
+        {!roomId && <Box sx={{  paddingBottom:'10px !important', bgcolor:'rgba(48, 48, 48, 0)',height: 'auto', pl:2, pr:2}} >
           <Container maxWidth="sm">
             <Grid container sx={{display:'flex', justifyContent:'center', pt:3,mb:5}}>
               <Contentslider />
@@ -274,7 +275,7 @@ function App() {
           message={"A bientôt !"}
         />
 
-        {!roomId && <Footer />}
+        {!roomId && false && <Footer />}
       </Container>
     </>
   );
