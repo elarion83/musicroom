@@ -29,7 +29,7 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin,
         }}
         >
             <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1}}>
-                     <Icon icon='carbon:user-avatar' style={{marginRight:'10px'}} /> Connexion / Inscription
+                     <Icon width="15" icon='carbon:user-avatar' style={{marginRight:'10px'}} /> Connexion / Inscription
             </DialogTitle>  
             <DialogContent dividers sx={{pt:0}}>
                 <DialogContentText sx={{pt:2}}>

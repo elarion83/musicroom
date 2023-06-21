@@ -52,11 +52,19 @@ import RoomPlaylist from "./rooms/RoomPlaylist";
 import RoomTopBar from "./rooms/RoomTopBar";
 import SoundWave from "./rooms/SoundWave";
 
+import ReactGA4 from "react-ga4";
+
 const Room = ({ currentUser, roomId, handleQuitRoom }) => {
 
     const [scrollFromTopTrigger, setScrollFromTopTrigger] = useState(window.screen.height/4);
     const [isShowSticky, setIsShowSticky] = useState(false);
 
+
+    ReactGA4.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_KEY);
+    async function CreateGoogleAnalyticsEvent(category,action,label) {
+        ReactGA4.event({category: category,action: action,label: label});
+    }
+    
     useEffect(() => {
         const handleScroll = (event) => {
             if(window.scrollY >= scrollFromTopTrigger) {
@@ -249,6 +257,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
 
     async function createNewRoomInteraction(type) {
         
+        CreateGoogleAnalyticsEvent('Actions','Room Interaction','Room Interaction');
 		getRoomData(roomId); 
         room.interactionsArray.push({timestamp:Date.now(), type:type, createdBy: currentUser.displayName});
         roomRef.update({interactionsArray: room.interactionsArray});
@@ -371,6 +380,8 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
     }
 
     function handleVoteChange(idMedia, NewValue, mediaHashId, voteType) {
+        
+        CreateGoogleAnalyticsEvent('Actions','Vote','Vote');
         room.playlistUrls[idMedia].vote = NewValue;
 
         if('up' === voteType) {
@@ -415,10 +426,16 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
     }
 
     function handleOpenShareModal(ShareModalIsOpen) {
+        if(ShareModalIsOpen) {
+            CreateGoogleAnalyticsEvent('Actions','Open shareModal','Open shareModal');
+        }
         setOpenInvitePeopleToRoomModal(ShareModalIsOpen);
     }
 
     function handleOpenRoomParamModal(roomParamModalIsOpen) {
+        if(roomParamModalIsOpen) {
+            CreateGoogleAnalyticsEvent('Actions','Open paramModal','Open paramModal');
+        }
         setOpenRoomParamModal(roomParamModalIsOpen);
     }
 
