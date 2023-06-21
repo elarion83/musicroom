@@ -80,12 +80,7 @@ const RoomPlaylist = ({isSpotifyAvailable, isAdminView, roomPlaylist, roomIdActu
                                     </ListItemIcon>
                                     <Grid item sx={{display:'block', zIndex:2, pl: 0, pb:0.5, flexGrow:1}}>
                                         { d.title && <ListItemText className="flexRowCenterHDirectChild" onClick={e => (idx === idDisplaying) ? handleChangeIdActuallyDisplaying(-1) : handleChangeIdActuallyDisplaying(idx)} sx={{ pl:0,mb:0, wordBreak: 'break-all'}}>
-                                            {d.source === 'spotify' && (idx !== roomIdActuallyPlaying) && <Icon width='25' style={{display:'inline',marginLeft:'-10px', marginRight:'0.5em'}} icon="mdi:spotify" />}
-                                            {d.source === 'youtube' && (idx !== roomIdActuallyPlaying) && <Icon width='25' style={{display:'inline',marginLeft:'-10px', marginRight:'0.5em'}} icon="mdi:youtube" />}
-                                            {d.source === 'dailymotion' && (idx !== roomIdActuallyPlaying) && <Icon width='25' style={{display:'inline',marginLeft:'-10px', marginRight:'0.5em'}} icon="bxl:dailymotion" />}
-                                            {d.source === 'soundcloud' && (idx !== roomIdActuallyPlaying) && <Icon width='25' style={{display:'inline',marginLeft:'-10px', marginRight:'0.5em'}} icon="mdi:soundcloud" />}
-                                            {d.source === 'url' && (idx !== roomIdActuallyPlaying) && <Icon style={{display:'inline', marginRight:'0.5em'}} icon="mdi:link-variant" />}
-                                            {(d.source === 'spotify' && !isSpotifyAvailable) && <Icon style={{display:'inline', marginRight:'0.5em', color:'red'}} icon="ps:forbidden" />}
+                                           
                                             {d.title.length > 50 ? d.title.substring(0, 50)+'...' : d.title}
                                         </ListItemText>}
                                         { (d.title && d.title.length === 0) || !d.title && 
