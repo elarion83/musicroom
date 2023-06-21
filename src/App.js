@@ -24,15 +24,10 @@ import { auth, googleProvider } from "./services/firebase";
 import {PseudoGenerated} from './services/pseudoGenerator';
 import { Snackbar } from "@mui/material";
 
-import ReactGA4 from "react-ga4";
+import {CreateGoogleAnalyticsEvent} from './services/googleAnalytics';
 
 function App() {
   
-  ReactGA4.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_KEY);
-  
-  async function CreateGoogleAnalyticsEvent(category,action,label) {
-    ReactGA4.event({category: category,action: action,label: label});
-  }
 
   // general app statuts
   const [isAppLoading, setIsAppLoading] = useState(true);
@@ -101,15 +96,12 @@ function App() {
   function createNewRoom() {
     var newRoomId = uuid().slice(0,5).toLowerCase()
     joinRoomByRoomId(newRoomId);
-
-    CreateGoogleAnalyticsEvent('Actions','Création room','Room '+newRoomId);
   }
 
   function joinRoomByRoomId(idRoom) {
     setRoomId(idRoom.toLowerCase().trim());
     replaceCurrentUrlWithRoomUrl(idRoom.toLowerCase().trim());
     setJoinRoomModalOpen(false);
-    CreateGoogleAnalyticsEvent('Actions','Rejoin. Room','Room '+idRoom);
   }
   
 

@@ -14,6 +14,8 @@ import { useState } from 'react';
 
 import {returnAnimateReplace } from './../../services/animateReplace';
 
+import {CreateGoogleAnalyticsEvent} from './../../services/googleAnalytics';
+
 const BottomInteractions = ({ paramDrawerIsOpen, handleOpenDrawerParam, currentUser, roomId, roomParams, roomNotifs, userCanMakeInteraction, createNewRoomInteraction, setOpenAddToPlaylistModal,handleOpenShareModal,handleOpenLeaveRoomModal, OpenAddToPlaylistModal, checkRoomExist, checkInterractionLength,checkNotificationsLength }) => {
 
     const [isChatExpanded, setIsChatExpanded] = useState(false);
@@ -23,6 +25,7 @@ const BottomInteractions = ({ paramDrawerIsOpen, handleOpenDrawerParam, currentU
         returnAnimateReplace(animatedElementsRef, {In:"Out",Up:'Down', animate__delay:''}, /In|Up|animate__delay/gi);
         setTimeout(() => {
             setIsChatExpanded(true);
+            CreateGoogleAnalyticsEvent('Actions','Expand chat','Expand chat');
         }, 500);
     }
 

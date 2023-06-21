@@ -52,19 +52,13 @@ import RoomPlaylist from "./rooms/RoomPlaylist";
 import RoomTopBar from "./rooms/RoomTopBar";
 import SoundWave from "./rooms/SoundWave";
 
-import ReactGA4 from "react-ga4";
+import {CreateGoogleAnalyticsEvent} from '../services/googleAnalytics';
 
 const Room = ({ currentUser, roomId, handleQuitRoom }) => {
 
     const [scrollFromTopTrigger, setScrollFromTopTrigger] = useState(window.screen.height/4);
     const [isShowSticky, setIsShowSticky] = useState(false);
 
-
-    ReactGA4.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_KEY);
-    async function CreateGoogleAnalyticsEvent(category,action,label) {
-        ReactGA4.event({category: category,action: action,label: label});
-    }
-    
     useEffect(() => {
         const handleScroll = (event) => {
             if(window.scrollY >= scrollFromTopTrigger) {
@@ -121,6 +115,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
             roomRef.get().then((doc) => {
                 if (doc.exists) {
                     setRoom(doc.data());
+                    CreateGoogleAnalyticsEvent('Actions','Rejoin. Room','Room '+roomId);
                 } else {
                     var docData = {
                         id: roomId.toLowerCase(),
@@ -155,6 +150,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                     };
                     db.collection(process.env.REACT_APP_ROOM_COLLECTION).doc(roomId).set(docData).then(() => {});
                     setRoom(docData);
+                    CreateGoogleAnalyticsEvent('Actions','Création room','Room '+roomId);
                 }
                 setLoaded(true);
             });
@@ -257,7 +253,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
 
     async function createNewRoomInteraction(type) {
         
-        CreateGoogleAnalyticsEvent('Actions','Room Interaction','Room Interaction');
+        CreateGoogleAnalyticsEvent('Actions','Room Interaction','Room '+roomId+' - '+type);
 		getRoomData(roomId); 
         room.interactionsArray.push({timestamp:Date.now(), type:type, createdBy: currentUser.displayName});
         roomRef.update({interactionsArray: room.interactionsArray});
@@ -491,6 +487,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                     vote: {'up':0,'down':0}
                 }
                 handleAddValidatedObjectToPlaylist(suggestMedia);
+                CreateGoogleAnalyticsEvent('Actions','Autoplay add', 'Autoplay add');
                 handleChangeActuallyPlaying(room.playing+1);  
             })
         .catch(function(error) {
@@ -501,7 +498,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
             if('youtube' !== room.playlistUrls[room.playing].source) {
                 YTSearch({key: process.env.REACT_APP_YOUTUBE_API_KEY, term: room.playlistUrls[room.playing].title}, (videos) => {
                     if(videos[1]) {
-                        addMediaForAutoPlayByYoutubeId(videos[1].id.videoId);   
+                        addMediaForAutoPlayByYoutubeId(videos[1].id.videoId);  
                     } 
                 });
             } else {
