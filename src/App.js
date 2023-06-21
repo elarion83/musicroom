@@ -96,12 +96,15 @@ function App() {
   function createNewRoom() {
     var newRoomId = uuid().slice(0,5).toLowerCase()
     joinRoomByRoomId(newRoomId);
+
+    CreateGoogleAnalyticsEvent('Actions','Création room','Room id :'+newRoomId);
   }
 
   function joinRoomByRoomId(idRoom) {
     setRoomId(idRoom.toLowerCase().trim());
     replaceCurrentUrlWithRoomUrl(idRoom.toLowerCase().trim());
     setJoinRoomModalOpen(false);
+    CreateGoogleAnalyticsEvent('Actions','Rejoin. Room','Room id :'+idRoom);
   }
   
 

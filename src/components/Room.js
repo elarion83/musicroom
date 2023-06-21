@@ -115,7 +115,6 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
             roomRef.get().then((doc) => {
                 if (doc.exists) {
                     setRoom(doc.data());
-                    CreateGoogleAnalyticsEvent('Actions','Rejoin. Room','Room '+roomId);
                 } else {
                     var docData = {
                         id: roomId.toLowerCase(),
@@ -150,7 +149,6 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                     };
                     db.collection(process.env.REACT_APP_ROOM_COLLECTION).doc(roomId).set(docData).then(() => {});
                     setRoom(docData);
-                    CreateGoogleAnalyticsEvent('Actions','Création room','Room '+roomId);
                 }
                 setLoaded(true);
             });
