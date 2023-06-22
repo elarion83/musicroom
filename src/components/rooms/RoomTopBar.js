@@ -10,7 +10,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import TuneIcon from '@mui/icons-material/Tune';
-import { Divider, Drawer, Grid, List, ListItem, ListItemButton, Typography } from '@mui/material';
+import { Divider, Drawer, FormControlLabel, Grid, List, ListItem, ListItemButton, Switch, Typography } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Badge from '@mui/material/Badge';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
@@ -24,11 +24,16 @@ import 'animate.css';
 const RoomTopBar = ({
                 isShowSticky,
                 handlePlay,
+                roomIsPlaying,
+                setRoomIsPlaying,
+                roomIdPlayed,
+                setRoomIdPlayed,
                 isAdminView,
                 room,
                 handleChangeActuallyPlaying,
                 isSpotifyAndIsNotPlayableBySpotify,
-                handleChangeIdActuallyPlaying,
+                guestSynchroOrNot,
+                setGuestSynchroOrNot,
                 paramDrawerIsOpen, handleOpenDrawerParam, roomId, roomAdmin, isLinkedToSpotify,handleOpenRoomParamModal,handleOpenShareModal,handleOpenLeaveRoomModal, }) => {
 
   return (
@@ -48,6 +53,7 @@ const RoomTopBar = ({
                     <ListItemButton onClick={(e) => handleOpenDrawerParam(false)} sx={{display:'flex',justifyContent:'flex-end'}}>
                         <ChevronLeftIcon />
                         <Typography fontSize="small" sx={{pl:1, textTransform:'uppercase'}}>Room <b style={{textTransform:'uppercase'}}>{ roomId } </b> </Typography>
+                       
                     </ListItemButton>
                 </ListItem> 
                 <Divider sx={{mb:2}}/>
@@ -74,6 +80,7 @@ const RoomTopBar = ({
                         <Typography>{isLinkedToSpotify ? 'Spotify relié' : 'Spotify non relié'}</Typography>
                     </ListItemButton>
                 </ListItem>
+
                 <Divider sx={{mb:2, mt:2}}/>
                 
                 <ListItem key='roomDrawRoomParams' disablePadding>
@@ -92,6 +99,22 @@ const RoomTopBar = ({
                         <Typography>Partager la room</Typography>
                     </ListItemButton>
                 </ListItem>
+                
+                 {!isAdminView && <ListItem key='roomDrawSync' disablePadding onClick={(e) => setGuestSynchroOrNot(!guestSynchroOrNot)}>
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <Switch
+                                size='small'
+                                sx={{ml:-1}}
+                                checked={guestSynchroOrNot}
+                                onChange={(e) => setGuestSynchroOrNot(!guestSynchroOrNot)}
+                                inputProps={{ 'aria-label': 'controlled' }}
+                            />
+                        </ListItemIcon>
+                        <Typography>{guestSynchroOrNot ? 'Lecture synchronisé' : 'Lecture différée'}</Typography>
+                    </ListItemButton>
+                </ListItem>}
+
                 <Divider  sx={{mt:2, mb:2}}/>
                 <ListItem key='roomDrawRoomLeave' disablePadding>
                     <ListItemButton onClick={e => handleOpenLeaveRoomModal(true)}>
@@ -119,20 +142,26 @@ const RoomTopBar = ({
                 Room <b style={{textTransform:'uppercase'}}><span>{ roomId }</span> </b> 
             </Typography>
             
-            {isShowSticky && isAdminView &&
+            {isShowSticky &&
                 <Grid className="animate__animated animate__fadeInDown"> 
-                    <IconButton onClick={e => ((room.playing > 0) && isSpotifyAndIsNotPlayableBySpotify(room.playing-1, room.roomParams.isLinkedToSpotify)) ? handleChangeActuallyPlaying(room.playing - 1) : ''}>
+                    {isAdminView && <IconButton onClick={e => ((room.playing > 0) && isSpotifyAndIsNotPlayableBySpotify(room.playing-1, room.roomParams.isLinkedToSpotify)) ? handleChangeActuallyPlaying(room.playing - 1) : ''}>
                         <SkipPrevious fontSize="large" sx={{color:((room.playing > 0) && isSpotifyAndIsNotPlayableBySpotify(room.playing-1, room.roomParams.isLinkedToSpotify)) ? '#f0f1f0': '#303134'}} />
-                    </IconButton>
+                    </IconButton>}
 
-                    <IconButton variant="contained" onClick={e => handlePlay(!room.actuallyPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
+                    {isAdminView && <IconButton variant="contained" onClick={e => handlePlay(!roomIsPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
                         { room.actuallyPlaying && <PauseCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
                         { !room.actuallyPlaying && <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
-                    </IconButton>
+                    </IconButton>}
                     
-                    <IconButton onClick={e => (room.playlistUrls.length -1) !== room.playing ? handleChangeActuallyPlaying(room.playing + 1) : ''}>
+                    {isAdminView && <IconButton onClick={e => (room.playlistUrls.length -1) !== room.playing ? handleChangeActuallyPlaying(room.playing + 1) : ''}>
                         <SkipNextIcon fontSize="large" sx={{color: (room.playlistUrls.length -1) !== room.playing ? '#f0f1f0' : '#303134'}} />
-                    </IconButton> 
+                    </IconButton>}
+
+                    {!isAdminView && !guestSynchroOrNot &&<IconButton variant="contained" onClick={e => setRoomIsPlaying(!roomIsPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
+                        { roomIsPlaying && <PauseCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
+                        { !roomIsPlaying && <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
+                    </IconButton>}
+
                 </Grid>}
         </Toolbar>
         
