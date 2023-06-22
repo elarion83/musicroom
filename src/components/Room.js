@@ -628,7 +628,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                                         }
                                     }}
                                 />}
-                                {isActuallyAdmin && <div style={{width:'100%',height:'100%',opacity:0,top:0,position:'absolute'}}></div>}
+                                <div style={{width:'100%',height:'100%',opacity:0,top:0,position:'absolute'}}></div>
                             </Grid>
                             <Grid item sm={(room.playlistUrls[room.playing].source === 'spotify' || !viewPlayer) ? 12 : 8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }} className={`player_right_side_container ${(room.playlistUrls[room.playing].source === 'spotify') ? "spotify_header" : ""}`}>
                                 { /* pip ? 'Disable PiP' : 'Enable PiP' */ }
