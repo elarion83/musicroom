@@ -190,10 +190,12 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
         if( typeof playerRef.current.seekTo === 'function') {
             if(guestSynchroOrNot) {
                 roomRef.get().then((doc) => {
-                    playerRef.current.seekTo(doc.data().mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds');
+                    playerRef.current.seekTo(doc.data().mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds');        
+                    CreateGoogleAnalyticsEvent('Actions','Room synchro','Room '+roomId);
                 });
             } else {
                 playerRef.current.seekTo(0, 'seconds');
+                CreateGoogleAnalyticsEvent('Actions','Room désynchro','Room '+roomId);
             }
         }
 	}, [guestSynchroOrNot]);
