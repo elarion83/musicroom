@@ -214,7 +214,13 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
             setRoomIsPlaying(room.actuallyPlaying);
         } 
     }, [room.actuallyPlaying]);
-        
+
+    useEffect(() => {
+        if(guestSynchroOrNot) {
+            setRoomIdPlayed(room.playing);
+        } 
+    }, [room.playing]);
+
 	useEffect(() => {
         if(currentUser.displayName === room.admin || currentUser.displayName === room.admin) {
             setIsActuallyAdmin(true);
@@ -294,16 +300,27 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
 
     
     async function handleMediaEnd() {
-        if(room.playlistUrls[room.playing+1]) {
-            handleChangeActuallyPlaying(room.playing+1);
-        } 
+        
+        if(!isActuallyAdmin && !guestSynchroOrNot) { 
+                console.log('aaa');
+            if(room.playlistUrls[roomIdPlayed+1]) {
+                setRoomIdPlayed(roomIdPlayed+1);
+                console.log('a');
+            }
+        }
         else {
-            if(isActuallyAdmin) {
-                if(room.roomParams.isAutoPlayActivated) {
-                    addMediaForAutoPlay();
-                }
-                else if(room.roomParams.isPlayingLooping) {
-                    handleChangeActuallyPlaying(0);
+                console.log('bb');
+            if(room.playlistUrls[room.playing+1]) {
+                handleChangeActuallyPlaying(room.playing+1);
+            } 
+            else {
+                if(isActuallyAdmin) {
+                    if(room.roomParams.isAutoPlayActivated) {
+                        addMediaForAutoPlay();
+                    }
+                    else if(room.roomParams.isPlayingLooping) {
+                        handleChangeActuallyPlaying(0);
+                    }
                 }
             }
         }
@@ -611,7 +628,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                                         }
                                     }}
                                 />}
-                                {!isActuallyAdmin && room.playlistUrls[room.playing].source !== 'spotify'  && <ReactPlayer sx={{ padding:0}}
+                                {!isActuallyAdmin && room.playlistUrls[roomIdPlayed] && room.playlistUrls[roomIdPlayed].source !== 'spotify'  && <ReactPlayer sx={{ padding:0}}
                                     ref={playerRef}
                                     className='react-player'
                                     width='100%'
@@ -620,7 +637,8 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                                     volume={localVolume}
                                     onPlay={e => handleNonAdminPlay()}
                                     onReady={e => handleReady()}
-                                    url={room.playlistUrls[room.playing].url}
+                                    onEnded={e => handleMediaEnd()}
+                                    url={room.playlistUrls[roomIdPlayed].url}
                                     playing={roomIsPlaying} // is player actually playing
                                     controls={false}
                                     light={false}
@@ -632,22 +650,22 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                                 />}
                                 <div style={{width:'100%',height:'100%',opacity:0,top:0,position:'absolute'}}></div>
                             </Grid>
-                            <Grid item sm={(room.playlistUrls[room.playing].source === 'spotify' || !viewPlayer) ? 12 : 8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }} className={`player_right_side_container ${(room.playlistUrls[room.playing].source === 'spotify') ? "spotify_header" : ""}`}>
+                            <Grid item sm={(room.playlistUrls[roomIdPlayed].source === 'spotify' || !viewPlayer) ? 12 : 8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }} className={`player_right_side_container ${(room.playlistUrls[roomIdPlayed].source === 'spotify') ? "spotify_header" : ""}`}>
                                 { /* pip ? 'Disable PiP' : 'Enable PiP' */ }
                                  <Grid item sm={12} sx={{ padding:0,pl:1.5,ml:0, mb: 0 , mt:1, fill:'#f0f1f0'}}>
                                     <Grid item 
-                                    sx={[{pb:1}, room.playlistUrls[room.playing].source === 'spotify' &&  { justifyContent: 'center' } ]} 
+                                    sx={[{pb:1}, room.playlistUrls[roomIdPlayed].source === 'spotify' &&  { justifyContent: 'center' } ]} 
                                     className="flexRowCenterH">
                                         <Tooltip title="Afficher / Cacher le lecteur">
                                                 <Icon icon={viewPlayer ? 'ep:view' : 'carbon:view-off'} 
                                                 style={{flexShrink:0,cursor:'pointer',marginRight:'20px'}} onClick={e => setViewPlayer(!viewPlayer)} />
                                         </Tooltip>
-                                        { room.playlistUrls[room.playing].title && <Typography component={'span'}>
-                                        {room.playlistUrls[room.playing].title} 
+                                        { room.playlistUrls[roomIdPlayed].title && <Typography component={'span'}>
+                                        {room.playlistUrls[roomIdPlayed].title} 
                                         </Typography>}
-                                        { room.playlistUrls[room.playing].url && room.playlistUrls[room.playing].url.length === 0 || !room.playlistUrls[room.playing].title && 
+                                        { room.playlistUrls[roomIdPlayed].url && room.playlistUrls[roomIdPlayed].url.length === 0 || !room.playlistUrls[roomIdPlayed].title && 
                                         <Typography component={'span'}  >
-                                            {room.playlistUrls[room.playing].url.substring(0, 50)+'...'} 
+                                            {room.playlistUrls[roomIdPlayed].url.substring(0, 50)+'...'} 
                                         </Typography>} 
                                         </Grid>
                                     
@@ -655,13 +673,13 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                                         <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
                                             {roomIsPlaying ? 'En lecture' : 'En pause'}
                                         </Typography>
-                                        {playerReady && playerRef.current !== null && room.playlistUrls[room.playing].source !== 'spotify' && 
+                                        {playerReady && playerRef.current !== null && room.playlistUrls[roomIdPlayed].source !== 'spotify' && 
                                         <Typography sx={{ fontSize: '10px', ml:0, mb: 1}}> {~~(Math.round(playerRef.current.getCurrentTime())/60) + 'm'+Math.round(playerRef.current.getCurrentTime()) % 60+ 's / ' + formatNumberToMinAndSec(playerRef.current.getDuration())}</Typography>}
                                         <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
-                                            Source : { room.playlistUrls[room.playing].source }
+                                            Source : { room.playlistUrls[roomIdPlayed].source }
                                         </Typography>
                                         <Typography sx={{ ml:0, mb: 1.5, fontSize: '10px', textTransform:'uppercase' }}>
-                                            Ajouté par : { room.playlistUrls[room.playing].addedBy }
+                                            Ajouté par : { room.playlistUrls[roomIdPlayed].addedBy }
                                         </Typography>
                                     </Grid>
                                 </Grid> 
@@ -669,12 +687,12 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                                     {isActuallyAdmin && 
                                         <Grid item sm={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:2, mb: 1.5 }}>
                                             
-                                            <IconButton onClick={e => room.playing > 0 ? handleChangeActuallyPlaying(0) : ''}>
-                                                <FirstPageIcon  fontSize="large" sx={{color:room.playing > 0 ? '#f0f1f0': '#303134'}} />
+                                            <IconButton onClick={e => roomIdPlayed > 0 ? handleChangeActuallyPlaying(0) : ''}>
+                                                <FirstPageIcon  fontSize="large" sx={{color:roomIdPlayed > 0 ? '#f0f1f0': '#303134'}} />
                                             </IconButton>
                                             
-                                            <IconButton onClick={e => ((room.playing > 0) && isSpotifyAndIsNotPlayableBySpotify(room.playing-1, room.roomParams.isLinkedToSpotify)) ? handleChangeActuallyPlaying(room.playing - 1) : ''}>
-                                                <SkipPrevious fontSize="large" sx={{color:((room.playing > 0) && isSpotifyAndIsNotPlayableBySpotify(room.playing-1, room.roomParams.isLinkedToSpotify)) ? '#f0f1f0': '#303134'}} />
+                                            <IconButton onClick={e => ((roomIdPlayed > 0) && isSpotifyAndIsNotPlayableBySpotify(roomIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? handleChangeActuallyPlaying(roomIdPlayed - 1) : ''}>
+                                                <SkipPrevious fontSize="large" sx={{color:((roomIdPlayed > 0) && isSpotifyAndIsNotPlayableBySpotify(roomIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? '#f0f1f0': '#303134'}} />
                                             </IconButton>
 
                                             <IconButton variant="contained" onClick={e => handlePlay(!room.actuallyPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
@@ -682,7 +700,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                                                 { !room.actuallyPlaying && <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
                                             </IconButton>
                                            
-                                            <IconButton onClick={e => (room.playlistUrls.length -1) !== room.playing ? handleChangeActuallyPlaying(room.playing + 1) : ''}>
+                                            <IconButton onClick={e => (room.playlistUrls.length -1) !== roomIdPlayed ? handleChangeActuallyPlaying(room.playing + 1) : ''}>
                                                 <SkipNextIcon fontSize="large" sx={{color: (room.playlistUrls.length -1) !== room.playing ? '#f0f1f0' : '#303134'}} />
                                             </IconButton>
 
@@ -703,10 +721,19 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                                         </Grid>
                                     }
                                     {!isActuallyAdmin && !guestSynchroOrNot && <Grid item sm={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:2, mb: 1.5 }}>
+                                            <IconButton onClick={e => roomIdPlayed > 0 ? setRoomIdPlayed(roomIdPlayed-1) : ''}>
+                                                <FirstPageIcon  fontSize="large" sx={{color:roomIdPlayed > 0 ? '#f0f1f0': '#303134'}} />
+                                            </IconButton>
+                                            
                                             <IconButton variant="contained" onClick={e => setRoomIsPlaying(!roomIsPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
                                                 { roomIsPlaying && <PauseCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
                                                 { !roomIsPlaying && <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
                                             </IconButton>
+
+                                            <IconButton onClick={e => (room.playlistUrls.length -1) !== roomIdPlayed ? setRoomIdPlayed(roomIdPlayed+1) : ''}>
+                                                <LastPageIcon  fontSize="large" sx={{color: (room.playlistUrls.length -1) !== roomIdPlayed ? '#f0f1f0' : '#303134'}} />
+                                            </IconButton>
+                                            
                                     </Grid>}
 
                                     {room.playlistUrls[room.playing].source !== 'spotify' && 
@@ -765,7 +792,9 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                     </>
                 }
                 {typeof(room.playlistUrls) !== 'undefined' && room.playlistUrls && room.playlistUrls.length > 0 && <Box sx={{ p:0,mb:0}}>
-                    <RoomPlaylist isSpotifyAvailable={room.roomParams.spotifyIsLinked} isAdminView={isActuallyAdmin} roomPlaylist={room.playlistUrls} roomIdActuallyPlaying={room.playing} userVoteArray={localData.currentUserVotes} handleChangeIsActuallyPlaying={handlePlay} handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying}  handleVoteChange={handleVoteChange} roomIsActuallyPlaying={roomIsPlaying} roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayedData.playedPercentage} />
+                    <RoomPlaylist isSpotifyAvailable={room.roomParams.spotifyIsLinked} isAdminView={isActuallyAdmin} 
+                    roomPlaylist={room.playlistUrls} 
+                    roomIdActuallyPlaying={roomIdPlayed} userVoteArray={localData.currentUserVotes} handleChangeIsActuallyPlaying={handlePlay} handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying}  handleVoteChange={handleVoteChange} roomIsActuallyPlaying={roomIsPlaying} roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayedData.playedPercentage} />
                 </Box>}
             </div>
             } 
