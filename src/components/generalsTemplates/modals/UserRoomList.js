@@ -34,7 +34,7 @@ const UserRoomList = ({ open, changeOpen, user, joinRoomByRoomId}) => {
                             Id : {room.id} 
                         </Typography>
                         <Typography fontSize='small' sx={{color:'var(--main-color)'}}> 
-                            Statut : {room.actallyPlaying ? 'En lecture' : 'En pause'} 
+                            Statut : {room.actuallyPlaying ? 'En lecture' : 'En pause'} 
                         </Typography>
                         <Typography fontSize='small' sx={{color:'var(--main-color)'}}> 
                             {room.playlistUrls.length } médias en playlist
