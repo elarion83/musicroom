@@ -15,8 +15,9 @@ import Typography from '@mui/material/Typography';
 import { Button } from '@mui/material';
 
 import UserParamModal from './modals/UserParamModal';
+import UserRoomList from './modals/UserRoomList';
 
-const UserTopBar = ({ user, setUserInfo, handleLogout, handleOpenLoginModal }) => {
+const UserTopBar = ({ user, setUserInfo, handleLogout, handleOpenLoginModal, joinRoomByRoomId }) => {
 
   // menu
     function handleClickMenu(event) {
@@ -32,6 +33,7 @@ const UserTopBar = ({ user, setUserInfo, handleLogout, handleOpenLoginModal }) =
 
 
     const [userParamModalOpen, setUserParamModalOpen] = useState(false);
+    const [userRoomListModalOpen, setUserRoomListModalOpen] = useState(false);
     return(
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', textAlign: 'center', width:'100%' }}>
           
@@ -97,6 +99,14 @@ const UserTopBar = ({ user, setUserInfo, handleLogout, handleOpenLoginModal }) =
                 { user.displayName }
                 </Typography>
             </MenuItem>
+            {user.loginType !== 'anon' && <MenuItem onClick={e => setUserRoomListModalOpen(true)}>
+                <ListItemIcon>
+                <TuneIcon fontSize="small" />
+                </ListItemIcon>
+                <Typography>
+                Mes rooms
+                </Typography>
+            </MenuItem>}
             <Divider />
             <MenuItem onClick={e => handleLogout()}>
                 <ListItemIcon>
@@ -106,6 +116,7 @@ const UserTopBar = ({ user, setUserInfo, handleLogout, handleOpenLoginModal }) =
             </MenuItem>
           </Menu>
           <UserParamModal open={userParamModalOpen} changeOpen={setUserParamModalOpen} user={user} setUserInfo={setUserInfo} />
+          <UserRoomList open={userRoomListModalOpen} changeOpen={setUserRoomListModalOpen} user={user} joinRoomByRoomId={joinRoomByRoomId} />
         </Box>
             
     )

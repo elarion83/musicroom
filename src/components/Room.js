@@ -125,6 +125,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                         id: roomId.toLowerCase(),
                         roomName:'',
                         admin:currentUser.displayName,
+                        adminUid:currentUser.uid  ? currentUser.uid : 'anon',
                         playing:0,
                         actuallyPlaying:false,
                         playlistUrls: [],

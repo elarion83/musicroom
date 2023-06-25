@@ -230,7 +230,7 @@ function App() {
   }
 
   function replaceCurrentUrlWithRoomUrl(roomId) {
-    window.history.replaceState('string','', window.location.href+"?rid="+roomId.replace(/\s/g,''));
+    window.history.replaceState('string','', window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '')+'?rid='+roomId.replace(/\s/g,''));
   }
 
   function setUserInfoEdit(user) {
@@ -246,7 +246,7 @@ function App() {
             <Toolbar>
               <img src="img/logo_py1.png" style={{ width: 'auto', maxWidth:'50%', maxHeight:'30px'}} alt="Play-It logo"/>
               {!isAppLoading && (
-                <UserTopBar user={userInfos} setUserInfo={setUserInfoEdit} handleOpenLoginModal={setLoginModalOpen} handleLogout={logOut} />
+                <UserTopBar user={userInfos} setUserInfo={setUserInfoEdit} joinRoomByRoomId={joinRoomByRoomId} handleOpenLoginModal={setLoginModalOpen} handleLogout={logOut} />
               )}
             </Toolbar>
           </AppBar>
