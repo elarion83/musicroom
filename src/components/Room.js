@@ -120,6 +120,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
             roomRef.get().then((doc) => {
                 if (doc.exists) {
                     setRoom(doc.data());
+                    addUSerAsPresent();
                 } else {
                     var docData = {
                         id: roomId.toLowerCase(),
@@ -134,6 +135,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                             playedPercentage:0,
                             played:0
                         },
+                        presentsUsers:[],
                         roomParams:{
                             isChatActivated:true,
                             isPrivate:false,
@@ -190,10 +192,15 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
         if( typeof playerRef.current.seekTo === 'function') {
             if(guestSynchroOrNot) {
                 roomRef.get().then((doc) => {
-                    playerRef.current.seekTo(doc.data().mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds');        
+                    playerRef.current.seekTo(doc.data().mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds');   
+                    
+                    room.notifsArray.push({type: 'userSync', timestamp: Date.now(), createdBy: currentUser.displayName});
+                    roomRef.set({notifsArray: room.notifsArray},{merge:true});     
                     CreateGoogleAnalyticsEvent('Actions','Room synchro','Room '+roomId);
                 });
             } else {
+                room.notifsArray.push({type: 'userUnSync', timestamp: Date.now(), createdBy: currentUser.displayName});
+                roomRef.set({notifsArray: room.notifsArray},{merge:true});   
                 playerRef.current.seekTo(0, 'seconds');
                 CreateGoogleAnalyticsEvent('Actions','Room désynchro','Room '+roomId);
             }

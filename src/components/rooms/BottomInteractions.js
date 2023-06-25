@@ -106,20 +106,38 @@ const BottomInteractions = ({ paramDrawerIsOpen, handleOpenDrawerParam, currentU
             {checkNotificationsLength && roomNotifs[roomNotifs.length - 1].type === 'userArrived' && 
                 (roomNotifs[roomNotifs.length - 1].createdBy !== currentUser.displayName) && 
                 <Snackbar
-                open={((Date.now() - roomNotifs[roomNotifs.length - 1].timestamp) < 4000)}
+                open={((Date.now() - roomNotifs[roomNotifs.length - 1].timestamp) < 2000)}
                 key={'notif'+roomNotifs[roomNotifs.length - 1].timestamp}
-                autoHideDuration={4000}
+                autoHideDuration={2000}
                 sx={{ borderRadius:'2px'}}
                 message={roomNotifs[roomNotifs.length - 1].createdBy+" a rejoins la room !"}
             />}
             {checkNotificationsLength && roomNotifs[roomNotifs.length - 1].type === 'userLeaved' && 
                 (roomNotifs[roomNotifs.length - 1].createdBy !== currentUser.displayName) && 
                 <Snackbar
-                open={((Date.now() - roomNotifs[roomNotifs.length - 1].timestamp) < 4000)}
+                open={((Date.now() - roomNotifs[roomNotifs.length - 1].timestamp) < 2000)}
                 key={'notif'+roomNotifs[roomNotifs.length - 1].timestamp}
-                autoHideDuration={4000}
+                autoHideDuration={2000}
                 sx={{ borderRadius:'2px'}}
                 message={roomNotifs[roomNotifs.length - 1].createdBy+" a quitté la room !"}
+            />}
+            {checkNotificationsLength && roomNotifs[roomNotifs.length - 1].type === 'userSync' && 
+                (roomNotifs[roomNotifs.length - 1].createdBy !== currentUser.displayName) && 
+                <Snackbar
+                open={((Date.now() - roomNotifs[roomNotifs.length - 1].timestamp) < 2000)}
+                key={'notif'+roomNotifs[roomNotifs.length - 1].timestamp}
+                autoHideDuration={2000}
+                sx={{ borderRadius:'2px'}}
+                message={roomNotifs[roomNotifs.length - 1].createdBy+" s'est synchronisé!"}
+            />}
+            {checkNotificationsLength && roomNotifs[roomNotifs.length - 1].type === 'userUnSync' && 
+                (roomNotifs[roomNotifs.length - 1].createdBy !== currentUser.displayName) && 
+                <Snackbar
+                open={((Date.now() - roomNotifs[roomNotifs.length - 1].timestamp) < 2000)}
+                key={'notif'+roomNotifs[roomNotifs.length - 1].timestamp}
+                autoHideDuration={2000}
+                sx={{ borderRadius:'2px'}}
+                message={roomNotifs[roomNotifs.length - 1].createdBy+" s'est désynchronisé !"}
             />}
 
             <Snackbar
