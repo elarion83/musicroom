@@ -120,10 +120,10 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
             roomRef.get().then((doc) => {
                 if (doc.exists) {
                     setRoom(doc.data());
-                    addUSerAsPresent();
                 } else {
                     var docData = {
                         id: roomId.toLowerCase(),
+                        roomName:'',
                         admin:currentUser.displayName,
                         playing:0,
                         actuallyPlaying:false,
@@ -135,7 +135,6 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                             playedPercentage:0,
                             played:0
                         },
-                        presentsUsers:[],
                         roomParams:{
                             isChatActivated:true,
                             isPrivate:false,
@@ -309,14 +308,11 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
     async function handleMediaEnd() {
         
         if(!isActuallyAdmin && !guestSynchroOrNot) { 
-                console.log('aaa');
             if(room.playlistUrls[roomIdPlayed+1]) {
                 setRoomIdPlayed(roomIdPlayed+1);
-                console.log('a');
             }
         }
         else {
-                console.log('bb');
             if(room.playlistUrls[room.playing+1]) {
                 handleChangeActuallyPlaying(room.playing+1);
             } 

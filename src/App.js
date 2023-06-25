@@ -19,7 +19,7 @@ import Contentslider from "./components/homePage/ContentSlider";
 
 import Footer from './components/generalsTemplates/Footer';
 
-import { auth, googleProvider } from "./services/firebase";
+import { db, auth, googleProvider } from "./services/firebase";
 
 import {PseudoGenerated} from './services/pseudoGenerator';
 import { Snackbar } from "@mui/material";
@@ -59,12 +59,10 @@ function App() {
     const unregisterAuthObserver = auth.onAuthStateChanged(user => {
 
       if (user) {
-        setUserInfo(user);
-        if(user.displayName === null) {
-          user.updateProfile({displayName: PseudoGenerated});
-          setUserInfo({displayName:PseudoGenerated});
-        }
-        setIsSignedIn(true);
+        db.collection('users').doc(user.uid).get().then((userDB) => {
+          setUserInfo(userDB.data());
+          setIsSignedIn(true);
+        });
       }
       else if(localStorage.getItem("Play-It_AnonymouslyLoggedIn")) {
         setUserInfo({displayName:localStorage.getItem("Play-It_AnonymouslyPseudo")});
@@ -112,7 +110,8 @@ function App() {
     setIsLoginLoading(true);
     await delay(500);
     setIsLoginLoading(false);
-    setUserInfo({displayName:PseudoGenerated});
+    setUserInfo({displayName:PseudoGenerated,
+    loginType:'anon'});
 
     localStorage.setItem("Play-It_AnonymouslyPseudo",  PseudoGenerated);
     localStorage.setItem("Play-It_AnonymouslyLoggedIn",  true);
@@ -124,20 +123,31 @@ function App() {
     CreateGoogleAnalyticsEvent('Actions','Anonym. login','Anonym. login');
   }
 
+  async function newUserRegisterAfterFirebaseAuth(userUid, registerType) {
+      var userData={
+        displayName:PseudoGenerated, 
+        creationTime:Date.now(),
+        uid:userUid,
+        loginType:registerType
+      }
+      setUserInfo(userData);
+      db.collection('users').doc(userUid).set(userData).then((doc) => {
+        setIsLoginLoading(false);
+        handleLoginOkSnackNewUser();
+        CreateGoogleAnalyticsEvent('Actions',registerType+' register',registerType+' register');
+      });
+  }
+
   async function handleGoogleLogin() {
     setIsLoginLoading(true);
     await auth.signInWithPopup(googleProvider)
         .then((result) => { 
           if(result.additionalUserInfo.isNewUser) {
-            result.user.updateProfile({displayName: PseudoGenerated}).then((result) => { 
-              setIsLoginLoading(false);
-              setUserInfo({displayName:PseudoGenerated});        
-              handleLoginOkSnackNewUser();
-              CreateGoogleAnalyticsEvent('Actions','Google login','Google login');
-            });
+            newUserRegisterAfterFirebaseAuth(result.user.uid, 'Google');
           } else {
             setIsLoginLoading(false);
             handleLoginOkSnack();
+            CreateGoogleAnalyticsEvent('Actions','Google login','Google login');
           }
         })
         .catch((err) => {
@@ -151,7 +161,7 @@ function App() {
     setIsLoginLoading(true);
     await auth.createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {
-                handleLoginOkSnackNewUser();
+                newUserRegisterAfterFirebaseAuth(userCredential.user.uid, 'Mail');
             })
             .catch((error) => {
                 if(error.code === "auth/email-already-in-use") {
@@ -223,6 +233,10 @@ function App() {
     window.history.replaceState('string','', window.location.href+"?rid="+roomId.replace(/\s/g,''));
   }
 
+  function setUserInfoEdit(user) {
+      db.collection('users').doc(user.uid).set(user).then();
+      setUserInfo(user);
+  }
 
   return (
     <>
@@ -232,7 +246,7 @@ function App() {
             <Toolbar>
               <img src="img/logo_py1.png" style={{ width: 'auto', maxWidth:'50%', maxHeight:'30px'}} alt="Play-It logo"/>
               {!isAppLoading && (
-                <UserTopBar userInfoPseudo={userInfos.displayName} handleOpenLoginModal={setLoginModalOpen} handleLogout={logOut} />
+                <UserTopBar user={userInfos} setUserInfo={setUserInfoEdit} handleOpenLoginModal={setLoginModalOpen} handleLogout={logOut} />
               )}
             </Toolbar>
           </AppBar>
@@ -275,14 +289,14 @@ function App() {
           autoHideDuration={3000}
           onClose={() => setLoginOkSnackBarOpen(false)}
           sx={{borderRadius:'2px'}}
-          message={"Bienvenue "+userInfos.displayName+" !"}
+          message={"Bienvenue "+ userInfos.displayName+" !"}
         />
         <Snackbar
           open={loginNewUserOkSnackBarOpen}
           autoHideDuration={3000}
           onClose={() => setLoginNewUserOkSnackBarOpen(false)}
           sx={{borderRadius:'2px'}}
-          message={"Bienvenue "+userInfos.displayName+", 1e connexion !"}
+          message={"Bienvenue "+ userInfos.displayName+", 1e connexion !"}
         />
         <Snackbar
           open={logoutOkSnackBarOpen}
