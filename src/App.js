@@ -26,7 +26,8 @@ import { Snackbar } from "@mui/material";
 
 import {CreateGoogleAnalyticsEvent} from './services/googleAnalytics';
 
-function App() {
+import { withTranslation } from 'react-i18next';
+function App( {t} ) {
   
 
   // general app statuts
@@ -81,11 +82,14 @@ function App() {
 
   useEffect(() => {
       const hash = window.location.hash
+      console.log('aa');
       if (hash) {
           var token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
+          
           if(localStorage.getItem("Play-It_SpotifyRoomId")) {
             joinRoomByRoomId(localStorage.getItem("Play-It_SpotifyRoomId"));
-            replaceCurrentUrlWithRoomUrl(localStorage.getItem("Play-It_SpotifyRoomId"));
+         //   replaceCurrentUrlWithRoomUrl(localStorage.getItem("Play-It_SpotifyRoomId"));
+            replaceCurrentUrlWithRoomUrlForSpotify(localStorage.getItem("Play-It_SpotifyRoomId"), token);
           }
       }
   }, [])
@@ -233,6 +237,10 @@ function App() {
     window.history.replaceState('string','', window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '')+'?rid='+roomId.replace(/\s/g,''));
   }
 
+  function replaceCurrentUrlWithRoomUrlForSpotify(roomId, token) {
+    window.history.replaceState('string','', window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '')+'?rid='+roomId.replace(/\s/g,'')+'&token='+token);
+  }
+
   function setUserInfoEdit(user) {
       db.collection('users').doc(user.uid).set(user).then();
       setUserInfo(user);
@@ -259,11 +267,11 @@ function App() {
             <Button variant="filled" className='main_bg_color  buttonBorder' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em'}} 
               onClick={(e) => isSignedIn ? createNewRoom() : setLoginModalOpen(true)}>
                 <Icon icon="carbon:intent-request-create" width="30" style={{marginRight:'20px'}}/> 
-                Créer une Room </Button> 
+                {t('HomePageButtonsCreateRoom')} </Button> 
             <Button variant="filled" className='main_bg_color  buttonBorder' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em', mb:'2em'}} 
               onClick={(e) => isSignedIn ? setJoinRoomModalOpen(true) : setLoginModalOpen(true)}> 
                 <Icon icon="icon-park-outline:connect"  width="30" style={{marginRight:'20px'}}/>
-                Rejoindre une Room </Button> 
+                {t('HomePageButtonsJoinRoom')}  </Button> 
 
                 <JoinRoomModal open={joinRoomModalOpen} changeOpen={setJoinRoomModalOpen} handleJoinRoom={joinRoomByRoomId} />
            
@@ -289,21 +297,21 @@ function App() {
           autoHideDuration={3000}
           onClose={() => setLoginOkSnackBarOpen(false)}
           sx={{borderRadius:'2px'}}
-          message={"Bienvenue "+ userInfos.displayName+" !"}
+          message={t('GeneralSnackWelcome') +' '+ userInfos.displayName+" !"}
         />
         <Snackbar
           open={loginNewUserOkSnackBarOpen}
           autoHideDuration={3000}
           onClose={() => setLoginNewUserOkSnackBarOpen(false)}
           sx={{borderRadius:'2px'}}
-          message={"Bienvenue "+ userInfos.displayName+", 1e connexion !"}
+          message={t('GeneralSnackWelcome') +' '+ userInfos.displayName+", 1e connexion !"}
         />
         <Snackbar
           open={logoutOkSnackBarOpen}
           autoHideDuration={3000}
           onClose={() => setLogoutOkSnackBarOpen(false)}
           sx={{borderRadius:'2px'}}
-          message={"A bientôt !"}
+          message={t('GeneralSnackSeeYouSoon')}
         />
 
         {!roomId && false && <Footer />}
@@ -312,4 +320,4 @@ function App() {
   );
 }
 
-export default App;
+export default withTranslation()(App);

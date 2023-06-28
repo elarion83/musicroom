@@ -5,8 +5,8 @@ import useDigitInput from 'react-digit-input';
 import { Box } from '@mui/system';
 import { LoadingButton } from '@mui/lab';
 
-
-const JoinRoomModal = ({ open, handleJoinRoom, changeOpen}) => {
+import { withTranslation } from 'react-i18next';
+const JoinRoomModal = ({ t, open, handleJoinRoom, changeOpen}) => {
     const [value, onChange] = React.useState('');
     const [isJoining, setIsJoining] = React.useState(false);
 
@@ -27,11 +27,11 @@ const JoinRoomModal = ({ open, handleJoinRoom, changeOpen}) => {
     return(
          <Dialog open={open} onClose={(e) => changeOpen(false)} >
             <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
-                <Icon icon='icon-park-outline:connect' style={{marginRight:'10px'}} /> Rejoindre une room
+                <Icon icon='icon-park-outline:connect' style={{marginRight:'10px'}} /> {t('HomePageButtonsJoinRoom')}
             </DialogTitle>  
             <DialogContent dividers>
               <DialogContentText>
-                <Typography sx={{mb:1}}> ID de la room a rejoindre</Typography>
+                <Typography sx={{mb:1}}> {t('ModalJoinRoomIDOfTheRoom')}</Typography>
                 <Box className='joinRoomForm'>
                     <div className='input'>
                         <input  autoFocus {...digits[0]} />
@@ -54,11 +54,11 @@ const JoinRoomModal = ({ open, handleJoinRoom, changeOpen}) => {
             </DialogContent>
             <DialogActions>
                 <LoadingButton loading={isJoining}  variant="outlined" position="end">
-                            Rejoindre
+                            {t('ModalJoinRoomButtonJoin')}
                 </LoadingButton>
             </DialogActions>
         </Dialog>
     )
 };
 
-export default JoinRoomModal;
+export default withTranslation()(JoinRoomModal);

@@ -7,7 +7,8 @@ import TextField from '@mui/material/TextField';
 import { LoadingButton } from "@mui/lab";
 import PrivacyPolicyModal from '../modals/PrivacyPolicyModal';
 
-const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin, handlePasswordAndMailLogin, loginLoading, redirectToHome, roomId, loginErrorMessage}) => {
+import { withTranslation } from 'react-i18next';
+const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLogin, handlePasswordAndMailLogin, loginLoading, redirectToHome, roomId, loginErrorMessage}) => {
     
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
@@ -31,7 +32,7 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin,
         }}
         >
             <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1}}>
-                     <Icon width="15" icon='carbon:user-avatar' style={{marginRight:'10px'}} /> Connexion / Inscription
+                     <Icon width="15" icon='carbon:user-avatar' style={{marginRight:'10px'}} /> {t('ModalLoginTitle')} 
             </DialogTitle>  
             <DialogContent dividers sx={{pt:0}}>
                 <DialogContentText sx={{pt:2}}>
@@ -41,7 +42,7 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin,
                         <Box sx={{display:'flex', flexDirection:'column'}}>     
                             <TextField
                                 id="loginMailAndPass_EmailField"
-                                label="Adresse Email"
+                                label={t('ModalLoginFormPlaceholderEmailAdress')}
                                 value={email}  
                                 type='email'  
                                 onChange={(e) => setEmail(e.target.value)}  
@@ -52,7 +53,7 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin,
                                 onChange={(e) => setPassword(e.target.value)}   
                                 sx={{mt:2}}
                                 id="loginMailAndPass_PassField"
-                                label="Mot de passe"
+                                label={t('ModalLoginFormPlaceholderPassword')} 
                             />           
                             <LoadingButton
                                     loadingPosition='start'
@@ -67,7 +68,7 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin,
                         </Box> 
                         
                         <Divider sx={{mt:3,mb:2}}>
-                            OU
+                            {t('GeneralOr')} 
                         </Divider>  
                             <LoadingButton 
                                     loading={loginLoading}
@@ -76,10 +77,10 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin,
                                     variant="outlined"
                                     startIcon={<Icon icon="mdi:anonymous" />}
                                     onClick={e => handleAnonymousLogin()}>
-                                    Continuer en anonyme
+                                    {t('ModalLoginButtonAnon')} 
                             </LoadingButton>
                         <Divider sx={{mt:2,mb:2}}>
-                            OU
+                            {t('GeneralOr')} 
                         </Divider>  
                             <LoadingButton
                                     loadingPosition='start'
@@ -88,7 +89,7 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin,
                                     startIcon={<Icon icon="ri:google-fill" />}
                                     variant="outlined"
                                     onClick={handleGoogleLogin}>
-                                Continuer avec Google
+                                {t('ModalLoginButtonGoogle')} 
                             </LoadingButton>  
                     </Grid> 
                     <Grid sx={{mt:2}}>
@@ -97,11 +98,11 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin,
                                     startIcon={<Icon icon="raphael:arrowleft" />}
                                     size="small"
                                     onClick={redirectToHome}>
-                                Vers l'accueil
+                                {t('GeneralHome')}
                             </Button> }
                     </Grid>
 
-                    <Typography fontSize="small">En utilisant ce service vous acceptez notre <a href="#" onClick={(e) => setPrivacyPolicyModalOpen(true)}>politique de confidentialité</a> et <a href="https://www.youtube.com/t/terms" target="_blank">les conditions d'utilisation de Youtube.</a>
+                    <Typography fontSize="small"> {t('ModalLoginTermsSentence')} <a href="#" onClick={(e) => setPrivacyPolicyModalOpen(true)}>{t('ModalLoginTermsPrivacyPolicy')}  </a> {t('GeneralAnd')} <a href="https://www.youtube.com/t/terms" target="_blank">{t('ModalLoginTermsYoutubeTerms')}  </a>
                     </Typography>
                     <PrivacyPolicyModal open={PrivacyPolicyModalOpen} changeOpen={setPrivacyPolicyModalOpen} />
                 </DialogContentText>
@@ -110,4 +111,4 @@ const LoginModal = ({ open, changeOpen, handleAnonymousLogin, handleGoogleLogin,
     )
 };
 
-export default LoginModal;
+export default withTranslation()(LoginModal);

@@ -8,7 +8,8 @@ import React from "react";
 
 import TuneIcon from '@mui/icons-material/Tune';
 import Badge from '@mui/material/Badge';
-import Chat from './Chat'
+import Chat from './Chat';
+import DisplayMenu from './DisplayMenu';
 import { Icon } from '@iconify/react';
 import { useState } from 'react';
 
@@ -16,7 +17,7 @@ import {returnAnimateReplace } from './../../services/animateReplace';
 
 import {CreateGoogleAnalyticsEvent} from './../../services/googleAnalytics';
 
-const BottomInteractions = ({ paramDrawerIsOpen, handleOpenDrawerParam, currentUser, roomId, roomParams, roomNotifs, userCanMakeInteraction, createNewRoomInteraction, setOpenAddToPlaylistModal,handleOpenShareModal,handleOpenLeaveRoomModal, OpenAddToPlaylistModal, checkRoomExist, checkInterractionLength,checkNotificationsLength }) => {
+const BottomInteractions = ({ layoutDisplay, setLayoutdisplay, paramDrawerIsOpen, handleOpenDrawerParam, currentUser, roomId, roomParams, roomNotifs, userCanMakeInteraction, createNewRoomInteraction, setOpenAddToPlaylistModal,handleOpenShareModal,handleOpenLeaveRoomModal, OpenAddToPlaylistModal, checkRoomExist, checkInterractionLength,checkNotificationsLength }) => {
 
     const [isChatExpanded, setIsChatExpanded] = useState(false);
     const animatedElementsRef = [];

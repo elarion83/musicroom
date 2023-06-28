@@ -20,8 +20,10 @@ import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import 'animate.css';
 
+import { withTranslation } from 'react-i18next';
 
 const RoomTopBar = ({
+                t,
                 isShowSticky,
                 handlePlay,
                 roomIsPlaying,
@@ -62,7 +64,7 @@ const RoomTopBar = ({
                         <ListItemIcon>
                             <InfoIcon />
                         </ListItemIcon>
-                        <Typography>{isAdminView ? 'Vous êtes l\'hôte' : 'Hosté par'} {!isAdminView ? <b>{roomAdmin}</b> : '' }</Typography>
+                        <Typography>{isAdminView ? t('RoomLeftMenuHost') : t('RoomLeftMenuHostedBy')} {!isAdminView ? <b>{roomAdmin}</b> : '' }</Typography>
                     </ListItemButton>
                 </ListItem>
                 
@@ -77,7 +79,7 @@ const RoomTopBar = ({
                                     <Icon icon="mdi:spotify" width="27"  />
                             </Badge>
                         </ListItemIcon>
-                        <Typography>{isLinkedToSpotify ? 'Spotify relié' : 'Spotify non relié'}</Typography>
+                        <Typography>{isLinkedToSpotify ? t('RoomLeftMenuSpotifyLinked') : t('RoomLeftMenuSpotifyNotLinked')}</Typography>
                     </ListItemButton>
                 </ListItem>
 
@@ -88,7 +90,7 @@ const RoomTopBar = ({
                         <ListItemIcon>
                             <TuneIcon />
                         </ListItemIcon>
-                        <Typography>Paramètres de room</Typography>
+                        <Typography>{t('RoomLeftMenuRoomParams')}</Typography>
                     </ListItemButton>
                 </ListItem>
                 <ListItem key='roomDrawRoomShare' disablePadding>
@@ -96,7 +98,7 @@ const RoomTopBar = ({
                         <ListItemIcon>
                             <ShareIcon />
                         </ListItemIcon>
-                        <Typography>Partager la room</Typography>
+                        <Typography>{t('RoomLeftMenuRoomShare')}</Typography>
                     </ListItemButton>
                 </ListItem>
                 
@@ -111,7 +113,7 @@ const RoomTopBar = ({
                                 inputProps={{ 'aria-label': 'controlled' }}
                             />
                         </ListItemIcon>
-                        <Typography>{guestSynchroOrNot ? 'Lecture synchronisé' : 'Lecture différée'}</Typography>
+                        <Typography>{guestSynchroOrNot ? t('RoomLeftMenuSync') : t('RoomLeftMenuNotSync')}</Typography>
                     </ListItemButton>
                 </ListItem>}
 
@@ -121,7 +123,7 @@ const RoomTopBar = ({
                         <ListItemIcon>
                             <ExitToAppIcon />
                         </ListItemIcon>
-                        <Typography>Quitter la room</Typography>
+                        <Typography>{t('RoomLeftMenuRoomLeave')}</Typography>
                     </ListItemButton>
                 </ListItem>
             </List>
@@ -178,4 +180,4 @@ const RoomTopBar = ({
   )
 };
 
-export default RoomTopBar;
+export default withTranslation()(RoomTopBar);

@@ -54,8 +54,19 @@ import SoundWave from "./rooms/SoundWave";
 
 import {CreateGoogleAnalyticsEvent} from '../services/googleAnalytics';
 
-const Room = ({ currentUser, roomId, handleQuitRoom }) => {
+import { withTranslation } from 'react-i18next';
 
+const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
+
+    const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
+
+    // global for room
+	const roomRef = db.collection(process.env.REACT_APP_ROOM_COLLECTION).doc(roomId);
+    const [localData, setLocalData] = useState({domain:window.location.hostname, currentUserVotes:{up:[], down:[]} });
+	const [loaded, setLoaded] = useState(false);
+	const [room, setRoom] = useState({});
+
+    // sticky toolbar
     const [scrollFromTopTrigger, setScrollFromTopTrigger] = useState(window.screen.height/4);
     const [isShowSticky, setIsShowSticky] = useState(false);
 
@@ -71,12 +82,6 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
         window.addEventListener('scroll', handleScroll);
 
     }, []);
-    const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
-
-    const [localData, setLocalData] = useState({domain:window.location.hostname, currentUserVotes:{up:[], down:[]} });
-
-	const [loaded, setLoaded] = useState(false);
-	const [room, setRoom] = useState({});
 
     // for desynchro || FINAL CLIENT ROOM DATAS
 	const [roomIdPlayed, setRoomIdPlayed] = useState(0);
@@ -86,18 +91,21 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
     const [openInvitePeopleToRoomModal, setOpenInvitePeopleToRoomModal] = useState(false);
     const [OpenAddToPlaylistModal, setOpenAddToPlaylistModal] = useState(false);
     const [openRoomParamModal, setOpenRoomParamModal] = useState(false);
+    const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
+
     const [openRoomDrawer, setOpenRoomDrawer] = useState(false);
+
     const [localVolume, setLocalVolume] = useState(0);
     const [pip, setPip] = useState(true);
-	const roomRef = db.collection(process.env.REACT_APP_ROOM_COLLECTION).doc(roomId);
     const [userCanMakeInteraction, setUserCanMakeInteraction]= useState(true);
-    const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
     const [openForceDisconnectSpotifyModal, setOpenForceDisconnectSpotifyModal] = useState(false);
 
     const [playerReady, setPlayerReady] = useState(false);
     const [viewPlayer, setViewPlayer] = useState(true);
-    const [isFullScreen, setIsFullScreen] = useState(false);
     const [spotifyPlayerShow, setSpotifyPlayerShow] = useState(true);
+
+    // layout
+    const [layoutDisplay, setLayoutdisplay] = useState('default');
 
     const playerRef = useRef({
         url: null,
@@ -169,8 +177,8 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
     });
 
     useKeypress(['Escape'], () => {
-        if(isFullScreen) {
-            setIsFullScreen(false);
+        if(layoutDisplay === 'fullscreen') {
+            setLayoutdisplay('default');
         }
     });
 
@@ -450,20 +458,21 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
     }
 
     useEffect(() => {
-        const hash = window.location.hash
-        if (hash) {
-            var token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
-
-            window.location.hash = ""
+        var queryParameters = new URLSearchParams(window.location.search);
+        if(queryParameters.get("token")) {
+        console.log('bbaa');
+            var token = queryParameters.get("token") ? queryParameters.get("token") : '';
+            window.location.hash = "";
             window.localStorage.setItem("Play-It_SpotifyToken", token)
             handleChangeSpotifyToken(token)
-        }
-    }, [])
 
+        }
+    })
 
     async function handleChangeSpotifyToken(newToken) {
         roomRef.set({roomParams:{spotifyToken: newToken,spotifyIsLinked:true,spotifyAlreadyHaveBeenLinked:true, spotifyTokenTimestamp: Date.now(), spotifyUserConnected:currentUser.displayName}}, { merge: true });
-        window.history.replaceState('string','', window.location.href.replace('#','')+"?rid="+roomId.replace(/\s/g,''));
+        window.history.replaceState('string','', window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '')+'?rid='+roomId.replace(/\s/g,''));
+
     }
 
     function handleOpenShareModal(ShareModalIsOpen) {
@@ -584,7 +593,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                     <Box sx={{bgcolor:'#303030',borderBottom: '2px solid var(--border-color)', padding:"0px 0em"}}> 
                         <Grid container spacing={0} sx={{ bgcolor:'var(--grey-dark)'}} className={viewPlayer ? 'playerShow' : 'playerHide'}>
 
-                            <Grid item className={isFullScreen ? 'fullscreen' : 'playerContainer'} sm={(room.playlistUrls[room.playing].source === 'spotify' ) ? 12 : 4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
+                            <Grid item className={layoutDisplay === 'fullscreen' ? 'fullscreen' : 'playerContainer'} sm={(room.playlistUrls[room.playing].source === 'spotify' ) ? 12 : 4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
                                 {spotifyPlayerShow && isActuallyAdmin && room.playlistUrls[room.playing].source === 'spotify' &&
                                     <SpotifyPlayer
                                         callback={SpotifyPlayerCallBack}
@@ -717,7 +726,7 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                                                     <IconButton onClick={e => setPercentagePlayed(0)} >
                                                         <ReplayIcon fontSize="large" sx={{color:'#f0f1f0'}} />
                                                     </IconButton>
-                                                    {!isFullScreen && <IconButton onClick={e => setIsFullScreen(true)} >
+                                                    {layoutDisplay !== 'fullscreen' && <IconButton onClick={e => setLayoutdisplay('fullscren')} >
                                                         <FullscreenIcon fontSize="large" sx={{color:'#f0f1f0'}} />
                                                     </IconButton>}
                                                 </>
@@ -753,8 +762,8 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                             </Grid>
                         </Grid>
                         
-                        {isFullScreen &&
-                            <IconButton className="fullscreenoff" onClick={e => setIsFullScreen(false)} >
+                        {layoutDisplay === 'fullscreen' &&
+                            <IconButton className="fullscreenoff" onClick={e => setLayoutdisplay('fullscren')} >
                                 <FullscreenExitIcon fontSize="large" sx={{color:'#f0f1f0', position:'absolute'}} />
                             </IconButton>
                         }
@@ -771,8 +780,8 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                             className='animate__animated animate__fadeInUp animate__slow'
                             onClick={(e) => setOpenInvitePeopleToRoomModal(true)}
                             sx={{m:2, border:'2px solid var(--green-2)', cursor:'pointer'}}> 
-                            <AlertTitle sx={{mb:0}}>Bienvenue dans la room ! </AlertTitle> 
-                            <p style={{color:'var(--white)', margin:0}}>Clique ici pour la partager</p>
+                            <AlertTitle sx={{mb:0}}>{t('RoomEmptyAlertWelcome')} </AlertTitle> 
+                            <p style={{color:'var(--white)', margin:0}}>{t('RoomEmptyAlertWelcomeClickHere')}</p>
                         </Alert>
                         <Alert severity="warning" 
                             variant="filled" 
@@ -780,8 +789,8 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                             sx={{m:2, border:'2px solid #febc21', cursor:'pointer'}} 
                             className='animate__animated animate__fadeInUp animate__slow'
                             onClick={(e) => setOpenAddToPlaylistModal(true)} >
-                            <AlertTitle>La Playlist est vide !</AlertTitle>
-                            <p style={{color:'var(--white)', margin:0}}>Clique ici pour commencer</p>
+                            <AlertTitle>{t('RoomEmptyAlertPlaylist')}</AlertTitle>
+                            <p style={{color:'var(--white)', margin:0}}>{t('RoomEmptyAlertPlaylistClickHere')}</p>
                         </Alert>
                         
                         {!room.roomParams.spotifyIsLinked && 
@@ -790,8 +799,8 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                             sx={{m:2, border:'2px solid #febc21',cursor:'pointer'}} 
                             className='animate__animated animate__fadeInUp animate__slow'
                             onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
-                            <AlertTitle>Spotify n'est pas lié à la room !</AlertTitle>
-                            <p style={{color:'var(--white)', margin:0}}> Clique ici pour lier les deux <br /> <b>Spotify Premium requis</b> </p>
+                            <AlertTitle>{t('RoomEmptyAlertSpotify')}</AlertTitle>
+                            <p style={{color:'var(--white)', margin:0}}> {t('RoomEmptyAlertSpotifyClickHere')} <br /> <b>{t('RoomEmptyAlertSpotifyBold')}</b> </p>
                         </Alert>}
                     </>
                 }
@@ -858,10 +867,12 @@ const Room = ({ currentUser, roomId, handleQuitRoom }) => {
                 checkRoomExist={(room && room.playlistEmpty) ? true:false}
                 checkInterractionLength={(room.roomParams.interactionsArray && room.roomParams.interactionsArray.length > 0) ? true:false}
                 checkNotificationsLength={(room.notifsArray && room.notifsArray.length > 0) ? true:false}
+                layoutDisplay={layoutDisplay}
+                setLayoutdisplay={setLayoutdisplay}
             />  } 
 
     </div>
   );
 };
 
-export default Room;
+export default withTranslation()(Room);
