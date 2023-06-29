@@ -750,17 +750,15 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                                             </IconButton>
                                             
                                     </Grid>}
-                                    {!isActuallyAdmin && layoutDisplay === 'fullscreen' && <Grid item sm={2} xs={2}  sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0, mb: 1.5 }}>
-                                            <IconButton className="" onClick={e => setLayoutdisplay('default')} >
-                                                <FullscreenExitIcon fontSize="large"  sx={{color: '#f0f1f0' }} />
-                                            </IconButton>
-                                    </Grid> }
                                     {room.playlistUrls[room.playing].source !== 'spotify' && 
-                                        <Grid item xs={10} md={3}  sx={{ pt:0,pl:2,pr:2,ml:0, mb: 0, pb:1, mt:2.5 }}>
+                                        <Grid item xs={10} md={3}  sx={{ pt:0,pl:2,pr:2,ml:0, mb: 0, pb:1, mt:1.5 }}>
                                             <Stack spacing={2} sm={8} direction="row" sx={{ mb: 1, mr:2 }} alignItems="center">
                                                 <VolumeDown />
                                                 <Slider step={0.01} min={0}  max={1} aria-label="Volume" value={localVolume} onChange={e => handleVolumeChange(e)} />
                                                 <VolumeUp />
+                                                {!isActuallyAdmin && layoutDisplay === 'fullscreen' &&<IconButton className="" onClick={e => setLayoutdisplay('default')} >
+                                                    <FullscreenExitIcon fontSize="large"  sx={{color: '#f0f1f0' }} />
+                                                </IconButton>}
                                             </Stack>
                                         </Grid> 
                                     }
