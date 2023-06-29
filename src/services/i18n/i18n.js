@@ -84,7 +84,7 @@ const resources = {
 };
 
 var lang = 'en';
-if(navigator.language === 'fr') {
+if(navigator.language === 'fr' || navigator.language === 'fr-FR') {
     lang = 'fr';
 }
 
