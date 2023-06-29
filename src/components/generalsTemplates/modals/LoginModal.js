@@ -92,7 +92,7 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
                                 {t('ModalLoginButtonGoogle')} 
                             </LoadingButton>  
                     </Grid> 
-                    <Grid sx={{mt:2}}>
+                    <Grid sx={{mt:2, mb:2}}>
                         {roomId && 
                             <Button
                                     startIcon={<Icon icon="raphael:arrowleft" />}

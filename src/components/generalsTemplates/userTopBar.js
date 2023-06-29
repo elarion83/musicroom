@@ -13,7 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { Button } from '@mui/material';
-
+import AppsIcon from '@mui/icons-material/Apps';
 import UserParamModal from './modals/UserParamModal';
 import UserRoomList from './modals/UserRoomList';
 
@@ -103,7 +103,7 @@ const UserTopBar = ({ t, user, setUserInfo, handleLogout, handleOpenLoginModal, 
             </MenuItem>
             {user.loginType !== 'anon' && <MenuItem onClick={e => setUserRoomListModalOpen(true)}>
                 <ListItemIcon>
-                <TuneIcon fontSize="small" />
+                <AppsIcon fontSize="small" />
                 </ListItemIcon>
                 <Typography>        
                   {t('UserMenuMyRooms')}

@@ -16,6 +16,7 @@ const resources = {
         "GeneralNo":'No',
         "GeneralLeave":'Leave',
         "GeneralStay":'Stay',
+        "GeneralSave":'Save',
         "GeneralWait":'Wait',
         "GeneralSeconds":'Seconds',
         "GeneralEmpty":'empty',
@@ -26,6 +27,7 @@ const resources = {
         "GeneralAddedBy":'Added by',
         "GeneralMediasInPlaylist":'Medias in playlist',
         "GeneralHome":'Homepage',
+        "GeneralLength":"Length",
         "GeneralSnackWelcome" : "Welcome",
         "GeneralSnackSeeYouSoon" : "See you soon !",
         
@@ -50,6 +52,7 @@ const resources = {
         "ModalUserSettingsTitle" : "Account settings",
         "ModalUserSettingsEditNotAllowedTitle" : "Edition impossible",
         "ModalUserSettingsEditNotAllowedText" : "Profile editing is not possible in anonymous mode.",
+        "ModalUserSettingsLabelLoginType" : "Login type",
 
         "ModalJoinRoomIDOfTheRoom": "ID of the room you want to join",
         "ModalJoinRoomButtonJoin": "Join",
@@ -116,6 +119,7 @@ const resources = {
         "GeneralNo":'Non',
         "GeneralLeave":'Quitter',
         "GeneralStay":'Rester',
+        "GeneralSave":'Enregistrer',
         "GeneralWait":'Attendre',
         "GeneralSeconds":'Secondes',
         "GeneralStatus":'Statut',
@@ -126,6 +130,7 @@ const resources = {
         "GeneralEmpty":'vide',
         "GeneralEvery":'Toutes les',
         "GeneralHome":'Accueil',
+        "GeneralLength":"Longueur",
         "GeneralSnackWelcome" : "Bienvenue",
         "GeneralSnackSeeYouSoon" : "A bientôt !",
         
@@ -150,6 +155,7 @@ const resources = {
         "ModalUserSettingsTitle" : "Paramètres du compte",
         "ModalUserSettingsEditNotAllowedTitle" : "Edition impossible",
         "ModalUserSettingsEditNotAllowedText" : "L'édition du profil est impossible en anonyme.",
+        "ModalUserSettingsLabelLoginType" : "Type de connexion",
 
         "ModalJoinRoomIDOfTheRoom": "ID de la room a rejoindre",
         "ModalJoinRoomButtonJoin": "Rejoindre",
@@ -216,7 +222,7 @@ i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     resources,
-    lng: 'en',
+    lng: lang,
     interpolation: {
       escapeValue: false // react already safes from xss
     }

@@ -43,7 +43,7 @@ const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
                     {!isEditingPseudo && <Grid container>
                         
                         <Grid item xs={11} md={11}>
-                            <Typography> Pseudo : {user.displayName}</Typography>
+                            <Typography> Pseudo : <b>{user.displayName}</b></Typography>
                         </Grid>
                         <Grid item xs={1} md={1}>
                             
@@ -57,11 +57,11 @@ const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
                         <Grid item sx={12} md={12}>
                             <TextField id="outlined-basic" 
                                 value={pseudo} onChange={(e) => setPseudo(e.target.value)} 
-                                helperText="Longueur min : 5 | Max : 15"
-                                placeholder="Entrez un pseudo" label="Pseudo utilisateur" variant="outlined" />
+                                helperText= {t('GeneralLength')+" min : 5 | Max : 15"}
+                                placeholder="Entrez un pseudo" label="Pseudo" variant="outlined" />
                             </Grid>
                         {pseudo.length >= 5 && pseudo.length <= 15 && <Grid item sx={12} md={12}>
-                            <LoadingButton loading={isEditingUserLoading} variant="outlined" onClick={(e) => updateUser()} sx={{mt:1}}> Enregistrer </LoadingButton>
+                            <LoadingButton loading={isEditingUserLoading} variant="outlined" onClick={(e) => updateUser()} sx={{mt:1}}> {t('GeneralSave')} </LoadingButton>
                         </Grid>}
                     </Grid>}
                 </FormGroup>

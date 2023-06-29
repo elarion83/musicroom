@@ -239,7 +239,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
             setIsActuallyAdmin(true);
         }
         if(roomIsPlaying) {
-            document.title = 'En lecture - Room ' + roomId + ' - Play-It';
+            document.title = t('GeneralPlaying')+' - Room ' + roomId + ' - Play-It';
         } else {
             document.title = 'Room ' + roomId + ' - Play-It';
         }
