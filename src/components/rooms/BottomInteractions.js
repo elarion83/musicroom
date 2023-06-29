@@ -41,7 +41,7 @@ const BottomInteractions = ({ layoutDisplay, setLayoutdisplay, paramDrawerIsOpen
                     className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-1s animate__faster'}
                     title={!userCanMakeInteraction ? "Toutes les "+  (roomParams.interactionFrequence/1000) +" secondes": ''}>  
                     <Fab size="small" variant="extended" className='room_small_button_interactions' 
-                        sx={{ boxShadow:20,mr:1, ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} 
+                        sx={{ ml:1, boxShadow:20,mr:1, ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} 
                         onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('laugh') : ''}>
                         <EmojiEmotionsIcon fontSize="small" sx={{color:'var(--white)'}} />
                         {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
@@ -91,12 +91,17 @@ const BottomInteractions = ({ layoutDisplay, setLayoutdisplay, paramDrawerIsOpen
                         </Fab>
                     </Badge>
                 </Tooltip>
-                <Tooltip className='hiddenButPresent'>  
+                <Tooltip  ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUp animate__delay-1s'>  
                     <Fab size="small" variant="extended" className='room_small_button_interactions'  
                         sx={{justifyContent: 'center', ml:1}}  >
-                        <TuneIcon fontSize="small" />
+                        <DisplayMenu 
+                            layoutDisplay={layoutDisplay}
+                            setLayoutdisplay={setLayoutdisplay}
+                        />
                     </Fab>
                 </Tooltip>
+            
+
             </div>}
             {isChatExpanded && 
                 <Chat currentUser={currentUser} roomId={roomId} createNewRoomInteraction={createNewRoomInteraction} userCanMakeInteraction={userCanMakeInteraction} roomParams={roomParams} className='chatBox' hideTchat={e => setIsChatExpanded(false)} />

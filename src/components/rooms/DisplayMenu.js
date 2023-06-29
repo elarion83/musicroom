@@ -1,7 +1,3 @@
-
-
-
-
 import * as React from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import Button from '@mui/material/Button';
@@ -13,23 +9,26 @@ import ArchiveIcon from '@mui/icons-material/Archive';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { useState } from 'react';
 
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
-import ViewQuiltIcon from '@mui/icons-material/ViewQuilt';
-import ArtTrackIcon from '@mui/icons-material/ArtTrack';
+import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import DvrIcon from '@mui/icons-material/Dvr';
 import AirplayIcon from '@mui/icons-material/Airplay';
+import { useEffect } from 'react';
 
-const StyledMenu = styled((props: MenuProps) => (
+const StyledMenu = styled((props) => (
   <Menu
+    dense
     elevation={0}
+    sx={{ml:1,mt:-1}}
     anchorOrigin={{
-      vertical: 'bottom',
+      vertical: 'top',
       horizontal: 'right',
     }}
     transformOrigin={{
-      vertical: 'top',
+      vertical: 'bottom',
       horizontal: 'right',
     }}
     {...props}
@@ -38,7 +37,7 @@ const StyledMenu = styled((props: MenuProps) => (
   '& .MuiPaper-root': {
     borderRadius: 6,
     marginTop: theme.spacing(1),
-    minWidth: 180,
+    minWidth: 120,
     color:
       theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
     boxShadow:
@@ -48,8 +47,7 @@ const StyledMenu = styled((props: MenuProps) => (
     },
     '& .MuiMenuItem-root': {
       '& .MuiSvgIcon-root': {
-        fontSize: 18,
-        color: theme.palette.text.secondary,
+        fontSize: 14,
         marginRight: theme.spacing(1.5),
       },
       '&:active': {
@@ -63,53 +61,54 @@ const StyledMenu = styled((props: MenuProps) => (
 }));
 
 const DisplayMenu = ({layoutDisplay, setLayoutdisplay}) => {
-    const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+    setAnchorEl(null);
+    };
+
+    useEffect(() => {
+        setAnchorEl(null);
+    }, [layoutDisplay]);
+
+    
   return (
     
     <div>
       <Button
-        id="demo-customized-button"
+        size='small'
         aria-controls={open ? 'demo-customized-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
-        variant="contained"
         disableElevation
+        sx={{m:0,p:0,minWidth:'0px',width:'40px'}}
         onClick={handleClick}
-        endIcon={<KeyboardArrowDownIcon />}
+        endIcon={open ? <KeyboardArrowDownIcon sx={{ml:-1.5}}/> : <KeyboardArrowUpIcon sx={{ml:-1.5}}/>}
       >
-      <ViewQuiltIcon />
+      <ViewModuleIcon sx={{ml:0.5,mr:0.5}} />
       </Button>
       <StyledMenu
-        id="demo-customized-menu"
         MenuListProps={{
           'aria-labelledby': 'demo-customized-button',
         }}
+        dense
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={(e) => setLayoutdisplay('fullscreen')} disableRipple>
+        <MenuItem selected={layoutDisplay === 'fullscreen'} onClick={(e) => setLayoutdisplay('fullscreen')} disableRipple>
           <FullscreenIcon />
           Plein écran
         </MenuItem>
-        <MenuItem onClick={handleClose} disableRipple>
-          <ArtTrackIcon />
-          Interactif
-        </MenuItem>
-        <MenuItem onClick={(handleClose)} disableRipple>
+        <MenuItem selected={layoutDisplay === 'compact'} onClick={(e) => setLayoutdisplay('compact')} disableRipple>
           <DvrIcon />
-          Econome
+          Compact
         </MenuItem>
-        <Divider sx={{ my: 0.5 }} />
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem selected={layoutDisplay === 'default'} onClick={(e) => setLayoutdisplay('default')} disableRipple>
           <AirplayIcon />
           Classique
         </MenuItem>

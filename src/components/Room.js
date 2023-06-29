@@ -101,7 +101,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
     const [openForceDisconnectSpotifyModal, setOpenForceDisconnectSpotifyModal] = useState(false);
 
     const [playerReady, setPlayerReady] = useState(false);
-    const [viewPlayer, setViewPlayer] = useState(true);
     const [spotifyPlayerShow, setSpotifyPlayerShow] = useState(true);
 
     // layout
@@ -591,14 +590,14 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
             {loaded && room.playlistUrls && <div>
                 {!room.playlistEmpty && room.playlistUrls.length > 0 && room.playing !== null && 
                     <Box sx={{bgcolor:'#303030',borderBottom: '2px solid var(--border-color)', padding:"0px 0em"}}> 
-                        <Grid container spacing={0} sx={{ bgcolor:'var(--grey-dark)'}} className={viewPlayer ? 'playerShow' : 'playerHide'}>
+                        <Grid container spacing={0} sx={{ bgcolor:'var(--grey-dark)'}} className={layoutDisplay === 'compact' ? 'playerHide' : 'playerShow'}>
 
-                            <Grid item className={layoutDisplay === 'fullscreen' ? 'fullscreen' : 'playerContainer'} sm={(room.playlistUrls[room.playing].source === 'spotify' ) ? 12 : 4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
-                                {spotifyPlayerShow && isActuallyAdmin && room.playlistUrls[room.playing].source === 'spotify' &&
+                            <Grid item className={layoutDisplay === 'fullscreen' ? 'fullscreen' : 'playerContainer'} sm={(room.playlistUrls[roomIdPlayed].source === 'spotify' ) ? 12 : 4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
+                                {spotifyPlayerShow && isActuallyAdmin && room.playlistUrls[roomIdPlayed].source === 'spotify' &&
                                     <SpotifyPlayer
                                         callback={SpotifyPlayerCallBack}
                                         token={room.roomParams.spotifyToken}
-                                        uris={room.playlistUrls[room.playing].url}
+                                        uris={room.playlistUrls[roomIdPlayed].url}
                                         play={room.actuallyPlaying}
                                         inlineVolume={localVolume}
                                         styles={{
@@ -610,14 +609,19 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                                             trackNameColor: 'var(--grey-dark)',
                                         }}
                                     />}
-                                {!isActuallyAdmin && room.playlistUrls[room.playing].source === 'spotify' &&
+                                {spotifyPlayerShow && !isActuallyAdmin && guestSynchroOrNot && room.playlistUrls[roomIdPlayed].source === 'spotify' &&
                                     <Alert severity="warning" sx={{m:2, border:'1px solid #F27C24'}}> Le lecteur Spotify n'est visible que par l'host de la room. 
                                         <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} sx={{color:'var(--main-color-darker)'}}>
                                             <b>Ajoute quelque chose dans la playlist en attendant !</b>
                                         </a>
                                     </Alert>
                                 }
-                                {isActuallyAdmin && room.playlistUrls[room.playing].source !== 'spotify'  && <ReactPlayer sx={{ padding:0}}
+                                {spotifyPlayerShow && !isActuallyAdmin && !guestSynchroOrNot && room.playlistUrls[roomIdPlayed].source === 'spotify' &&
+                                    <Alert severity="warning" sx={{m:2, border:'1px solid #F27C24'}}> Nous sommes désolé. 
+                                            <b>Le lecteur Spotify n'est pour l'instant pas accessible en désynchronisé.</b>
+                                    </Alert>
+                                }
+                                {isActuallyAdmin && room.playlistUrls[roomIdPlayed].source !== 'spotify'  && <ReactPlayer sx={{ padding:0}}
                                     ref={playerRef}
                                     className='react-player'
                                     width='100%'
@@ -663,16 +667,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                                 />}
                                 <div style={{display:'none',width:'100%',height:'100%',opacity:0,top:0,position:'absolute'}}></div>
                             </Grid>
-                            <Grid item sm={(room.playlistUrls[roomIdPlayed].source === 'spotify' || !viewPlayer) ? 12 : 8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }} className={`player_right_side_container ${(room.playlistUrls[roomIdPlayed].source === 'spotify') ? "spotify_header" : ""}`}>
+                            <Grid item sm={(room.playlistUrls[roomIdPlayed].source === 'spotify' || layoutDisplay === 'compact') ? 12 : 8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }} className={`player_right_side_container ${(room.playlistUrls[roomIdPlayed].source === 'spotify') ? "spotify_header" : ""}`}>
                                 { /* pip ? 'Disable PiP' : 'Enable PiP' */ }
                                  <Grid item sm={12} sx={{ padding:0,pl:1.5,ml:0, mb: 0 , mt:1, fill:'#f0f1f0'}}>
                                     <Grid item 
                                     sx={[{pb:1}, room.playlistUrls[roomIdPlayed].source === 'spotify' &&  { justifyContent: 'center' } ]} 
                                     className="flexRowCenterH">
-                                        <Tooltip title="Afficher / Cacher le lecteur">
-                                                <Icon icon={viewPlayer ? 'ep:view' : 'carbon:view-off'} 
-                                                style={{flexShrink:0,cursor:'pointer',marginRight:'20px'}} onClick={e => setViewPlayer(!viewPlayer)} />
-                                        </Tooltip>
                                         { room.playlistUrls[roomIdPlayed].title && <Typography component={'span'}>
                                         {room.playlistUrls[roomIdPlayed].title} 
                                         </Typography>}
@@ -733,15 +733,15 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                                             }
                                         </Grid>
                                     }
-                                    {!isActuallyAdmin && !guestSynchroOrNot && <Grid item sm={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:2, mb: 1.5 }}>
+                                    {!isActuallyAdmin && !guestSynchroOrNot  && <Grid item sm={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:2, mb: 1.5 }}>
                                             <IconButton onClick={e => roomIdPlayed > 0 ? setRoomIdPlayed(roomIdPlayed-1) : ''}>
                                                 <FirstPageIcon  fontSize="large" sx={{color:roomIdPlayed > 0 ? '#f0f1f0': '#303134'}} />
                                             </IconButton>
                                             
-                                            <IconButton variant="contained" onClick={e => setRoomIsPlaying(!roomIsPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
+                                            {room.playlistUrls[roomIdPlayed].source !== 'spotify' && <IconButton variant="contained" onClick={e => setRoomIsPlaying(!roomIsPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
                                                 { roomIsPlaying && <PauseCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
                                                 { !roomIsPlaying && <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
-                                            </IconButton>
+                                            </IconButton>}
 
                                             <IconButton onClick={e => (room.playlistUrls.length -1) !== roomIdPlayed ? setRoomIdPlayed(roomIdPlayed+1) : ''}>
                                                 <LastPageIcon  fontSize="large" sx={{color: (room.playlistUrls.length -1) !== roomIdPlayed ? '#f0f1f0' : '#303134'}} />
@@ -763,7 +763,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                         </Grid>
                         
                         {layoutDisplay === 'fullscreen' &&
-                            <IconButton className="fullscreenoff" onClick={e => setLayoutdisplay('fullscren')} >
+                            <IconButton className="fullscreenoff" onClick={e => setLayoutdisplay('default')} >
                                 <FullscreenExitIcon fontSize="large" sx={{color:'#f0f1f0', position:'absolute'}} />
                             </IconButton>
                         }
