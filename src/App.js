@@ -60,7 +60,7 @@ function App( {t} ) {
     const unregisterAuthObserver = auth.onAuthStateChanged(user => {
 
       if (user) {
-        db.collection('users').doc(user.uid).get().then((userDB) => {
+        db.collection(process.env.REACT_APP_USERS_COLLECTION).doc(user.uid).get().then((userDB) => {
           setUserInfo(userDB.data());
           setIsSignedIn(true);
         });
@@ -132,10 +132,13 @@ function App( {t} ) {
         displayName:PseudoGenerated, 
         creationTime:Date.now(),
         uid:userUid,
-        loginType:registerType
+        loginType:registerType,
+        userParams:{
+          NotifsActivated:true
+        }
       }
       setUserInfo(userData);
-      db.collection('users').doc(userUid).set(userData).then((doc) => {
+      db.collection(process.env.REACT_APP_USERS_COLLECTION).doc(userUid).set(userData).then((doc) => {
         setIsLoginLoading(false);
         handleLoginOkSnackNewUser();
         CreateGoogleAnalyticsEvent('Actions',registerType+' register',registerType+' register');
@@ -242,7 +245,7 @@ function App( {t} ) {
   }
 
   function setUserInfoEdit(user) {
-      db.collection('users').doc(user.uid).set(user).then();
+      db.collection(process.env.REACT_APP_USERS_COLLECTION).doc(user.uid).set(user).then();
       setUserInfo(user);
   }
 
