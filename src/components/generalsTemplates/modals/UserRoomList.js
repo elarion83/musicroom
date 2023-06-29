@@ -15,7 +15,7 @@ const UserRoomList = ({ open, changeOpen, user, joinRoomByRoomId}) => {
     if(user.uid) {
         db.collection(process.env.REACT_APP_ROOM_COLLECTION).where('adminUid', '==', user.uid).orderBy("creationTimeStamp", "asc").get().then((querySnapshot) => {
             var i =0;
-            querySnapshot.forEach((doc) => {
+            querySnapshot.forEach(doc => {
                 roomList[i] = doc.data();
                 i++;
             });

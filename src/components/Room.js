@@ -27,7 +27,6 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import LastPageIcon from '@mui/icons-material/LastPage';
 
-import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
@@ -726,9 +725,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                                                     <IconButton onClick={e => setPercentagePlayed(0)} >
                                                         <ReplayIcon fontSize="large" sx={{color:'#f0f1f0'}} />
                                                     </IconButton>
-                                                    {layoutDisplay !== 'fullscreen' && <IconButton onClick={e => setLayoutdisplay('fullscren')} >
-                                                        <FullscreenIcon fontSize="large" sx={{color:'#f0f1f0'}} />
-                                                    </IconButton>}
                                                 </>
                                             }
                                         </Grid>
