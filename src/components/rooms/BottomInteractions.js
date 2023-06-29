@@ -35,9 +35,10 @@ const BottomInteractions = ({ t, layoutDisplay, setLayoutdisplay, paramDrawerIsO
     return(
         <Grid 
          className={`room_bottom_interactions ${isChatExpanded ? "chatExpanded" : ""}`}
+         
         >
             
-            {!isChatExpanded && <div>
+            {(!isChatExpanded && layoutDisplay !== 'interactive') && <div>
                 <Tooltip 
                     ref={el => animatedElementsRef.push(el)} 
                     className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-1s animate__faster'}
@@ -105,8 +106,8 @@ const BottomInteractions = ({ t, layoutDisplay, setLayoutdisplay, paramDrawerIsO
             
 
             </div>}
-            {isChatExpanded && 
-                <Chat currentUser={currentUser} roomId={roomId} createNewRoomInteraction={createNewRoomInteraction} userCanMakeInteraction={userCanMakeInteraction} roomParams={roomParams} className='chatBox' hideTchat={e => setIsChatExpanded(false)} />
+            {(isChatExpanded || layoutDisplay === 'interactive') && 
+                <Chat currentUser={currentUser} layoutDisplay={layoutDisplay} setLayoutdisplay={setLayoutdisplay} roomId={roomId} createNewRoomInteraction={createNewRoomInteraction} userCanMakeInteraction={userCanMakeInteraction} roomParams={roomParams} className='chatBox' hideTchat={e => setIsChatExpanded(false)} />
             }
             
            

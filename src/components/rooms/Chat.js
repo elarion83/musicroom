@@ -11,12 +11,13 @@ import { Icon } from '@iconify/react';
 
 import { db } from './../../services/firebase';
 import { LoadingButton } from "@mui/lab";
+import ViewModuleIcon from '@mui/icons-material/ViewModule';
 
 import {returnAnimateReplace} from './../../services/animateReplace'
 
 import { withTranslation } from 'react-i18next';
 
-const Chat = ({t, roomParams, currentUser, roomId, userCanMakeInteraction,createNewRoomInteraction, hideTchat}) => {
+const Chat = ({t, layoutDisplay, setLayoutdisplay, roomParams, currentUser, roomId, userCanMakeInteraction,createNewRoomInteraction, hideTchat}) => {
 
     const [isChatUltraExpanded, setIsChatUltraExpanded] = useState(false);
     const chatBoxRef = useRef([]);
@@ -92,12 +93,18 @@ const Chat = ({t, roomParams, currentUser, roomId, userCanMakeInteraction,create
                 <Grid item xs={2} md={1} 
                 sx={{display:'flex', flexDirection:'column', 
                 justifyContent:'space-between', alignItems:'center'}}>
-                    <Tooltip  ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInLeft animate__faster' title={t('RoomBottomButtonChatHide')}>  
+                    {layoutDisplay !== 'interactive' && <Tooltip  ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInLeft animate__faster' title={t('RoomBottomButtonChatHide')}>  
                         <Fab size="small" variant="extended" className='room_small_button_interactions'  
                             sx={{justifyContent: 'center', ml:0}} onClick={e => hideTchatInComp()} >
                             <Icon icon="tabler:messages-off" width='20' />
                         </Fab>
-                    </Tooltip> 
+                    </Tooltip>}
+                    {layoutDisplay === 'interactive' && <Tooltip  ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInLeft animate__faster' title={t('RoomBottomButtonChatHide')}>  
+                        <Fab size="small" variant="extended" className='room_small_button_interactions'  
+                            sx={{justifyContent: 'center', ml:0}} onClick={e => setLayoutdisplay('default')} >
+                            <ViewModuleIcon sx={{color:'rgb(25, 118, 210)'}} />
+                        </Fab>
+                    </Tooltip>}
                     <Tooltip  ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInLeft animate__fast'}
                         title={!userCanMakeInteraction ? t('GeneralEvery')+' '+ (roomParams.interactionFrequence/1000)  +" "+t('GeneralSeconds'): ''}>  
                         <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mt:1,mr:0, ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('laugh') : ''}>
@@ -120,7 +127,8 @@ const Chat = ({t, roomParams, currentUser, roomId, userCanMakeInteraction,create
                         </Fab>
                     </Tooltip>  
                 </Grid>
-                <Grid item xs={10} md={11} sx={{pr:'4vw'}}>
+                <Grid item xs={10} md={11} sx={{pr:'4vw'}} 
+                className="chatBoxGrid" >
                     <Box 
                     ref={el => animatedElementsRef.push(el)} 
                     className='animate__animated animate__fadeInUp animate__fast chatBox' 

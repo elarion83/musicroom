@@ -54,6 +54,7 @@ import SoundWave from "./rooms/SoundWave";
 import {CreateGoogleAnalyticsEvent} from '../services/googleAnalytics';
 
 import { withTranslation } from 'react-i18next';
+import VolumeButton from "./rooms/playerSection/VolumeButton";
 
 const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
 
@@ -104,6 +105,23 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
 
     // layout
     const [layoutDisplay, setLayoutdisplay] = useState('default');
+    const [layoutDisplayClass, setLayoutDisplayClass] = useState('defaultLayout');
+
+    useEffect(() => {
+        switch (layoutDisplay) {
+            case 'compact':
+                setLayoutDisplayClass('compactLayout');
+                break;
+            case 'fullscreen':
+                setLayoutDisplayClass('fullscreenLayout');
+                break;
+            case 'interactive':
+                setLayoutDisplayClass('interactiveLayout');
+                break;
+            default:
+                setLayoutDisplayClass('defaultLayout');
+        }
+    }, [layoutDisplay]);
 
     const playerRef = useRef({
         url: null,
@@ -285,6 +303,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
             interactionDisplay.src = "img/"+type+".png";
             interactionDisplay.classList.add("interactionImageContainer");
             interactionDisplay.style.left = Math.random() * 100 + "vw";
+            if(layoutDisplay === 'interactive') {
+                interactionDisplay.style.zIndex = 2100;
+            }
             interactionDisplay.style.animationDuration = Math.random() * 5 + 3 + "s ";
             document.body.appendChild(interactionDisplay);
             setTimeout(() => {
@@ -585,7 +606,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                 roomAdmin={room.admin} 
                 isLinkedToSpotify={room.roomParams.spotifyIsLinked}/>
         }
-        <Container maxWidth={false} sx={{ padding: '0 !important'}} >
+        <Container maxWidth={false} sx={{ padding: '0 !important'}} className={layoutDisplayClass} >
             {loaded && room.playlistUrls && <div>
                 {!room.playlistEmpty && room.playlistUrls.length > 0 && room.playing !== null && 
                     <Box sx={{bgcolor:'#303030',borderBottom: '2px solid var(--border-color)', padding:"0px 0em"}}> 
@@ -687,17 +708,17 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                                         </Typography>
                                         {playerReady && playerRef.current !== null && room.playlistUrls[roomIdPlayed].source !== 'spotify' && 
                                         <Typography sx={{ fontSize: '10px', ml:0, mb: 1}}> {~~(Math.round(playerRef.current.getCurrentTime())/60) + 'm'+Math.round(playerRef.current.getCurrentTime()) % 60+ 's / ' + formatNumberToMinAndSec(playerRef.current.getDuration())}</Typography>}
-                                        <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
+                                        {layoutDisplay !== 'compact' && layoutDisplay !== 'interactive' &&  <><Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
                                             Source : { room.playlistUrls[roomIdPlayed].source }
                                         </Typography>
                                         <Typography sx={{ ml:0, mb: 1.5, fontSize: '10px', textTransform:'uppercase' }}>
                                             Ajouté par : { room.playlistUrls[roomIdPlayed].addedBy }
-                                        </Typography>
+                                        </Typography></>}
                                     </Grid>
                                 </Grid> 
                                 <Grid className='player_button_container' item sm={12} sx={{ display:'flex', flexWrap:'wrap',padding:0,pl:1.5,ml:0, pr:1.5,mb: 0 , mt:1, fill:'#f0f1f0'}}   >
                                     {isActuallyAdmin && 
-                                        <Grid item sm={6} xs={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:2, mb: 1.5 }}>
+                                        <Grid item sm={6} xs={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:0, mb: 1.5 }}>
                                             
                                             <IconButton onClick={e => roomIdPlayed > 0 ? handleChangeActuallyPlaying(0) : ''}>
                                                 <FirstPageIcon  fontSize="large" sx={{color:roomIdPlayed > 0 ? '#f0f1f0': '#303134'}} />
@@ -733,10 +754,14 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                                                     </IconButton>
                                                 </>
                                             }
+                                            
+                                            {room.playlistUrls[room.playing].source !== 'spotify' && 
+                                                <VolumeButton volume={localVolume} setVolume={setLocalVolume}/>
+                                            }
                                         </Grid>
                                     }
-                                    {!isActuallyAdmin && !guestSynchroOrNot  && <Grid item sm={6} xs={12}  sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:2, mb: 1.5 }}>
-                                            <IconButton onClick={e => roomIdPlayed > 0 ? setRoomIdPlayed(roomIdPlayed-1) : ''}>
+                                    {!isActuallyAdmin && <Grid item sm={6} xs={12}  sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:0,ml:0,mr:1,pr:2, mb: 1 }}>
+                                            {!guestSynchroOrNot && <><IconButton onClick={e => roomIdPlayed > 0 ? setRoomIdPlayed(roomIdPlayed-1) : ''}>
                                                 <FirstPageIcon  fontSize="large" sx={{color:roomIdPlayed > 0 ? '#f0f1f0': '#303134'}} />
                                             </IconButton>
                                             
@@ -747,21 +772,20 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
 
                                             <IconButton onClick={e => (room.playlistUrls.length -1) !== roomIdPlayed ? setRoomIdPlayed(roomIdPlayed+1) : ''}>
                                                 <LastPageIcon  fontSize="large" sx={{color: (room.playlistUrls.length -1) !== roomIdPlayed ? '#f0f1f0' : '#303134'}} />
-                                            </IconButton>
+                                            </IconButton></>}
                                             
+                                            {room.playlistUrls[room.playing].source !== 'spotify' && 
+                                                <Grid item xs={10} md={3} sx={{ pt:0,pr:2,ml: guestSynchroOrNot ? 1.5 : 0, mb: 0, pb:1, mt: guestSynchroOrNot ? 0 : 0 }}>
+                                                    <Stack spacing={2} sm={8} direction="row" sx={{ mb: 1, mr:2 }} alignItems="center">
+                                                        <VolumeButton volume={localVolume} setVolume={setLocalVolume}/>
+                                                        
+                                                        {layoutDisplay === 'fullscreen' && <IconButton onClick={e => setLayoutdisplay('default')} >
+                                                            <FullscreenExitIcon fontSize="large"  sx={{color: '#f0f1f0', mt: guestSynchroOrNot ? 1 : 0  }} />
+                                                        </IconButton>}
+                                                    </Stack>
+                                                </Grid> 
+                                            }
                                     </Grid>}
-                                    {room.playlistUrls[room.playing].source !== 'spotify' && 
-                                        <Grid item xs={10} md={3}  sx={{ pt:0,pl:2,pr:2,ml:0, mb: 0, pb:1, mt:1.5 }}>
-                                            <Stack spacing={2} sm={8} direction="row" sx={{ mb: 1, mr:2 }} alignItems="center">
-                                                <VolumeDown />
-                                                <Slider step={0.01} min={0}  max={1} aria-label="Volume" value={localVolume} onChange={e => handleVolumeChange(e)} />
-                                                <VolumeUp />
-                                                {!isActuallyAdmin && layoutDisplay === 'fullscreen' &&<IconButton className="" onClick={e => setLayoutdisplay('default')} >
-                                                    <FullscreenExitIcon fontSize="large"  sx={{color: '#f0f1f0' }} />
-                                                </IconButton>}
-                                            </Stack>
-                                        </Grid> 
-                                    }
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -803,7 +827,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                         </Alert>}
                     </>
                 }
-                {typeof(room.playlistUrls) !== 'undefined' && room.playlistUrls && room.playlistUrls.length > 0 && <Box sx={{ p:0,mb:0}}>
+                {typeof(room.playlistUrls) !== 'undefined' && room.playlistUrls && room.playlistUrls.length > 0 && <Box className="roomPlaylistbloc" sx={{ p:0,mb:0}}>
                     <RoomPlaylist isSpotifyAvailable={room.roomParams.spotifyIsLinked} isAdminView={isActuallyAdmin} 
                     roomPlaylist={room.playlistUrls} 
                     roomIdActuallyPlaying={roomIdPlayed} userVoteArray={localData.currentUserVotes} handleChangeIsActuallyPlaying={handlePlay} handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying}  handleVoteChange={handleVoteChange} roomIsActuallyPlaying={roomIsPlaying} roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayedData.playedPercentage} />

@@ -1,0 +1,103 @@
+
+.fullscreen {    
+    position: fixed !important;
+    background-color: var(--grey-dark);
+    width: 100vw;
+    top: 0;
+    max-width: 100vw !important;
+    height: 100%;
+    z-index: 8000;
+}
+
+.fullscreen+div .player_button_container {
+    position: fixed;
+    top: calc(100vh - 71px);
+    z-index: 20000;
+    width: 100%;
+    height: auto;
+}
+
+.fullscreen .PlayerRSWP{     
+    width: 100%;
+    margin: 0;
+    max-width: none;
+}
+
+
+.fullscreenoff {  
+    position: fixed !important;
+    z-index: 8001;
+    background-color: var(--grey-dark) !important;
+    bottom: 20px;
+    left: calc(50vw - 25px);
+    width: 50px;
+    height: 50px;
+}
+
+.interactiveLayout .roomPlaylistbloc {  
+    display: none;
+}
+
+
+.interactiveLayout .playerShow {
+    position: fixed;
+    top:0;
+    z-index: 2000;
+    width: 100%;
+    height: 100vh;
+    display: block;
+}
+
+.interactiveLayout .playerContainer  {
+    height: 75%;
+}
+
+.interactiveLayout .playerShow>div {
+    width: 100%;
+    max-width: 100%;
+}
+
+.interactiveLayout+.room_bottom_interactions  {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 40%;
+    z-index: 2500;
+}
+
+.interactiveLayout .player_button_container, 
+.compactLayout .player_button_container,
+.interactiveLayout .volumeButton, 
+.compactLayout .volumeButton {
+    margin-top: 0;
+}
+
+.fullscreenLayout .player_button_container {
+    background-color: rgba(var(--grey-dark-rgb), 0.8);
+    padding-left: 0;
+}
+
+.interactiveLayout .player_button_container>div, .interactiveLayout .MuiButtonBase-root, 
+.compactLayout .player_button_container>div, .compactLayout .MuiButtonBase-root  {
+    padding-top: 0;
+}
+.interactiveLayout+.room_bottom_interactions .chatBoxGrid {
+    padding-right: 0;
+}
+
+
+@media (max-width: 500px) { 
+
+    .interactiveLayout .playerContainer  {
+        height: 50%;
+    }
+    
+    .interactiveLayout+.room_bottom_interactions {
+        width: 100%;
+    }
+    
+    .fullscreenLayout .MuiButtonBase-root  {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}

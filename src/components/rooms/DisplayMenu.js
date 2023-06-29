@@ -114,6 +114,10 @@ const DisplayMenu = ({t, layoutDisplay, setLayoutdisplay}) => {
           <AirplayIcon />
           {t('RoomBottomDisplayClassic')}
         </MenuItem>
+        <MenuItem selected={layoutDisplay === 'interactive'} onClick={(e) => setLayoutdisplay('interactive')} disableRipple>
+          <AirplayIcon />
+          Interactif
+        </MenuItem>
       </StyledMenu>
     </div>
     
