@@ -20,7 +20,9 @@ import Tabs from '@mui/material/Tabs';
 import validator from 'validator';
 import YTSearch from 'youtube-api-search';
 
-const RoomModalAddMedia = ({ currentUser, roomId, validatedObjectToAdd, spotifyTokenProps }) => {
+import { withTranslation } from 'react-i18next';
+
+const RoomModalAddMedia = ({ t, currentUser, roomId, validatedObjectToAdd, spotifyTokenProps }) => {
 
     const [mediaSearchResultYoutube, setMediaSearchResultYoutube] = useState([]);
     const [mediaSearchResultDailyMotion, setMediaSearchResultDailyMotion] = useState([]);
@@ -144,8 +146,8 @@ const RoomModalAddMedia = ({ currentUser, roomId, validatedObjectToAdd, spotifyT
                   <Grid item xs={12} sx={{display:'flex', flexDirection:'row'}} className="autowriter_container">
                      <Typed
                         strings={[
-                            'CHERCHE SUR YOUTUBE ',
-                            'CHERCHE SUR SPOTIFY ',
+                            t('GeneralSearchOn')+' YOUTUBE ',
+                            t('GeneralSearchOn')+' SPOTIFY ',
                             'CHERCHE UNE MUSIQUE',
                             'CHERCHE UN CLIP',
                             'UNE VIDEO DE DOMINGO', 
@@ -257,4 +259,4 @@ const RoomModalAddMedia = ({ currentUser, roomId, validatedObjectToAdd, spotifyT
     )
 };
 
-export default RoomModalAddMedia;
+export default withTranslation()(RoomModalAddMedia);

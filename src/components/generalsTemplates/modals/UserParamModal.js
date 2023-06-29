@@ -8,7 +8,9 @@ import { useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import { LoadingButton } from "@mui/lab";
 
-const UserParamModal = ({ open, changeOpen, user, setUserInfo}) => {
+import { withTranslation } from 'react-i18next';
+
+const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
 
   const delay = ms => new Promise(res => setTimeout(res, ms));
   const [pseudo, setPseudo] = useState('');
@@ -28,14 +30,14 @@ const UserParamModal = ({ open, changeOpen, user, setUserInfo}) => {
     return(
         <Dialog open={open} onClose={(e) => changeOpen(false)}>
             <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
-                <AccountCircleIcon fontSize="small" sx={{mr:1}} /> Paramètres du compte
+                <AccountCircleIcon fontSize="small" sx={{mr:1}} />{t('ModalUserSettingsTitle')}
             </DialogTitle>  
             <DialogContent dividers sx={{pt:2}}>
                 <FormGroup>
                     {user.loginType === "anon" && 
                         <Alert sx={{mb:2, alignItems: 'center'}}  severity='warning'>
-                            <AlertTitle sx={{fontWeight:'bold'}}>Edition impossible</AlertTitle>
-                            <Typography fontSize='small'>L'édition du profil est impossible en anonyme.</Typography>
+                            <AlertTitle sx={{fontWeight:'bold'}}>{t('ModalUserSettingsEditNotAllowedTitle')}</AlertTitle>
+                            <Typography fontSize='small'>{t('ModalUserSettingsEditNotAllowedText')}</Typography>
                         </Alert>
                     }
                     {!isEditingPseudo && <Grid container>
@@ -68,4 +70,4 @@ const UserParamModal = ({ open, changeOpen, user, setUserInfo}) => {
     )
 };
 
-export default UserParamModal;
+export default withTranslation()(UserParamModal);

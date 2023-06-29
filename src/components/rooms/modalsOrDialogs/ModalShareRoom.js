@@ -9,7 +9,9 @@ import ShareIcon from '@mui/icons-material/Share';
 import { Dialog, DialogContent } from "@mui/material";
 import DialogTitle from '@mui/material/DialogTitle';
 
-const ModalShareRoom = ({ roomUrl, open, changeOpen }) => {
+import { withTranslation } from 'react-i18next';
+
+const ModalShareRoom = ({ t, roomUrl, open, changeOpen }) => {
 
     const [copiedToClipboard, setCopiedToClipboard] = useState(false);
 
@@ -23,7 +25,7 @@ const ModalShareRoom = ({ roomUrl, open, changeOpen }) => {
     return(
         <Dialog open={open} onClose={(e) => changeOpen(false)} className='modal_share_room'>
             <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
-                <ShareIcon fontSize="small" sx={{mr:1}} /> Partager la room ! 
+                <ShareIcon fontSize="small" sx={{mr:1}} /> {t('ModalShareRoomTitle')}
             </DialogTitle>  
             <DialogContent dividers sx={{pt:0}}>
                 <ShareSocial sx={{maxHeight:'none', p:0}}
@@ -31,12 +33,12 @@ const ModalShareRoom = ({ roomUrl, open, changeOpen }) => {
                     socialTypes={['facebook','whatsapp','twitter','reddit','email']}
                 />
                 <CopyToClipboard onCopy={(e) => setCopiedToClipboardToTrueAndFalse()} text={( roomUrl)}>
-                        <Button variant="contained"><ContentCopyIcon sx={{ mr: 1.5 }} /> Copier l'url </Button> 
+                        <Button variant="contained"><ContentCopyIcon sx={{ mr: 1.5 }} /> {t('ModalShareRoomCopyUrl')} </Button> 
                 </CopyToClipboard>
-                {copiedToClipboard && <Alert severity="success" sx={{ mt: 1.5 }} > Copié dans le presse papier </Alert>}
+                {copiedToClipboard && <Alert severity="success" sx={{ mt: 1.5 }} > {t('ModalShareRoomUrlCopiedText')} </Alert>}
             </DialogContent>
         </Dialog>
     )
 };
 
-export default ModalShareRoom;
+export default withTranslation()(ModalShareRoom);

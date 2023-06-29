@@ -10,7 +10,9 @@ import { AlertTitle, Button, Dialog, DialogContent, Divider, FormControlLabel, F
 import Alert from '@mui/material/Alert';
 import Tooltip from '@mui/material/Tooltip';
 
-const ModalRoomParams = ({ adminView, open, changeOpen, roomParams , handleDisconnectFromSpotifyModal, handleChangeRoomParams}) => {
+import { withTranslation } from 'react-i18next';
+
+const ModalRoomParams = ({ t,  adminView, open, changeOpen, roomParams , handleDisconnectFromSpotifyModal, handleChangeRoomParams}) => {
 
     const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
 
@@ -49,7 +51,7 @@ const ModalRoomParams = ({ adminView, open, changeOpen, roomParams , handleDisco
     return(
         <Dialog open={open} onClose={(e) => changeOpen(false)}>
             <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
-                <TuneIcon fontSize="small" sx={{mr:1}} /> Paramètres de la room 
+                <TuneIcon fontSize="small" sx={{mr:1}} /> {t('ModalParamsRoomTitle')}
             </DialogTitle>  
             <DialogContent dividers sx={{pt:2}}>
                 <FormGroup>
@@ -59,7 +61,7 @@ const ModalRoomParams = ({ adminView, open, changeOpen, roomParams , handleDisco
                                 variant="contained" 
                                 color="success"  
                                 onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
-                                Connecter a Spotify
+                                {t('ModalParamsRoomConnectToSpotifyText')}
                             </Button>
                     }          
                     {roomParams.spotifyIsLinked && 
@@ -72,7 +74,7 @@ const ModalRoomParams = ({ adminView, open, changeOpen, roomParams , handleDisco
                                 </Tooltip>
                             }
                         >
-                            La room est connectée a Spotify
+                            {t('ModalParamsRoomConnectedToSpotifyText')}
                         </Alert>
                     }
 
@@ -80,28 +82,28 @@ const ModalRoomParams = ({ adminView, open, changeOpen, roomParams , handleDisco
                     <Alert sx={{pl:0, mt:3, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.interactionsAllowed} onChange={handleChangeIsInterractionsAllowed} 
                             disabled={adminView? false:true}
                             name="switchInteractionsAllowed" />} severity={roomParams.interactionsAllowed ? 'success' : 'warning'}>
-                        <AlertTitle sx={{fontWeight:'bold'}}>Autoriser les interactions</AlertTitle>
-                        <Typography fontSize='small'>{adminView? "Permet aux membres de la room d'intéragir avec les emoticones." : "Reservé à l'hôte de la room."}</Typography>
+                        <AlertTitle sx={{fontWeight:'bold'}}>{t('ModalParamsRoomInteractionAllowedTitle')}</AlertTitle>
+                        <Typography fontSize='small'>{adminView? t('ModalParamsRoomInteractionAllowedText') : t('ModalParamsRoomNotAllowedText')}</Typography>
                     </Alert>
                     
                     <Alert sx={{pl:0, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.isChatActivated} onChange={handleChangeIsChatActivated} 
                             disabled={adminView? false:true}
                             name="switchIsChatActivated" />} severity={roomParams.isChatActivated ? 'success' : 'warning'}>
-                        <AlertTitle sx={{fontWeight:'bold'}}>Autoriser le chat de room</AlertTitle>
-                        <Typography fontSize='small'>{adminView? "Active le chat de la room." : "Reservé à l'hôte de la room."}</Typography>
+                        <AlertTitle sx={{fontWeight:'bold'}}>{t('ModalParamsRoomChatAllowedTitle')}</AlertTitle>
+                        <Typography fontSize='small'>{adminView? t('ModalParamsRoomChatAllowedText') : t('ModalParamsRoomNotAllowedText')}</Typography>
                     </Alert>
 
                     <Alert sx={{pl:0, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.isPlayingLooping} onChange={handleChangeIsPlayingLooping} 
                             disabled={adminView? false:true}
                             name="switchIsPlayingLooping" />} severity={roomParams.isPlayingLooping ? 'success' : 'warning'}>
-                        <AlertTitle sx={{fontWeight:'bold'}}>Lecture en boucle</AlertTitle>
-                        <Typography fontSize='small'>{adminView? "Si la playlist est finie, le lecteur reviens au premier média." : "Reservé à l'hôte de la room."}</Typography>
+                        <AlertTitle sx={{fontWeight:'bold'}}>{t('ModalParamsRoomLoopPlayingTitle')}</AlertTitle>
+                        <Typography fontSize='small'>{adminView? t('ModalParamsRoomLoopPlayingText') : t('ModalParamsRoomNotAllowedText')}</Typography>
                     </Alert>
                     <Alert sx={{pl:0, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.isAutoPlayActivated} onChange={handleChangeIsAutoPlayActivated} 
                             disabled={adminView? false:true}
                             name="switchIsAutoPlayActivated" />} severity={roomParams.isAutoPlayActivated ? 'success' : 'warning'}>
-                        <AlertTitle sx={{fontWeight:'bold'}}>Lecture automatique</AlertTitle>
-                        <Typography fontSize='small'>{adminView? "Le lecteur ajoutera automatiquement des médias à la playlist." : "Reservé à l'hôte de la room."}</Typography>
+                        <AlertTitle sx={{fontWeight:'bold'}}>{t('ModalParamsRoomAutoPlayingTitle')}</AlertTitle>
+                        <Typography fontSize='small'>{adminView? t('ModalParamsRoomAutoPlayingText') : t('ModalParamsRoomNotAllowedText')}</Typography>
                     </Alert>
 
                     
@@ -111,4 +113,4 @@ const ModalRoomParams = ({ adminView, open, changeOpen, roomParams , handleDisco
     )
 };
 
-export default ModalRoomParams;
+export default withTranslation()(ModalRoomParams);

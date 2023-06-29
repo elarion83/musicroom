@@ -17,7 +17,9 @@ import { Button } from '@mui/material';
 import UserParamModal from './modals/UserParamModal';
 import UserRoomList from './modals/UserRoomList';
 
-const UserTopBar = ({ user, setUserInfo, handleLogout, handleOpenLoginModal, joinRoomByRoomId }) => {
+import { withTranslation } from 'react-i18next';
+
+const UserTopBar = ({ t, user, setUserInfo, handleLogout, handleOpenLoginModal, joinRoomByRoomId }) => {
 
   // menu
     function handleClickMenu(event) {
@@ -103,8 +105,8 @@ const UserTopBar = ({ user, setUserInfo, handleLogout, handleOpenLoginModal, joi
                 <ListItemIcon>
                 <TuneIcon fontSize="small" />
                 </ListItemIcon>
-                <Typography>
-                Mes rooms
+                <Typography>        
+                  {t('UserMenuMyRooms')}
                 </Typography>
             </MenuItem>}
             <Divider />
@@ -112,7 +114,7 @@ const UserTopBar = ({ user, setUserInfo, handleLogout, handleOpenLoginModal, joi
                 <ListItemIcon>
                 <Logout fontSize="small" />
                 </ListItemIcon>
-                Déconnexion
+                {t('GeneralLogout')}
             </MenuItem>
           </Menu>
           <UserParamModal open={userParamModalOpen} changeOpen={setUserParamModalOpen} user={user} setUserInfo={setUserInfo} />
@@ -122,4 +124,4 @@ const UserTopBar = ({ user, setUserInfo, handleLogout, handleOpenLoginModal, joi
     )
 };
 
-export default UserTopBar;
+export default withTranslation()(UserTopBar);

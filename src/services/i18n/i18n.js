@@ -8,15 +8,31 @@ const resources = {
   en: {
     translation: {
         "GeneralContinue":'Continue',
+        "GeneralLogout":'Logout',
+        "GeneralSearchOn":'Search on',
         "GeneralOr":'Or',
         "GeneralAnd":'And',
+        "GeneralYes":'Yes',
+        "GeneralNo":'No',
+        "GeneralLeave":'Leave',
+        "GeneralStay":'Stay',
+        "GeneralEmpty":'empty',
         "GeneralHome":'Homepage',
         "GeneralSnackWelcome" : "Welcome",
         "GeneralSnackSeeYouSoon" : "See you soon !",
+        
+        "UserMenuMyRooms" : "My rooms",
+
         "HomePageButtonsCreateRoom" : "Create a room",
         "HomePageButtonsJoinRoom" : "Join a room",
+
+        "ModalUserSettingsTitle" : "Account settings",
+        "ModalUserSettingsEditNotAllowedTitle" : "Edition impossible",
+        "ModalUserSettingsEditNotAllowedText" : "Profile editing is not possible in anonymous mode.",
+
         "ModalJoinRoomIDOfTheRoom": "ID of the room you want to join",
         "ModalJoinRoomButtonJoin": "Join",
+        
         "ModalLoginTitle": "Login / Register",
         "ModalLoginFormPlaceholderEmailAdress": "Mail adress",
         "ModalLoginFormPlaceholderPassword":"Password",
@@ -25,6 +41,30 @@ const resources = {
         "ModalLoginTermsSentence": "By using this service you agree to our",
         "ModalLoginTermsPrivacyPolicy": "privacy policy",
         "ModalLoginTermsYoutubeTerms": "Youtube terms of use.",
+        
+        "ModalLeaveRoomTitle": "Leave the romm ?",
+        "ModalLeaveRoomText": "You're about to leave the room to go back to reception. Are you sure?",
+        
+        "ModalShareRoomTitle": "Share the room",
+        "ModalShareRoomCopyUrl": "Copy url",
+        "ModalShareRoomUrlCopiedText": "Copied in clipboard",
+        
+        "ModalParamsRoomTitle": "Room settings",
+        "ModalParamsRoomConnectToSpotifyText":"Connect to Spotify",
+        "ModalParamsRoomConnectedToSpotifyText":"The room is connected to Spotify",
+        "ModalParamsRoomNotAllowedText":"Reserved for the room's host.",
+        "ModalParamsRoomInteractionAllowedTitle": "Allow interaction",
+        "ModalParamsRoomInteractionAllowedText": "Allows room members to interact with emoticons.",
+        "ModalParamsRoomChatAllowedTitle": "Allow room chat",
+        "ModalParamsRoomChatAllowedText": "Allow room chat.",
+        "ModalParamsRoomLoopPlayingTitle": "Enable Loop playing",
+        "ModalParamsRoomLoopPlayingText": "If the playlist is finished, the player returns to the first media.",
+        "ModalParamsRoomAutoPlayingTitle": "Enable Autoplay",
+        "ModalParamsRoomAutoPlayingText": "The player will automatically add media to the playlist.",
+  
+        "ModalRoomForceSpotifyDisconnectTitle":"Force disconnect from Spotify?",
+        "ModalRoomForceSpotifyDisconnectText":"Spotify playback and search will no longer be available.",
+
         "RoomLeftMenuHost":"You are the host",
         "RoomLeftMenuHostedBy":"Hosted by",
         "RoomLeftMenuSpotifyNotLinked" : "Spotify not linked",
@@ -34,6 +74,7 @@ const resources = {
         "RoomLeftMenuRoomParams" : "Room settings",
         "RoomLeftMenuRoomShare" : "Share the room",
         "RoomLeftMenuRoomLeave" : "Leave the room",
+        
         "RoomEmptyAlertWelcome":"Welcome in the room !",
         "RoomEmptyAlertWelcomeClickHere":"Click here to share it",
         "RoomEmptyAlertPlaylist":"The playlist is empty !",
@@ -46,15 +87,31 @@ const resources = {
   fr: {
     translation: {
         "GeneralContinue":'Continuer',
+        "GeneralLogout":'Déconnexion',
+        "GeneralSearchOn":'Chercher sur',
         "GeneralOr":'Ou',
         "GeneralAnd":'Et',
+        "GeneralYes":'Oui',
+        "GeneralNo":'Non',
+        "GeneralLeave":'Quitter',
+        "GeneralStay":'Rester',
+        "GeneralEmpty":'vide',
         "GeneralHome":'Accueil',
         "GeneralSnackWelcome" : "Bienvenue",
         "GeneralSnackSeeYouSoon" : "A bientôt !",
+        
+        "UserMenuMyRooms" : "Mes rooms",
+
         "HomePageButtonsCreateRoom" : "Créer une room",
         "HomePageButtonsJoinRoom" : "Rejoindre une room",
+        
+        "ModalUserSettingsTitle" : "Paramètres du compte",
+        "ModalUserSettingsEditNotAllowedTitle" : "Edition impossible",
+        "ModalUserSettingsEditNotAllowedText" : "L'édition du profil est impossible en anonyme.",
+
         "ModalJoinRoomIDOfTheRoom": "ID de la room a rejoindre",
         "ModalJoinRoomButtonJoin": "Rejoindre",
+        
         "ModalLoginTitle": "Connexion / Inscription",
         "ModalLoginFormPlaceholderEmailAdress": "Adresse E-mail",
         "ModalLoginFormPlaceholderPassword":"Mot de passe",
@@ -63,6 +120,30 @@ const resources = {
         "ModalLoginTermsSentence": "En utilisant ce service vous acceptez nos",
         "ModalLoginTermsPrivacyPolicy": "Politique de confidentialité",
         "ModalLoginTermsYoutubeTerms": "les conditions d'utilisation de Youtube.",
+        
+        "ModalLeaveRoomTitle": "Quitter la room ?",
+        "ModalLeaveRoomText": "Vous êtes sur le point de quitter la room pour retourner à l'accueil. Êtes-vous sûrs ?",
+        
+        "ModalShareRoomTitle": "Partager la room",
+        "ModalShareRoomCopyUrl": "Copier l'url",
+        "ModalShareRoomUrlCopiedText": "Copié dans le presse papier",
+
+        "ModalParamsRoomTitle": "Paramètres de la room ",
+        "ModalParamsRoomConnectToSpotifyText":"Connecter a Spotify",
+        "ModalParamsRoomConnectedToSpotifyText":"La room est connectée a Spotify",
+        "ModalParamsRoomNotAllowedText":"Reservé à l'hôte de la room.",
+        "ModalParamsRoomInteractionAllowedTitle": "Autoriser les interactions",
+        "ModalParamsRoomInteractionAllowedText": "Permet aux membres de la room d'intéragir avec les emoticones.",
+        "ModalParamsRoomChatAllowedTitle": "Autoriser le chat de room",
+        "ModalParamsRoomChatAllowedText": "Active le chat de la room.",
+        "ModalParamsRoomLoopPlayingTitle": "Lecture en boucle",
+        "ModalParamsRoomLoopPlayingText": "Si la playlist est finie, le lecteur reviens au premier média.",
+        "ModalParamsRoomAutoPlayingTitle": "Lecture automatique",
+        "ModalParamsRoomAutoPlayingText": "Le lecteur ajoutera automatiquement des médias à la playlist.",
+
+        "ModalRoomForceSpotifyDisconnectTitle":"Forcer la deconnexion de Spotify ?",
+        "ModalRoomForceSpotifyDisconnectText":"La lecture et la recherche via Spotify ne sera plus disponible.",
+
         "RoomLeftMenuHost":"Vous êtes l'hôte",
         "RoomLeftMenuHostedBy":"Hosté par",
         "RoomLeftMenuSpotifyNotLinked" : "Spotify non relié",
@@ -72,6 +153,7 @@ const resources = {
         "RoomLeftMenuRoomParams" : "Paramètres de room",
         "RoomLeftMenuRoomShare" : "Partager la room",
         "RoomLeftMenuRoomLeave" : "Quitter la room",
+        
         "RoomEmptyAlertWelcome":"Bienvenue dans la room !",
         "RoomEmptyAlertWelcomeClickHere":"Clique ici pour la partager",
         "RoomEmptyAlertPlaylist":"La playlist est vide !",
@@ -92,7 +174,7 @@ i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     resources,
-    lng: lang,
+    lng: 'en',
     interpolation: {
       escapeValue: false // react already safes from xss
     }

@@ -6,7 +6,9 @@ import { Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/ma
 import DialogTitle from '@mui/material/DialogTitle';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
-const ModalForceSpotifyDisconnect = ({ open, changeOpen, handleDisconnectSpotify }) => {
+import { withTranslation } from 'react-i18next';
+
+const ModalForceSpotifyDisconnect = ({ t, open, changeOpen, handleDisconnectSpotify }) => {
 
     const [loading, setLoading] = useState(false);
     const delay = ms => new Promise(res => setTimeout(res, ms));
@@ -20,23 +22,23 @@ const ModalForceSpotifyDisconnect = ({ open, changeOpen, handleDisconnectSpotify
     return(
         <Dialog open={open} keepMounted onClose={(e) => changeOpen(false)} sx={{zIndex:10000}}> 
             <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
-                <ExitToAppIcon fontSize="small" sx={{mr:1}} />Forcer la deconnexion de Spotify ? 
+                <ExitToAppIcon fontSize="small" sx={{mr:1}} />{t('ModalRoomForceSpotifyDisconnectTitle')} 
             </DialogTitle>  
             <DialogContent dividers>
                 <DialogContentText >
-                La lecture et la recherche via Spotify ne sera plus disponible.
+                    {t('ModalRoomForceSpotifyDisconnectText')}
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
                 <LoadingButton loading={loading} variant="outlined" onClick={(e) => handleDisconnectSpotifyInComp()}>
-                    Oui
+                    {t('GeneralYes')}
                 </LoadingButton>
                 <Button variant="outlined" onClick={(e) => changeOpen(false)} autoFocus>
-                    Non
+                    {t('GeneralNo')}
                 </Button>
             </DialogActions>
         </Dialog>
     )
 };
 
-export default ModalForceSpotifyDisconnect;
+export default withTranslation()(ModalForceSpotifyDisconnect);
