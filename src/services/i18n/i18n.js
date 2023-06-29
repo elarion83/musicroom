@@ -16,7 +16,15 @@ const resources = {
         "GeneralNo":'No',
         "GeneralLeave":'Leave',
         "GeneralStay":'Stay',
+        "GeneralWait":'Wait',
+        "GeneralSeconds":'Seconds',
         "GeneralEmpty":'empty',
+        "GeneralEvery":'Every',
+        "GeneralStatus":'Status',
+        "GeneralPlaying":'Playing',
+        "GeneralPause":'Paused',
+        "GeneralAddedBy":'Added by',
+        "GeneralMediasInPlaylist":'Medias in playlist',
         "GeneralHome":'Homepage',
         "GeneralSnackWelcome" : "Welcome",
         "GeneralSnackSeeYouSoon" : "See you soon !",
@@ -25,6 +33,19 @@ const resources = {
 
         "HomePageButtonsCreateRoom" : "Create a room",
         "HomePageButtonsJoinRoom" : "Join a room",
+
+        "RoomAlertSpotifyNotVisibleTitle":"The Spotify player is only visible to the room's host.",
+        "RoomAlertSpotifyNotVisibleText":"Add something to the playlist while you wait!",
+        "RoomAlertSpotifyNotVisibleUnsyncTitle":"We're sorry.",
+        "RoomAlertSpotifyNotVisibleUnsyncText":"The Spotify player is not currently available in desynchronized mode.",
+
+        "RoomBottomButtonChatShow":"Show the chat",
+        "RoomBottomButtonChatHide":"Hide chat",
+        "RoomBottomDisplayFullScreen":"Fullscreen",
+        "RoomBottomDisplayClassic":"Classic",
+
+        "RoomChatWelcomeMessage": "Welcome on the chat !",
+        "RoomChatPlaceholder" : "Send a message",
 
         "ModalUserSettingsTitle" : "Account settings",
         "ModalUserSettingsEditNotAllowedTitle" : "Edition impossible",
@@ -95,7 +116,15 @@ const resources = {
         "GeneralNo":'Non',
         "GeneralLeave":'Quitter',
         "GeneralStay":'Rester',
+        "GeneralWait":'Attendre',
+        "GeneralSeconds":'Secondes',
+        "GeneralStatus":'Statut',
+        "GeneralPlaying":'En lecture',
+        "GeneralPause":'En Pause',
+        "GeneralAddedBy":'Ajouté par',
+        "GeneralMediasInPlaylist":'Médias en playlist',
         "GeneralEmpty":'vide',
+        "GeneralEvery":'Toutes les',
         "GeneralHome":'Accueil',
         "GeneralSnackWelcome" : "Bienvenue",
         "GeneralSnackSeeYouSoon" : "A bientôt !",
@@ -104,7 +133,20 @@ const resources = {
 
         "HomePageButtonsCreateRoom" : "Créer une room",
         "HomePageButtonsJoinRoom" : "Rejoindre une room",
-        
+
+        "RoomAlertSpotifyNotVisibleTitle":"Le lecteur Spotify n'est visible que par l'host de la room.",
+        "RoomAlertSpotifyNotVisibleText":"Ajoute quelque chose dans la playlist en attendant !",
+        "RoomAlertSpotifyNotVisibleUnsyncTitle":"Nous sommes désolé. ",
+        "RoomAlertSpotifyNotVisibleUnsyncText":"Le lecteur Spotify n'est pour l'instant pas accessible en désynchronisé.",
+
+        "RoomBottomButtonChatShow":"Voir le chat",
+        "RoomBottomButtonChatHide":"Cacher le chat",
+        "RoomBottomDisplayFullScreen":"Plein écran",
+        "RoomBottomDisplayClassic":"Classique",
+
+        "RoomChatWelcomeMessage": "Bienvenue sur le chat !",
+        "RoomChatPlaceholder" : "Envoyer un message",
+
         "ModalUserSettingsTitle" : "Paramètres du compte",
         "ModalUserSettingsEditNotAllowedTitle" : "Edition impossible",
         "ModalUserSettingsEditNotAllowedText" : "L'édition du profil est impossible en anonyme.",

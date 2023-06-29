@@ -39,7 +39,7 @@ const UserTopBar = ({ t, user, setUserInfo, handleLogout, handleOpenLoginModal, 
     return(
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', textAlign: 'center', width:'100%' }}>
           
-          {user.displayName && <Tooltip title="Paramètres du compte" sx={{ bgColor:'#30363c'}}>
+          {user.displayName && <Tooltip title={t('ModalUserSettingsTitle')} sx={{ bgColor:'#30363c'}}>
             <IconButton
               onClick={e => handleClickMenu(e)}
               size="small"

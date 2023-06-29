@@ -9,7 +9,9 @@ import { db } from '../../../services/firebase';
 import { useState } from "react";
 import { Box } from "@mui/system";
 
-const UserRoomList = ({ open, changeOpen, user, joinRoomByRoomId}) => {
+import { withTranslation } from 'react-i18next';
+
+const UserRoomList = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
 
     const [roomList, setRoomList] = useState({});
     if(user.uid) {
@@ -24,7 +26,7 @@ const UserRoomList = ({ open, changeOpen, user, joinRoomByRoomId}) => {
     return(
         <Dialog open={open} onClose={(e) => changeOpen(false)}>
             <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
-                <AccountCircleIcon fontSize="small" sx={{mr:1}} /> Vos rooms
+                <AccountCircleIcon fontSize="small" sx={{mr:1}} /> {t('UserMenuMyRooms')}
             </DialogTitle>  
             <DialogContent dividers sx={{pt:2}}>
                 {Object.entries(roomList).map(([key, room]) => {
@@ -34,10 +36,10 @@ const UserRoomList = ({ open, changeOpen, user, joinRoomByRoomId}) => {
                             Id : {room.id} 
                         </Typography>
                         <Typography fontSize='small' sx={{color:'var(--main-color)'}}> 
-                            Statut : {room.actuallyPlaying ? 'En lecture' : 'En pause'} 
+                            {t('GeneralStatus')} : {room.actuallyPlaying ? t('GeneralPlaying') : t('GeneralPause')}
                         </Typography>
                         <Typography fontSize='small' sx={{color:'var(--main-color)'}}> 
-                            {room.playlistUrls.length } médias en playlist
+                            {room.playlistUrls.length } {t('GeneralMediasInPlaylist')}
                         </Typography>
                     </Box>
                     )
@@ -48,4 +50,4 @@ const UserRoomList = ({ open, changeOpen, user, joinRoomByRoomId}) => {
     )
 };
 
-export default UserRoomList;
+export default withTranslation()(UserRoomList);

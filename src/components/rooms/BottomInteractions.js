@@ -17,7 +17,9 @@ import {returnAnimateReplace } from './../../services/animateReplace';
 
 import {CreateGoogleAnalyticsEvent} from './../../services/googleAnalytics';
 
-const BottomInteractions = ({ layoutDisplay, setLayoutdisplay, paramDrawerIsOpen, handleOpenDrawerParam, currentUser, roomId, roomParams, roomNotifs, userCanMakeInteraction, createNewRoomInteraction, setOpenAddToPlaylistModal,handleOpenShareModal,handleOpenLeaveRoomModal, OpenAddToPlaylistModal, checkRoomExist, checkInterractionLength,checkNotificationsLength }) => {
+import { withTranslation } from 'react-i18next';
+
+const BottomInteractions = ({ t, layoutDisplay, setLayoutdisplay, paramDrawerIsOpen, handleOpenDrawerParam, currentUser, roomId, roomParams, roomNotifs, userCanMakeInteraction, createNewRoomInteraction, setOpenAddToPlaylistModal,handleOpenShareModal,handleOpenLeaveRoomModal, OpenAddToPlaylistModal, checkRoomExist, checkInterractionLength,checkNotificationsLength }) => {
 
     const [isChatExpanded, setIsChatExpanded] = useState(false);
     const animatedElementsRef = [];
@@ -39,7 +41,7 @@ const BottomInteractions = ({ layoutDisplay, setLayoutdisplay, paramDrawerIsOpen
                 <Tooltip 
                     ref={el => animatedElementsRef.push(el)} 
                     className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-1s animate__faster'}
-                    title={!userCanMakeInteraction ? "Toutes les "+  (roomParams.interactionFrequence/1000) +" secondes": ''}>  
+                    title={!userCanMakeInteraction ? t('GeneralEvery')+' '+ (roomParams.interactionFrequence/1000) +" "+t('GeneralSeconds'): ''}>  
                     <Fab size="small" variant="extended" className='room_small_button_interactions' 
                         sx={{ ml:1, boxShadow:20,mr:1, ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} 
                         onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('laugh') : ''}>
@@ -48,7 +50,7 @@ const BottomInteractions = ({ layoutDisplay, setLayoutdisplay, paramDrawerIsOpen
                     </Fab>
                 </Tooltip>
                 <Tooltip ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-1s animate__fast'}
-                    title={!userCanMakeInteraction ? "Toutes les "+  (roomParams.interactionFrequence/1000) +" secondes": ''}>  
+                    title={!userCanMakeInteraction ? t('GeneralEvery')+' '+ (roomParams.interactionFrequence/1000) +" "+t('GeneralSeconds'): ''}>  
                     <Fab size="small" variant="extended" className='room_small_button_interactions' 
                         sx={{mr:1, ...(userCanMakeInteraction && {bgcolor: '#ff9c22 !important'}) }} 
                         onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
@@ -57,7 +59,7 @@ const BottomInteractions = ({ layoutDisplay, setLayoutdisplay, paramDrawerIsOpen
                     </Fab>
                 </Tooltip>
                 <Tooltip ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-1s '}
-                    title={!userCanMakeInteraction ? "Toutes les "+  (roomParams.interactionFrequence/1000) +" secondes": ''}>  
+                    title={!userCanMakeInteraction ? t('GeneralEvery')+' '+ (roomParams.interactionFrequence/1000) +" "+t('GeneralSeconds'): ''}>  
                     <Fab size="small" variant="extended" className='room_small_button_interactions' 
                         sx={{ mr:0, ...(userCanMakeInteraction && {bgcolor: 'var(--red-2) !important'}) }} 
                         onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('heart') : ''}>
@@ -73,13 +75,13 @@ const BottomInteractions = ({ layoutDisplay, setLayoutdisplay, paramDrawerIsOpen
                     <Icon className='addMediaIcon' icon="iconoir:music-double-note-add" />
                 </Fab>
 
-                <Tooltip ref={el => animatedElementsRef.push(el)} className={!roomParams.isChatActivated ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-1s'} title="Afficher le Chat">  
+                <Tooltip ref={el => animatedElementsRef.push(el)} className={!roomParams.isChatActivated ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-1s'} title={t('RoomBottomButtonChatShow')}>  
                     <Fab size="small" variant="extended" className='room_small_button_interactions'  
                         sx={{justifyContent: 'center', ml:0}} onClick={e => expandTchatAnimation()} >
                         <Icon icon="tabler:messages" width='20'/>
                     </Fab>
                 </Tooltip>
-                <Tooltip ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUp animate__delay-1s' title="Paramètres">  
+                <Tooltip ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUp animate__delay-1s' title={t('RoomLeftMenuRoomParams')}>  
                     <Badge invisible={roomParams.spotifyIsLinked} variant="dot" sx={{'& .MuiBadge-badge': {
                             right:'10px',
                             bgcolor:'var(--red-2)',
@@ -156,4 +158,4 @@ const BottomInteractions = ({ layoutDisplay, setLayoutdisplay, paramDrawerIsOpen
     )
 };
 
-export default BottomInteractions;
+export default withTranslation()(BottomInteractions);

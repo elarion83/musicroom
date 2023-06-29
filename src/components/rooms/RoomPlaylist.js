@@ -21,7 +21,9 @@ import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import SoundWave from "./SoundWave";
 
-const RoomPlaylist = ({isSpotifyAvailable, isAdminView, roomPlaylist, roomIdActuallyPlaying, handleVoteChange, userVoteArray, handleChangeIdActuallyPlaying, roomIsActuallyPlaying, roomPlayedActuallyPlayed}) => {
+import { withTranslation } from 'react-i18next';
+
+const RoomPlaylist = ({t, isSpotifyAvailable, isAdminView, roomPlaylist, roomIdActuallyPlaying, handleVoteChange, userVoteArray, handleChangeIdActuallyPlaying, roomIsActuallyPlaying, roomPlayedActuallyPlayed}) => {
 
     const [idDisplaying, setIdDisplaying] = useState(roomIdActuallyPlaying);
 
@@ -94,7 +96,7 @@ const RoomPlaylist = ({isSpotifyAvailable, isAdminView, roomPlaylist, roomIdActu
                                         
                                         {(idx === idDisplaying  || roomIdActuallyPlaying === idx)  && 
                                             <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, pt:1, fontSize: '10px', textTransform:'uppercase' }}>
-                                                Ajouté par <span>{ d.addedBy }</span>
+                                                {t('GeneralAddedBy')} <span>{ d.addedBy }</span>
                                             </Typography>
                                         }
                                         {(idx === idDisplaying || roomIdActuallyPlaying === idx)  && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1, fontSize: '8px', textTransform:'uppercase' }}>
@@ -103,7 +105,7 @@ const RoomPlaylist = ({isSpotifyAvailable, isAdminView, roomPlaylist, roomIdActu
                                             </Typography>
                                         }
                                         {idx === roomIdActuallyPlaying && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
-                                            {roomIsActuallyPlaying ? 'En lecture' : 'En pause'}
+                                            {roomIsActuallyPlaying ? t('GeneralPlaying') : t('GeneralPause')}
                                         </Typography>}
                                     </Grid>
                                    {idx === roomIdActuallyPlaying && <LinearProgress sx={{top:0, position:'absolute', width:'100%', height:'100%', zIndex:1, opacity:0.5, "& .MuiLinearProgress-barColorPrimary": {
@@ -146,4 +148,4 @@ const RoomPlaylist = ({isSpotifyAvailable, isAdminView, roomPlaylist, roomIdActu
     )
 };
 
-export default RoomPlaylist;
+export default withTranslation()(RoomPlaylist);

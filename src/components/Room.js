@@ -609,15 +609,15 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                                         }}
                                     />}
                                 {spotifyPlayerShow && !isActuallyAdmin && guestSynchroOrNot && room.playlistUrls[roomIdPlayed].source === 'spotify' &&
-                                    <Alert severity="warning" sx={{m:2, border:'1px solid #F27C24'}}> Le lecteur Spotify n'est visible que par l'host de la room. 
+                                    <Alert severity="warning" sx={{m:2, border:'1px solid #F27C24'}}> {t('RoomAlertSpotifyNotVisibleTitle')}
                                         <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} sx={{color:'var(--main-color-darker)'}}>
-                                            <b>Ajoute quelque chose dans la playlist en attendant !</b>
+                                            <b>{t('RoomAlertSpotifyNotVisibleText')}</b>
                                         </a>
                                     </Alert>
                                 }
                                 {spotifyPlayerShow && !isActuallyAdmin && !guestSynchroOrNot && room.playlistUrls[roomIdPlayed].source === 'spotify' &&
-                                    <Alert severity="warning" sx={{m:2, border:'1px solid #F27C24'}}> Nous sommes désolé. 
-                                            <b>Le lecteur Spotify n'est pour l'instant pas accessible en désynchronisé.</b>
+                                    <Alert severity="warning" sx={{m:2, border:'1px solid #F27C24'}}> {t('RoomAlertSpotifyNotVisibleUnsyncTitle')}
+                                            <b>{t('RoomAlertSpotifyNotVisibleUnsyncText')}</b>
                                     </Alert>
                                 }
                                 {isActuallyAdmin && room.playlistUrls[roomIdPlayed].source !== 'spotify'  && <ReactPlayer sx={{ padding:0}}
@@ -683,7 +683,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                                     
                                     <Grid item sm={12} md={12} >
                                         <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
-                                            {roomIsPlaying ? 'En lecture' : 'En pause'}
+                                            {roomIsPlaying ? t('GeneralPlaying') : t('GeneralPause')}
                                         </Typography>
                                         {playerReady && playerRef.current !== null && room.playlistUrls[roomIdPlayed].source !== 'spotify' && 
                                         <Typography sx={{ fontSize: '10px', ml:0, mb: 1}}> {~~(Math.round(playerRef.current.getCurrentTime())/60) + 'm'+Math.round(playerRef.current.getCurrentTime()) % 60+ 's / ' + formatNumberToMinAndSec(playerRef.current.getDuration())}</Typography>}
@@ -825,12 +825,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                 </Button >
                 {room.playlistEmpty && 
                     <Box sx={{display:'flex',flexDirection:'column', padding:'1em'}}>
-                        <Typography component="span"> Playlist vide </Typography>
-                        <Typography sx={{color:'var(--white)', display:'block', width:'100%',ml:0, fontSize: '12px', textTransform:'uppercase' }} > Room n° { roomId }</Typography>
+                        <Typography component="span"> Playlist {t('GeneralEmpty')} </Typography>
+                        <Typography sx={{color:'var(--white)', display:'block', width:'100%',ml:0, fontSize: '12px', textTransform:'uppercase' }} > Room { roomId }</Typography>
                     </Box>}
                 {typeof(room.playlistUrls) !== 'undefined' && loaded && !room.playlistEmpty && 
                     <Box sx={{display:'flex',flexDirection:'column',p:'8px'}}>
-                        <Typography sx={{color:'var(--white)', display:'block', width:'100%',ml:0, pl:0,fontSize: '12px', textTransform:'uppercase' }} > Room n° { roomId }</Typography>
+                        <Typography sx={{color:'var(--white)', display:'block', width:'100%',ml:0, pl:0,fontSize: '12px', textTransform:'uppercase' }} > Room { roomId }</Typography>
 
                         <Typography sx={{color:'var(--white)', display:'flex',gap:'10px',flexDirection:'row', alignItems:'center', width:'100%',ml:1,mt:1, fontSize: '10px', textTransform:'uppercase' }} >
                             <SoundWave waveNumber={7} isPlayingOrNo={roomIsPlaying}  /> 

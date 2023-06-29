@@ -14,7 +14,9 @@ import { LoadingButton } from "@mui/lab";
 
 import {returnAnimateReplace} from './../../services/animateReplace'
 
-const Chat = ({roomParams, currentUser, roomId, userCanMakeInteraction,createNewRoomInteraction, hideTchat}) => {
+import { withTranslation } from 'react-i18next';
+
+const Chat = ({t, roomParams, currentUser, roomId, userCanMakeInteraction,createNewRoomInteraction, hideTchat}) => {
 
     const [isChatUltraExpanded, setIsChatUltraExpanded] = useState(false);
     const chatBoxRef = useRef([]);
@@ -48,7 +50,7 @@ const Chat = ({roomParams, currentUser, roomId, userCanMakeInteraction,createNew
     async function sendMessage() {
         if(messageToSend.length > 0) {
             setIsSendingMessage(true);
-            setCantSendMessageReason('Attendre '+sendMessageTimeToWait+' secondes');
+            setCantSendMessageReason(t('GeneralWait')+' '+sendMessageTimeToWait+' '+t('GeneralSeconds'));
             db.collection(process.env.REACT_APP_MESSAGE_COLLECTION).add({
                 author: currentUser.displayName,
                 roomId: roomId,
@@ -66,7 +68,7 @@ const Chat = ({roomParams, currentUser, roomId, userCanMakeInteraction,createNew
 
                 setInterval(function() {
                     sendMessageTimeToWait--;
-                    setCantSendMessageReason('Attendre '+sendMessageTimeToWait+' secondes');
+                    setCantSendMessageReason(t('GeneralWait')+' '+sendMessageTimeToWait+' '+t('GeneralSeconds'));
                     if (sendMessageTimeToWait === 0) {
                         setCanSendMessage(true);
                         sendMessageTimeToWait = 10;
@@ -90,28 +92,28 @@ const Chat = ({roomParams, currentUser, roomId, userCanMakeInteraction,createNew
                 <Grid item xs={2} md={1} 
                 sx={{display:'flex', flexDirection:'column', 
                 justifyContent:'space-between', alignItems:'center'}}>
-                    <Tooltip  ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInLeft animate__faster' title="Fermer le chat">  
+                    <Tooltip  ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInLeft animate__faster' title={t('RoomBottomButtonChatHide')}>  
                         <Fab size="small" variant="extended" className='room_small_button_interactions'  
                             sx={{justifyContent: 'center', ml:0}} onClick={e => hideTchatInComp()} >
                             <Icon icon="tabler:messages-off" width='20' />
                         </Fab>
                     </Tooltip> 
                     <Tooltip  ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInLeft animate__fast'}
-                        title={!userCanMakeInteraction ? "Toutes les "+  (roomParams.interactionFrequence/1000) +" secondes": ''}>  
+                        title={!userCanMakeInteraction ? t('GeneralEvery')+' '+ (roomParams.interactionFrequence/1000)  +" "+t('GeneralSeconds'): ''}>  
                         <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mt:1,mr:0, ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('laugh') : ''}>
                             <EmojiEmotionsIcon fontSize="small" sx={{color:'var(--white)'}} />
                             {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
                         </Fab>
                     </Tooltip>
                     <Tooltip  ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInLeft '}
-                        title={!userCanMakeInteraction ? "Toutes les "+  (roomParams.interactionFrequence/1000) +" secondes": ''}>  
+                        title={!userCanMakeInteraction ? t('GeneralEvery')+' '+ (roomParams.interactionFrequence/1000)  +" "+t('GeneralSeconds'): ''}>  
                         <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{mt:1,mr:0, ...(userCanMakeInteraction && {bgcolor: '#ff9c22 !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
                             <CelebrationIcon fontSize="small" sx={{color:'var(--white)'}} />
                             {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
                         </Fab>
                     </Tooltip>
                     <Tooltip  ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInLeft'}
-                        title={!userCanMakeInteraction ? "Toutes les "+  (roomParams.interactionFrequence/1000) +" secondes": ''}>  
+                        title={!userCanMakeInteraction ? t('GeneralEvery')+' '+ (roomParams.interactionFrequence/1000)  +" "+t('GeneralSeconds'): ''}>  
                         <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mt:1,mr:0, ...(userCanMakeInteraction && {bgcolor: 'var(--red-2) !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('heart') : ''}>
                             <FavoriteIcon fontSize="small" sx={{color:'var(--white)'}} />
                             {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
@@ -131,7 +133,7 @@ const Chat = ({roomParams, currentUser, roomId, userCanMakeInteraction,createNew
                         <Box sx={{height:isChatUltraExpanded ? '70vh': '150px',p:0,m:0, overflowY:'scroll', transition:'var(--transition-smooth-all)'}} ref={chatBoxRef}>
                             <Box key='welCome' sx={{display:'flex',mb:1, justifyContent:'start'}}>
                                 <Typography fontSize='small' sx={{color:'var(--grey-light)', fontWeight:'bold'}}> 
-                                    Bienvenue sur le chat !
+                                    {t('RoomChatWelcomeMessage')}
                                 </Typography>
                             </Box>
                             {Object.entries(messagesToDisplay).map(([key, value]) => {
@@ -170,7 +172,7 @@ const Chat = ({roomParams, currentUser, roomId, userCanMakeInteraction,createNew
                             width:'100%', 
                             bgcolor:'rgba(var(--grey-dark-rgb) ,0.9)'
                             }}
-                        placeholder={canSendMessage ? 'Envoyer un message' : cantSendMessageReason}
+                        placeholder={canSendMessage ? t('RoomChatPlaceholder') : cantSendMessageReason}
                         type="text"
                         id="chatSendMessageText"
                         value={messageToSend}  
@@ -227,4 +229,4 @@ const Chat = ({roomParams, currentUser, roomId, userCanMakeInteraction,createNew
 };
 
 
-export default Chat;
+export default withTranslation()(Chat);

@@ -18,6 +18,8 @@ import DvrIcon from '@mui/icons-material/Dvr';
 import AirplayIcon from '@mui/icons-material/Airplay';
 import { useEffect } from 'react';
 
+import { withTranslation } from 'react-i18next';
+
 const StyledMenu = styled((props) => (
   <Menu
     dense
@@ -60,7 +62,7 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-const DisplayMenu = ({layoutDisplay, setLayoutdisplay}) => {
+const DisplayMenu = ({t, layoutDisplay, setLayoutdisplay}) => {
 
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -102,7 +104,7 @@ const DisplayMenu = ({layoutDisplay, setLayoutdisplay}) => {
       >
         <MenuItem selected={layoutDisplay === 'fullscreen'} onClick={(e) => setLayoutdisplay('fullscreen')} disableRipple>
           <FullscreenIcon />
-          Plein écran
+          {t('RoomBottomDisplayFullScreen')}
         </MenuItem>
         <MenuItem selected={layoutDisplay === 'compact'} onClick={(e) => setLayoutdisplay('compact')} disableRipple>
           <DvrIcon />
@@ -110,7 +112,7 @@ const DisplayMenu = ({layoutDisplay, setLayoutdisplay}) => {
         </MenuItem>
         <MenuItem selected={layoutDisplay === 'default'} onClick={(e) => setLayoutdisplay('default')} disableRipple>
           <AirplayIcon />
-          Classique
+          {t('RoomBottomDisplayClassic')}
         </MenuItem>
       </StyledMenu>
     </div>
@@ -118,4 +120,4 @@ const DisplayMenu = ({layoutDisplay, setLayoutdisplay}) => {
   )
 };
 
-export default DisplayMenu;
+export default withTranslation()(DisplayMenu);

@@ -63,7 +63,7 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
                                     className='main_bg_color buttonBorder btnIconFixToLeft' 
                                     sx={{mt:2}} 
                             onClick={e => onEmailAndPasswordSubmit()}> 
-                            Continuer 
+                            {t('GeneralContinue')} 
                             </LoadingButton>                  
                         </Box> 
                         
