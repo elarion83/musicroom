@@ -350,7 +350,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
 
     async function handleReady() {
         setPlayerReady(true);
-        playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds');
+        if(room.playlistUrls[roomIdPlayed].source !== 'deezer') {   
+            playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds');
+        }
     }
 
     
@@ -681,6 +683,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                                         }
                                     </>
                                 }
+                                {room.playlistUrls[roomIdPlayed].source === 'deezer' && 
+                                    <img className="coverImg" src={room.playlistUrls[roomIdPlayed].visuel} />
+                                }
                                 {isActuallyAdmin && room.playlistUrls[roomIdPlayed].source !== 'spotify'  && <ReactPlayer sx={{ padding:0}}
                                     ref={playerRef}
                                     className='react-player'
@@ -725,13 +730,14 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                                         }
                                     }}
                                 />}
+                                
                                 <div style={{display:'none',width:'100%',height:'100%',opacity:0,top:0,position:'absolute'}}></div>
                             </Grid>
                             <Grid item sm={(room.playlistUrls[roomIdPlayed].source === 'spotify' || layoutDisplay === 'compact') ? 12 : 8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }} className={`player_right_side_container ${(room.playlistUrls[roomIdPlayed].source === 'spotify') ? "spotify_header" : ""}`}>
                                 { /* pip ? 'Disable PiP' : 'Enable PiP' */ }
                                  <Grid item sm={12} sx={{ padding:0,pl:1.5,ml:0, mb: 0 , mt:1, fill:'#f0f1f0'}}>
                                     <Grid item 
-                                    sx={[{pb:1}, room.playlistUrls[roomIdPlayed].source === 'spotify' &&  { justifyContent: 'center' } ]} 
+                                    sx={[{pb:1}, ['spotify','deezer'].includes(room.playlistUrls[roomIdPlayed].source) === 'spotify' &&  { justifyContent: 'center' } ]} 
                                     className="flexRowCenterH">
                                         { room.playlistUrls[roomIdPlayed].title && <Typography component={'span'}>
                                         {room.playlistUrls[roomIdPlayed].title} 

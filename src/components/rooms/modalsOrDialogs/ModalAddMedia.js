@@ -119,7 +119,6 @@ const RoomModalAddMedia = ({ t, currentUser, validatedObjectToAdd, spotifyTokenP
                 if(DeezerTokenProps.length !== 0) {
                     await axios.get(process.env.REACT_APP_BACK_FOLDER_URL+'/deezer/search?search='+searchTerm+'&token='+DeezerTokenProps)
                     .then(function(response) {
-                        console.log(response.data.data);
                         setMediaSearchResultDeezer(response.data.data);
                     });
                 }
@@ -250,8 +249,9 @@ const RoomModalAddMedia = ({ t, currentUser, validatedObjectToAdd, spotifyTokenP
                             {mediaSearchResultDeezer.length > 1 && <Grid item xs={12}>
                             <List component="nav">
                                 { mediaSearchResultDeezer.map(function(media, idde){
-                                        return (<ListItemButton sx={{m:0, p:0, pr:1,borderBottom: '2px solid var(--border-color)'}}  key={idde} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.title, source:'deezer', platformId:media.id, url:media.preview, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
-                                        <img alt={media.title.substring(0, 50)} src={media.album.cover_small} />
+                                        return (<ListItemButton sx={{m:0, p:0, pr:1,borderBottom: '2px solid var(--border-color)'}}  key={idde} 
+                                        onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.title, source:'deezer',visuel:'https://e-cdn-images.dzcdn.net/images/cover/'+media.md5_image+'/264x264-000000-80-0-0.jpg', platformId:media.id, url:media.preview, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
+                                        <img alt={media.title.substring(0, 50)} src={'https://e-cdn-images.dzcdn.net/images/cover/'+media.md5_image+'/50x50-000000-80-0-0.jpg'} />
                                         <Grid sx={{display:'flex',flexDirection:'column',pl:2}}>
                                             <ListItemText primary={media.title.substring(0, 50)} className='video_title_list' sx={{ mt:0, fontSize:'0.9em'}}/>
                                             <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>Par <b>{media.artist.name} </b></Typography>
