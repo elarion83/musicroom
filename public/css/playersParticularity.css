@@ -49,12 +49,12 @@ width: 100%;
 display: block;
 }
 
-.spotify_header {
+.musicOnlyPlayer_header {
     text-align: center;
 }
 
 @media (min-width: 800px) { 
-    .spotify_header .player_button_container>div {
+    .musicOnlyPlayer_header .player_button_container>div {
         margin: 0 auto !important;
         max-width: 70%;
     }

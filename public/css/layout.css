@@ -77,8 +77,8 @@
     padding-left: 0;
 }
 
-.fullscreenLayout .spotify_header,
-.interactiveLayout .spotify_header {
+.fullscreenLayout .musicOnlyPlayer_header,
+.interactiveLayout .musicOnlyPlayer_header {
     z-index: 8000;
 }
 

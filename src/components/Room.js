@@ -21,6 +21,8 @@ import useKeypress from 'react-use-keypress';
 
 import YTSearch from 'youtube-api-search';
 
+import RoomPlaylistDrawer from "./rooms/playlistSection/RoomPlaylistDrawer";
+
 import Stack from '@mui/material/Stack';
 //import screenfull from 'screenfull'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -44,7 +46,7 @@ import ModalShareRoom from './rooms/modalsOrDialogs/ModalShareRoom';
 
 import { AlertTitle, Tooltip } from "@mui/material";
 import BottomInteractions from "./rooms/BottomInteractions";
-import RoomPlaylist from "./rooms/RoomPlaylist";
+import RoomPlaylist from "./rooms/playlistSection/RoomPlaylist";
 import RoomTopBar from "./rooms/RoomTopBar";
 import SoundWave from "./rooms/SoundWave";
 
@@ -91,6 +93,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
     const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
 
     const [openRoomDrawer, setOpenRoomDrawer] = useState(false);
+
+    const [mediaDataShowInDrawer, setMediaDataShowInDrawer] = useState();
+    const [mediaDataDrawerOpen, setMediaDataDrawerOpen] = useState(false);
 
     const [localVolume, setLocalVolume] = useState(0);
     const [pip, setPip] = useState(true);
@@ -472,6 +477,11 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
         }
     }
 
+    function handleChangeIdShownInDrawer(idToShow) {
+        setMediaDataShowInDrawer(idToShow);
+        setMediaDataDrawerOpen(true);
+    }
+
     function handleVoteChange(idMedia, NewValue, mediaHashId, voteType) {
         
         CreateGoogleAnalyticsEvent('Actions','Vote','Vote');
@@ -735,7 +745,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                                 
                                 <div style={{display:'none',width:'100%',height:'100%',opacity:0,top:0,position:'absolute'}}></div>
                             </Grid>
-                            <Grid item sm={(room.playlistUrls[roomIdPlayed].source === 'spotify' || layoutDisplay === 'compact') ? 12 : 8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }} className={`player_right_side_container ${(room.playlistUrls[roomIdPlayed].source === 'spotify') ? "spotify_header" : ""}`}>
+                            <Grid item sm={(room.playlistUrls[roomIdPlayed].source === 'spotify' || layoutDisplay === 'compact') ? 12 : 8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }} className={`player_right_side_container ${(['spotify', 'deezer'].includes(room.playlistUrls[roomIdPlayed].source)) ? "musicOnlyPlayer_header" : ""}`}>
                                 { /* pip ? 'Disable PiP' : 'Enable PiP' */ }
                                  <Grid item sm={12} sx={{ padding:0,pl:1.5,ml:0, mb: 0 , mt:1, fill:'#f0f1f0'}}>
                                     <Grid item 
@@ -756,12 +766,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                                         </Typography>
                                         {playerReady && playerRef.current !== null && room.playlistUrls[roomIdPlayed].source !== 'spotify' && 
                                         <Typography sx={{ fontSize: '10px', ml:0, mb: 1}}> {~~(Math.round(playerRef.current.getCurrentTime())/60) + 'm'+Math.round(playerRef.current.getCurrentTime()) % 60+ 's / ' + formatNumberToMinAndSec(playerRef.current.getDuration())}</Typography>}
-                                        {layoutDisplay !== 'compact' && layoutDisplay !== 'interactive' &&  <><Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
-                                            Source : { room.playlistUrls[roomIdPlayed].source }
-                                        </Typography>
-                                        <Typography sx={{ ml:0, mb: 1.5, fontSize: '10px', textTransform:'uppercase' }}>
-                                            Ajouté par : { room.playlistUrls[roomIdPlayed].addedBy }
-                                        </Typography></>}
                                     </Grid>
                                 </Grid> 
                                 <Grid className='player_button_container' item sm={12} sx={{ display:'flex', flexWrap:'wrap',padding:0,pl:1.5,ml:0, pr:1.5,mb: 0 , mt:1, fill:'#f0f1f0'}}   >
@@ -875,11 +879,38 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                         </Alert>}
                     </>
                 }
-                {typeof(room.playlistUrls) !== 'undefined' && room.playlistUrls && room.playlistUrls.length > 0 && <Box className="roomPlaylistbloc" sx={{ p:0,mb:0}}>
-                    <RoomPlaylist isSpotifyAvailable={room.roomParams.spotifyIsLinked} isAdminView={isActuallyAdmin} 
-                    roomPlaylist={room.playlistUrls} 
-                    roomIdActuallyPlaying={roomIdPlayed} userVoteArray={localData.currentUserVotes} handleChangeIsActuallyPlaying={handlePlay} handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying}  handleVoteChange={handleVoteChange} roomIsActuallyPlaying={roomIsPlaying} roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayedData.playedPercentage} />
-                </Box>}
+                {typeof(room.playlistUrls) !== 'undefined' && room.playlistUrls && room.playlistUrls.length > 0 && 
+                    <Box className="roomPlaylistbloc" sx={{ p:0,mb:0}}>
+                        <RoomPlaylist 
+                            isSpotifyAvailable={room.roomParams.spotifyIsLinked} 
+                            isAdminView={isActuallyAdmin} 
+                            roomPlaylist={room.playlistUrls} 
+                            roomIdActuallyPlaying={roomIdPlayed} 
+                            userVoteArray={localData.currentUserVotes} 
+                            handleChangeIsActuallyPlaying={handlePlay} 
+                            handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying}  
+                            handleChangeIdShownInDrawer={handleChangeIdShownInDrawer}  
+                            handleVoteChange={handleVoteChange} 
+                            roomIsActuallyPlaying={roomIsPlaying} 
+                            roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayedData.playedPercentage} 
+                        />
+                        
+                        <RoomPlaylistDrawer 
+                            open={mediaDataDrawerOpen} 
+                            changeOpen={setMediaDataDrawerOpen} 
+                            isAdminView={isActuallyAdmin} 
+                            data={room.playlistUrls[mediaDataShowInDrawer]} 
+                            roomIsActuallyPlaying={roomIsPlaying}
+                            roomIdActuallyDisplaying={mediaDataShowInDrawer}
+                            roomIdActuallyPlaying={roomIdPlayed}
+                            changeIdPlaying={handleChangeIdActuallyPlaying}
+                            changeIsPlaying={handlePlay}
+                            handleVoteChange={handleVoteChange} 
+                            userVoteArray={localData.currentUserVotes} 
+                            roomPlaylist={room.playlistUrls} 
+                        />
+                    </Box>
+                }
             </div>
             } 
         </Container>
