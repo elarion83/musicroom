@@ -1,3 +1,17 @@
+/*
+*
+*  SPOTIFY
+*
+*/
+
+.interactiveLayout .spotifyDisplay .playerContainer {
+    height: 20%;
+    margin-top: 2em;
+}
+.interactiveLayout .spotifyDisplay .player_button_container {
+    margin-top: 2em;
+}
+ 
 ._ControlsRSWP, ._DevicesRSWP, ._InfoRSWP a+div, ._ActionsRSWP  {
 display: none !important;
 }

@@ -77,6 +77,11 @@
     padding-left: 0;
 }
 
+.fullscreenLayout .spotify_header,
+.interactiveLayout .spotify_header {
+    z-index: 8000;
+}
+
 .interactiveLayout .player_button_container>div, .interactiveLayout .MuiButtonBase-root, 
 .compactLayout .player_button_container>div, .compactLayout .MuiButtonBase-root  {
     padding-top: 0;
@@ -84,7 +89,6 @@
 .interactiveLayout+.room_bottom_interactions .chatBoxGrid {
     padding-right: 0;
 }
-
 
 @media (max-width: 500px) { 
 
