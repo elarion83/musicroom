@@ -22,10 +22,11 @@ import YTSearch from 'youtube-api-search';
 
 import { withTranslation } from 'react-i18next';
 
-const RoomModalAddMedia = ({ t, currentUser, roomId, validatedObjectToAdd, spotifyTokenProps }) => {
+const RoomModalAddMedia = ({ t, currentUser, validatedObjectToAdd, spotifyTokenProps, DeezerTokenProps }) => {
 
     const [mediaSearchResultYoutube, setMediaSearchResultYoutube] = useState([]);
     const [mediaSearchResultDailyMotion, setMediaSearchResultDailyMotion] = useState([]);
+    const [mediaSearchResultDeezer, setMediaSearchResultDeezer] = useState([]);
     const [mediaSearchResultSpotify, setMediaSearchResultSpotify] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [recentlyAdded, setRecentlyAdded]= useState(false);
@@ -114,7 +115,16 @@ const RoomModalAddMedia = ({ t, currentUser, roomId, validatedObjectToAdd, spoti
                         setMediaSearchResultDailyMotion(responseJson.list);
                         setIsSearching(false);
                 });
-
+                
+                if(DeezerTokenProps.length !== 0) {
+                    await axios.get(process.env.REACT_APP_BACK_FOLDER_URL+'/deezer/search?search='+searchTerm+'&token='+DeezerTokenProps)
+                    .then(function(response) {
+                        console.log(response.data.data);
+                        setMediaSearchResultDeezer(response.data.data);
+                    });
+                }
+                
+                
                 if(spotifyTokenProps.length !== 0) {
                     await axios.get("https://api.spotify.com/v1/search", {
                         headers: {Authorization: `Bearer ${spotifyTokenProps}`},
@@ -186,6 +196,7 @@ const RoomModalAddMedia = ({ t, currentUser, roomId, validatedObjectToAdd, spoti
                     <Tabs value={tabIndex} onChange={handleTabChange} sx={{bgcolor:'#202124'}}>
                         <Tab sx={{ color:'var(--white)'}} label="Youtube" disabled={mediaSearchResultYoutube.length > 1 ? false : true}/>
                         <Tab sx={{ color:'var(--white)'}} label="Spotify" disabled={mediaSearchResultSpotify.length > 1 ? false : true}/>
+                        <Tab sx={{ color:'var(--white)'}} label="Deezer" disabled={mediaSearchResultDeezer.length > 1 ? false : true}/>
                         <Tab sx={{ color:'var(--white)'}} label="Dailymotion" disabled={mediaSearchResultDailyMotion.length > 1 ? false : true}/>
                     </Tabs>
                     <Box sx={{ lineHeight:"15px", p:0, pt:0, mb:0 }}>
@@ -235,6 +246,23 @@ const RoomModalAddMedia = ({ t, currentUser, roomId, validatedObjectToAdd, spoti
                         </Box>
                         )}
                         {tabIndex === 2 && (
+                        <Box>
+                            {mediaSearchResultDeezer.length > 1 && <Grid item xs={12}>
+                            <List component="nav">
+                                { mediaSearchResultDeezer.map(function(media, idde){
+                                        return (<ListItemButton sx={{m:0, p:0, pr:1,borderBottom: '2px solid var(--border-color)'}}  key={idde} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.title, source:'deezer', platformId:media.id, url:media.preview, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
+                                        <img alt={media.title.substring(0, 50)} src={media.album.cover_small} />
+                                        <Grid sx={{display:'flex',flexDirection:'column',pl:2}}>
+                                            <ListItemText primary={media.title.substring(0, 50)} className='video_title_list' sx={{ mt:0, fontSize:'0.9em'}}/>
+                                            <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>Par <b>{media.artist.name} </b></Typography>
+                                        </Grid>
+                                        </ListItemButton>)
+                                }) }
+                            </List>
+                        </Grid>}
+                        </Box>
+                        )}
+                        {tabIndex === 3 && (
                         <Box>
                             {mediaSearchResultDailyMotion.length > 1 && <Grid item xs={12}>
                             <List component="nav">

@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
 import { v4 as uuid } from 'uuid';
+import axios from "axios";
 
 import { Icon } from '@iconify/react';
 import LoginModal from './components/generalsTemplates/modals/LoginModal';
@@ -82,18 +83,35 @@ function App( {t} ) {
 
   useEffect(() => {
       const hash = window.location.hash
-      console.log('aa');
       if (hash) {
-          var token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
-          
-          if(localStorage.getItem("Play-It_SpotifyRoomId")) {
-            joinRoomByRoomId(localStorage.getItem("Play-It_SpotifyRoomId"));
-         //   replaceCurrentUrlWithRoomUrl(localStorage.getItem("Play-It_SpotifyRoomId"));
-            replaceCurrentUrlWithRoomUrlForSpotify(localStorage.getItem("Play-It_SpotifyRoomId"), token);
+          var token_spotify = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
+          if(localStorage.getItem("Play-It_RoomId")) {
+            joinRoomByRoomId(localStorage.getItem("Play-It_RoomId"));
+            replaceCurrentUrlWithRoomUrlForSpotify(localStorage.getItem("Play-It_RoomId"), token_spotify);
           }
+      }
+      
+      if(queryParameters.get("code")) {
+        var token_deezer = queryParameters.get("code");
+        getDeezerAccessToken(token_deezer);
       }
   }, [])
 
+
+  async function getDeezerAccessToken(token) {
+      await axios.get(process.env.REACT_APP_BACK_FOLDER_URL+'/deezer/accessToken.php?appID='+process.env.REACT_APP_ROOM_DEEZER_APP_ID+'&appSecret='+process.env.REACT_APP_ROOM_DEEZER_APP_SECRET_KEY+'&code='+token)
+        .then(function(response) {
+          var deezerResult = response.data;
+          var firstSplit = deezerResult.split('=');
+          var tokenSplit = firstSplit[1].split('&');
+          if(tokenSplit[0]) {
+            joinRoomByRoomId(localStorage.getItem("Play-It_RoomId"));
+            replaceCurrentUrlWithRoomUrlForDeezer(localStorage.getItem("Play-It_RoomId"), tokenSplit[0]);
+          }
+        })
+        .catch(function(error) {
+        });          
+  }
 
   function createNewRoom() {
     var newRoomId = uuid().slice(0,5).toLowerCase()
@@ -211,7 +229,7 @@ function App( {t} ) {
     setRoomId();
     setUserInfo({});
     setIsSignedIn(false);
-    localStorage.removeItem("Play-It_SpotifyRoomId");
+    localStorage.removeItem("Play-It_RoomId");
     localStorage.removeItem("Play-It_SpotifyToken");
     localStorage.removeItem("Play-It_AnonymouslyLoggedIn");
     localStorage.removeItem("Play-It_AnonymouslyPseudo");
@@ -224,7 +242,7 @@ function App( {t} ) {
 
   function handleQuitRoomMain() {
     setRoomId();
-    localStorage.removeItem("Play-It_SpotifyRoomId");
+    localStorage.removeItem("Play-It_RoomId");
     localStorage.removeItem("Play-It_SpotifyToken");
     replaceCurrentUrlWithHomeUrl();
     
@@ -241,7 +259,11 @@ function App( {t} ) {
   }
 
   function replaceCurrentUrlWithRoomUrlForSpotify(roomId, token) {
-    window.history.replaceState('string','', window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '')+'?rid='+roomId.replace(/\s/g,'')+'&token='+token);
+    window.history.replaceState('string','', window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '')+'?rid='+roomId.replace(/\s/g,'')+'&spotoken='+token);
+  }
+
+  function replaceCurrentUrlWithRoomUrlForDeezer(roomId, token) {
+    window.history.replaceState('string','', window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '')+'?rid='+roomId.replace(/\s/g,'')+'&deetoken='+token);
   }
 
   function setUserInfoEdit(user) {

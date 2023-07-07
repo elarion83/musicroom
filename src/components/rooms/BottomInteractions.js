@@ -153,7 +153,14 @@ const BottomInteractions = ({ t, layoutDisplay, setLayoutdisplay, paramDrawerIsO
                 open={((Date.now() - roomParams.spotifyTokenTimestamp) < 8000) && roomParams.spotifyAlreadyHaveBeenLinked}
                 autoHideDuration={8000}
                 sx={{ borderRadius:'2px'}}
-                message={roomParams.spotifyIsLinked ? roomParams.spotifyUserConnected + " a ajouté Spotify a la room !" : "La connexion spotify a expirée"}
+                message={roomParams.spotifyIsLinked ? roomParams.spotifyUserConnected + " a ajouté Spotify a la room !" : "La connexion Spotify a expirée"}
+            />
+
+            <Snackbar
+                open={((Date.now() - roomParams.deezer.TokenTimestamp) < 8000) && roomParams.deezer.AlreadyHaveBeenLinked}
+                autoHideDuration={8000}
+                sx={{ borderRadius:'2px'}}
+                message={roomParams.deezer.IsLinked ? roomParams.deezer.UserConnected + " a ajouté Deezer a la room !" : "La connexion Deezer a expirée"}
             />
         </Grid>
     )

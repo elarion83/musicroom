@@ -35,10 +35,6 @@ import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SkipPrevious from '@mui/icons-material/SkipPrevious';
 import Typography from '@mui/material/Typography';
 
-import VolumeDown from '@mui/icons-material/VolumeDown';
-import VolumeUp from '@mui/icons-material/VolumeUp';
-import Slider from '@mui/material/Slider';
-
 import RoomModalAddMedia from './rooms/modalsOrDialogs/ModalAddMedia';
 import ModalForceSpotifyDisconnect from "./rooms/modalsOrDialogs/ModalForceSpotifyDisconnect";
 import ModalLeaveRoom from './rooms/modalsOrDialogs/ModalLeaveRoom';
@@ -174,7 +170,14 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                             spotifyAlreadyHaveBeenLinked:false,
                             spotifyToken:'',
                             spotifyTokenTimestamp:0,
-                            spotifyUserConnected:''
+                            spotifyUserConnected:'',
+                            deezer:{
+                                IsLinked:false,
+                                AlreadyHaveBeenLinked:false,
+                                Token:'',
+                                TokenTimestamp:0,
+                                UserConnected:''
+                            }
                             },
                         interactionsArray:[],
                         creationTimeStamp	: Date.now()
@@ -201,7 +204,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
 	useEffect(() => {
         
 		getRoomData(roomId); 
-        localStorage.setItem("Play-It_SpotifyRoomId", roomId)
+        localStorage.setItem("Play-It_RoomId", roomId)
         if(null === localStorage.getItem("Play-It_UserInfoVotes")) {
             localStorage.setItem("Play-It_UserInfoVotes", JSON.stringify({up:[], down:[]}));
         } else {
@@ -232,7 +235,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
 	}, [guestSynchroOrNot]);
 
     useEffect(() => {
-        if(loaded) {
+        if(loaded && room) {
             room.notifsArray.push({type: 'userArrived', timestamp: Date.now(), createdBy: currentUser.displayName});
             roomRef.set({notifsArray: room.notifsArray},{merge:true});
             setRoomIdPlayed(room.playing);
@@ -277,12 +280,18 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
         if((typeof(room.roomParams.spotifyTokenTimestamp) === 'number' && room.roomParams.spotifyTokenTimestamp > 0) && ((Date.now() - room.roomParams.spotifyTokenTimestamp) > 3600000)) {   
             disconnectSpotify();
         }
+        if((typeof(room.roomParams.deezer.TokenTimestamp) === 'number' && room.roomParams.deezer.TokenTimestamp > 0) && ((Date.now() - room.roomParams.deezer.TokenTimestamp) > 3600000)) {   
+            disconnectDeezer();
+        }
         if(isActuallyAdmin) {
-            roomRef.set({actuallyPlaying: playStatus,mediaActuallyPlayingAlreadyPlayedData:{
+            roomRef.set({
+                    actuallyPlaying: playStatus,
+                    mediaActuallyPlayingAlreadyPlayedData:{
                         playedSeconds:room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds,
                         playedPercentage:room.mediaActuallyPlayingAlreadyPlayedData.played*100,
                         played:room.mediaActuallyPlayingAlreadyPlayedData.played
-                    }}, { merge: true });
+                    }
+                    }, { merge: true });
         } else {
             setRoomIsPlaying(roomIsPlaying);
         }
@@ -290,6 +299,18 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
 
     async function disconnectSpotify() {
         roomRef.set({roomParams:{spotifyToken: '',spotifyIsLinked:false, spotifyTokenTimestamp: Date.now(), spotifyUserConnected:''}}, { merge: true });
+        setOpenForceDisconnectSpotifyModal(false);
+    }
+    
+    async function disconnectDeezer() {
+        roomRef.set({roomParams:{
+            deezer:{
+                IsLinked:false,
+                AlreadyHaveBeenLinked:true,
+                Token:'',
+                TokenTimestamp:Date.now(),
+                UserConnected:''
+            }}}, { merge: true });
         setOpenForceDisconnectSpotifyModal(false);
     }
 
@@ -478,20 +499,35 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
 
     useEffect(() => {
         var queryParameters = new URLSearchParams(window.location.search);
-        if(queryParameters.get("token")) {
-        console.log('bbaa');
-            var token = queryParameters.get("token") ? queryParameters.get("token") : '';
+        if(queryParameters.get("spotoken")) {
+            var token = queryParameters.get("spotoken") ? queryParameters.get("spotoken") : '';
             window.location.hash = "";
             window.localStorage.setItem("Play-It_SpotifyToken", token)
             handleChangeSpotifyToken(token)
-
+        }
+        if(queryParameters.get("deetoken")) {
+            var token = queryParameters.get("deetoken") ? queryParameters.get("deetoken") : '';
+            window.location.hash = "";
+            window.localStorage.setItem("Play-It_DeezerToken", token)
+            handleChangeDeezerToken(token)
         }
     })
 
     async function handleChangeSpotifyToken(newToken) {
         roomRef.set({roomParams:{spotifyToken: newToken,spotifyIsLinked:true,spotifyAlreadyHaveBeenLinked:true, spotifyTokenTimestamp: Date.now(), spotifyUserConnected:currentUser.displayName}}, { merge: true });
         window.history.replaceState('string','', window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '')+'?rid='+roomId.replace(/\s/g,''));
-
+    }
+    
+    async function handleChangeDeezerToken(newToken) {
+        roomRef.set({roomParams:{
+                deezer:{
+                    IsLinked:true,
+                    AlreadyHaveBeenLinked:true,
+                    Token:newToken,
+                    TokenTimestamp:Date.now(),
+                    UserConnected:currentUser.displayName
+                }}}, { merge: true });
+        window.history.replaceState('string','', window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '')+'?rid='+roomId.replace(/\s/g,''));
     }
 
     function handleOpenShareModal(ShareModalIsOpen) {
@@ -613,33 +649,37 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                         <Grid container spacing={0} sx={{ bgcolor:'var(--grey-dark)'}} className={layoutDisplay === 'compact' ? 'playerHide' : 'playerShow'}>
 
                             <Grid item className={layoutDisplay === 'fullscreen' ? 'fullscreen' : 'playerContainer'} sm={(room.playlistUrls[roomIdPlayed].source === 'spotify' ) ? 12 : 4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
-                                {spotifyPlayerShow && isActuallyAdmin && room.playlistUrls[roomIdPlayed].source === 'spotify' &&
-                                    <SpotifyPlayer
-                                        callback={SpotifyPlayerCallBack}
-                                        token={room.roomParams.spotifyToken}
-                                        uris={room.playlistUrls[roomIdPlayed].url}
-                                        play={room.actuallyPlaying}
-                                        inlineVolume={localVolume}
-                                        styles={{
-                                            activeColor: 'var(--main-color)',
-                                            bgColor: 'var(--grey-dark)',
-                                            loaderColor: 'var(--main-color)',
-                                            sliderColor: 'var(--red-2)',
-                                            trackArtistColor: 'var(--grey-dark)',
-                                            trackNameColor: 'var(--grey-dark)',
-                                        }}
-                                    />}
-                                {spotifyPlayerShow && !isActuallyAdmin && guestSynchroOrNot && room.playlistUrls[roomIdPlayed].source === 'spotify' &&
-                                    <Alert severity="warning" sx={{m:2, border:'1px solid #F27C24'}}> {t('RoomAlertSpotifyNotVisibleTitle')}
-                                        <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} sx={{color:'var(--main-color-darker)'}}>
-                                            <b>{t('RoomAlertSpotifyNotVisibleText')}</b>
-                                        </a>
-                                    </Alert>
-                                }
-                                {spotifyPlayerShow && !isActuallyAdmin && !guestSynchroOrNot && room.playlistUrls[roomIdPlayed].source === 'spotify' &&
-                                    <Alert severity="warning" sx={{m:2, border:'1px solid #F27C24'}}> {t('RoomAlertSpotifyNotVisibleUnsyncTitle')}
-                                            <b>{t('RoomAlertSpotifyNotVisibleUnsyncText')}</b>
-                                    </Alert>
+                                {room.playlistUrls[roomIdPlayed].source === 'spotify' && 
+                                    <>
+                                        {spotifyPlayerShow && isActuallyAdmin &&
+                                            <SpotifyPlayer
+                                                callback={SpotifyPlayerCallBack}
+                                                token={room.roomParams.spotifyToken}
+                                                uris={room.playlistUrls[roomIdPlayed].url}
+                                                play={room.actuallyPlaying}
+                                                inlineVolume={localVolume}
+                                                styles={{
+                                                    activeColor: 'var(--main-color)',
+                                                    bgColor: 'var(--grey-dark)',
+                                                    loaderColor: 'var(--main-color)',
+                                                    sliderColor: 'var(--red-2)',
+                                                    trackArtistColor: 'var(--grey-dark)',
+                                                    trackNameColor: 'var(--grey-dark)',
+                                                }}
+                                            />}
+                                        {spotifyPlayerShow && !isActuallyAdmin && guestSynchroOrNot &&
+                                            <Alert severity="warning" sx={{m:2, border:'1px solid #F27C24'}}> {t('RoomAlertSpotifyNotVisibleTitle')}
+                                                <a href="#" onClick={(e) => setOpenAddToPlaylistModal(true)} sx={{color:'var(--main-color-darker)'}}>
+                                                    <b>{t('RoomAlertSpotifyNotVisibleText')}</b>
+                                                </a>
+                                            </Alert>
+                                        }
+                                        {spotifyPlayerShow && !isActuallyAdmin && !guestSynchroOrNot &&
+                                            <Alert severity="warning" sx={{m:2, border:'1px solid #F27C24'}}> {t('RoomAlertSpotifyNotVisibleUnsyncTitle')}
+                                                    <b>{t('RoomAlertSpotifyNotVisibleUnsyncText')}</b>
+                                            </Alert>
+                                        }
+                                    </>
                                 }
                                 {isActuallyAdmin && room.playlistUrls[roomIdPlayed].source !== 'spotify'  && <ReactPlayer sx={{ padding:0}}
                                     ref={playerRef}
@@ -864,7 +904,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                         </Typography>
                     </Box>}
             </Grid>
-            {OpenAddToPlaylistModal && <RoomModalAddMedia roomId={roomId} currentUser={currentUser} spotifyTokenProps={room.roomParams.spotifyToken} handleChangeSpotifyToken={handleChangeSpotifyToken} validatedObjectToAdd={handleAddValidatedObjectToPlaylist} /> }
+            {OpenAddToPlaylistModal && 
+                <RoomModalAddMedia 
+                currentUser={currentUser} 
+                DeezerTokenProps={room.roomParams.deezer.Token} 
+                spotifyTokenProps={room.roomParams.spotifyToken} 
+                validatedObjectToAdd={handleAddValidatedObjectToPlaylist} /> }
         </Dialog>
         
         {loaded && room.roomParams && <ModalRoomParams adminView={isActuallyAdmin} open={openRoomParamModal} changeOpen={setOpenRoomParamModal} handleChangeRoomParams={handleChangeRoomParams} handleDisconnectFromSpotifyModal={setOpenForceDisconnectSpotifyModal} roomParams={room.roomParams} />} 

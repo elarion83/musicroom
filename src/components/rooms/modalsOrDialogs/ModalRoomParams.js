@@ -55,6 +55,15 @@ const ModalRoomParams = ({ t,  adminView, open, changeOpen, roomParams , handleD
             </DialogTitle>  
             <DialogContent dividers sx={{pt:2}}>
                 <FormGroup>
+                    
+                    <Button
+                        startIcon={<Icon style={{display:'inline',  marginRight:'0.5em'}} icon="mdi:deezer" />}
+                        variant="contained" 
+                        color="success"  
+                        onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_DEEZER_AUTH_ENDPOINT}?app_id=${process.env.REACT_APP_ROOM_DEEZER_APP_ID}&redirect_uri=${REDIRECT_URI}&perms=basic_access,email`}>
+                        connect to deezer
+                    </Button>
+
                     {!roomParams.spotifyIsLinked && 
                             <Button
                                 startIcon={<Icon style={{display:'inline',  marginRight:'0.5em'}} icon="mdi:spotify" />}
