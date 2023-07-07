@@ -37,6 +37,7 @@ import Typography from '@mui/material/Typography';
 
 import RoomModalAddMedia from './rooms/modalsOrDialogs/ModalAddMedia';
 import ModalForceSpotifyDisconnect from "./rooms/modalsOrDialogs/ModalForceSpotifyDisconnect";
+import ModalForceDeezerDisconnect from "./rooms/modalsOrDialogs/ModalForceDeezerDisconnect";
 import ModalLeaveRoom from './rooms/modalsOrDialogs/ModalLeaveRoom';
 import ModalRoomParams from './rooms/modalsOrDialogs/ModalRoomParams';
 import ModalShareRoom from './rooms/modalsOrDialogs/ModalShareRoom';
@@ -95,6 +96,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
     const [pip, setPip] = useState(true);
     const [userCanMakeInteraction, setUserCanMakeInteraction]= useState(true);
     const [openForceDisconnectSpotifyModal, setOpenForceDisconnectSpotifyModal] = useState(false);
+    const [openForceDisconnectDeezerModal, setOpenForceDisconnectDeezerModal] = useState(false);
 
     const [playerReady, setPlayerReady] = useState(false);
     const [spotifyPlayerShow, setSpotifyPlayerShow] = useState(true);
@@ -301,7 +303,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
         roomRef.set({roomParams:{spotifyToken: '',spotifyIsLinked:false, spotifyTokenTimestamp: Date.now(), spotifyUserConnected:''}}, { merge: true });
         setOpenForceDisconnectSpotifyModal(false);
     }
-    
+
     async function disconnectDeezer() {
         roomRef.set({roomParams:{
             deezer:{
@@ -311,7 +313,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                 TokenTimestamp:Date.now(),
                 UserConnected:''
             }}}, { merge: true });
-        setOpenForceDisconnectSpotifyModal(false);
+        setOpenForceDisconnectDeezerModal(false);
     }
 
     async function handleNonAdminPlay() {
@@ -647,7 +649,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
         <Container maxWidth={false} sx={{ padding: '0 !important'}} className={layoutDisplayClass} >
             {loaded && room.playlistUrls && <div>
                 {!room.playlistEmpty && room.playlistUrls.length > 0 && room.playing !== null && 
-                    <Box sx={{bgcolor:'#303030',borderBottom: '2px solid var(--border-color)', padding:"0px 0em"}}> 
+                    <Box sx={{bgcolor:'#303030',borderBottom: '2px solid var(--border-color)', padding:"0px 0em"}} className={room.playlistUrls[roomIdPlayed].source+'Display'}> 
                         <Grid container spacing={0} sx={{ bgcolor:'var(--grey-dark)'}} className={layoutDisplay === 'compact' ? 'playerHide' : 'playerShow'}>
 
                             <Grid item className={layoutDisplay === 'fullscreen' ? 'fullscreen' : 'playerContainer'} sm={(room.playlistUrls[roomIdPlayed].source === 'spotify' ) ? 12 : 4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
@@ -737,7 +739,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                                 { /* pip ? 'Disable PiP' : 'Enable PiP' */ }
                                  <Grid item sm={12} sx={{ padding:0,pl:1.5,ml:0, mb: 0 , mt:1, fill:'#f0f1f0'}}>
                                     <Grid item 
-                                    sx={[{pb:1}, ['spotify','deezer'].includes(room.playlistUrls[roomIdPlayed].source) === 'spotify' &&  { justifyContent: 'center' } ]} 
+                                    sx={[{pb:1}, room.playlistUrls[roomIdPlayed].source === 'spotify' &&  { justifyContent: 'center' } ]} 
                                     className="flexRowCenterH">
                                         { room.playlistUrls[roomIdPlayed].title && <Typography component={'span'}>
                                         {room.playlistUrls[roomIdPlayed].title} 
@@ -918,10 +920,11 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                 validatedObjectToAdd={handleAddValidatedObjectToPlaylist} /> }
         </Dialog>
         
-        {loaded && room.roomParams && <ModalRoomParams adminView={isActuallyAdmin} open={openRoomParamModal} changeOpen={setOpenRoomParamModal} handleChangeRoomParams={handleChangeRoomParams} handleDisconnectFromSpotifyModal={setOpenForceDisconnectSpotifyModal} roomParams={room.roomParams} />} 
+        {loaded && room.roomParams && <ModalRoomParams adminView={isActuallyAdmin} open={openRoomParamModal} changeOpen={setOpenRoomParamModal} handleChangeRoomParams={handleChangeRoomParams} handleDisconnectFromDeezerModal={setOpenForceDisconnectDeezerModal} handleDisconnectFromSpotifyModal={setOpenForceDisconnectSpotifyModal} roomParams={room.roomParams} />} 
         <ModalShareRoom open={openInvitePeopleToRoomModal} changeOpen={setOpenInvitePeopleToRoomModal} roomUrl={ localData.domain +'/?rid='+roomId} />
         <ModalLeaveRoom open={openLeaveRoomModal} changeOpen={setOpenLeaveRoomModal} handleQuitRoom={handleQuitRoomInComp} />
         <ModalForceSpotifyDisconnect open={openForceDisconnectSpotifyModal} changeOpen={setOpenForceDisconnectSpotifyModal} handleDisconnectSpotify={disconnectSpotify} />
+        <ModalForceDeezerDisconnect open={openForceDisconnectDeezerModal} changeOpen={setOpenForceDisconnectDeezerModal} handleDisconnectDeezer={disconnectDeezer} />
 
 
         {loaded && room.roomParams && 

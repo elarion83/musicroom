@@ -18,7 +18,6 @@ import Snackbar from '@mui/material/Snackbar';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import validator from 'validator';
-import YTSearch from 'youtube-api-search';
 
 import { withTranslation } from 'react-i18next';
 
@@ -105,8 +104,19 @@ const RoomModalAddMedia = ({ t, currentUser, validatedObjectToAdd, spotifyTokenP
                 setSearchTerm('');
                 setIsSearching(false);
             } else {
-                YTSearch({key: process.env.REACT_APP_YOUTUBE_API_KEY, term: searchTerm}, (videos) => {
-                    setMediaSearchResultYoutube(videos);
+
+                axios.get('https://www.googleapis.com/youtube/v3/search', { params: {
+                    part: 'snippet',
+                    key: process.env.REACT_APP_YOUTUBE_API_KEY,
+                    q: searchTerm,
+                    maxResults:10,
+                    type: 'video'
+                } })
+                .then(function(response) {
+                    setMediaSearchResultYoutube(response.data.items); 
+                })
+                .catch(function(error) {
+                    console.error(error);
                 });
 
                 fetch('https://api.dailymotion.com/videos?fields=id,thumbnail_url%2Ctitle&country=fr&search='+searchTerm+'&limit=10')
@@ -119,6 +129,7 @@ const RoomModalAddMedia = ({ t, currentUser, validatedObjectToAdd, spotifyTokenP
                 if(DeezerTokenProps.length !== 0) {
                     await axios.get(process.env.REACT_APP_BACK_FOLDER_URL+'/deezer/search?search='+searchTerm+'&token='+DeezerTokenProps)
                     .then(function(response) {
+                        console.log(response.data.data);
                         setMediaSearchResultDeezer(response.data.data);
                     });
                 }
@@ -143,14 +154,6 @@ const RoomModalAddMedia = ({ t, currentUser, validatedObjectToAdd, spotifyTokenP
 
     return(
             <Container sx={{padding:'3em',pt:0, height:'100vh', zIndex:3}} className="full_width_modal_content_container">
-                 <Grid item xs={12} sx={{margin:0,padding:0,display:'flex', justifyContent:'center'}}>
-                    {spotifyTokenProps.length === 0 && searchTerm.length === 0 &&
-                        <Button startIcon={<Icon style={{display:'inline', marginRight:'0.5em'}} icon="mdi:spotify" />} 
-                        variant="contained" color="success" sx={{mb:2,mt:2}} onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
-                        Connecter la room a Spotify
-                        </Button>
-                    }
-                 </Grid>
 
                   <Grid item xs={12} sx={{display:'flex', flexDirection:'row'}} className="autowriter_container">
                      <Typed
@@ -251,10 +254,11 @@ const RoomModalAddMedia = ({ t, currentUser, validatedObjectToAdd, spotifyTokenP
                                 { mediaSearchResultDeezer.map(function(media, idde){
                                         return (<ListItemButton sx={{m:0, p:0, pr:1,borderBottom: '2px solid var(--border-color)'}}  key={idde} 
                                         onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.title, source:'deezer',visuel:'https://e-cdn-images.dzcdn.net/images/cover/'+media.md5_image+'/264x264-000000-80-0-0.jpg', platformId:media.id, url:media.preview, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
-                                        <img alt={media.title.substring(0, 50)} src={'https://e-cdn-images.dzcdn.net/images/cover/'+media.md5_image+'/50x50-000000-80-0-0.jpg'} />
+                                        <img alt={media.title.substring(0, 50)} src={'https://e-cdn-images.dzcdn.net/images/cover/'+media.md5_image+'/80x80-000000-80-0-0.jpg'} />
                                         <Grid sx={{display:'flex',flexDirection:'column',pl:2}}>
                                             <ListItemText primary={media.title.substring(0, 50)} className='video_title_list' sx={{ mt:0, fontSize:'0.9em'}}/>
                                             <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>Par <b>{media.artist.name} </b></Typography>
+                                            <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>Album <b>{media.album.title} </b></Typography>
                                         </Grid>
                                         </ListItemButton>)
                                 }) }

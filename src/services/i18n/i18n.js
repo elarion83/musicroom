@@ -76,6 +76,8 @@ const resources = {
         "ModalParamsRoomTitle": "Room settings",
         "ModalParamsRoomConnectToSpotifyText":"Connect to Spotify",
         "ModalParamsRoomConnectedToSpotifyText":"The room is connected to Spotify",
+        "ModalParamsRoomConnectToDeezerText":"Connect to Deezer",
+        "ModalParamsRoomConnectedToDeezerText":"The room is connected to Deezer",
         "ModalParamsRoomNotAllowedText":"Reserved for the room's host.",
         "ModalParamsRoomInteractionAllowedTitle": "Allow interaction",
         "ModalParamsRoomInteractionAllowedText": "Allows room members to interact with emoticons.",
@@ -88,6 +90,9 @@ const resources = {
   
         "ModalRoomForceSpotifyDisconnectTitle":"Force disconnect from Spotify?",
         "ModalRoomForceSpotifyDisconnectText":"Spotify playback and search will no longer be available.",
+
+        "ModalRoomForceDeezerDisconnectTitle":"Force disconnect from Deezer?",
+        "ModalRoomForceDeezerDisconnectText":"Deezer playback and search will no longer be available.",
 
         "RoomLeftMenuHost":"You are the host",
         "RoomLeftMenuHostedBy":"Hosted by",
@@ -179,6 +184,8 @@ const resources = {
         "ModalParamsRoomTitle": "Paramètres de la room ",
         "ModalParamsRoomConnectToSpotifyText":"Connecter a Spotify",
         "ModalParamsRoomConnectedToSpotifyText":"La room est connectée a Spotify",
+        "ModalParamsRoomConnectToDeezerText":"Connecter a Deezer",
+        "ModalParamsRoomConnectedToDeezerText":"La room est connectée a Deezer",
         "ModalParamsRoomNotAllowedText":"Reservé à l'hôte de la room.",
         "ModalParamsRoomInteractionAllowedTitle": "Autoriser les interactions",
         "ModalParamsRoomInteractionAllowedText": "Permet aux membres de la room d'intéragir avec les emoticones.",
@@ -191,6 +198,9 @@ const resources = {
 
         "ModalRoomForceSpotifyDisconnectTitle":"Forcer la deconnexion de Spotify ?",
         "ModalRoomForceSpotifyDisconnectText":"La lecture et la recherche via Spotify ne sera plus disponible.",
+
+        "ModalRoomForceDeezerDisconnectTitle":"Forcer la deconnexion de Deezer ?",
+        "ModalRoomForceDeezerDisconnectText":"La lecture et la recherche via Deezer ne sera plus disponible.",
 
         "RoomLeftMenuHost":"Vous êtes l'hôte",
         "RoomLeftMenuHostedBy":"Hosté par",

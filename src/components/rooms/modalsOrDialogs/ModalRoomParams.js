@@ -12,7 +12,7 @@ import Tooltip from '@mui/material/Tooltip';
 
 import { withTranslation } from 'react-i18next';
 
-const ModalRoomParams = ({ t,  adminView, open, changeOpen, roomParams , handleDisconnectFromSpotifyModal, handleChangeRoomParams}) => {
+const ModalRoomParams = ({ t,  adminView, open, changeOpen, roomParams , handleDisconnectFromSpotifyModal, handleDisconnectFromDeezerModal, handleChangeRoomParams}) => {
 
     const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
 
@@ -56,13 +56,30 @@ const ModalRoomParams = ({ t,  adminView, open, changeOpen, roomParams , handleD
             <DialogContent dividers sx={{pt:2}}>
                 <FormGroup>
                     
-                    <Button
-                        startIcon={<Icon style={{display:'inline',  marginRight:'0.5em'}} icon="mdi:deezer" />}
-                        variant="contained" 
-                        color="success"  
-                        onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_DEEZER_AUTH_ENDPOINT}?app_id=${process.env.REACT_APP_ROOM_DEEZER_APP_ID}&redirect_uri=${REDIRECT_URI}&perms=basic_access,email`}>
-                        connect to deezer
-                    </Button>
+                    {!roomParams.deezer.IsLinked && 
+                            <Button
+                            sx={{mb:1}}
+                                startIcon={<Icon style={{display:'inline',  marginRight:'0.5em'}} icon="mdi:deezer" />}
+                                variant="contained" 
+                                color="success"  
+                                onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_DEEZER_AUTH_ENDPOINT}?app_id=${process.env.REACT_APP_ROOM_DEEZER_APP_ID}&redirect_uri=${REDIRECT_URI}&perms=basic_access,email`}>
+                                {t('ModalParamsRoomConnectToDeezerText')}
+                            </Button>
+                    }          
+                    {roomParams.deezer.IsLinked && 
+                        <Alert
+                        sx={{mb:1}}
+                            action={
+                                <Tooltip title="Forcer la déconnexion">
+                                    <Button onClick={e => handleDisconnectFromDeezerModal(true)}>
+                                        <ExitToAppIcon  fontSize="small" />
+                                    </Button>
+                                </Tooltip>
+                            }
+                        >
+                            {t('ModalParamsRoomConnectedToDeezerText')}
+                        </Alert>
+                    }
 
                     {!roomParams.spotifyIsLinked && 
                             <Button
@@ -86,7 +103,6 @@ const ModalRoomParams = ({ t,  adminView, open, changeOpen, roomParams , handleD
                             {t('ModalParamsRoomConnectedToSpotifyText')}
                         </Alert>
                     }
-
 
                     <Alert sx={{pl:0, mt:3, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.interactionsAllowed} onChange={handleChangeIsInterractionsAllowed} 
                             disabled={adminView? false:true}
