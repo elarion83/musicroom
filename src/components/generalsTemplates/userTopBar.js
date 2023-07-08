@@ -8,6 +8,7 @@ import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import AvatarIcon from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
@@ -48,7 +49,7 @@ const UserTopBar = ({ t, user, setUserInfo, handleLogout, handleOpenLoginModal, 
               aria-haspopup="true"
               aria-expanded={open ? 'true' : undefined}
             >
-              <Avatar sx={{ bgcolor: 'var(--red-2)', textTransform:'uppercase' }} >{user.displayName.substring(0, 1) }</Avatar>
+              <Avatar sx={{ bgcolor: 'var(--red-2)', textTransform:'uppercase' }} ><AvatarIcon /></Avatar>
             </IconButton>
           </Tooltip>}
           {!user.displayName && 

@@ -35,6 +35,7 @@ function App( {t} ) {
   const [isAppLoading, setIsAppLoading] = useState(true);
   const [isLoginLoading, setIsLoginLoading] = useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = useState();
+  const [stickyDisplay, setStickyDisplay] = useState(false);
 
   // room infos
 	const queryParameters = new URLSearchParams(window.location.search)
@@ -275,7 +276,7 @@ function App( {t} ) {
     <>
       <CssBaseline />
       <Container maxWidth={false} className='main_container' sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
-         <AppBar position="static" sx={{bgcolor: '#202124'}}>
+         <AppBar className={roomId ? stickyDisplay ? 'topBarIsInRoomSticky' : 'topBarIsInRoom' : 'topBarClassic'} position="static" sx={{bgcolor: '#202124'}}>
             <Toolbar>
               <img src="img/logo_py1.png" style={{ width: 'auto', maxWidth:'50%', maxHeight:'30px'}} alt="Play-It logo"/>
               {!isAppLoading && (
@@ -303,7 +304,7 @@ function App( {t} ) {
             </Container>
         </Box>
         }
-        {roomId && isSignedIn && <Room currentUser={userInfos} className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain}></Room>}
+        {roomId && isSignedIn && <Room currentUser={userInfos} className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain} setStickyDisplay={setStickyDisplay}></Room>}
 
         {!isSignedIn && !isAppLoading && (roomId || loginModalOpen) && <LoginModal 
         open={true} 

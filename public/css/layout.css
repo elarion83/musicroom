@@ -18,9 +18,15 @@
 }
 
 .fullscreen .PlayerRSWP{     
-    width: 100%;
-    margin: 0;
-    max-width: none;
+    padding: 0;
+    width: 80%;
+    margin: auto;
+    margin-top: auto;
+    margin-top: 1em;
+}
+
+.fullscreenLayout .spotifyDisplay .musicOnlyPlayer_header {
+    margin-top: 3em;
 }
 
 

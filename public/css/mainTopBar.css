@@ -1,0 +1,27 @@
+.topBarIsInRoom {
+    background: none !important;
+    position: fixed !important;
+    top: 0;  
+    width: auto !important;
+    z-index: 5;
+    right: 0;
+    box-shadow: none !important;
+}
+
+.topBarIsInRoom img {
+    display: none;
+}
+
+.topBarIsInRoom .MuiIconButton-sizeSmall {
+    padding: 0;
+}
+
+.topBarIsInRoom .MuiToolbar-root {
+    height: 45px;
+    min-height: 0;
+}
+
+.topBarIsInRoom .MuiAvatar-root {
+    height: 30px;
+    width: 30px;
+}

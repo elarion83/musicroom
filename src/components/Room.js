@@ -55,7 +55,7 @@ import {CreateGoogleAnalyticsEvent} from '../services/googleAnalytics';
 import { withTranslation } from 'react-i18next';
 import VolumeButton from "./rooms/playerSection/VolumeButton";
 
-const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
+const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
 
@@ -66,15 +66,17 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
 	const [room, setRoom] = useState({});
 
     // sticky toolbar
-    const [scrollFromTopTrigger, setScrollFromTopTrigger] = useState(window.screen.height/4);
+    const [scrollFromTopTrigger, setScrollFromTopTrigger] = useState(window.screen.height/6);
     const [isShowSticky, setIsShowSticky] = useState(false);
 
     useEffect(() => {
         const handleScroll = (event) => {
             if(window.scrollY >= scrollFromTopTrigger) {
                 setIsShowSticky(true);
+                setStickyDisplay(true);
             } else {
                 setIsShowSticky(false);
+                setStickyDisplay(false);
             }
         };
 
@@ -570,19 +572,18 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
 
 
     const [spotifyEndSwitchTempFix, setSpotifyEndSwitchTempFix] = useState(true);
-    function SpotifyPlayerCallBack(e){
+    async function SpotifyPlayerCallBack(e){
         if(e.type === 'player_update') {
-            if(e.previousTracks[0] && (e.track.id === e.previousTracks[0].id)) {
-                if((e.track.uri !== room.playlistUrls[room.playing].source) && spotifyEndSwitchTempFix) {
+            if(e.previousTracks[0] && (e.track.id === e.previousTracks[0].id && spotifyEndSwitchTempFix)) {
+                if((e.track.uri !== room.playlistUrls[room.playing].source)) {
                     setSpotifyPlayerShow(false);
                     setSpotifyEndSwitchTempFix(false);
                     handleMediaEnd();
                     setSpotifyPlayerShow(true);
-                } else {
-                    handleMediaEnd();
-                    setSpotifyEndSwitchTempFix(true);
                 }
-            } 
+            } else {
+                setSpotifyEndSwitchTempFix(true);
+            }
         }
     }
 
