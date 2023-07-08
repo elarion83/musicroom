@@ -40,7 +40,7 @@ const RoomPlaylist = ({t, isSpotifyAvailable, handleChangeIdShownInDrawer, roomP
                                 
                                 <ListItemButton 
                                     onClick={e => handleChangeIdShownInDrawer(idx)}
-                                    sx={{ alignItems:'flex-start',position:'relative',width:'100%', pl:2,m:0, backgroundColor:'var(--main-bg-color)',borderBottom: '2px solid var(--border-color)', color:'var(--white)', "&.Mui-selected": {
+                                    sx={{ alignItems:'flex-start',position:'relative',width:'100%', pl:2,m:0, pr:'35px', backgroundColor:'var(--main-bg-color)',borderBottom: '2px solid var(--border-color)', color:'var(--white)', "&.Mui-selected": {
                                         backgroundColor: "var(--grey-dark)",
                                         transition: 'all 0.3s ease-out'
                                         }

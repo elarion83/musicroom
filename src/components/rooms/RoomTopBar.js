@@ -44,8 +44,7 @@ const RoomTopBar = ({
   return (
     <AppBar sx={{position: (isShowSticky) ? "fixed": 'initial', top:0, bgcolor: 'var(--grey-dark)',borderBottom: '2px solid var(--border-color)'}} >
         
-        <Toolbar xs={12} sx={{ minHeight: '45px !important', fontFamily: 'Monospace', pl:'15px', 
-        pr:(isShowSticky)? 0: '25 px' }}>
+        <Toolbar className={isShowSticky ? "stickyRoomTopBar": ''} xs={12} sx={{ minHeight: '45px !important', fontFamily: 'Monospace', paddingLeft:'10px !important' }}>
                 <Drawer
             id="menu-appbar"
             anchor='left'

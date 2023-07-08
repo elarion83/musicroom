@@ -3,7 +3,7 @@
     position: fixed !important;
     top: 0;  
     width: auto !important;
-    z-index: 5;
+    z-index: 500;
     right: 0;
     box-shadow: none !important;
 }
@@ -24,4 +24,12 @@
 .topBarIsInRoom .MuiAvatar-root {
     height: 30px;
     width: 30px;
+}
+
+.stickyRoomTopBar {
+    padding-right: 10px !important;
+}
+
+.stickyRoomTopBar .MuiFormControlLabel-root {
+    margin-right: 0;
 }
