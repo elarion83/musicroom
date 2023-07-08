@@ -22,7 +22,7 @@ padding: 2px !important;
 min-width: 50px;
 }
 
-.MuiLinearProgress-root {
+.roomPlaylistbloc  .MuiLinearProgress-root {
 background-color: #786b4d !important;
 }
 .MuiListItemButton-root.Mui-selected:hover {

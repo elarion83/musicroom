@@ -30,6 +30,11 @@
     background: #392b2b;
 }
 
+#mediaInfoDrawer .MuiPaper-root {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
 .DrawerBackButton {
     background: var(--grey-lighter);
     cursor: pointer;
@@ -46,4 +51,8 @@
     margin-top: 7px;
     margin-bottom: 7px;
     border-radius: 14px;
+}
+
+.DrawerMediaLinearProgress {
+    background-color: white !important;
 }

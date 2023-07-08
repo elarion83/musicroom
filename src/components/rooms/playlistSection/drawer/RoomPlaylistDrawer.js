@@ -1,5 +1,5 @@
 
-import { Avatar, Divider, Drawer, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, SwipeableDrawer, Typography } from "@mui/material";
+import { Avatar, Divider, Drawer, LinearProgress, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, SwipeableDrawer, Typography } from "@mui/material";
 import React from "react";
 import ImageIcon from '@mui/icons-material/Image';
 
@@ -10,7 +10,7 @@ import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { Box } from "@mui/system";
 
-const RoomPlaylistDrawer = ({t,isSpotifyAvailable, open, changeOpen, isAdminView, userVoteArray, roomPlaylist, changeIsPlaying, handleVoteChange, changeIdPlaying,  data, roomIsActuallyPlaying, roomIdActuallyPlaying, roomIdActuallyDisplaying }) => {
+const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, open, changeOpen, isAdminView, userVoteArray, roomPlaylist, changeIsPlaying, handleVoteChange, changeIdPlaying,  data, roomIsActuallyPlaying, roomIdActuallyPlaying, roomIdActuallyDisplaying }) => {
     
     function handleVotePositif(idMedia, mediaHashId) {
         roomPlaylist[idMedia].vote.up++;
@@ -24,15 +24,15 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable, open, changeOpen, isAdminView
     
     return(
       <Drawer
-            id="menu-appbar"
+            id="mediaInfoDrawer"
             anchor='bottom'
             onClose={(e) => changeOpen(false)}
             open={open}
-            sx={{zIndex:2000}}
+            sx={{zIndex:2000, borderTopLeftRadius:'5px'}}
         >
             <Box className="DrawerBackButton" onClick={(e) => changeOpen(false)} ></Box>
             <Divider />
-            {data && <List sx={{ width: '100%', mb:'15em'}}>
+            {data && <List sx={{ width: '100%', mb:'15em', p:0}}>
                 <ListItem sx={{pt:0, mt:0}}>
                     <DrawerPlayPauseButton 
                         isAdminView={isAdminView}
@@ -43,8 +43,11 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable, open, changeOpen, isAdminView
                         changeIdPlaying={changeIdPlaying}
                         idActuallyPlaying={roomIdActuallyPlaying}
                         idActuallyDisplaying={roomIdActuallyDisplaying} />
-                    <ListItemText primary={data.title} secondary={"Via "+data.source+" par "+data.addedBy} />
-                    
+                    <ListItemText sx={{zIndex:2}} primary={data.title} secondary={"Via "+data.source+" par "+data.addedBy} />
+                    {roomIdActuallyPlaying === roomIdActuallyDisplaying &&
+                    <LinearProgress className="DrawerMediaLinearProgress" sx={{top:0, left:0,position:'absolute', width:'100%', height:'100%', zIndex:1, opacity:0.5, "& .MuiLinearProgress-barColorPrimary": {
+                        backgroundColor: 'var(--grey-lighter)',
+                    }}} variant="determinate" value={roomPlayedActuallyPlayed} />}
                 </ListItem>
                 {data.source === 'spotify' && !isSpotifyAvailable && 
                     <><Divider />

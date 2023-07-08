@@ -812,7 +812,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                                             }
                                         </Grid>
                                     }
-                                    {!isActuallyAdmin && <Grid item sm={6} xs={12}  sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:0,ml:0,mr:1,pr:2, mb: 1 }}>
+                                    {!isActuallyAdmin && <Grid item sm={6} xs={12} className="guestButtons" sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:0,ml:0,mr:1,pr:2, mb: 1 }}>
                                             {!guestSynchroOrNot && <><IconButton onClick={e => roomIdPlayed > 0 ? setRoomIdPlayed(roomIdPlayed-1) : ''}>
                                                 <FirstPageIcon  fontSize="large" sx={{color:roomIdPlayed > 0 ? '#f0f1f0': '#303134'}} />
                                             </IconButton>
@@ -826,16 +826,11 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                                                 <LastPageIcon  fontSize="large" sx={{color: (room.playlistUrls.length -1) !== roomIdPlayed ? '#f0f1f0' : '#303134'}} />
                                             </IconButton></>}
                                             
-                                            {room.playlistUrls[room.playing].source !== 'spotify' && 
-                                                <Grid item xs={10} md={3} sx={{ pt:0,pr:2,ml: guestSynchroOrNot ? 1.5 : 0, mb: 0, pb:1, mt: guestSynchroOrNot ? 0 : 0 }}>
-                                                    <Stack spacing={2} sm={8} direction="row" sx={{ mb: 1, mr:2 }} alignItems="center">
-                                                        <VolumeButton volume={localVolume} setVolume={setLocalVolume}/>
-                                                        
-                                                        {layoutDisplay === 'fullscreen' && <IconButton onClick={e => setLayoutdisplay('default')} >
-                                                            <FullscreenExitIcon fontSize="large"  sx={{color: '#f0f1f0', mt: guestSynchroOrNot ? 1 : 0  }} />
-                                                        </IconButton>}
-                                                    </Stack>
-                                                </Grid> 
+                                            {room.playlistUrls[room.playing].source !== 'spotify' && !isShowSticky && <VolumeButton volume={localVolume} setVolume={setLocalVolume}/>}
+                                            {room.playlistUrls[room.playing].source !== 'spotify' && layoutDisplay === 'fullscreen' &&
+                                                <IconButton onClick={e => setLayoutdisplay('default')} >
+                                                    <FullscreenExitIcon fontSize="large"  sx={{color: '#f0f1f0', mt: guestSynchroOrNot ? 1 : 0  }} />
+                                                </IconButton>
                                             }
                                     </Grid>}
                                 </Grid>
@@ -905,6 +900,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                             userVoteArray={localData.currentUserVotes} 
                             roomPlaylist={room.playlistUrls} 
                             isSpotifyAvailable={room.roomParams.spotifyIsLinked} 
+                            roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayedData.playedPercentage} 
                         />
                     </Box>
                 }
