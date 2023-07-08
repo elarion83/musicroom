@@ -14,6 +14,7 @@ import { useState } from 'react';
 
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
+import ChatIcon from '@mui/icons-material/Chat';
 import DvrIcon from '@mui/icons-material/Dvr';
 import AirplayIcon from '@mui/icons-material/Airplay';
 import { useEffect } from 'react';
@@ -91,7 +92,7 @@ const DisplayMenu = ({t, layoutDisplay, setLayoutdisplay}) => {
         onClick={handleClick}
         endIcon={open ? <KeyboardArrowDownIcon sx={{ml:-1.5}}/> : <KeyboardArrowUpIcon sx={{ml:-1.5}}/>}
       >
-      <ViewModuleIcon sx={{ml:0.5,mr:0.5}} />
+      <FullscreenIcon sx={{ml:0.5,mr:0.5}} />
       </Button>
       <StyledMenu
         MenuListProps={{
@@ -115,7 +116,7 @@ const DisplayMenu = ({t, layoutDisplay, setLayoutdisplay}) => {
           {t('RoomBottomDisplayClassic')}
         </MenuItem>
         <MenuItem selected={layoutDisplay === 'interactive'} onClick={(e) => setLayoutdisplay('interactive')} disableRipple>
-          <AirplayIcon />
+          <ChatIcon />
           Interactif
         </MenuItem>
       </StyledMenu>

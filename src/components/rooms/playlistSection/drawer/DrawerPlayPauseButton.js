@@ -6,30 +6,37 @@ import SoundWave from "../../SoundWave";
 import { Box } from "@mui/system";
 import { ListItemIcon } from "@mui/material";
 
-const DrawerPlayPauseButton = ({ isAdminView, isPlaying, changeIsPlaying, changeIdPlaying, idActuallyPlaying, idActuallyDisplaying }) => {
-
+const DrawerPlayPauseButton = ({ isAdminView,isPlayable, isPlaying, mediaDisplayingData, changeIsPlaying, changeIdPlaying, idActuallyPlaying, idActuallyDisplaying }) => {
     return(
         <Box>
         {isAdminView && <ListItemIcon sx={{cursor:'pointer'}}>
                 {idActuallyPlaying === idActuallyDisplaying && 
                     <>
-                        {isPlaying && 
+                        {isPlaying &&
                             <Box sx={{pl:1}} onClick={e => changeIsPlaying(false)}>
                                 <SoundWave waveNumber={7} isPlayingOrNo={isPlaying}  /></Box>
                         }
-                        {!isPlaying && 
+                        {!isPlaying &&
                             <PlayCircleOutlineIcon sx={{ml:1}} fontSize="large" onClick={e => changeIsPlaying(true)}  />
                         }
                     </>
                 }
-                {idActuallyPlaying !== idActuallyDisplaying && 
+                {idActuallyPlaying !== idActuallyDisplaying && isPlayable &&
                     <PlayCircleOutlineIcon sx={{ml:1}} fontSize="large" onClick={e => changeIdPlaying(idActuallyDisplaying)}  />
+                }
+                {idActuallyPlaying !== idActuallyDisplaying && !isPlayable &&
+                    <img src={mediaDisplayingData.visuel} width="50px" />
                 }
         </ListItemIcon>}
         {!isAdminView && (idActuallyPlaying === idActuallyDisplaying) && 
-                <ListItemIcon sx={{cursor:'pointer'}}>
-                <SoundWave waveNumber={7} sx={{pl:0.5}}isPlayingOrNo={isPlaying} />
-            </ListItemIcon>}
+            <ListItemIcon sx={{cursor:'pointer'}}>
+            <SoundWave waveNumber={7} sx={{pl:0.5}}isPlayingOrNo={isPlaying} />
+        </ListItemIcon>}
+        {!isAdminView && (idActuallyPlaying !== idActuallyDisplaying) && 
+            <ListItemIcon sx={{cursor:'pointer'}}>
+            <img src={mediaDisplayingData.visuel} width="50px" />
+        </ListItemIcon>}
+        
         </Box>
     )
 };

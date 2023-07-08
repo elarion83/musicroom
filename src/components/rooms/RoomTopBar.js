@@ -21,6 +21,7 @@ import Tooltip from '@mui/material/Tooltip';
 import 'animate.css';
 
 import { withTranslation } from 'react-i18next';
+import VolumeButton from "./playerSection/VolumeButton";
 
 const RoomTopBar = ({
                 t,
@@ -36,6 +37,8 @@ const RoomTopBar = ({
                 isSpotifyAndIsNotPlayableBySpotify,
                 guestSynchroOrNot,
                 setGuestSynchroOrNot,
+                volume,
+                setVolume,
                 paramDrawerIsOpen, handleOpenDrawerParam, roomId, roomAdmin, isLinkedToSpotify,handleOpenRoomParamModal,handleOpenShareModal,handleOpenLeaveRoomModal, }) => {
 
   return (
@@ -128,16 +131,16 @@ const RoomTopBar = ({
                 </ListItem>
             </List>
         </Drawer>
-                <Tooltip  className='animate__animated animate__fadeInLeft animate__delay-1s animate__fast' title={t('RoomLeftMenuRoomParams')} sx={{ bgColor:'#30363c'}}>
-                        <Badge invisible={isLinkedToSpotify} variant="dot" sx={{'& .MuiBadge-badge': {
-                            right:'10px',
-                            bgcolor:'var(--red-2)'
-                        }}} >
-                            <TuneIcon 
-                            onClick={e => handleOpenDrawerParam(!paramDrawerIsOpen)} 
-                            sx={{mr:1, cursor:'pointer', color:'var(--white)'}}/>
-                        </Badge>
-                </Tooltip>
+            <Tooltip  className='animate__animated animate__fadeInLeft animate__delay-1s animate__fast' title={t('RoomLeftMenuRoomParams')} sx={{ bgColor:'#30363c'}}>
+                    <Badge invisible={isLinkedToSpotify} variant="dot" sx={{'& .MuiBadge-badge': {
+                        right:'10px',
+                        bgcolor:'var(--red-2)'
+                    }}} >
+                        <TuneIcon 
+                        onClick={e => handleOpenDrawerParam(!paramDrawerIsOpen)} 
+                        sx={{mr:1, cursor:'pointer', color:'var(--white)'}}/>
+                    </Badge>
+            </Tooltip>
                 
 
             <Typography  className='animate__animated animate__fadeInLeft animate__fast' component="div" sx={{ flexGrow: 1 , textTransform:'uppercase', fontSize:'12px',}}>
@@ -145,7 +148,7 @@ const RoomTopBar = ({
             </Typography>
             
             {isShowSticky &&
-                <Grid className="animate__animated animate__fadeInDown"> 
+                <Grid className="animate__animated animate__fadeInDown stickyButtons"> 
                     {isAdminView && <IconButton onClick={e => ((room.playing > 0) && isSpotifyAndIsNotPlayableBySpotify(room.playing-1, room.roomParams.isLinkedToSpotify)) ? handleChangeActuallyPlaying(room.playing - 1) : ''}>
                         <SkipPrevious fontSize="large" sx={{color:((room.playing > 0) && isSpotifyAndIsNotPlayableBySpotify(room.playing-1, room.roomParams.isLinkedToSpotify)) ? '#f0f1f0': '#303134'}} />
                     </IconButton>}
@@ -171,6 +174,8 @@ const RoomTopBar = ({
                     {!isAdminView && !guestSynchroOrNot && <IconButton onClick={e => (room.playlistUrls.length -1) !== roomIdPlayed ? setRoomIdPlayed(roomIdPlayed + 1) : ''}>
                         <SkipNextIcon fontSize="large" sx={{color: (room.playlistUrls.length -1) !== roomIdPlayed ? '#f0f1f0' : '#303134'}} />
                     </IconButton>}
+                    
+                    <VolumeButton volume={volume} setVolume={setVolume}/>
 
                 </Grid>}
         </Toolbar>

@@ -21,7 +21,7 @@ import useKeypress from 'react-use-keypress';
 
 import YTSearch from 'youtube-api-search';
 
-import RoomPlaylistDrawer from "./rooms/playlistSection/RoomPlaylistDrawer";
+import RoomPlaylistDrawer from "./rooms/playlistSection/drawer/RoomPlaylistDrawer";
 
 import Stack from '@mui/material/Stack';
 //import screenfull from 'screenfull'
@@ -98,6 +98,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
     const [mediaDataDrawerOpen, setMediaDataDrawerOpen] = useState(false);
 
     const [localVolume, setLocalVolume] = useState(0);
+
     const [pip, setPip] = useState(true);
     const [userCanMakeInteraction, setUserCanMakeInteraction]= useState(true);
     const [openForceDisconnectSpotifyModal, setOpenForceDisconnectSpotifyModal] = useState(false);
@@ -448,10 +449,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
             } 
         }
     }
-
-    function handleVolumeChange(e) {
-        setLocalVolume(e.target.value);
-    }
     
     function handleQuitRoomInComp() {
         room.notifsArray.push({type: 'userLeaved', timestamp: Date.now(), createdBy: currentUser.displayName});
@@ -652,9 +649,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                 handleOpenDrawerParam={setOpenRoomDrawer}
                 handleOpenLeaveRoomModal={handleOpenLeaveRoomModal}
                 localData={localData} 
+                volume={localVolume}
+                setVolume={setLocalVolume}
                 roomId={roomId} 
                 roomAdmin={room.admin} 
-                isLinkedToSpotify={room.roomParams.spotifyIsLinked}/>
+                isLinkedToSpotify={room.roomParams.spotifyIsLinked}
+            />
         }
         <Container maxWidth={false} sx={{ padding: '0 !important'}} className={layoutDisplayClass} >
             {loaded && room.playlistUrls && <div>
@@ -751,7 +751,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                                     <Grid item 
                                     sx={[{pb:1}, room.playlistUrls[roomIdPlayed].source === 'spotify' &&  { justifyContent: 'center' } ]} 
                                     className="flexRowCenterH">
-                                        { room.playlistUrls[roomIdPlayed].title && <Typography component={'span'}>
+                                        { room.playlistUrls[roomIdPlayed].title && <Typography component={'span'} className='mediaTitle'>
                                         {room.playlistUrls[roomIdPlayed].title} 
                                         </Typography>}
                                         { room.playlistUrls[roomIdPlayed].url && room.playlistUrls[roomIdPlayed].url.length === 0 || !room.playlistUrls[roomIdPlayed].title && 
@@ -807,7 +807,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                                                 </>
                                             }
                                             
-                                            {room.playlistUrls[room.playing].source !== 'spotify' && 
+                                            {room.playlistUrls[room.playing].source !== 'spotify' && !isShowSticky &&
                                                 <VolumeButton volume={localVolume} setVolume={setLocalVolume}/>
                                             }
                                         </Grid>
@@ -883,14 +883,10 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                     <Box className="roomPlaylistbloc" sx={{ p:0,mb:0}}>
                         <RoomPlaylist 
                             isSpotifyAvailable={room.roomParams.spotifyIsLinked} 
-                            isAdminView={isActuallyAdmin} 
                             roomPlaylist={room.playlistUrls} 
                             roomIdActuallyPlaying={roomIdPlayed} 
-                            userVoteArray={localData.currentUserVotes} 
                             handleChangeIsActuallyPlaying={handlePlay} 
-                            handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying}  
                             handleChangeIdShownInDrawer={handleChangeIdShownInDrawer}  
-                            handleVoteChange={handleVoteChange} 
                             roomIsActuallyPlaying={roomIsPlaying} 
                             roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayedData.playedPercentage} 
                         />
@@ -908,6 +904,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                             handleVoteChange={handleVoteChange} 
                             userVoteArray={localData.currentUserVotes} 
                             roomPlaylist={room.playlistUrls} 
+                            isSpotifyAvailable={room.roomParams.spotifyIsLinked} 
                         />
                     </Box>
                 }

@@ -15,6 +15,8 @@
     margin-left: auto;
     margin-right: auto;
     display: block;
+    width: 100%;
+    max-width: 250px;
 }
 
 .player_right_side_container {

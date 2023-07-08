@@ -49,13 +49,40 @@ width: 100%;
 display: block;
 }
 
-.musicOnlyPlayer_header {
-    text-align: center;
-}
-
 @media (min-width: 800px) { 
-    .musicOnlyPlayer_header .player_button_container>div {
+    .spotifyDisplay .musicOnlyPlayer_header .player_button_container>div {
         margin: 0 auto !important;
         max-width: 70%;
     }
+    
+    .deezerDisplay .volumeButton {
+        margin-top: 2.3em;
+        margin-left: 1em;
+    }
+}
+
+
+@media (max-width: 800px) { 
+    .musicOnlyPlayer_header {
+        text-align: center;
+    }
+
+    .musicOnlyPlayer_header .mediaTitle {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.spotifyDisplay .player_right_side_container {
+    text-align: center;
+}
+
+
+/*
+*
+* STICKY BUTTONS
+*
+*/
+.stickyButtons .volumeButton {
+      margin-top: 0px;
 }
