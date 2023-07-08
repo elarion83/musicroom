@@ -9,7 +9,7 @@ import { ListItemIcon } from "@mui/material";
 const DrawerPlayPauseButton = ({ isAdminView,isPlayable, isPlaying, mediaDisplayingData, changeIsPlaying, changeIdPlaying, idActuallyPlaying, idActuallyDisplaying }) => {
     return(
         <Box>
-        {isAdminView && <ListItemIcon sx={{cursor:'pointer'}}>
+        {isAdminView && <ListItemIcon sx={{cursor:'pointer', zIndex:2, position:'relative'}}>
                 {idActuallyPlaying === idActuallyDisplaying && 
                     <>
                         {isPlaying &&
