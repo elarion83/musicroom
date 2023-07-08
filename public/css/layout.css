@@ -11,10 +11,10 @@
 
 .fullscreen+div .player_button_container {
     position: fixed;
-    top: calc(100vh - 71px);
+    top: calc(100vh - 63px);
     z-index: 20000;
     width: 100%;
-    height: auto;
+    height: 59px;
 }
 
 .fullscreen .PlayerRSWP{     

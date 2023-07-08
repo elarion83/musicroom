@@ -770,7 +770,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                                 </Grid> 
                                 <Grid className='player_button_container' item sm={12} sx={{ display:'flex', flexWrap:'wrap',padding:0,pl:1.5,ml:0, pr:1.5,mb: 0 , mt:1, fill:'#f0f1f0'}}   >
                                     {isActuallyAdmin && 
-                                        <Grid item sm={6} xs={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:0, mb: 1.5 }}>
+                                        <Grid item sm={6} className="adminButtons" xs={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:0, mb: 1.5 }}>
                                             
                                             <IconButton onClick={e => roomIdPlayed > 0 ? handleChangeActuallyPlaying(0) : ''}>
                                                 <FirstPageIcon  fontSize="large" sx={{color:roomIdPlayed > 0 ? '#f0f1f0': '#303134'}} />
@@ -829,7 +829,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom }) => {
                                             {room.playlistUrls[room.playing].source !== 'spotify' && !isShowSticky && <VolumeButton volume={localVolume} setVolume={setLocalVolume}/>}
                                             {room.playlistUrls[room.playing].source !== 'spotify' && layoutDisplay === 'fullscreen' &&
                                                 <IconButton onClick={e => setLayoutdisplay('default')} >
-                                                    <FullscreenExitIcon fontSize="large"  sx={{color: '#f0f1f0', mt: guestSynchroOrNot ? 1 : 0  }} />
+                                                    <FullscreenExitIcon fontSize="large"  sx={{color: '#f0f1f0' }} />
                                                 </IconButton>
                                             }
                                     </Grid>}
