@@ -9,11 +9,11 @@ import { ListItemIcon } from "@mui/material";
 const DrawerPlayPauseButton = ({ isAdminView,isPlayable, isPlaying, mediaDisplayingData, changeIsPlaying, changeIdPlaying, idActuallyPlaying, idActuallyDisplaying }) => {
     return(
         <Box>
-        {isAdminView && <ListItemIcon sx={{cursor:'pointer', zIndex:2, position:'relative'}}>
+        {isAdminView && <ListItemIcon sx={{cursor:'pointer', zIndex:2, position:'relative', display:'flex'}}>
                 {idActuallyPlaying === idActuallyDisplaying && 
                     <>
                         {isPlaying &&
-                            <Box sx={{pl:1}} onClick={e => changeIsPlaying(false)}>
+                            <Box sx={{pl:2}} onClick={e => changeIsPlaying(false)}>
                                 <SoundWave waveNumber={7} isPlayingOrNo={isPlaying}  /></Box>
                         }
                         {!isPlaying &&

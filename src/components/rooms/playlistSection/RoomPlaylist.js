@@ -15,10 +15,7 @@ import Paper from '@mui/material/Paper';
 
 
 import { Icon } from '@iconify/react';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SoundWave from "../SoundWave";
 
 import { withTranslation } from 'react-i18next';
@@ -64,6 +61,7 @@ const RoomPlaylist = ({t, isSpotifyAvailable, handleChangeIdShownInDrawer, roomP
                                             {roomIsActuallyPlaying ? t('GeneralPlaying') : t('GeneralPause')}
                                         </Typography>}
                                     </Grid>
+                                    <MoreVertIcon sx={{position:'absolute',zIndex:1, right:'10px', top:'calc(50% - 12px)', opacity:0.5, color:'var(--grey-light)'}} />
                                    {idx === roomIdActuallyPlaying && <LinearProgress sx={{top:0, left:0,position:'absolute', width:'100%', height:'100%', zIndex:1, opacity:0.5, "& .MuiLinearProgress-barColorPrimary": {
                                         backgroundColor: "var(--grey-dark)",
                                     }}} variant="determinate" value={roomPlayedActuallyPlayed} /> }
