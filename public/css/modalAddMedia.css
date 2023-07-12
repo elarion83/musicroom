@@ -29,3 +29,9 @@
     -webkit-animation: typedjsBlink 0.7s infinite;
     animation: typedjsBlink 0.7s infinite;
 }
+
+.searchResultItem>div {
+      height: 100%;
+  display: flex;
+  flex-direction: column;
+}

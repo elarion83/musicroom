@@ -18,6 +18,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import validator from 'validator';
+import SearchResultItem from '../searchResultItem';
 
 import { withTranslation } from 'react-i18next';
 
@@ -47,13 +48,13 @@ const RoomModalAddMedia = ({ t, currentUser, validatedObjectToAdd, spotifyTokenP
     async function handleCheckAndAddObjectToPlaylistFromObject(objectFormatted) {
         validatedObjectToAdd(objectFormatted);
         
+        setRecentlyAdded(false);
+        await delay(100);
         setRecentlyAddedTitle(objectFormatted.title);
         addingObject.title='';
         addingObject.source='';
         addingObject.url='';
         addingObject.platformId='';
-        setRecentlyAdded(false);
-        await delay(100);
         setRecentlyAdded(true);
         await delay(6000);
         setRecentlyAdded(false);
@@ -204,78 +205,96 @@ const RoomModalAddMedia = ({ t, currentUser, validatedObjectToAdd, spotifyTokenP
                     <Box sx={{ lineHeight:"15px", p:0, pt:0, mb:0 }}>
                         {tabIndex === 0 && (
                         <Box>  
-                            {mediaSearchResultYoutube.length > 1 && <Grid item xs={12}>
-                                <List component="nav">
+                            {mediaSearchResultYoutube.length > 1 && 
+                                <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{mt:0}}>
                                     { mediaSearchResultYoutube.map(function(media, idyt){
                                         var txt = document.createElement("textarea");
                                         txt.innerHTML = media.snippet.title;
                                         media.snippet.title = txt.innerHTML;
-                                        return (<ListItemButton sx={{m:0, p:0, pr:1,borderBottom: '2px solid var(--border-color)'}}  key={idyt} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.snippet.title, source:'youtube', platformId:media.id.videoId, url:'https://www.youtube.com/watch?v='+media.id.videoId, visuel:media.snippet.thumbnails.default.url, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
-                                            <img alt={media.snippet.title.substring(0, 50)} src={media.snippet.thumbnails.default.url} />
-                                            <Grid sx={{display:'flex',flexDirection:'column',pl:2}}>
-                                                <ListItemText primary={media.snippet.title.substring(0, 50)} className='video_title_list' sx={{ mt:0, fontSize:'0.9em'}}/>
-                                                <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>Par <b>{media.snippet.channelTitle} </b></Typography>
-                                                <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>Le <b>{dateFormat(media.snippet.publishedAt, 'd mmm yyyy à HH:MM')} </b></Typography>
-                                            </Grid>
-                                            </ListItemButton>)
+                                        return (
+                                        <SearchResultItem 
+                                            key={idyt}
+                                            image={media.snippet.thumbnails.high.url}
+                                            title={media.snippet.title}
+                                            source='youtube'
+                                            uid={uuid().slice(0,10).toLowerCase()}
+                                            platformId={media.id.videoId}
+                                            addedBy={addingObject.addedBy}
+                                            url={'https://www.youtube.com/watch?v='+media.id.videoId}
+                                            date={dateFormat(media.snippet.publishedAt, 'd mmm yyyy à HH:MM')}
+                                            channelOrArtist={media.snippet.channelTitle}
+                                            addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject}
+                                        />)
                                     }) }
-                                </List>
                             </Grid>}
                         </Box>
                         )}
                         {tabIndex === 1 && (
                         <Box>
                             {mediaSearchResultSpotify.length > 1 && <Grid item xs={12}>
-                            <List component="nav">
+                            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{mt:0}}>
                                 { mediaSearchResultSpotify.map(function(media, idsp){
-                                    return (<ListItemButton sx={{margin:0,padding:0, pr:1,borderBottom: '2px solid var(--border-color)'}} key={idsp} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.artists[0].name + ' - ' +media.name, source:'spotify', platformId:media.uri, visuel:media.album.images[0].url, url:media.uri, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
-                                        <img alt={media.name.substring(0, 50)} src={media.album.images[2].url} />
-                                        <Grid sx={{display:'flex',flexDirection:'column',pl:2}}>
-                                            <ListItemText primary={media.name} sx={{ mt:0, fontSize:'0.9em'}}/>
-                                            <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}> 
-                                                { media.artists.map(function(artist, ida){
-                                                    return ( 
-                                                        <b>{artist.name} / </b>
-                                                    )
-                                                })}
-                                            </Typography>
-                                            <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>Album {media.album.name} - <b>{dateFormat(media.album.release_date, 'd mmm yyyy ')} </b></Typography>
-                                        </Grid>
-                                    </ListItemButton>)
+                                    return (
+                                    <SearchResultItem 
+                                        key={idsp}
+                                        image={media.album.images[0].url}
+                                        title={media.artists[0].name + ' - ' +media.name}
+                                        source='spotify'
+                                        uid={uuid().slice(0,10).toLowerCase()}
+                                        platformId={media.uri}
+                                        addedBy={addingObject.addedBy}
+                                        url={media.uri}
+                                        date={dateFormat(media.album.release_date, 'd mmm yyyy')}
+                                        channelOrArtist={media.artists[0].name}
+                                        addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject}
+                                    />)
                                 }) }
-                            </List>
+                            </Grid>
                         </Grid>}
                         </Box>
                         )}
                         {tabIndex === 2 && (
                         <Box>
-                            {mediaSearchResultDeezer.length > 1 && <Grid item xs={12}>
-                            <List component="nav">
+                            {mediaSearchResultDeezer.length > 1 && 
+                            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{mt:0}}>
                                 { mediaSearchResultDeezer.map(function(media, idde){
-                                        return (<ListItemButton sx={{m:0, p:0, pr:1,borderBottom: '2px solid var(--border-color)'}}  key={idde} 
-                                        onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.artist.name+' | '+media.title, source:'deezer',visuel:'https://e-cdn-images.dzcdn.net/images/cover/'+media.md5_image+'/264x264-000000-80-0-0.jpg', platformId:media.id, url:media.preview, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
-                                        <img alt={media.title.substring(0, 50)} src={'https://e-cdn-images.dzcdn.net/images/cover/'+media.md5_image+'/80x80-000000-80-0-0.jpg'} />
-                                        <Grid sx={{display:'flex',flexDirection:'column',pl:2}}>
-                                            <ListItemText primary={media.title.substring(0, 50)} className='video_title_list' sx={{ mt:0, fontSize:'0.9em'}}/>
-                                            <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>Par <b>{media.artist.name} </b></Typography>
-                                            <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>Album <b>{media.album.title} </b></Typography>
-                                        </Grid>
-                                        </ListItemButton>)
+                                        return (
+                                        <SearchResultItem 
+                                            key={idde}
+                                            image={'https://e-cdn-images.dzcdn.net/images/cover/'+media.md5_image+'/345x345-000000-80-0-0.jpg'}
+                                            title={media.artist.name+' - '+media.title}
+                                            source='deezer'
+                                            uid={uuid().slice(0,10).toLowerCase()}
+                                            platformId={media.id}
+                                            addedBy={addingObject.addedBy}
+                                            url={media.preview}
+                                            channelOrArtist={media.artist.name}
+                                            album={media.album.title}
+                                            addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject}
+                                        />)
                                 }) }
-                            </List>
-                        </Grid>}
+                            </Grid>}
                         </Box>
                         )}
                         {tabIndex === 3 && (
                         <Box>
                             {mediaSearchResultDailyMotion.length > 1 && <Grid item xs={12}>
-                            <List component="nav">
+                            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{mt:0}}>
                                 { mediaSearchResultDailyMotion.map(function(media, iddm){
-                                    return (<ListItemButton sx={{margin:0,padding:0, pr:1,borderBottom: '2px solid var(--border-color)'}} key={iddm} onClick={(e) => handleCheckAndAddObjectToPlaylistFromObject({title:media.title, source:'dailymotion', platformId:media.id, visuel:media.thumbnail_url, url:'https://www.dailymotion.com/video/'+media.id, addedBy: addingObject.addedBy, vote: {'up':0,'down':0}, hashId: uuid().slice(0,10).toLowerCase()})}>
-                                        <img alt={media.title.substring(0, 50)}  src={media.thumbnail_url} style={{width:'120px', height:'90px'}}/>
-                                        <ListItemText primary={media.title.substring(0, 50)} sx={{ml:2, mt:0, fontSize:'0.9em'}}/></ListItemButton>)
+                                    return (
+                                    <SearchResultItem 
+                                            key={iddm}
+                                            image={media.thumbnail_url}
+                                            title={media.title}
+                                            source='dailymotion'
+                                            uid={uuid().slice(0,10).toLowerCase()}
+                                            platformId={media.id}
+                                            addedBy={addingObject.addedBy}
+                                            url={'https://www.dailymotion.com/video/'+media.id}
+                                            addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject}
+                                    />)
                                 }) }
-                            </List>
+                            </Grid>
                         </Grid>}
                         </Box>
                         )}
