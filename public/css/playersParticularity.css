@@ -67,11 +67,16 @@ display: block;
 }
 
 .fullscreenLayout .deezerDisplay .player_right_side_container {
-    margin-top: 10em;
+    margin-top: 300px;
     max-width: 100%;
     width: 100vw !important;
     position: absolute;
     text-align: center;
+}
+
+.fullscreenLayout .deezerDisplay .coverImg,
+.interactiveLayout .deezerDisplay .coverImg {
+    margin-top: 1em;
 }
 
 .fullscreenLayout .deezerDisplay .player_right_side_container .flexRowCenterH  {
@@ -94,7 +99,7 @@ display: block;
     margin-top: 0;
 }
 
-@media (max-width: 800px) { 
+@media (max-width: 600px) { 
     .musicOnlyPlayer_header {
         text-align: center;
     }
