@@ -110,7 +110,7 @@ const RoomModalAddMedia = ({ t, currentUser, validatedObjectToAdd, spotifyTokenP
                     part: 'snippet',
                     key: process.env.REACT_APP_YOUTUBE_API_KEY,
                     q: searchTerm,
-                    maxResults:10,
+                    maxResults:12,
                     type: 'video'
                 } })
                 .then(function(response) {

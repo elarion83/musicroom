@@ -1,6 +1,6 @@
 .topBarIsInRoom {
     background: none !important;
-    position: fixed !important;
+    position: absolute !important;
     top: 0;  
     width: auto !important;
     z-index: 500;
@@ -32,4 +32,8 @@
 
 .stickyRoomTopBar .MuiFormControlLabel-root {
     margin-right: 0;
+}
+
+.stickyRoomTopBar {
+      box-shadow: 0px 5px 10px -1px rgba(0, 0, 0, 0.8),0px 10px 50px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12);
 }
