@@ -176,12 +176,14 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                             allowEverybodyToAddMedia:true,
                             interactionsAllowed:true,
                             interactionFrequence:20000,
-                            spotifyIsLinked:false,
-                            spotifyAlreadyHaveBeenLinked:false,
-                            spotifyToken:'',
-                            spotifyTokenTimestamp:0,
-                            spotifyUserConnected:'',
                             deezer:{
+                                IsLinked:false,
+                                AlreadyHaveBeenLinked:false,
+                                Token:'',
+                                TokenTimestamp:0,
+                                UserConnected:''
+                            },
+                            spotify:{
                                 IsLinked:false,
                                 AlreadyHaveBeenLinked:false,
                                 Token:'',
@@ -287,7 +289,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }, [loaded, localData,room]);
 
     async function handlePlay(playStatus) {
-        if((typeof(room.roomParams.spotifyTokenTimestamp) === 'number' && room.roomParams.spotifyTokenTimestamp > 0) && ((Date.now() - room.roomParams.spotifyTokenTimestamp) > 3600000)) {   
+        if((typeof(room.roomParams.spotify.TokenTimestamp) === 'number' && room.roomParams.spotify.TokenTimestamp > 0) && ((Date.now() - room.roomParams.spotify.TokenTimestamp) > 3600000)) {   
             disconnectSpotify();
         }
         if((typeof(room.roomParams.deezer.TokenTimestamp) === 'number' && room.roomParams.deezer.TokenTimestamp > 0) && ((Date.now() - room.roomParams.deezer.TokenTimestamp) > 3600000)) {   
@@ -308,7 +310,14 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }
 
     async function disconnectSpotify() {
-        roomRef.set({roomParams:{spotifyToken: '',spotifyIsLinked:false, spotifyTokenTimestamp: Date.now(), spotifyUserConnected:''}}, { merge: true });
+         roomRef.set({roomParams:{
+            spotify:{
+                IsLinked:false,
+                AlreadyHaveBeenLinked:true,
+                Token:'',
+                TokenTimestamp:Date.now(),
+                UserConnected:''
+            }}}, { merge: true });
         setOpenForceDisconnectSpotifyModal(false);
     }
 
@@ -400,7 +409,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     function handleChangeActuallyPlaying(numberToPlay) {
         if(isActuallyAdmin) {
             if(room.playlistUrls[numberToPlay]) {
-                if(room.playlistUrls[numberToPlay].source === 'spotify' && !room.roomParams.spotifyIsLinked) {
+                if(room.playlistUrls[numberToPlay].source === 'spotify' && !room.roomParams.spotify.IsLinked) {
                     handleChangeActuallyPlaying(numberToPlay+1);
                     return
                 }
@@ -527,7 +536,14 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     })
 
     async function handleChangeSpotifyToken(newToken) {
-        roomRef.set({roomParams:{spotifyToken: newToken,spotifyIsLinked:true,spotifyAlreadyHaveBeenLinked:true, spotifyTokenTimestamp: Date.now(), spotifyUserConnected:currentUser.displayName}}, { merge: true });
+        roomRef.set({roomParams:{
+            spotify:{
+                IsLinked:true,
+                AlreadyHaveBeenLinked:true,
+                Token:newToken,
+                TokenTimestamp:Date.now(),
+                UserConnected:currentUser.displayName
+            }}}, { merge: true });
         window.history.replaceState('string','', window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '')+'?rid='+roomId.replace(/\s/g,''));
     }
     
@@ -654,7 +670,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 setVolume={setLocalVolume}
                 roomId={roomId} 
                 roomAdmin={room.admin} 
-                isLinkedToSpotify={room.roomParams.spotifyIsLinked}
+                isLinkedToSpotify={room.roomParams.spotify.IsLinked}
             />
         }
         <Container maxWidth={false} sx={{ padding: '0 !important'}} className={layoutDisplayClass} >
@@ -669,7 +685,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                         {spotifyPlayerShow && isActuallyAdmin &&
                                             <SpotifyPlayer
                                                 callback={SpotifyPlayerCallBack}
-                                                token={room.roomParams.spotifyToken}
+                                                token={room.roomParams.spotify.Token}
                                                 uris={room.playlistUrls[roomIdPlayed].url}
                                                 play={room.actuallyPlaying}
                                                 inlineVolume={localVolume}
@@ -865,7 +881,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                             <p style={{color:'var(--white)', margin:0}}>{t('RoomEmptyAlertPlaylistClickHere')}</p>
                         </Alert>
                         
-                        {!room.roomParams.spotifyIsLinked && 
+                        {!room.roomParams.spotify.IsLinked && 
                             <Alert severity="warning" variant="filled" 
                             icon={<Icon icon="mdi:spotify" width="30" />} 
                             sx={{m:2, border:'2px solid #febc21',cursor:'pointer'}} 
@@ -879,7 +895,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 {typeof(room.playlistUrls) !== 'undefined' && room.playlistUrls && room.playlistUrls.length > 0 && 
                     <Box className="roomPlaylistbloc" sx={{ p:0,mb:0}}>
                         <RoomPlaylist 
-                            isSpotifyAvailable={room.roomParams.spotifyIsLinked} 
+                            isSpotifyAvailable={room.roomParams.spotify.IsLinked} 
                             roomPlaylist={room.playlistUrls} 
                             roomIdActuallyPlaying={roomIdPlayed} 
                             handleChangeIsActuallyPlaying={handlePlay} 
@@ -901,7 +917,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                             handleVoteChange={handleVoteChange} 
                             userVoteArray={localData.currentUserVotes} 
                             roomPlaylist={room.playlistUrls} 
-                            isSpotifyAvailable={room.roomParams.spotifyIsLinked} 
+                            isSpotifyAvailable={room.roomParams.spotify.IsLinked} 
                             roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayedData.playedPercentage} 
                         />
                     </Box>
@@ -942,7 +958,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 <RoomModalAddMedia 
                 currentUser={currentUser} 
                 DeezerTokenProps={room.roomParams.deezer.Token} 
-                spotifyTokenProps={room.roomParams.spotifyToken} 
+                spotifyTokenProps={room.roomParams.spotify.Token} 
                 validatedObjectToAdd={handleAddValidatedObjectToPlaylist} /> }
         </Dialog>
         

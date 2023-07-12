@@ -81,7 +81,7 @@ const ModalRoomParams = ({ t,  adminView, open, changeOpen, roomParams , handleD
                         </Alert>
                     }
 
-                    {!roomParams.spotifyIsLinked && 
+                    {!roomParams.spotify.IsLinked && 
                             <Button
                                 startIcon={<Icon style={{display:'inline',  marginRight:'0.5em'}} icon="mdi:spotify" />}
                                 variant="contained" 
@@ -90,7 +90,7 @@ const ModalRoomParams = ({ t,  adminView, open, changeOpen, roomParams , handleD
                                 {t('ModalParamsRoomConnectToSpotifyText')}
                             </Button>
                     }          
-                    {roomParams.spotifyIsLinked && 
+                    {roomParams.spotify.IsLinked && 
                         <Alert
                             action={
                                 <Tooltip title="Forcer la déconnexion">

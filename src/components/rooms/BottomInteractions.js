@@ -83,7 +83,7 @@ const BottomInteractions = ({ t, layoutDisplay, setLayoutdisplay, paramDrawerIsO
                     </Fab>
                 </Tooltip>
                 <Tooltip ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUp animate__delay-1s' title={t('RoomLeftMenuRoomParams')}>  
-                    <Badge invisible={roomParams.spotifyIsLinked} variant="dot" sx={{'& .MuiBadge-badge': {
+                    <Badge invisible={roomParams.spotify.IsLinked} variant="dot" sx={{'& .MuiBadge-badge': {
                             right:'10px',
                             bgcolor:'var(--red-2)',
                             zIndex:10000
@@ -150,10 +150,10 @@ const BottomInteractions = ({ t, layoutDisplay, setLayoutdisplay, paramDrawerIsO
             />}
 
             <Snackbar
-                open={((Date.now() - roomParams.spotifyTokenTimestamp) < 8000) && roomParams.spotifyAlreadyHaveBeenLinked}
+                open={((Date.now() - roomParams.spotify.TokenTimestamp) < 8000) && roomParams.spotify.AlreadyHaveBeenLinked}
                 autoHideDuration={8000}
                 sx={{ borderRadius:'2px'}}
-                message={roomParams.spotifyIsLinked ? roomParams.spotifyUserConnected + " a ajouté Spotify a la room !" : "La connexion Spotify a expirée"}
+                message={roomParams.spotify.IsLinked ? roomParams.spotify.UserConnected + " a ajouté Spotify a la room !" : "La connexion Spotify a expirée"}
             />
 
             <Snackbar
