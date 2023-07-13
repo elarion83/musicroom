@@ -62,8 +62,16 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams , handleDi
         handleChangeRoomParams(roomParams);
     }
 
+    async function changeOpenInComp() {
+        if(roomParams.isPasswordNeeded && password.length === 0 && roomParams.password.length === 0 ) {
+            roomParams.isPasswordNeeded = false;
+            handleChangeRoomParams(roomParams);
+        }
+        changeOpen(false);
+    }
+
     return(
-        <Dialog open={open} onClose={(e) => changeOpen(false)}>
+        <Dialog open={open} onClose={(e) => changeOpenInComp(false)}>
             <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
                 <TuneIcon fontSize="small" sx={{mr:1}} /> {t('ModalParamsRoomTitle')}
             </DialogTitle>  
