@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import DialogTitle from '@mui/material/DialogTitle';
 
@@ -6,35 +6,49 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Icon } from '@iconify/react';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import TuneIcon from '@mui/icons-material/Tune';
-import { AlertTitle, Button, Dialog, DialogContent, Divider, FormControlLabel, FormGroup, Switch, Typography } from "@mui/material";
+import { AlertTitle, Button, Dialog, DialogContent, Divider, FormControlLabel, FormGroup, IconButton, InputAdornment, Switch, TextField, Typography } from "@mui/material";
 import Alert from '@mui/material/Alert';
 import Tooltip from '@mui/material/Tooltip';
 
 import { withTranslation } from 'react-i18next';
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import SaveIcon from '@mui/icons-material/Save';
 
-const ModalRoomParams = ({ t,  adminView, open, changeOpen, roomParams , handleDisconnectFromSpotifyModal, handleDisconnectFromDeezerModal, handleChangeRoomParams}) => {
+const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams , handleDisconnectFromSpotifyModal, handleDisconnectFromDeezerModal, handleChangeRoomParams}) => {
 
     const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
 
+    const [showPassword, setShowPassword] = useState(false);
+
+    const [password, setPassword] = useState(roomParams.password);
     
+    async function savePassword() {
+        roomParams.password = password;
+        handleChangeRoomParams(roomParams);
+    }
+
     async function handleChangeIsPlayingLooping() {
         roomParams.isPlayingLooping = !roomParams.isPlayingLooping;
         handleChangeRoomParams(roomParams);
     }
-
 
     async function handleChangeIsInterractionsAllowed() {
         roomParams.interactionsAllowed = !roomParams.interactionsAllowed;
         handleChangeRoomParams(roomParams);
     }
     
-    async function handleChangeAllowEverybodyToAddMedia() {
-        roomParams.allowEverybodyToAddMedia = !roomParams.allowEverybodyToAddMedia;
+    async function handleChangeIsPasswordNeeded() {
+        roomParams.isPasswordNeeded = !roomParams.isPasswordNeeded;
         handleChangeRoomParams(roomParams);
     }
 
     async function handleChangeIsAutoPlayActivated() {
         roomParams.isAutoPlayActivated = !roomParams.isAutoPlayActivated;
+        handleChangeRoomParams(roomParams);
+    }
+
+    async function handleChangeSyncPeopleByDefault() {
+        roomParams.syncPeopleByDefault = !roomParams.syncPeopleByDefault;
         handleChangeRoomParams(roomParams);
     }
 
@@ -111,6 +125,51 @@ const ModalRoomParams = ({ t,  adminView, open, changeOpen, roomParams , handleD
                         <Typography fontSize='small'>{adminView? t('ModalParamsRoomInteractionAllowedText') : t('ModalParamsRoomNotAllowedText')}</Typography>
                     </Alert>
                     
+                    <Alert sx={{pl:0, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.isPasswordNeeded} onChange={handleChangeIsPasswordNeeded} 
+                            disabled={adminView? false:true}
+                            name="switchInteractionsAllowed" />} severity={roomParams.isPasswordNeeded ? 'success' : 'warning'}>
+                        <AlertTitle sx={{fontWeight:'bold'}}>Mot de passe requis</AlertTitle>
+                        {!adminView && <Typography fontSize='small'>{t('ModalParamsRoomNotAllowedText')}</Typography>}
+                        {adminView && !roomParams.isPasswordNeeded && <Typography fontSize='small'>Rendre la room accessible par mot de passe</Typography>}
+                        {adminView && roomParams.isPasswordNeeded && 
+                            <TextField
+                                value={password}
+                                type={showPassword ? 'text' : 'password'} 
+                                onChange={(e) => setPassword(e.target.value)} 
+                                sx={{bgcolor:'var(--white)', mt:1}} 
+                                size="small" 
+                                id="outlined-basic" 
+                                label="Mot de passe" 
+                                variant="outlined" 
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment sx={{ml:'-10px'}} position="start">
+                                            <IconButton
+                                                aria-label="Afficher / Cacher le mot de passe de la room"
+                                                onClick={(e) => setShowPassword(!showPassword)}
+                                                edge="end"
+                                                >
+                                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                aria-label="Afficher / Cacher le mot de passe de la room"
+                                                onClick={(e) => savePassword()}
+                                                edge="end"
+                                                >
+                                                <SaveIcon />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    )
+                                }}
+                            />
+                        }
+                    </Alert>
+                    
+                    
                     <Alert sx={{pl:0, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.isChatActivated} onChange={handleChangeIsChatActivated} 
                             disabled={adminView? false:true}
                             name="switchIsChatActivated" />} severity={roomParams.isChatActivated ? 'success' : 'warning'}>
@@ -129,6 +188,13 @@ const ModalRoomParams = ({ t,  adminView, open, changeOpen, roomParams , handleD
                             name="switchIsAutoPlayActivated" />} severity={roomParams.isAutoPlayActivated ? 'success' : 'warning'}>
                         <AlertTitle sx={{fontWeight:'bold'}}>{t('ModalParamsRoomAutoPlayingTitle')}</AlertTitle>
                         <Typography fontSize='small'>{adminView? t('ModalParamsRoomAutoPlayingText') : t('ModalParamsRoomNotAllowedText')}</Typography>
+                    </Alert>
+
+                    <Alert sx={{pl:0, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.syncPeopleByDefault} onChange={handleChangeSyncPeopleByDefault} 
+                            disabled={adminView? false:true}
+                            name="switchSyncPeopleByDefault" />} severity={roomParams.syncPeopleByDefault ? 'success' : 'warning'}>
+                        <AlertTitle sx={{fontWeight:'bold'}}>Synchronisés par défaut</AlertTitle>
+                        <Typography fontSize='small'>{adminView? 'Synchronise automatiquement les utilisateurs a l\'hôte de la room' : t('ModalParamsRoomNotAllowedText')}</Typography>
                     </Alert>
 
                     

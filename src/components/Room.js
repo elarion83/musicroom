@@ -54,6 +54,7 @@ import {CreateGoogleAnalyticsEvent} from '../services/googleAnalytics';
 
 import { withTranslation } from 'react-i18next';
 import VolumeButton from "./rooms/playerSection/VolumeButton";
+import ModalEnterRoomPassword from "./rooms/modalsOrDialogs/ModalEnterRoomPassword";
 
 const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
@@ -90,6 +91,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     const [guestSynchroOrNot, setGuestSynchroOrNot] = useState(true);
 
     const [openInvitePeopleToRoomModal, setOpenInvitePeopleToRoomModal] = useState(false);
+    const [openPassWordModal, setOpenPassWordModal] = useState(true);
     const [OpenAddToPlaylistModal, setOpenAddToPlaylistModal] = useState(false);
     const [openRoomParamModal, setOpenRoomParamModal] = useState(false);
     const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
@@ -170,6 +172,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                             isChatActivated:true,
                             isPrivate:false,
                             isOnInvitation:false,
+                            isPasswordNeeded:false,
+                            password:'',
                             isPlayingLooping:true,
                             isAutoPlayActivated:true,
                             syncPeopleByDefault:true,
@@ -250,6 +254,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         if(loaded && room) {
             room.notifsArray.push({type: 'userArrived', timestamp: Date.now(), createdBy: currentUser.displayName});
             roomRef.set({notifsArray: room.notifsArray},{merge:true});
+            
             setRoomIdPlayed(room.playing);
             setRoomIsPlaying(room.actuallyPlaying);
         } 
@@ -270,7 +275,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 	useEffect(() => {
         if(currentUser.displayName === room.admin || currentUser.displayName === room.admin) {
             setIsActuallyAdmin(true);
-        }
+        } 
+
         if(roomIsPlaying) {
             document.title = t('GeneralPlaying')+' - Room ' + roomId + ' - Play-It';
         } else {
@@ -963,6 +969,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         </Dialog>
         
         {loaded && room.roomParams && <ModalRoomParams adminView={isActuallyAdmin} open={openRoomParamModal} changeOpen={setOpenRoomParamModal} handleChangeRoomParams={handleChangeRoomParams} handleDisconnectFromDeezerModal={setOpenForceDisconnectDeezerModal} handleDisconnectFromSpotifyModal={setOpenForceDisconnectSpotifyModal} roomParams={room.roomParams} />} 
+        {loaded && room.roomParams && room.roomParams.isPasswordNeeded && !isActuallyAdmin && openPassWordModal && <ModalEnterRoomPassword password={room.roomParams.password} open={room.roomParams.isPasswordNeeded && !isActuallyAdmin} changeOpen={setOpenPassWordModal}/> }
         <ModalShareRoom open={openInvitePeopleToRoomModal} changeOpen={setOpenInvitePeopleToRoomModal} roomUrl={ localData.domain +'/?rid='+roomId} />
         <ModalLeaveRoom open={openLeaveRoomModal} changeOpen={setOpenLeaveRoomModal} handleQuitRoom={handleQuitRoomInComp} />
         <ModalForceSpotifyDisconnect open={openForceDisconnectSpotifyModal} changeOpen={setOpenForceDisconnectSpotifyModal} handleDisconnectSpotify={disconnectSpotify} />

@@ -23,7 +23,7 @@ import { withTranslation } from 'react-i18next';
 
 const StyledMenu = styled((props) => (
   <Menu
-    dense
+    dense={true}
     elevation={0}
     sx={{ml:1,mt:-1}}
     anchorOrigin={{
@@ -98,7 +98,7 @@ const DisplayMenu = ({t, layoutDisplay, setLayoutdisplay}) => {
         MenuListProps={{
           'aria-labelledby': 'demo-customized-button',
         }}
-        dense
+        dense={true}
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
