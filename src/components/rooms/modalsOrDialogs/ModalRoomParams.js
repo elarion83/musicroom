@@ -39,6 +39,9 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams , handleDi
     
     async function handleChangeIsPasswordNeeded() {
         roomParams.isPasswordNeeded = !roomParams.isPasswordNeeded;
+        if(!roomParams.isPasswordNeeded) {
+            roomParams.password = '';
+        }
         handleChangeRoomParams(roomParams);
     }
 
@@ -156,13 +159,12 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams , handleDi
                                     ),
                                     endAdornment: (
                                         <InputAdornment position="end">
-                                            <IconButton
-                                                aria-label="Afficher / Cacher le mot de passe de la room"
+                                            {password !== roomParams.password && <IconButton
                                                 onClick={(e) => savePassword()}
                                                 edge="end"
                                                 >
                                                 <SaveIcon />
-                                            </IconButton>
+                                            </IconButton>}
                                         </InputAdornment>
                                     )
                                 }}
