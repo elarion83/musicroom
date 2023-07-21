@@ -832,7 +832,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                         </Grid>
                                     }
                                     {!isActuallyAdmin && !(isShowSticky && layoutDisplay == 'default') &&
-                                        <Grid item sm={6} xs={12} className="guestButtons" sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:0,ml:0,mr:1,pr:2, mb: 1 }}>
+                                        <Grid item sm={6} xs={12} className={guestSynchroOrNot ? 'guestButtons guestSync' : 'guestButtons guestNotSync'} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:0,ml:0,mr:1,pr:2, mb: 1 }}>
                                             {!guestSynchroOrNot && <><IconButton onClick={e => roomIdPlayed > 0 ? setRoomIdPlayed(roomIdPlayed-1) : ''}>
                                                 <FirstPageIcon  fontSize="large" sx={{color:roomIdPlayed > 0 ? '#f0f1f0': '#303134'}} />
                                             </IconButton>
@@ -859,10 +859,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         
                     </Box>
                 }
-                { !room.playlistEmpty && <Toolbar xs={12} sx={{ bgcolor: 'var(--grey-dark)',borderBottom: '2px solid var(--border-color)', minHeight: '45px !important', fontFamily: 'Monospace', paddingLeft:'0', pr:'25 px' }}>
-                     <Typography component="div" sx={{ flexGrow: 1, textTransform:'uppercase', fontSize:'12px', color:'white' }}>  <b><span> { room.playlistUrls && room.playlistUrls.length } médias en playlist :</span></b>
-                    </Typography>
-                </Toolbar>}
                 { room.playlistEmpty && 
                     <EmptyPlaylist 
                         setOpenInvitePeopleToRoomModal={setOpenInvitePeopleToRoomModal}

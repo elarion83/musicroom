@@ -309,10 +309,8 @@ function App( {t} ) {
             </Toolbar>
           </AppBar>
         {!roomId && <Box sx={{  paddingBottom:'10px !important', bgcolor:'rgba(48, 48, 48, 0)',height: 'auto', pl:2, pr:2}} >
-          <Container maxWidth="sm">
-            <Grid container sx={{display:'flex', justifyContent:'center', pt:3,mb:5}}>
-              <Contentslider />
-            </Grid>
+          <Container maxWidth="sm" sx={{pt:3}}>
+            <Contentslider />
             
             <Button variant="filled" className='main_bg_color  buttonBorder' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em'}} 
               onClick={(e) => isSignedIn ? createNewRoom() : handleLoginAndRoom('createRoom')}>

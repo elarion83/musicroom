@@ -3,6 +3,7 @@ import { Box } from "@mui/system";
 import { useEffect } from "react";
 import { useState } from "react";
 
+import { Icon } from '@iconify/react';
 
 import AwesomeSlider from 'react-awesome-slider';
 import withAutoplay from 'react-awesome-slider/dist/autoplay';
@@ -21,7 +22,7 @@ const Contentslider = () => {
         } else {
             slideToItem(0);
         }
-      }, 10000);
+      }, 80000);
       return () => {
         window.clearInterval(timer);
       };
@@ -29,20 +30,21 @@ const Contentslider = () => {
     }, [slideToNextItem]);
 
     const { carouselFragment,useListenToCustomEvent,slideToItem,getCurrentActiveItem, slideToPrevItem, slideToNextItem } = useSpringCarousel({
-        gutter: 0,
+        gutter: -40,
         items: [
             {
                 id: '0',
                 renderItem: 
                 <Box className={activeItem == 0 ? 'slideBox activeSlideBox' : 'slideBox'}> 
+                    <Icon icon="iconoir:playlist" width="30" className='mainIcon' />
                     <Typography sx={{pl:2,pr:2,mb:3}} variant="h5" gutterBottom>
-                        Créez une playlist en temps réel et a plusieurs ..
+                        Crée une playlist en temps réel et a plusieurs
                     </Typography>
-                    <Typography sx={{pl:2,pr:2,mb:2, color:'var(--white)'}} >
-                        Ajoutez des médias depuis <i>Spotify, Youtube, Deezer, et bien d'autre plateformes</i>.
+                    <Typography sx={{pl:2,pr:2,mb:2,mt:3, color:'var(--white)'}} >
+                        Ajoutez des médias depuis <i>Spotify, Youtube, Deezer, et bien d'autre plateformes</i> à une playlist collective lue en temps réel.
                     </Typography>
                     <Typography sx={{pl:2,pr:2,mt:2, color:'var(--white)'}} >
-                        Votez, tchatez, réagissez et vibrez ensemble au rythme de votre playlist. <b>Entre pote, en voiture, ou au sport, Play-it est l'outil indispensable !</b>
+                        Votez, tchatez, réagissez et vibrez ensemble au rythme de votre playlist. <b>Entre potes, en soirée, en voiture, en voyage, ou au sport, Play-it est l'outil indispensable !</b>
                     </Typography>
                 </Box>,
             },
@@ -50,11 +52,12 @@ const Contentslider = () => {
                 id: '1',
                 renderItem: 
                 <Box className={activeItem == 1 ? 'slideBox activeSlideBox' : 'slideBox'}> 
+                    <Icon icon="carbon:network-2" width="30" className='mainIcon' />
                     <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
-                        Tous au même endroit ..
+                        En étant tous au même endroit ..
                     </Typography>
                     <Typography sx={{pl:2,pr:2, color:'var(--white)'}} >
-                        Idéal pour les soirées, une room Play-it permet a chaque convive d'ajouter sa musique ou sa vidéo à la suite de la playlist, plus besoin d'utiliser le téléphone de l'hôte !
+                        <b>Idéal pour les soirées</b>, une room Play-it permet a chaque convive d'ajouter sa musique ou sa vidéo à la suite de la playlist, plus besoin d'utiliser le téléphone de l'hôte de la soirée !
                     </Typography>
                 </Box>,
             },
@@ -62,11 +65,12 @@ const Contentslider = () => {
                 id: '2',
                 renderItem: 
                 <Box className={activeItem == 2 ? 'slideBox activeSlideBox' : 'slideBox'}> 
+                    <Icon icon="carbon:network-4" width="30" className='mainIcon' />
                     <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
-                        .. Ou bien chacun chez soi
+                        .. ou en étant chacun chez soi
                     </Typography>
                     <Typography sx={{pl:2,pr:2, color:'var(--white)'}} >
-                        Grâce à la synchronisation, il est possible de vibrer au rythme de tout tes potes à des endroits différents de la planète, chacun chez soi en révisant ou pour matter les dernières vidéos youtube sous la couette !
+                        Grâce à Play-it, vibre au même rythme que tes potes à des endroits différents de la planète, en voyage, chacun dans sa voiture, chacun chez soi en révisant ou en mattant les dernières vidéos youtube sous la couette !
                     </Typography>
                 </Box>,
             },
@@ -74,11 +78,15 @@ const Contentslider = () => {
                 id: '3',
                 renderItem: 
                 <Box className={activeItem == 3 ? 'slideBox activeSlideBox' : 'slideBox'}> 
+                    <Icon icon="lucide:party-popper" width="30" className='mainIcon' />
                     <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
-                        Et bien plus !
+                        Une playlist.. et bien plus !
                     </Typography>
                     <Typography sx={{pl:2,pr:2, color:'var(--white)'}} >
                         Grâce au chat, aux émoticones en temps réel et aux votes, les membres de la room font partie intégrante de l'ambiance !
+                    </Typography>
+                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} >
+                        Retrouvez et relisez les playlist qui vous on plu grâce à la lecture désynchronisée !
                     </Typography>
                 </Box>,
             },

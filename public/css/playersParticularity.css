@@ -109,7 +109,13 @@ display: block;
         margin-right: auto;
     }
 
+    .defaultLayout .guestButtons.guestSync {
+        margin-top: -60px;
+        position: absolute;
+        right: -25px;
+    }
 }
+
 
 .spotifyDisplay .player_right_side_container {
     text-align: center;
