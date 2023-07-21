@@ -25,6 +25,8 @@ const resources = {
         "GeneralPlaying":'Playing',
         "GeneralPause":'Paused',
         "GeneralAddedBy":'Added by',
+        "GeneralNotLinked" : " not linked",
+        "GeneralLinked" : " linked",
         "GeneralMediasInPlaylist":'Medias in playlist',
         "GeneralHome":'Homepage',
         "GeneralLength":"Length",
@@ -96,8 +98,6 @@ const resources = {
 
         "RoomLeftMenuHost":"You are the host",
         "RoomLeftMenuHostedBy":"Hosted by",
-        "RoomLeftMenuSpotifyNotLinked" : "Spotify not linked",
-        "RoomLeftMenuSpotifyLinked" : "Spotify linked",
         "RoomLeftMenuNotSync" : "Unsynchronized",
         "RoomLeftMenuSync" : "Synchronized",
         "RoomLeftMenuRoomParams" : "Room settings",
@@ -111,6 +111,8 @@ const resources = {
         "RoomEmptyAlertSpotify":"Spotify is not linked to the room !",
         "RoomEmptyAlertSpotifyClickHere":"Click here to link",
         "RoomEmptyAlertSpotifyBold":"Spotify premium needed",
+        "RoomEmptyAlertDeezer":"Deezer is not linked to the room !",
+        "RoomEmptyAlertDeezerClickHere":"Click here to link",
     }
   },
   fr: {
@@ -131,6 +133,8 @@ const resources = {
         "GeneralPlaying":'En lecture',
         "GeneralPause":'En Pause',
         "GeneralAddedBy":'Ajouté par',
+        "GeneralNotLinked" : " non relié",
+        "GeneralLinked" : " relié",
         "GeneralMediasInPlaylist":'Médias en playlist',
         "GeneralEmpty":'vide',
         "GeneralEvery":'Toutes les',
@@ -204,7 +208,6 @@ const resources = {
 
         "RoomLeftMenuHost":"Vous êtes l'hôte",
         "RoomLeftMenuHostedBy":"Hosté par",
-        "RoomLeftMenuSpotifyNotLinked" : "Spotify non relié",
         "RoomLeftMenuSpotifyLinked" : "Spotify relié",
         "RoomLeftMenuNotSync" : "Lecture différée",
         "RoomLeftMenuSync" : "Lecture synchronisée",
@@ -219,6 +222,8 @@ const resources = {
         "RoomEmptyAlertSpotify":"Spotify n'est pas lié à la room !",
         "RoomEmptyAlertSpotifyClickHere":"Clique ici pour lier les deux",
         "RoomEmptyAlertSpotifyBold":"Spotify premium requis",
+        "RoomEmptyAlertDeezer":"Deezer n'est pas lié à la room !",
+        "RoomEmptyAlertDeezerClickHere":"Clique ici pour lier les deux",
     }
   }
 };

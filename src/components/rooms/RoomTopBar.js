@@ -39,7 +39,7 @@ const RoomTopBar = ({
                 setGuestSynchroOrNot,
                 volume,
                 setVolume,
-                paramDrawerIsOpen, handleOpenDrawerParam, roomId, roomAdmin, isLinkedToSpotify,handleOpenRoomParamModal,handleOpenShareModal,handleOpenLeaveRoomModal, }) => {
+                paramDrawerIsOpen, handleOpenDrawerParam, roomId, roomAdmin, isLinkedToSpotify,isLinkedToDeezer, handleOpenRoomParamModal,handleOpenShareModal,handleOpenLeaveRoomModal, }) => {
 
   return (
     <AppBar sx={{position: (isShowSticky) ? "fixed": 'initial', top:0, bgcolor: 'var(--grey-dark)',borderBottom: '2px solid var(--border-color)'}} >
@@ -81,11 +81,26 @@ const RoomTopBar = ({
                                     <Icon icon="mdi:spotify" width="27"  />
                             </Badge>
                         </ListItemIcon>
-                        <Typography>{isLinkedToSpotify ? t('RoomLeftMenuSpotifyLinked') : t('RoomLeftMenuSpotifyNotLinked')}</Typography>
+                        <Typography>Spotify {isLinkedToSpotify ? t('GeneralLinked') : t('GeneralNotLinked')}</Typography>
                     </ListItemButton>
                 </ListItem>
 
-                <Divider sx={{mb:2, mt:2}}/>
+                <ListItem key='roomDrawDeezerStatus' disablePadding>
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <Badge invisible={isLinkedToDeezer} variant="dot" 
+                                sx={{'& .MuiBadge-badge': {
+                                        right:'0px',
+                                        bgcolor:'var(--red-2)'
+                                    }, ml:'-2px'}} >
+                                    <Icon icon="jam:deezer" width="27"  />
+                            </Badge>
+                        </ListItemIcon>
+                        <Typography>Deezer {isLinkedToDeezer ? t('GeneralLinked') : t('GeneralNotLinked')}</Typography>
+                    </ListItemButton>
+                </ListItem>
+
+                <Divider sx={{mb:1, mt:1}}/>
                 
                 <ListItem key='roomDrawRoomParams' disablePadding>
                     <ListItemButton onClick={e => handleOpenRoomParamModal(true)}>
@@ -119,7 +134,7 @@ const RoomTopBar = ({
                     </ListItemButton>
                 </ListItem>}
 
-                <Divider  sx={{mt:2, mb:2}}/>
+                <Divider  sx={{mt:1, mb:1}}/>
                 <ListItem key='roomDrawRoomLeave' disablePadding>
                     <ListItemButton onClick={e => handleOpenLeaveRoomModal(true)}>
                         <ListItemIcon>
@@ -131,7 +146,7 @@ const RoomTopBar = ({
             </List>
         </Drawer>
             <Tooltip  className='animate__animated animate__fadeInLeft animate__delay-1s animate__fast' title={t('RoomLeftMenuRoomParams')} sx={{ bgColor:'#30363c'}}>
-                    <Badge invisible={isLinkedToSpotify} variant="dot" sx={{'& .MuiBadge-badge': {
+                    <Badge invisible={isLinkedToSpotify && isLinkedToDeezer} variant="dot" sx={{'& .MuiBadge-badge': {
                         right:'10px',
                         bgcolor:'var(--red-2)'
                     }}} >
@@ -141,7 +156,6 @@ const RoomTopBar = ({
                     </Badge>
             </Tooltip>
                 
-
             <Typography  className='animate__animated animate__fadeInLeft animate__fast' component="div" sx={{ flexGrow: 1 , textTransform:'uppercase', fontSize:'12px',}}>
                 Room <b style={{textTransform:'uppercase'}}><span>{ roomId }</span> </b> 
             </Typography>
