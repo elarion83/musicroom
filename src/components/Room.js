@@ -3,7 +3,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { db } from "../services/firebase";
 
-import { Icon } from '@iconify/react';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -12,18 +11,17 @@ import Dialog from '@mui/material/Dialog';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
-import axios from "axios";
 import 'animate.css';
-import { v4 as uuid } from 'uuid';  
+import axios from "axios";
 import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
+import { v4 as uuid } from 'uuid';
 
 import YTSearch from 'youtube-api-search';
 
 import RoomPlaylistDrawer from "./rooms/playlistSection/drawer/RoomPlaylistDrawer";
 
-import Stack from '@mui/material/Stack';
 //import screenfull from 'screenfull'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import FirstPageIcon from '@mui/icons-material/FirstPage';
@@ -38,23 +36,22 @@ import SkipPrevious from '@mui/icons-material/SkipPrevious';
 import Typography from '@mui/material/Typography';
 
 import RoomModalAddMedia from './rooms/modalsOrDialogs/ModalAddMedia';
-import ModalForceSpotifyDisconnect from "./rooms/modalsOrDialogs/ModalForceSpotifyDisconnect";
 import ModalForceDeezerDisconnect from "./rooms/modalsOrDialogs/ModalForceDeezerDisconnect";
+import ModalForceSpotifyDisconnect from "./rooms/modalsOrDialogs/ModalForceSpotifyDisconnect";
 import ModalLeaveRoom from './rooms/modalsOrDialogs/ModalLeaveRoom';
 import ModalRoomParams from './rooms/modalsOrDialogs/ModalRoomParams';
 import ModalShareRoom from './rooms/modalsOrDialogs/ModalShareRoom';
 
-import { AlertTitle, Tooltip } from "@mui/material";
 import BottomInteractions from "./rooms/BottomInteractions";
-import RoomPlaylist from "./rooms/playlistSection/RoomPlaylist";
 import RoomTopBar from "./rooms/RoomTopBar";
 import SoundWave from "./rooms/SoundWave";
+import RoomPlaylist from "./rooms/playlistSection/RoomPlaylist";
 
-import {CreateGoogleAnalyticsEvent} from '../services/googleAnalytics';
+import { CreateGoogleAnalyticsEvent } from '../services/googleAnalytics';
 
 import { withTranslation } from 'react-i18next';
-import VolumeButton from "./rooms/playerSection/VolumeButton";
 import ModalEnterRoomPassword from "./rooms/modalsOrDialogs/ModalEnterRoomPassword";
+import VolumeButton from "./rooms/playerSection/VolumeButton";
 import EmptyPlaylist from "./rooms/playlistSection/EmptyPlaylist";
 
 const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {

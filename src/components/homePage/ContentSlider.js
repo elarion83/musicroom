@@ -18,7 +18,7 @@ const Contentslider = () => {
         } else {
             slideToItem(0);
         }
-      }, 80000);
+      }, 8000);
       return () => {
         window.clearInterval(timer);
       };

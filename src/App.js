@@ -7,25 +7,24 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
-import { v4 as uuid } from 'uuid';
 import axios from "axios";
+import { v4 as uuid } from 'uuid';
 
 import { Icon } from '@iconify/react';
 import LoginModal from './components/generalsTemplates/modals/LoginModal';
 
 import CssBaseline from '@mui/material/CssBaseline';
-import Grid from '@mui/material/Grid';
 import JoinRoomModal from "./components/generalsTemplates/modals/JoinRoomModal";
 import Contentslider from "./components/homePage/ContentSlider";
 
 import Footer from './components/generalsTemplates/Footer';
 
-import { db, auth, googleProvider } from "./services/firebase";
+import { auth, db, googleProvider } from "./services/firebase";
 
-import {PseudoGenerated} from './services/pseudoGenerator';
 import { Snackbar } from "@mui/material";
+import { PseudoGenerated } from './services/pseudoGenerator';
 
-import {CreateGoogleAnalyticsEvent} from './services/googleAnalytics';
+import { CreateGoogleAnalyticsEvent } from './services/googleAnalytics';
 
 import { withTranslation } from 'react-i18next';
 function App( {t} ) {
@@ -138,11 +137,11 @@ function App( {t} ) {
   }
 
   function doActionAfterLogin() {
-    if(funcAfterLogin == 'createRoom') {
+    if(funcAfterLogin === 'createRoom') {
       createNewRoom();
     }
 
-    if(funcAfterLogin == 'joinRoom') {
+    if(funcAfterLogin === 'joinRoom') {
       setJoinRoomModalOpen(true);
     }
 

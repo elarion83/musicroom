@@ -4,4 +4,13 @@ module.exports = {
       plugins: [require("tailwindcss"), require("autoprefixer")],
     },
   },
+  webpack: {
+    plugins: {
+      add: [
+        new webpack.DefinePlugin({
+          process: {env: {}}
+        })
+      ]
+    }
+  }
 };

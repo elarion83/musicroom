@@ -80,7 +80,7 @@ const DisplayMenu = ({t, layoutDisplay, setLayoutdisplay}) => {
       <Box
         size='small'
         onClick={handleClick}
-        sx={{pt:0.5}}
+        sx={{pt:0.8}}
       >
         <FullscreenIcon sx={{ml:0,mr:0}} />
         {open ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}

@@ -48,7 +48,6 @@ const RoomTopBar = ({
                 <Drawer
             id="menu-appbar"
             anchor='left'
-            onClick={(e) => handleOpenDrawerParam(false)}
             onClose={(e) => handleOpenDrawerParam(false)}
             open={paramDrawerIsOpen}
         >
