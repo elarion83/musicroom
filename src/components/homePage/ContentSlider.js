@@ -5,14 +5,10 @@ import { useState } from "react";
 
 import { Icon } from '@iconify/react';
 
-import AwesomeSlider from 'react-awesome-slider';
-import withAutoplay from 'react-awesome-slider/dist/autoplay';
-import 'react-awesome-slider/dist/styles.css';
 import { useSpringCarousel, useTransitionCarousel  } from 'react-spring-carousel'
 
 const Contentslider = () => {
     
-    const AutoplaySlider = withAutoplay(AwesomeSlider);
     const [activeItem, setActiveItem] = useState(0);
 
     useEffect(() => {
@@ -38,7 +34,7 @@ const Contentslider = () => {
                 <Box className={activeItem == 0 ? 'slideBox activeSlideBox' : 'slideBox'}> 
                     <Icon icon="iconoir:playlist" width="30" className='mainIcon' />
                     <Typography sx={{pl:2,pr:2,mb:3}} variant="h5" gutterBottom>
-                        Crée une playlist en temps réel et a plusieurs
+                        Créez une playlist en temps réel a plusieurs
                     </Typography>
                     <Typography sx={{pl:2,pr:2,mb:2,mt:3, color:'var(--white)'}} >
                         Ajoutez des médias depuis <i>Spotify, Youtube, Deezer, et bien d'autre plateformes</i> à une playlist collective lue en temps réel.

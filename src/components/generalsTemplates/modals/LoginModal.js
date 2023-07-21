@@ -8,6 +8,8 @@ import { LoadingButton } from "@mui/lab";
 import PrivacyPolicyModal from '../modals/PrivacyPolicyModal';
 
 import { withTranslation } from 'react-i18next';
+import { SlideUp } from "../../../services/materialSlideTransition/Slide";
+
 const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLogin, handlePasswordAndMailLogin, loginLoading, redirectToHome, roomId, loginErrorMessage}) => {
     
     const [email, setEmail] = useState('')
@@ -21,7 +23,7 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
     return(
 
 
-        <Dialog open={open} onClose={() => changeOpen(false)}
+        <Dialog open={open} TransitionComponent={SlideUp} onClose={() => changeOpen(false)}
         sx={{
             "& .MuiDialog-container": {
                 "& .MuiPaper-root": {

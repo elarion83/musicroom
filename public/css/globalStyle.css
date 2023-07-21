@@ -43,18 +43,6 @@ body,html {
   align-items: center;
 }
 
-.MuiDialog-container .flexRowCenterH::before  {
-  content:'';
-  width:35px;
-  z-index: 1;
-  height:100%;
-  position: absolute;
-  left: 0;
-  opacity: 0.1;
-  background-color: black;
-}
-
-
 .hidden, .jss5 {
   display: none !important;
 }

@@ -10,6 +10,7 @@ import { Dialog, DialogContent } from "@mui/material";
 import DialogTitle from '@mui/material/DialogTitle';
 
 import { withTranslation } from 'react-i18next';
+import { SlideUp } from '../../../services/materialSlideTransition/Slide';
 
 const ModalShareRoom = ({ t, roomUrl, open, changeOpen }) => {
 
@@ -23,7 +24,7 @@ const ModalShareRoom = ({ t, roomUrl, open, changeOpen }) => {
     }
 
     return(
-        <Dialog open={open} onClose={(e) => changeOpen(false)} className='modal_share_room'>
+        <Dialog open={open} TransitionComponent={SlideUp}  onClose={(e) => changeOpen(false)} className='modal_share_room'>
             <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
                 <ShareIcon fontSize="small" sx={{mr:1}} /> {t('ModalShareRoomTitle')}
             </DialogTitle>  

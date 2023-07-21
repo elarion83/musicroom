@@ -6,6 +6,8 @@ import { Box } from '@mui/system';
 import { LoadingButton } from '@mui/lab';
 
 import { withTranslation } from 'react-i18next';
+import { SlideUp } from "../../../services/materialSlideTransition/Slide";
+
 const JoinRoomModal = ({ t, open, handleJoinRoom, changeOpen}) => {
     const [value, onChange] = React.useState('');
     const [isJoining, setIsJoining] = React.useState(false);
@@ -25,7 +27,7 @@ const JoinRoomModal = ({ t, open, handleJoinRoom, changeOpen}) => {
     }, [value]);
     
     return(
-         <Dialog open={open} onClose={(e) => changeOpen(false)} >
+         <Dialog open={open} TransitionComponent={SlideUp} onClose={(e) => changeOpen(false)} >
             <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
                 <Icon icon='icon-park-outline:connect' style={{marginRight:'10px'}} /> {t('HomePageButtonsJoinRoom')}
             </DialogTitle>  
@@ -34,7 +36,7 @@ const JoinRoomModal = ({ t, open, handleJoinRoom, changeOpen}) => {
                 <Typography sx={{mb:1}}> {t('ModalJoinRoomIDOfTheRoom')}</Typography>
                 <Box className='joinRoomForm'>
                     <div className='input'>
-                        <input  autoFocus {...digits[0]} />
+                        <input {...digits[0]} />
                     </div>
                     <div className='input'>
                         <input {...digits[1]} />

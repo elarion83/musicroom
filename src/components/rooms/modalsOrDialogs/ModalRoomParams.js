@@ -13,6 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { withTranslation } from 'react-i18next';
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import SaveIcon from '@mui/icons-material/Save';
+import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 
 const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams , handleDisconnectFromSpotifyModal, handleDisconnectFromDeezerModal, handleChangeRoomParams}) => {
 
@@ -74,7 +75,7 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams , handleDi
     }
 
     return(
-        <Dialog open={open} onClose={(e) => changeOpenInComp(false)}>
+        <Dialog open={open} TransitionComponent={SlideUp}  onClose={(e) => changeOpenInComp(false)}>
             <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
                 <TuneIcon fontSize="small" sx={{mr:1}} /> {t('ModalParamsRoomTitle')}
             </DialogTitle>  

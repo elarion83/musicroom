@@ -1,12 +1,13 @@
 import { Icon } from "@iconify/react";
 import { Dialog, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 
 const PrivacyPolicyModal = ({ open, changeOpen,}) => {
     
     return(
 
 
-        <Dialog open={open} onClose={() => changeOpen(false)}
+        <Dialog open={open} TransitionComponent={SlideUp} onClose={() => changeOpen(false)}
         sx={{
             "& .MuiDialog-container": {
                 "& .MuiPaper-root": {

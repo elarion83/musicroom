@@ -3,11 +3,12 @@ import Box from '@mui/material/Box';
 import React from "react";
 
 import { Icon } from '@iconify/react';
+import { SlideUp } from '../../../services/materialSlideTransition/Slide';
 
 const MentionsLegalesModal = ({open, changeOpen}) => {
     
     return(
-            <Dialog open={open} onClose={() => changeOpen(false)}
+            <Dialog open={open} TransitionComponent={SlideUp} onClose={() => changeOpen(false)}
                 sx={{
                     "& .MuiDialog-container": {
                         "& .MuiPaper-root": {
