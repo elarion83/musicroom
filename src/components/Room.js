@@ -55,10 +55,9 @@ import {CreateGoogleAnalyticsEvent} from '../services/googleAnalytics';
 import { withTranslation } from 'react-i18next';
 import VolumeButton from "./rooms/playerSection/VolumeButton";
 import ModalEnterRoomPassword from "./rooms/modalsOrDialogs/ModalEnterRoomPassword";
+import EmptyPlaylist from "./rooms/playlistSection/EmptyPlaylist";
 
 const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
-
-    const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
 
     // global for room
 	const roomRef = db.collection(process.env.REACT_APP_ROOM_COLLECTION).doc(roomId);
@@ -673,6 +672,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 roomId={roomId} 
                 roomAdmin={room.admin} 
                 isLinkedToSpotify={room.roomParams.spotify.IsLinked}
+                isLinkedToDeezer={room.roomParams.deezer.IsLinked}
             />
         }
         <Container maxWidth={false} sx={{ padding: '0 !important'}} className={layoutDisplayClass} >
@@ -864,35 +864,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     </Typography>
                 </Toolbar>}
                 { room.playlistEmpty && 
-                    <>
-                        <Alert severity="success" variant="filled" 
-                            icon={<Icon icon="uil:smile-beam" width="35"/>} 
-                            className='animate__animated animate__fadeInUp animate__slow'
-                            onClick={(e) => setOpenInvitePeopleToRoomModal(true)}
-                            sx={{m:2, border:'2px solid var(--green-2)', cursor:'pointer'}}> 
-                            <AlertTitle sx={{mb:0}}>{t('RoomEmptyAlertWelcome')} </AlertTitle> 
-                            <p style={{color:'var(--white)', margin:0}}>{t('RoomEmptyAlertWelcomeClickHere')}</p>
-                        </Alert>
-                        <Alert severity="warning" 
-                            variant="filled" 
-                            icon={<Icon icon="iconoir:music-double-note-add" width="35" />} 
-                            sx={{m:2, border:'2px solid #febc21', cursor:'pointer'}} 
-                            className='animate__animated animate__fadeInUp animate__slow'
-                            onClick={(e) => setOpenAddToPlaylistModal(true)} >
-                            <AlertTitle>{t('RoomEmptyAlertPlaylist')}</AlertTitle>
-                            <p style={{color:'var(--white)', margin:0}}>{t('RoomEmptyAlertPlaylistClickHere')}</p>
-                        </Alert>
-                        
-                        {!room.roomParams.spotify.IsLinked && 
-                            <Alert severity="warning" variant="filled" 
-                            icon={<Icon icon="mdi:spotify" width="30" />} 
-                            sx={{m:2, border:'2px solid #febc21',cursor:'pointer'}} 
-                            className='animate__animated animate__fadeInUp animate__slow'
-                            onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
-                            <AlertTitle>{t('RoomEmptyAlertSpotify')}</AlertTitle>
-                            <p style={{color:'var(--white)', margin:0}}> {t('RoomEmptyAlertSpotifyClickHere')} <br /> <b>{t('RoomEmptyAlertSpotifyBold')}</b> </p>
-                        </Alert>}
-                    </>
+                    <EmptyPlaylist 
+                        setOpenInvitePeopleToRoomModal={setOpenInvitePeopleToRoomModal}
+                        setOpenAddToPlaylistModal={setOpenAddToPlaylistModal}
+                        spotifyIsLinked={room.roomParams.spotify.IsLinked}
+                        deezerIsLinked={room.roomParams.deezer.IsLinked}
+                    />
                 }
                 {typeof(room.playlistUrls) !== 'undefined' && room.playlistUrls && room.playlistUrls.length > 0 && 
                     <Box className="roomPlaylistbloc" sx={{ p:0,mb:0}}>
