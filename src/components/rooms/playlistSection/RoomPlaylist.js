@@ -48,16 +48,13 @@ const RoomPlaylist = ({t, isSpotifyAvailable, handleChangeIdShownInDrawer, roomP
                                         {idx === roomIdActuallyPlaying && !(d.source === 'spotify' && !isSpotifyAvailable) && <ListItemIcon sx={{ pt:'10px',color:'var(--white)',pl: 1,pr:-2, zIndex:2, display:'flex', flexDirection:'column'}}>        
                                                 <SoundWave waveNumber={7} isPlayingOrNo={roomIsActuallyPlaying} />
                                         </ListItemIcon>}
-                                            {(d.source === 'spotify' && !isSpotifyAvailable) && <Icon style={{display:'inline', marginRight:'0.5em', marginTop:'0.5em', color:'red'}} icon="ps:forbidden" />}
+                                        {(d.source === 'spotify' && !isSpotifyAvailable) && <Icon style={{display:'inline', marginRight:'0.5em', marginTop:'0.5em', color:'red'}} icon="ps:forbidden" />}
                                     <Grid item sx={{display:'block', zIndex:2, pl: 0, pb:0.5,pt:0.5, flexGrow:1}}>
-                                        { d.title && <ListItemText className="flexRowCenterHDirectChild" onClick={e => (idx === idDisplaying) ? handleChangeIdActuallyDisplaying(-1) : handleChangeIdActuallyDisplaying(idx)} sx={{ pl:0,mb:0,mt:0, wordBreak: 'break-all'}}>
-                                            {d.title.length > 50 ? d.title.substring(0, 50)+'...' : d.title}
-                                        </ListItemText>}
-                                        { (d.title && d.title.length === 0) || !d.title && 
-                                            <ListItemText onClick={e => (idx === idDisplaying) ? handleChangeIdActuallyDisplaying(-1) : handleChangeIdActuallyDisplaying(idx)} sx={{ pl:0,mb:0,mt:0, wordBreak: 'break-all'}} 
-                                            primary={d.url.substring(0, 40)+'...'} />
-                                        }
-                                        {idx === roomIdActuallyPlaying && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
+                                        <Typography className="flexRowCenterHDirectChild varelaFontTitle" onClick={e => (idx === idDisplaying) ? handleChangeIdActuallyDisplaying(-1) : handleChangeIdActuallyDisplaying(idx)} sx={{ pl:0,mb:0,mt:0, wordBreak: 'break-all'}}>
+                                            <span>{ (d.title.length === 0) ? d.url.substring(0, 40)+'...' : d.title.length > 50 ? d.title.substring(0, 50)+'...' : d.title} </span>
+                                        </Typography>
+                                        
+                                        {idx === roomIdActuallyPlaying && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0,color:'var(--grey-inspired)', fontSize: '10px', textTransform:'uppercase' }}>
                                             {roomIsActuallyPlaying ? t('GeneralPlaying') : t('GeneralPause')}
                                         </Typography>}
                                     </Grid>

@@ -18,8 +18,6 @@ import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
 import { v4 as uuid } from 'uuid';
 
-import YTSearch from 'youtube-api-search';
-
 import RoomPlaylistDrawer from "./rooms/playlistSection/drawer/RoomPlaylistDrawer";
 
 //import screenfull from 'screenfull'
@@ -53,6 +51,7 @@ import { withTranslation } from 'react-i18next';
 import ModalEnterRoomPassword from "./rooms/modalsOrDialogs/ModalEnterRoomPassword";
 import VolumeButton from "./rooms/playerSection/VolumeButton";
 import EmptyPlaylist from "./rooms/playlistSection/EmptyPlaylist";
+import { Icon } from "@iconify/react";
 
 const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
@@ -610,7 +609,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
             relatedToVideoId: mediaYoutubeId,
         }; 
 
-        await axios.get('https://www.googleapis.com/youtube/v3/search', { params: params })
+        await axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, { params: params })
             .then(function(response) {
                 var suggestMedia = {
                     addedBy : 'App_AutoPlay',
@@ -631,10 +630,19 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     async function addMediaForAutoPlay() {
             if('youtube' !== room.playlistUrls[room.playing].source) {
-                YTSearch({key: process.env.REACT_APP_YOUTUBE_API_KEY, term: room.playlistUrls[room.playing].title}, (videos) => {
-                    if(videos[1]) {
-                        addMediaForAutoPlayByYoutubeId(videos[1].id.videoId);  
-                    } 
+                
+                axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, { params: {
+                    part: 'snippet',
+                    key: process.env.REACT_APP_YOUTUBE_API_KEY,
+                    q: room.playlistUrls[room.playing].title,
+                    maxResults:1,
+                    type: 'video'
+                } })
+                .then(function(response) {
+                    addMediaForAutoPlayByYoutubeId(response.data.items[0].id.videoId);
+                })
+                .catch(function(error) {
+                    console.error(error);
                 });
             } else {
                 addMediaForAutoPlayByYoutubeId(room.playlistUrls[room.playing].platformId);
@@ -767,21 +775,21 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                     <Grid item 
                                     sx={[{pb:1}, room.playlistUrls[roomIdPlayed].source === 'spotify' &&  { justifyContent: 'center' } ]} 
                                     className="flexRowCenterH">
-                                        { room.playlistUrls[roomIdPlayed].title && <Typography component={'span'} className='mediaTitle'>
+                                        { room.playlistUrls[roomIdPlayed].title && <Typography component={'span'} className='mediaTitle varelaFontTitle'>
                                         {room.playlistUrls[roomIdPlayed].title} 
                                         </Typography>}
                                         { room.playlistUrls[roomIdPlayed].url && room.playlistUrls[roomIdPlayed].url.length === 0 || !room.playlistUrls[roomIdPlayed].title && 
-                                        <Typography component={'span'}  >
+                                        <Typography component={'span'} className='varelaFontTitle' >
                                             {room.playlistUrls[roomIdPlayed].url.substring(0, 50)+'...'} 
                                         </Typography>} 
                                         </Grid>
                                     
                                     <Grid item sm={12} md={12} >
-                                        <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>
+                                        <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase', color:'var(--grey-inspired)' }}>
                                             {roomIsPlaying ? t('GeneralPlaying') : t('GeneralPause')}
                                         </Typography>
                                         {playerReady && playerRef.current !== null && room.playlistUrls[roomIdPlayed].source !== 'spotify' && 
-                                        <Typography sx={{ fontSize: '10px', ml:0, mb: 1}}> {~~(Math.round(playerRef.current.getCurrentTime())/60) + 'm'+Math.round(playerRef.current.getCurrentTime()) % 60+ 's / ' + formatNumberToMinAndSec(playerRef.current.getDuration())}</Typography>}
+                                        <Typography sx={{ fontSize: '10px', ml:0, mb: 1, color:'var(--grey-inspired)'}}> {~~(Math.round(playerRef.current.getCurrentTime())/60) + 'm'+Math.round(playerRef.current.getCurrentTime()) % 60+ 's / ' + formatNumberToMinAndSec(playerRef.current.getDuration())}</Typography>}
                                     </Grid>
                                 </Grid> 
                                 <Grid className='player_button_container' item sm={12} sx={{ display:'flex', flexWrap:'wrap',padding:0,pl:1.5,ml:0, pr:1.5,mb: 0 , mt:1, fill:'#f0f1f0'}}   >
@@ -818,7 +826,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                             {room.playlistUrls[room.playing].source !== 'spotify' && 
                                                 <>
                                                     <IconButton onClick={e => setPercentagePlayed(0)} >
-                                                        <ReplayIcon fontSize="large" sx={{color:'#f0f1f0'}} />
+                                                        <Icon icon="icon-park-outline:replay-music" width="30" style={{color:'#f0f1f0'}} />
                                                     </IconButton>
                                                 </>
                                             }
@@ -856,7 +864,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         
                     </Box>
                 }
-                { !room.playlistEmpty && <Toolbar xs={12} sx={{ bgcolor: 'var(--grey-dark)',borderBottom: '2px solid var(--border-color)', minHeight: '45px !important', fontFamily: 'Monospace', paddingLeft:'15px', pr:'25 px' }}>
+                { !room.playlistEmpty && <Toolbar xs={12} sx={{ bgcolor: 'var(--grey-dark)',borderBottom: '2px solid var(--border-color)', minHeight: '45px !important', fontFamily: 'Monospace', pl:'15px', pr:'25 px' }}>
                      <Typography component="div" sx={{ flexGrow: 1, textTransform:'uppercase', fontSize:'12px', color:'white' }}>  <b><span> { room.playlistUrls && room.playlistUrls.length } médias en playlist :</span></b>
                     </Typography>
                 </Toolbar>}
@@ -922,12 +930,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     <Box sx={{display:'flex',flexDirection:'column',p:'8px'}}>
                         <Typography sx={{color:'var(--white)', display:'block', width:'100%',ml:0, pl:0,fontSize: '12px', textTransform:'uppercase' }} > Room { roomId }</Typography>
 
-                        <Typography sx={{color:'var(--white)', display:'flex',gap:'10px',flexDirection:'row', alignItems:'center', width:'100%',ml:1,mt:1, fontSize: '10px', textTransform:'uppercase' }} >
+                        <Box sx={{color:'var(--white)', display:'flex',gap:'10px',flexDirection:'row', alignItems:'center', width:'100%',ml:1,mt:1, fontSize: '10px', textTransform:'uppercase' }} >
                             <SoundWave waveNumber={7} isPlayingOrNo={roomIsPlaying}  /> 
-                            <span >
+                            <span class="varelaFontTitle">
                                 { room.playlistUrls[room.playing].title ? room.playlistUrls[room.playing].title : room.playlistUrls[room.playing].url.substring(0,25)+'..' }
                             </span>
-                        </Typography>
+                        </Box>
                     </Box>}
             </Grid>
             {OpenAddToPlaylistModal && 

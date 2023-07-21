@@ -13,7 +13,7 @@ const EmptyPlaylist = ({t, setOpenInvitePeopleToRoomModal, setOpenAddToPlaylistM
             className='animate__animated animate__fadeInUp animate__slow'
             onClick={(e) => setOpenInvitePeopleToRoomModal(true)}
             sx={{m:2, border:'2px solid var(--green-2)', cursor:'pointer'}}> 
-            <AlertTitle sx={{mb:0}}>{t('RoomEmptyAlertWelcome')} </AlertTitle> 
+            <AlertTitle className='varelaFontTitle' sx={{mb:0}}>{t('RoomEmptyAlertWelcome')} </AlertTitle> 
             <p style={{color:'var(--white)', margin:0}}>{t('RoomEmptyAlertWelcomeClickHere')}</p>
         </Alert>
         <Alert severity="warning" 
@@ -22,7 +22,7 @@ const EmptyPlaylist = ({t, setOpenInvitePeopleToRoomModal, setOpenAddToPlaylistM
             sx={{m:2, border:'2px solid #febc21', cursor:'pointer'}} 
             className='animate__animated animate__fadeInUp animate__slow'
             onClick={(e) => setOpenAddToPlaylistModal(true)} >
-            <AlertTitle>{t('RoomEmptyAlertPlaylist')}</AlertTitle>
+            <AlertTitle className='varelaFontTitle'>{t('RoomEmptyAlertPlaylist')}</AlertTitle>
             <p style={{color:'var(--white)', margin:0}}>{t('RoomEmptyAlertPlaylistClickHere')}</p>
         </Alert>
         
@@ -32,7 +32,7 @@ const EmptyPlaylist = ({t, setOpenInvitePeopleToRoomModal, setOpenAddToPlaylistM
             sx={{m:2, border:'2px solid #febc21',cursor:'pointer'}} 
             className='animate__animated animate__fadeInUp animate__slow'
             onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
-            <AlertTitle>{t('RoomEmptyAlertSpotify')}</AlertTitle>
+            <AlertTitle className='varelaFontTitle'>{t('RoomEmptyAlertSpotify')}</AlertTitle>
             <p style={{color:'var(--white)', margin:0}}> {t('RoomEmptyAlertSpotifyClickHere')} <br /> <b>{t('RoomEmptyAlertSpotifyBold')}</b> </p>
         </Alert>}
 
@@ -42,7 +42,7 @@ const EmptyPlaylist = ({t, setOpenInvitePeopleToRoomModal, setOpenAddToPlaylistM
             sx={{m:2, border:'2px solid #febc21',cursor:'pointer'}} 
             className='animate__animated animate__fadeInUp animate__slow'
                 onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_DEEZER_AUTH_ENDPOINT}?app_id=${process.env.REACT_APP_ROOM_DEEZER_APP_ID}&redirect_uri=${REDIRECT_URI}&perms=basic_access,email`}>
-            <AlertTitle>{t('RoomEmptyAlertDeezer')}</AlertTitle>
+            <AlertTitle className='varelaFontTitle'>{t('RoomEmptyAlertDeezer')}</AlertTitle>
             <p style={{color:'var(--white)', margin:0}}> {t('RoomEmptyAlertDeezerClickHere')} <br /> </p>
         </Alert>}
     </>

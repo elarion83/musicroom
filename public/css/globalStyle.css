@@ -102,3 +102,9 @@ b, * {
   transform: scale(1.5);
   margin-left: 0.3em;
 }
+
+.textEllipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}

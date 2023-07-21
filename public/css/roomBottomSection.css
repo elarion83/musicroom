@@ -9,9 +9,9 @@
 }
 
 .room_small_button_interactions {
-    justify-content: 'center';
-    background-color: 'greylight';
+    justify-content: center;  
 }
+
 
 .hidden.room_small_button_interactions {
     height: 0;

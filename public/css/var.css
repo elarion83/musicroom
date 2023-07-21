@@ -12,8 +12,10 @@
   --white:#efeff1;
   --grey-lighter:rgb(217, 217, 228);
   --grey-light:rgb(173, 173, 184);
+  --grey-inspired: rgb(167, 167, 167);
   --grey-dark:#262626;
   --grey-dark-rgb:38, 38, 38;
   --transition-fast-easeIn:all 0.1s ease-in;
   --transition-smooth-all:all 0.3s ease-out;
+  --main-typo-family:'Lato', sans-serif;
 }

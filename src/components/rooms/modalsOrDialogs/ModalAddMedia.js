@@ -80,6 +80,7 @@ const RoomModalAddMedia = ({ t, currentUser, validatedObjectToAdd, spotifyTokenP
         if(searchTerm !== '') {
             if (validator.isURL(searchTerm.trim())) {
                 addingObject.url = searchTerm.trim();
+                addingObject.title = addingObject.url;
                 addingObject.source = "url";
                 if(addingObject.url.includes('youtube') || addingObject.url.includes('youtu.be')) {
                     addingObject.source = "youtube";
@@ -87,7 +88,6 @@ const RoomModalAddMedia = ({ t, currentUser, validatedObjectToAdd, spotifyTokenP
                     var match = addingObject.url.match(regExp);
 
                     await getYoutubeVideoInfosFromId(match[7], addingObject);
-
                 }
                 if(addingObject.url.includes('dailymotion')) {
                     addingObject.source = "dailymotion";
@@ -106,7 +106,7 @@ const RoomModalAddMedia = ({ t, currentUser, validatedObjectToAdd, spotifyTokenP
                 setIsSearching(false);
             } else {
 
-                axios.get('https://www.googleapis.com/youtube/v3/search', { params: {
+                axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, { params: {
                     part: 'snippet',
                     key: process.env.REACT_APP_YOUTUBE_API_KEY,
                     q: searchTerm,

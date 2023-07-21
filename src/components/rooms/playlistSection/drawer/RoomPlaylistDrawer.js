@@ -43,7 +43,23 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, open
                         changeIdPlaying={changeIdPlaying}
                         idActuallyPlaying={roomIdActuallyPlaying}
                         idActuallyDisplaying={roomIdActuallyDisplaying} />
-                    <ListItemText sx={{zIndex:2}} primary={data.title} secondary={"Via "+data.source+" par "+data.addedBy} />
+                    <ListItemText 
+                        sx={{zIndex:2}} 
+                        primary={
+                            <React.Fragment>
+                                <Typography className="varelaFontTitle">
+                                    {data.title} 
+                                </Typography>
+                            </React.Fragment>
+                        }
+                        secondary={
+                            <React.Fragment>
+                                <Typography>
+                                    Via <b>{data.source}</b> par <b>{data.addedBy}</b>
+                                </Typography>
+                            </React.Fragment>
+                        }
+                    />
                     {roomIdActuallyPlaying === roomIdActuallyDisplaying &&
                     <LinearProgress className="DrawerMediaLinearProgress" sx={{top:0, left:0,position:'absolute', width:'100%', height:'100%', zIndex:1, opacity:0.5, "& .MuiLinearProgress-barColorPrimary": {
                         backgroundColor: 'var(--grey-lighter)',
