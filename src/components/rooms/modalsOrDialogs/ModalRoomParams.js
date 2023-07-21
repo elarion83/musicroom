@@ -129,7 +129,35 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams , handleDi
                         </Alert>
                     }
 
-                    <Alert sx={{pl:0, mt:3, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.isPasswordNeeded} onChange={handleChangeIsPasswordNeeded} 
+                    <Alert sx={{pl:0,mt:3,  mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.isPlayingLooping} onChange={handleChangeIsPlayingLooping} 
+                            disabled={adminView? false:true}
+                            name="switchIsPlayingLooping" />} severity={roomParams.isPlayingLooping ? 'success' : 'warning'}>
+                        <AlertTitle sx={{fontWeight:'bold'}}>{t('ModalParamsRoomLoopPlayingTitle')}</AlertTitle>
+                        <Typography fontSize='small'>{adminView? t('ModalParamsRoomLoopPlayingText') : t('ModalParamsRoomNotAllowedText')}</Typography>
+                    </Alert>
+
+                    <Alert sx={{pl:0, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.isAutoPlayActivated} onChange={handleChangeIsAutoPlayActivated} 
+                            disabled={adminView? false:true}
+                            name="switchIsAutoPlayActivated" />} severity={roomParams.isAutoPlayActivated ? 'success' : 'warning'}>
+                        <AlertTitle sx={{fontWeight:'bold'}}>{t('ModalParamsRoomAutoPlayingTitle')}</AlertTitle>
+                        <Typography fontSize='small'>{adminView? t('ModalParamsRoomAutoPlayingText') : t('ModalParamsRoomNotAllowedText')}</Typography>
+                    </Alert>
+
+                    <Alert sx={{pl:0, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.interactionsAllowed} onChange={handleChangeIsInterractionsAllowed} 
+                            disabled={adminView? false:true}
+                            name="switchInteractionsAllowed" />} severity={roomParams.interactionsAllowed ? 'success' : 'warning'}>
+                        <AlertTitle sx={{fontWeight:'bold'}}>{t('ModalParamsRoomInteractionAllowedTitle')}</AlertTitle>
+                        <Typography fontSize='small'>{adminView? t('ModalParamsRoomInteractionAllowedText') : t('ModalParamsRoomNotAllowedText')}</Typography>
+                    </Alert>
+                    
+                    <Alert sx={{pl:0, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.isChatActivated} onChange={handleChangeIsChatActivated} 
+                            disabled={adminView? false:true}
+                            name="switchIsChatActivated" />} severity={roomParams.isChatActivated ? 'success' : 'warning'}>
+                        <AlertTitle sx={{fontWeight:'bold'}}>{t('ModalParamsRoomChatAllowedTitle')}</AlertTitle>
+                        <Typography fontSize='small'>{adminView? t('ModalParamsRoomChatAllowedText') : t('ModalParamsRoomNotAllowedText')}</Typography>
+                    </Alert>
+
+                    <Alert sx={{pl:0, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.isPasswordNeeded} onChange={handleChangeIsPasswordNeeded} 
                             disabled={adminView? false:true}
                             name="switchInteractionsAllowed" />} severity={roomParams.isPasswordNeeded ? 'success' : 'warning'}>
                         <AlertTitle sx={{fontWeight:'bold'}}>Mot de passe requis</AlertTitle>
@@ -172,34 +200,6 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams , handleDi
                         }
                     </Alert>
                     
-                    
-                    <Alert sx={{pl:0, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.interactionsAllowed} onChange={handleChangeIsInterractionsAllowed} 
-                            disabled={adminView? false:true}
-                            name="switchInteractionsAllowed" />} severity={roomParams.interactionsAllowed ? 'success' : 'warning'}>
-                        <AlertTitle sx={{fontWeight:'bold'}}>{t('ModalParamsRoomInteractionAllowedTitle')}</AlertTitle>
-                        <Typography fontSize='small'>{adminView? t('ModalParamsRoomInteractionAllowedText') : t('ModalParamsRoomNotAllowedText')}</Typography>
-                    </Alert>
-                    
-                    <Alert sx={{pl:0, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.isChatActivated} onChange={handleChangeIsChatActivated} 
-                            disabled={adminView? false:true}
-                            name="switchIsChatActivated" />} severity={roomParams.isChatActivated ? 'success' : 'warning'}>
-                        <AlertTitle sx={{fontWeight:'bold'}}>{t('ModalParamsRoomChatAllowedTitle')}</AlertTitle>
-                        <Typography fontSize='small'>{adminView? t('ModalParamsRoomChatAllowedText') : t('ModalParamsRoomNotAllowedText')}</Typography>
-                    </Alert>
-
-                    <Alert sx={{pl:0, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.isPlayingLooping} onChange={handleChangeIsPlayingLooping} 
-                            disabled={adminView? false:true}
-                            name="switchIsPlayingLooping" />} severity={roomParams.isPlayingLooping ? 'success' : 'warning'}>
-                        <AlertTitle sx={{fontWeight:'bold'}}>{t('ModalParamsRoomLoopPlayingTitle')}</AlertTitle>
-                        <Typography fontSize='small'>{adminView? t('ModalParamsRoomLoopPlayingText') : t('ModalParamsRoomNotAllowedText')}</Typography>
-                    </Alert>
-                    <Alert sx={{pl:0, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.isAutoPlayActivated} onChange={handleChangeIsAutoPlayActivated} 
-                            disabled={adminView? false:true}
-                            name="switchIsAutoPlayActivated" />} severity={roomParams.isAutoPlayActivated ? 'success' : 'warning'}>
-                        <AlertTitle sx={{fontWeight:'bold'}}>{t('ModalParamsRoomAutoPlayingTitle')}</AlertTitle>
-                        <Typography fontSize='small'>{adminView? t('ModalParamsRoomAutoPlayingText') : t('ModalParamsRoomNotAllowedText')}</Typography>
-                    </Alert>
-
                     <Alert sx={{pl:0, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.syncPeopleByDefault} onChange={handleChangeSyncPeopleByDefault} 
                             disabled={adminView? false:true}
                             name="switchSyncPeopleByDefault" />} severity={roomParams.syncPeopleByDefault ? 'success' : 'warning'}>
