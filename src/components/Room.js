@@ -521,10 +521,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         roomRef.set({roomParams: newParams}, { merge: true });
     }
 
-    function handleDisconnectFromSpotify(type) {
-        disconnectSpotify();
-    }
-
     useEffect(() => {
         var queryParameters = new URLSearchParams(window.location.search);
         if(queryParameters.get("spotoken")) {

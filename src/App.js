@@ -37,6 +37,9 @@ function App( {t} ) {
   const [loginErrorMessage, setLoginErrorMessage] = useState();
   const [stickyDisplay, setStickyDisplay] = useState(false);
 
+  // for login + action
+  const [funcAfterLogin, setFuncAfterLogin] = useState('');
+
   // room infos
 	const queryParameters = new URLSearchParams(window.location.search)
   const [roomId, setRoomId] = useState(queryParameters.get("rid") ? queryParameters.get("rid") : '');
@@ -128,6 +131,23 @@ function App( {t} ) {
     CreateGoogleAnalyticsEvent('Actions','Rejoin. Room','Room id :'+idRoom);
   }
   
+  // when join room or create room button pressed, if not logged in we need to do the right action after login
+  function handleLoginAndRoom(action) {
+    setFuncAfterLogin(action);
+    setLoginModalOpen(true);
+  }
+
+  function doActionAfterLogin() {
+    if(funcAfterLogin == 'createRoom') {
+      createNewRoom();
+    }
+
+    if(funcAfterLogin == 'joinRoom') {
+      setJoinRoomModalOpen(true);
+    }
+
+    setFuncAfterLogin('');
+  }
 
   async function anonymousLogin() {
     setIsLoginLoading(true);
@@ -142,6 +162,8 @@ function App( {t} ) {
     setIsSignedIn(true);
     handleLoginOkSnackNewUser();
     window.scrollTo(0, 0);
+
+    doActionAfterLogin();
 
     CreateGoogleAnalyticsEvent('Actions','Anonym. login','Anonym. login');
   }
@@ -160,6 +182,7 @@ function App( {t} ) {
       db.collection(process.env.REACT_APP_USERS_COLLECTION).doc(userUid).set(userData).then((doc) => {
         setIsLoginLoading(false);
         handleLoginOkSnackNewUser();
+        doActionAfterLogin();
         CreateGoogleAnalyticsEvent('Actions',registerType+' register',registerType+' register');
       });
   }
@@ -173,6 +196,7 @@ function App( {t} ) {
           } else {
             setIsLoginLoading(false);
             handleLoginOkSnack();
+            doActionAfterLogin();
             CreateGoogleAnalyticsEvent('Actions','Google login','Google login');
           }
         })
@@ -196,6 +220,7 @@ function App( {t} ) {
                             // Signed in
                             handleLoginOkSnack();
                             setIsLoginLoading(false);
+                            doActionAfterLogin();
                             CreateGoogleAnalyticsEvent('Actions','Mail login','Mail login');
                             return userCredential.user;
                         })
@@ -250,7 +275,6 @@ function App( {t} ) {
     CreateGoogleAnalyticsEvent('Actions','Quit room','Quit room');
   }
 
-
   function replaceCurrentUrlWithHomeUrl() {
     window.history.replaceState('string','', window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : ''));
   }
@@ -291,11 +315,11 @@ function App( {t} ) {
             </Grid>
             
             <Button variant="filled" className='main_bg_color  buttonBorder' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em'}} 
-              onClick={(e) => isSignedIn ? createNewRoom() : setLoginModalOpen(true)}>
+              onClick={(e) => isSignedIn ? createNewRoom() : handleLoginAndRoom('createRoom')}>
                 <Icon icon="carbon:intent-request-create" width="30" style={{marginRight:'20px'}}/> 
                 {t('HomePageButtonsCreateRoom')} </Button> 
             <Button variant="filled" className='main_bg_color  buttonBorder' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em', mb:'2em'}} 
-              onClick={(e) => isSignedIn ? setJoinRoomModalOpen(true) : setLoginModalOpen(true)}> 
+              onClick={(e) => isSignedIn ? setJoinRoomModalOpen(true) : handleLoginAndRoom('joinRoom')}> 
                 <Icon icon="icon-park-outline:connect"  width="30" style={{marginRight:'20px'}}/>
                 {t('HomePageButtonsJoinRoom')}  </Button> 
 
