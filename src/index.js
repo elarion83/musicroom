@@ -2,8 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
-import "@fontsource/roboto";
-import '@fontsource/roboto/100.css';
 import './services/i18n/i18n';
 
 ReactDOM.render(

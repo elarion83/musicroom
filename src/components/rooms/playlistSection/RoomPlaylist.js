@@ -49,9 +49,9 @@ const RoomPlaylist = ({t, isSpotifyAvailable, handleChangeIdShownInDrawer, roomP
                                                 <SoundWave waveNumber={7} isPlayingOrNo={roomIsActuallyPlaying} />
                                         </ListItemIcon>}
                                         {(d.source === 'spotify' && !isSpotifyAvailable) && <Icon style={{display:'inline', marginRight:'0.5em', marginTop:'0.5em', color:'red'}} icon="ps:forbidden" />}
-                                    <Grid item sx={{display:'block', zIndex:2, pl: 0, pb:0.5,pt:0.5, flexGrow:1}}>
-                                        <Typography className="flexRowCenterHDirectChild varelaFontTitle" onClick={e => (idx === idDisplaying) ? handleChangeIdActuallyDisplaying(-1) : handleChangeIdActuallyDisplaying(idx)} sx={{ pl:0,mb:0,mt:0, wordBreak: 'break-all'}}>
-                                            <span>{ (d.title.length === 0) ? d.url.substring(0, 40)+'...' : d.title.length > 50 ? d.title.substring(0, 50)+'...' : d.title} </span>
+                                    <Grid item sx={{display:'block', zIndex:2, pl: 0, pb:0.5,pt:0.5, flexGrow:1, overflow:'hidden'}}>
+                                        <Typography component="p" className="flexRowCenterHDirectChild varelaFontTitle textEllipsis" onClick={e => (idx === idDisplaying) ? handleChangeIdActuallyDisplaying(-1) : handleChangeIdActuallyDisplaying(idx)} sx={{ pl:0,mb:0,mt:0, wordBreak: 'break-all'}}>
+                                            { (d.title.length === 0) ? d.url : d.title}
                                         </Typography>
                                         
                                         {idx === roomIdActuallyPlaying && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0,color:'var(--grey-inspired)', fontSize: '10px', textTransform:'uppercase' }}>
