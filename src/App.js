@@ -98,7 +98,7 @@ function App( {t} ) {
         var token_deezer = queryParameters.get("code");
         getDeezerAccessToken(token_deezer);
       }
-  }, [])
+  })
 
 
   async function getDeezerAccessToken(token) {
