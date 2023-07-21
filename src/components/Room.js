@@ -646,7 +646,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
    
   return (
     <div className="flex flex-col w-full gap-0 relative " style={{height:'auto'}} > 
-        {loaded && room.roomParams !== undefined && 
+        {loaded && room.roomParams !== undefined && room.roomParams.spotify !== undefined && room.roomParams.deezer !== undefined && 
             <RoomTopBar     
                 room={room}
                 roomIsPlaying={roomIsPlaying}

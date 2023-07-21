@@ -21,6 +21,7 @@
 
 .homeSlider h5 {
     font-size: 1.6em;
+    text-align: center;
 }
 
 .homeSlider .mainIcon {
@@ -37,5 +38,9 @@
         margin-bottom: 1em;
         margin-top: 0;
         transform: scale(1.5);
+    }
+
+    .homeSlider h5 {
+        font-size: 1.3em;
     }
 }

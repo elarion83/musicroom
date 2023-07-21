@@ -3,7 +3,6 @@ import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { Box, Fab, Grid, Snackbar, Tooltip } from '@mui/material';
-import Button from '@mui/material/Button';
 import React from "react";
 
 import TuneIcon from '@mui/icons-material/Tune';
@@ -33,11 +32,7 @@ const BottomInteractions = ({ t, layoutDisplay, setLayoutdisplay, paramDrawerIsO
     }
 
     return(
-        <Grid 
-         className={`room_bottom_interactions ${isChatExpanded ? "chatExpanded" : ""}`}
-         
-        >
-            
+        <Grid className={`room_bottom_interactions ${isChatExpanded ? "chatExpanded" : ""}`} >
             {(!isChatExpanded && layoutDisplay !== 'interactive') && <div>
                 <Tooltip 
                     ref={el => animatedElementsRef.push(el)} 
@@ -109,8 +104,6 @@ const BottomInteractions = ({ t, layoutDisplay, setLayoutdisplay, paramDrawerIsO
             {(isChatExpanded || layoutDisplay === 'interactive') && 
                 <Chat currentUser={currentUser} layoutDisplay={layoutDisplay} setLayoutdisplay={setLayoutdisplay} roomId={roomId} createNewRoomInteraction={createNewRoomInteraction} userCanMakeInteraction={userCanMakeInteraction} roomParams={roomParams} className='chatBox' hideTchat={e => setIsChatExpanded(false)} />
             }
-            
-           
             
             {checkNotificationsLength && roomNotifs[roomNotifs.length - 1].type === 'userArrived' && 
                 (roomNotifs[roomNotifs.length - 1].createdBy !== currentUser.displayName) && 

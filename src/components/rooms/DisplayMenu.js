@@ -1,25 +1,20 @@
-import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import Button from '@mui/material/Button';
-import Menu, { MenuProps } from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import EditIcon from '@mui/icons-material/Edit';
-import Divider from '@mui/material/Divider';
-import ArchiveIcon from '@mui/icons-material/Archive';
-import FileCopyIcon from '@mui/icons-material/FileCopy';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import { alpha, styled } from '@mui/material/styles';
+import * as React from 'react';
 import { useState } from 'react';
 
-import FullscreenIcon from '@mui/icons-material/Fullscreen';
-import ViewModuleIcon from '@mui/icons-material/ViewModule';
+import AirplayIcon from '@mui/icons-material/Airplay';
 import ChatIcon from '@mui/icons-material/Chat';
 import DvrIcon from '@mui/icons-material/Dvr';
-import AirplayIcon from '@mui/icons-material/Airplay';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import { useEffect } from 'react';
 
 import { withTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -82,23 +77,19 @@ const DisplayMenu = ({t, layoutDisplay, setLayoutdisplay}) => {
   return (
     
     <div>
-      <Button
+      <Box
         size='small'
-        aria-controls={open ? 'demo-customized-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        disableElevation
-        sx={{m:0,p:0,minWidth:'0px',width:'40px'}}
         onClick={handleClick}
-        endIcon={open ? <KeyboardArrowDownIcon sx={{ml:-1.5}}/> : <KeyboardArrowUpIcon sx={{ml:-1.5}}/>}
+        sx={{pt:0.5}}
       >
-      <FullscreenIcon sx={{ml:0.5,mr:0.5}} />
-      </Button>
+        <FullscreenIcon sx={{ml:0,mr:0}} />
+        {open ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}
+      </Box>
       <StyledMenu
         MenuListProps={{
           'aria-labelledby': 'demo-customized-button',
         }}
-        dense={true}
+        dense="true"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}

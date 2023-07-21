@@ -36,9 +36,7 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
             <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1}}>
                      <Icon width="15" icon='carbon:user-avatar' style={{marginRight:'10px'}} /> {t('ModalLoginTitle')} 
             </DialogTitle>  
-            <DialogContent dividers sx={{pt:0}}>
-                <DialogContentText sx={{pt:2}}>
-                
+            <DialogContent dividers sx={{pt:2}}>
                 {loginErrorMessage && <Alert severity="error" sx={{mb:2}}>{loginErrorMessage}</Alert>}     
                     <Grid container direction="column" >
                         <Box sx={{display:'flex', flexDirection:'column'}}>     
@@ -107,7 +105,6 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
                     <Typography fontSize="small"> {t('ModalLoginTermsSentence')} <a href="#" onClick={(e) => setPrivacyPolicyModalOpen(true)}>{t('ModalLoginTermsPrivacyPolicy')}  </a> {t('GeneralAnd')} <a href="https://www.youtube.com/t/terms" target="_blank">{t('ModalLoginTermsYoutubeTerms')}  </a>
                     </Typography>
                     <PrivacyPolicyModal open={PrivacyPolicyModalOpen} changeOpen={setPrivacyPolicyModalOpen} />
-                </DialogContentText>
             </DialogContent>
         </Dialog>
     )

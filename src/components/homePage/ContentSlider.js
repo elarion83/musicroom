@@ -66,7 +66,10 @@ const Contentslider = () => {
                         .. ou en étant chacun chez soi
                     </Typography>
                     <Typography sx={{pl:2,pr:2, color:'var(--white)'}} >
-                        Grâce à Play-it, vibre au même rythme que tes potes à des endroits différents de la planète, en voyage, chacun dans sa voiture, chacun chez soi en révisant ou en mattant les dernières vidéos youtube sous la couette !
+                        Grâce à Play-it, vibre au même rythme que tes potes à des endroits différents de la planète ! 
+                    </Typography>
+                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} >
+                        En voyage, chacun dans sa voiture, chacun chez soi en révisant ou en mattant les dernières vidéos youtube sous la couette !
                     </Typography>
                 </Box>,
             },
@@ -79,7 +82,7 @@ const Contentslider = () => {
                         Une playlist.. et bien plus !
                     </Typography>
                     <Typography sx={{pl:2,pr:2, color:'var(--white)'}} >
-                        Grâce au chat, aux émoticones en temps réel et aux votes, les membres de la room font partie intégrante de l'ambiance !
+                        Grâce au chat, aux émoticones et aux votes, les membres de la room font partie intégrante de l'ambiance !
                     </Typography>
                     <Typography sx={{pl:2,pr:2, color:'var(--white)'}} >
                         Retrouvez et relisez les playlist qui vous on plu grâce à la lecture désynchronisée !
