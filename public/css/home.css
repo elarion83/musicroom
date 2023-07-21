@@ -1,0 +1,24 @@
+.homeSlider {
+    max-width: 100%;
+    cursor: grab;
+}
+.homeSlider .slideBox {
+    opacity: 0.2;
+    padding: 2em 0em;
+    background: var(--grey-dark);
+    border-radius: 5px;
+    transform: scale(0.7);
+    transition: var(--transition-fast-easeIn);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.homeSlider .activeSlideBox {
+    opacity: 1;
+    transform: scale(1);
+    transition: var(--transition-fast-easeIn);
+}
+
+.homeSlider h5 {
+    font-size: 2em;
+}

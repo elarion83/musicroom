@@ -1,5 +1,7 @@
 @import 'var.css';
+@import 'font.css';
 @import 'globalStyle.css';
+@import 'home.css';
 
 @import 'mainTopBar.css';
 @import 'animations.css';
