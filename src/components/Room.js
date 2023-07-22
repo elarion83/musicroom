@@ -40,9 +40,8 @@ import ModalLeaveRoom from './rooms/modalsOrDialogs/ModalLeaveRoom';
 import ModalRoomParams from './rooms/modalsOrDialogs/ModalRoomParams';
 import ModalShareRoom from './rooms/modalsOrDialogs/ModalShareRoom';
 
-import BottomInteractions from "./rooms/BottomInteractions";
+import BottomInteractions from "./rooms/bottomSection/BottomInteractions";
 import RoomTopBar from "./rooms/RoomTopBar";
-import SoundWave from "./rooms/SoundWave";
 import RoomPlaylist from "./rooms/playlistSection/RoomPlaylist";
 
 import { CreateGoogleAnalyticsEvent } from '../services/googleAnalytics';
@@ -52,6 +51,7 @@ import ModalEnterRoomPassword from "./rooms/modalsOrDialogs/ModalEnterRoomPasswo
 import VolumeButton from "./rooms/playerSection/VolumeButton";
 import EmptyPlaylist from "./rooms/playlistSection/EmptyPlaylist";
 import { Icon } from "@iconify/react";
+import SoundWave from "../services/SoundWave";
 
 const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
@@ -785,11 +785,11 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                         </Grid>
                                     
                                     <Grid item sm={12} md={12} >
-                                        <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase', color:'var(--grey-inspired)' }}>
+                                        <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase', color:'var(--grey-inspired)' }} className='fontFamilyNunito'>
                                             {roomIsPlaying ? t('GeneralPlaying') : t('GeneralPause')}
                                         </Typography>
                                         {playerReady && playerRef.current !== null && room.playlistUrls[roomIdPlayed].source !== 'spotify' && 
-                                        <Typography sx={{ fontSize: '10px', ml:0, mb: 1, color:'var(--grey-inspired)'}}> {~~(Math.round(playerRef.current.getCurrentTime())/60) + 'm'+Math.round(playerRef.current.getCurrentTime()) % 60+ 's / ' + formatNumberToMinAndSec(playerRef.current.getDuration())}</Typography>}
+                                        <Typography sx={{ fontSize: '10px', ml:0, mb: 1, color:'var(--grey-inspired)'}} className='fontFamilyNunito'> {~~(Math.round(playerRef.current.getCurrentTime())/60) + 'm'+Math.round(playerRef.current.getCurrentTime()) % 60+ 's / ' + formatNumberToMinAndSec(playerRef.current.getDuration())}</Typography>}
                                     </Grid>
                                 </Grid> 
                                 <Grid className='player_button_container' item sm={12} sx={{ display:'flex', flexWrap:'wrap',padding:0,pl:1.5,ml:0, pr:1.5,mb: 0 , mt:1, fill:'#f0f1f0'}}   >
@@ -865,7 +865,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     </Box>
                 }
                 { !room.playlistEmpty && <Toolbar xs={12} sx={{ bgcolor: 'var(--grey-dark)',borderBottom: '2px solid var(--border-color)', minHeight: '45px !important', fontFamily: 'Monospace', pl:'15px', pr:'25 px' }}>
-                     <Typography component="div" sx={{ flexGrow: 1, textTransform:'uppercase', fontSize:'12px', color:'white' }}>  <b><span> { room.playlistUrls && room.playlistUrls.length } médias en playlist :</span></b>
+                     <Typography component="div" sx={{ flexGrow: 1, textTransform:'uppercase', fontSize:'12px', color:'white' }}>  <b><span> { room.playlistUrls && room.playlistUrls.length } {t('GeneralMediasInPlaylist')}</span></b>
                     </Typography>
                 </Toolbar>}
                 { room.playlistEmpty && 

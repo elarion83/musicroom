@@ -14,6 +14,8 @@ const resources = {
         "GeneralAnd":'And',
         "GeneralYes":'Yes',
         "GeneralNo":'No',
+        "GeneralBy":'By',
+        "GeneralVia":'From',
         "GeneralLeave":'Leave',
         "GeneralStay":'Stay',
         "GeneralSave":'Save',
@@ -46,6 +48,7 @@ const resources = {
         "RoomBottomButtonChatShow":"Show the chat",
         "RoomBottomButtonChatHide":"Hide chat",
         "RoomBottomDisplayFullScreen":"Fullscreen",
+        "RoomBottomDisplayInteractive":"Interactive",
         "RoomBottomDisplayClassic":"Classic",
 
         "RoomChatWelcomeMessage": "Welcome on the chat !",
@@ -124,6 +127,8 @@ const resources = {
         "GeneralAnd":'Et',
         "GeneralYes":'Oui',
         "GeneralNo":'Non',
+        "GeneralBy":'Par',
+        "GeneralVia":'Via',
         "GeneralLeave":'Quitter',
         "GeneralStay":'Rester',
         "GeneralSave":'Enregistrer',
@@ -156,6 +161,7 @@ const resources = {
         "RoomBottomButtonChatShow":"Voir le chat",
         "RoomBottomButtonChatHide":"Cacher le chat",
         "RoomBottomDisplayFullScreen":"Plein écran",
+        "RoomBottomDisplayInteractive":"Interactif",
         "RoomBottomDisplayClassic":"Classique",
 
         "RoomChatWelcomeMessage": "Bienvenue sur le chat !",

@@ -17,7 +17,7 @@ const ModalLeaveRoom = ({ t, open , changeOpen,handleQuitRoom }) => {
                 <ExitToAppIcon fontSize="small" sx={{mr:1}} /> {t('ModalLeaveRoomTitle')} 
             </DialogTitle>  
             <DialogContent dividers>
-                <DialogContentText>
+                <DialogContentText className='fontFamilyNunito'>
                         {t('ModalLeaveRoomText')}
                 </DialogContentText>
             </DialogContent>

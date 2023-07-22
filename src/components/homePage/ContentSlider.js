@@ -1,11 +1,10 @@
-import { Container, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Icon } from '@iconify/react';
 
-import { useSpringCarousel, useTransitionCarousel  } from 'react-spring-carousel'
+import { useSpringCarousel } from 'react-spring-carousel';
 
 const Contentslider = () => {
     
@@ -31,15 +30,15 @@ const Contentslider = () => {
             {
                 id: '0',
                 renderItem: 
-                <Box className={activeItem == 0 ? 'slideBox activeSlideBox' : 'slideBox'}> 
+                <Box className={activeItem === 0 ? 'slideBox activeSlideBox' : 'slideBox'}> 
                     <Icon icon="iconoir:playlist" width="30" className='mainIcon' />
-                    <Typography sx={{pl:2,pr:2,mb:3}} variant="h5" gutterBottom>
+                    <Typography sx={{pl:2,pr:2,mb:3}} variant="h5" gutterBottom className='varelaFontTitle'>
                         Créez une playlist en temps réel a plusieurs
                     </Typography>
-                    <Typography sx={{pl:2,pr:2,mb:2,mt:3, color:'var(--white)'}} >
+                    <Typography sx={{pl:2,pr:2,mb:2,mt:3, color:'var(--white)'}} className='fontFamilyOpenSans'>
                         Ajoutez des médias depuis <i>Spotify, Youtube, Deezer, et bien d'autre plateformes</i> à une playlist collective lue en temps réel.
                     </Typography>
-                    <Typography sx={{pl:2,pr:2,mt:2, color:'var(--white)'}} >
+                    <Typography sx={{pl:2,pr:2,mt:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
                         Votez, tchatez, réagissez et vibrez ensemble au rythme de votre playlist. <b>Entre potes, en soirée, en voiture, en voyage, ou au sport, Play-it est l'outil indispensable !</b>
                     </Typography>
                 </Box>,
@@ -47,12 +46,12 @@ const Contentslider = () => {
             {
                 id: '1',
                 renderItem: 
-                <Box className={activeItem == 1 ? 'slideBox activeSlideBox' : 'slideBox'}> 
+                <Box className={activeItem === 1 ? 'slideBox activeSlideBox' : 'slideBox'}> 
                     <Icon icon="carbon:network-2" width="30" className='mainIcon' />
                     <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
                         En étant tous au même endroit ..
                     </Typography>
-                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} >
+                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
                         <b>Idéal pour les soirées</b>, une room Play-it permet a chaque convive d'ajouter sa musique ou sa vidéo à la suite de la playlist, plus besoin d'utiliser le téléphone de l'hôte de la soirée !
                     </Typography>
                 </Box>,
@@ -60,15 +59,15 @@ const Contentslider = () => {
             {
                 id: '2',
                 renderItem: 
-                <Box className={activeItem == 2 ? 'slideBox activeSlideBox' : 'slideBox'}> 
+                <Box className={activeItem === 2 ? 'slideBox activeSlideBox' : 'slideBox'}> 
                     <Icon icon="carbon:network-4" width="30" className='mainIcon' />
                     <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
                         .. ou en étant chacun chez soi
                     </Typography>
-                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} >
+                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
                         Grâce à Play-it, vibre au même rythme que tes potes à des endroits différents de la planète ! 
                     </Typography>
-                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} >
+                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
                         En voyage, chacun dans sa voiture, chacun chez soi en révisant ou en mattant les dernières vidéos youtube sous la couette !
                     </Typography>
                 </Box>,
@@ -76,15 +75,15 @@ const Contentslider = () => {
             {
                 id: '3',
                 renderItem: 
-                <Box className={activeItem == 3 ? 'slideBox activeSlideBox' : 'slideBox'}> 
+                <Box className={activeItem === 3 ? 'slideBox activeSlideBox' : 'slideBox'}> 
                     <Icon icon="lucide:party-popper" width="30" className='mainIcon' />
                     <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
                         Une playlist.. et bien plus !
                     </Typography>
-                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} >
+                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
                         Grâce au chat, aux émoticones et aux votes, les membres de la room font partie intégrante de l'ambiance !
                     </Typography>
-                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} >
+                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
                         Retrouvez et relisez les playlist qui vous on plu grâce à la lecture désynchronisée !
                     </Typography>
                 </Box>,

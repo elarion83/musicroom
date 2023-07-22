@@ -1,14 +1,13 @@
 
-import { Avatar, Divider, Drawer, LinearProgress, List, ListItem, ListItemAvatar, ListItemButton, ListItemIcon, ListItemText, SwipeableDrawer, Typography } from "@mui/material";
+import { Divider, Drawer, LinearProgress, List, ListItem, ListItemText, Typography } from "@mui/material";
 import React from "react";
-import ImageIcon from '@mui/icons-material/Image';
 
-import { withTranslation } from 'react-i18next';
-import DrawerPlayPauseButton from './DrawerPlayPauseButton';
-import Button from '@mui/material/Button';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import Button from '@mui/material/Button';
 import { Box } from "@mui/system";
+import { withTranslation } from 'react-i18next';
+import DrawerPlayPauseButton from './DrawerPlayPauseButton';
 
 const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, open, changeOpen, isAdminView, userVoteArray, roomPlaylist, changeIsPlaying, handleVoteChange, changeIdPlaying,  data, roomIsActuallyPlaying, roomIdActuallyPlaying, roomIdActuallyDisplaying }) => {
     
@@ -55,7 +54,7 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, open
                         secondary={
                             <React.Fragment>
                                 <Typography>
-                                    Via <b>{data.source}</b> par <b>{data.addedBy}</b>
+                                    {t('GeneralVia')} <b>{data.source}</b> {t('GeneralBy')} <b>{data.addedBy}</b>
                                 </Typography>
                             </React.Fragment>
                         }

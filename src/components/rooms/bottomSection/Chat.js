@@ -9,11 +9,11 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 
 import { Icon } from '@iconify/react';
 
-import { db } from './../../services/firebase';
+import { db } from '../../../services/firebase';
 import { LoadingButton } from "@mui/lab";
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
 
-import {returnAnimateReplace} from './../../services/animateReplace'
+import {returnAnimateReplace} from '../../../services/animateReplace'
 
 import { withTranslation } from 'react-i18next';
 

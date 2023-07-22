@@ -8,13 +8,13 @@ import React from "react";
 import TuneIcon from '@mui/icons-material/Tune';
 import Badge from '@mui/material/Badge';
 import Chat from './Chat';
-import DisplayMenu from './DisplayMenu';
+import DisplayMenu from '../DisplayMenu';
 import { Icon } from '@iconify/react';
 import { useState } from 'react';
 
-import {returnAnimateReplace } from './../../services/animateReplace';
+import {returnAnimateReplace } from '../../../services/animateReplace';
 
-import {CreateGoogleAnalyticsEvent} from './../../services/googleAnalytics';
+import {CreateGoogleAnalyticsEvent} from '../../../services/googleAnalytics';
 
 import { withTranslation } from 'react-i18next';
 

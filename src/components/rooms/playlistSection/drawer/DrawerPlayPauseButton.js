@@ -2,9 +2,9 @@
 import React from "react";
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 
-import SoundWave from "../../SoundWave";
 import { Box } from "@mui/system";
 import { ListItemIcon } from "@mui/material";
+import SoundWave from "../../../../services/SoundWave";
 
 const DrawerPlayPauseButton = ({ isAdminView,isPlayable, isPlaying, mediaDisplayingData, changeIsPlaying, changeIdPlaying, idActuallyPlaying, idActuallyDisplaying }) => {
     return(

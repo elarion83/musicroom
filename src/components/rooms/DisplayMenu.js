@@ -14,7 +14,7 @@ import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import { useEffect } from 'react';
 
 import { withTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
+import { Box, Divider } from '@mui/material';
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -82,7 +82,8 @@ const DisplayMenu = ({t, layoutDisplay, setLayoutdisplay}) => {
         onClick={handleClick}
         sx={{pt:0.8}}
       >
-        <FullscreenIcon sx={{ml:0,mr:0}} />
+        {'default' === layoutDisplay && <FullscreenIcon sx={{ml:0,mr:0}} />}
+        {'compact' === layoutDisplay && <DvrIcon sx={{fontSize:'1.4em', ml:0,mr:0}} />}
         {open ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}
       </Box>
       <StyledMenu
@@ -102,13 +103,14 @@ const DisplayMenu = ({t, layoutDisplay, setLayoutdisplay}) => {
           <DvrIcon />
           Compact
         </MenuItem>
-        <MenuItem selected={layoutDisplay === 'default'} onClick={(e) => setLayoutdisplay('default')} disableRipple>
-          <AirplayIcon />
-          {t('RoomBottomDisplayClassic')}
-        </MenuItem>
         <MenuItem selected={layoutDisplay === 'interactive'} onClick={(e) => setLayoutdisplay('interactive')} disableRipple>
           <ChatIcon />
-          Interactif
+          {t('RoomBottomDisplayInteractive')}
+        </MenuItem>
+        <Divider style={{pb:0, mb:0}} />
+        <MenuItem sx={{pt:0, mt:0}} selected={layoutDisplay === 'default'} onClick={(e) => setLayoutdisplay('default')} disableRipple>
+          <AirplayIcon />
+          {t('RoomBottomDisplayClassic')}
         </MenuItem>
       </StyledMenu>
     </div>

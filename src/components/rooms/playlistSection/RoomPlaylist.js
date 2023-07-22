@@ -16,9 +16,9 @@ import Paper from '@mui/material/Paper';
 
 import { Icon } from '@iconify/react';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import SoundWave from "../SoundWave";
 
 import { withTranslation } from 'react-i18next';
+import SoundWave from "../../../services/SoundWave";
 
 
 const RoomPlaylist = ({t, isSpotifyAvailable, handleChangeIdShownInDrawer, roomPlaylist, roomIdActuallyPlaying, roomIsActuallyPlaying, roomPlayedActuallyPlayed}) => {
@@ -54,7 +54,7 @@ const RoomPlaylist = ({t, isSpotifyAvailable, handleChangeIdShownInDrawer, roomP
                                             { (d.title.length === 0) ? d.url : d.title}
                                         </Typography>
                                         
-                                        {idx === roomIdActuallyPlaying && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0,color:'var(--grey-inspired)', fontSize: '10px', textTransform:'uppercase' }}>
+                                        {idx === roomIdActuallyPlaying && <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0,color:'var(--grey-inspired)', fontSize: '10px', textTransform:'uppercase' }}  className='fontFamilyNunito'>
                                             {roomIsActuallyPlaying ? t('GeneralPlaying') : t('GeneralPause')}
                                         </Typography>}
                                     </Grid>

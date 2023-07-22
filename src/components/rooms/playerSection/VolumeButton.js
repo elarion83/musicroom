@@ -1,10 +1,9 @@
 
-import React, { useEffect } from "react";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
 import Switch from '@mui/material/Switch';
 import { styled } from '@mui/material/styles';
-import { useState } from 'react';
+import React from "react";
 
 import { withTranslation } from 'react-i18next';
 
