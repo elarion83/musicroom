@@ -13,7 +13,7 @@ import { withTranslation } from 'react-i18next';
 
 const UserRoomList = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
 
-    const [roomList, setRoomList] = useState({});
+    const [roomList] = useState({});
     if(user.uid) {
         db.collection(process.env.REACT_APP_ROOM_COLLECTION).where('adminUid', '==', user.uid).orderBy("creationTimeStamp", "asc").get().then((querySnapshot) => {
             var i =0;

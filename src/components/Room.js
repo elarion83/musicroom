@@ -28,7 +28,6 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-import ReplayIcon from '@mui/icons-material/Replay';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SkipPrevious from '@mui/icons-material/SkipPrevious';
 import Typography from '@mui/material/Typography';
@@ -57,12 +56,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     // global for room
 	const roomRef = db.collection(process.env.REACT_APP_ROOM_COLLECTION).doc(roomId);
-    const [localData, setLocalData] = useState({domain:window.location.hostname, currentUserVotes:{up:[], down:[]} });
+    const [localData] = useState({domain:window.location.hostname, currentUserVotes:{up:[], down:[]} });
 	const [loaded, setLoaded] = useState(false);
 	const [room, setRoom] = useState({});
 
     // sticky toolbar
-    const [scrollFromTopTrigger, setScrollFromTopTrigger] = useState(window.screen.height/6);
+    const [scrollFromTopTrigger] = useState(window.screen.height/6);
     const [isShowSticky, setIsShowSticky] = useState(false);
 
     useEffect(() => {
@@ -78,7 +77,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
         window.addEventListener('scroll', handleScroll);
 
-    }, []);
+    }, [scrollFromTopTrigger, setStickyDisplay]);
 
     // for desynchro || FINAL CLIENT ROOM DATAS
 	const [roomIdPlayed, setRoomIdPlayed] = useState(0);
@@ -98,7 +97,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     const [localVolume, setLocalVolume] = useState(0);
 
-    const [pip, setPip] = useState(true);
+    const [pip] = useState(true);
     const [userCanMakeInteraction, setUserCanMakeInteraction]= useState(true);
     const [openForceDisconnectSpotifyModal, setOpenForceDisconnectSpotifyModal] = useState(false);
     const [openForceDisconnectDeezerModal, setOpenForceDisconnectDeezerModal] = useState(false);
@@ -518,14 +517,15 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     useEffect(() => {
         var queryParameters = new URLSearchParams(window.location.search);
+        var token = '';
         if(queryParameters.get("spotoken")) {
-            var token = queryParameters.get("spotoken") ? queryParameters.get("spotoken") : '';
+            token = queryParameters.get("spotoken") ? queryParameters.get("spotoken") : '';
             window.location.hash = "";
             window.localStorage.setItem("Play-It_SpotifyToken", token)
             handleChangeSpotifyToken(token)
         }
         if(queryParameters.get("deetoken")) {
-            var token = queryParameters.get("deetoken") ? queryParameters.get("deetoken") : '';
+            token = queryParameters.get("deetoken") ? queryParameters.get("deetoken") : '';
             window.location.hash = "";
             window.localStorage.setItem("Play-It_DeezerToken", token)
             handleChangeDeezerToken(token)
@@ -793,7 +793,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                     </Grid>
                                 </Grid> 
                                 <Grid className='player_button_container' item sm={12} sx={{ display:'flex', flexWrap:'wrap',padding:0,pl:1.5,ml:0, pr:1.5,mb: 0 , mt:1, fill:'#f0f1f0'}}   >
-                                    {isActuallyAdmin &&  !(isShowSticky && layoutDisplay == 'default') &&
+                                    {isActuallyAdmin &&  !(isShowSticky && layoutDisplay === 'default') &&
                                         <Grid item sm={6} className="adminButtons" xs={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:0, mb: 1.5 }}>
                                             
                                             <IconButton onClick={e => roomIdPlayed > 0 ? handleChangeActuallyPlaying(0) : ''}>
@@ -836,7 +836,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                             }
                                         </Grid>
                                     }
-                                    {!isActuallyAdmin && !(isShowSticky && layoutDisplay == 'default') &&
+                                    {!isActuallyAdmin && !(isShowSticky && layoutDisplay === 'default') &&
                                         <Grid item sm={6} xs={12} className={guestSynchroOrNot ? 'guestButtons guestSync' : 'guestButtons guestNotSync'}  sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:0,ml:0,mr:1,pr:2, mb: 1 }}>
                                             {!guestSynchroOrNot && <><IconButton onClick={e => roomIdPlayed > 0 ? setRoomIdPlayed(roomIdPlayed-1) : ''}>
                                                 <FirstPageIcon  fontSize="large" sx={{color:roomIdPlayed > 0 ? '#f0f1f0': '#303134'}} />

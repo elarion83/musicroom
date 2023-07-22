@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { Alert, Box, Button, Dialog, DialogContent, DialogContentText, DialogTitle, Divider, Grid, Typography } from "@mui/material";
+import { Alert, Box, Button, Dialog, DialogContent, DialogTitle, Divider, Grid, Typography } from "@mui/material";
 import { useState } from "react";
 
 import TextField from '@mui/material/TextField';
@@ -102,7 +102,7 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
                             </Button> }
                     </Grid>
 
-                    <Typography fontSize="small"> {t('ModalLoginTermsSentence')} <a href="#" onClick={(e) => setPrivacyPolicyModalOpen(true)}>{t('ModalLoginTermsPrivacyPolicy')}  </a> {t('GeneralAnd')} <a href="https://www.youtube.com/t/terms" target="_blank">{t('ModalLoginTermsYoutubeTerms')}  </a>
+                    <Typography fontSize="small"> {t('ModalLoginTermsSentence')} <a href="" onClick={(e) => setPrivacyPolicyModalOpen(true)}>{t('ModalLoginTermsPrivacyPolicy')}  </a> {t('GeneralAnd')} <a href="https://www.youtube.com/t/terms" rel="noreferrer" target="_blank">{t('ModalLoginTermsYoutubeTerms')}  </a>
                     </Typography>
                     <PrivacyPolicyModal open={PrivacyPolicyModalOpen} changeOpen={setPrivacyPolicyModalOpen} />
             </DialogContent>

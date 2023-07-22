@@ -25,7 +25,7 @@ const DrawerPlayPauseButton = ({ isAdminView,isPlayable, isPlaying, mediaDisplay
                     <PlayCircleOutlineIcon sx={{ml:1}} fontSize="large" onClick={e => changeIdPlaying(idActuallyDisplaying)}  />
                 }
                 {idActuallyPlaying !== idActuallyDisplaying && !isPlayable &&
-                    <img src={mediaDisplayingData.visuel} width="50px" style={{paddingTop:'1em'}}/>
+                    <img src={mediaDisplayingData.visuel} alt={mediaDisplayingData.title} width="50px" style={{paddingTop:'1em'}}/>
                 }
         </ListItemIcon>}
         {!isAdminView && (idActuallyPlaying === idActuallyDisplaying) && 
@@ -34,7 +34,7 @@ const DrawerPlayPauseButton = ({ isAdminView,isPlayable, isPlaying, mediaDisplay
         </ListItemIcon>}
         {!isAdminView && (idActuallyPlaying !== idActuallyDisplaying) && 
             <ListItemIcon sx={{cursor:'pointer'}}>
-            <img src={mediaDisplayingData.visuel} width="50px" style={{paddingTop:'1em'}}/>
+            <img src={mediaDisplayingData.visuel} alt={mediaDisplayingData.title} width="50px" style={{paddingTop:'1em'}}/>
         </ListItemIcon>}
         
         </Box>
