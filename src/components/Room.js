@@ -51,6 +51,7 @@ import VolumeButton from "./rooms/playerSection/VolumeButton";
 import EmptyPlaylist from "./rooms/playlistSection/EmptyPlaylist";
 import { Icon } from "@iconify/react";
 import SoundWave from "../services/SoundWave";
+import { SlideUp } from "../services/materialSlideTransition/Slide";
 
 const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
@@ -909,7 +910,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
             </div>
             } 
         </Container>
-        <Dialog fullScreen open={OpenAddToPlaylistModal} keepMounted onClose={(e) => setOpenAddToPlaylistModal(false)} className='black_style_dialog' >
+        <Dialog fullScreen open={OpenAddToPlaylistModal} keepMounted TransitionComponent={SlideUp} onClose={(e) => setOpenAddToPlaylistModal(false)} className='black_style_dialog' >
             
             <Grid sx={{bgcolor:'#202124', pb:0 , flexFlow: 'nowrap'}} container>
                 <Button 
