@@ -152,8 +152,10 @@ function App( {t} ) {
     setIsLoginLoading(true);
     await delay(500);
     setIsLoginLoading(false);
-    setUserInfo({displayName:PseudoGenerated,
-    loginType:'anon'});
+    setUserInfo({
+      displayName:PseudoGenerated,
+      loginType:'anon'
+    });
 
     localStorage.setItem("Play-It_AnonymouslyPseudo",  PseudoGenerated);
     localStorage.setItem("Play-It_AnonymouslyLoggedIn",  true);

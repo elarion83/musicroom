@@ -36,7 +36,7 @@ const Contentslider = () => {
                         Créez une playlist en temps réel a plusieurs
                     </Typography>
                     <Typography sx={{pl:2,pr:2,mb:2,mt:3, color:'var(--white)'}} className='fontFamilyOpenSans'>
-                        Ajoutez des médias depuis <i>Spotify, Youtube, Deezer, et bien d'autre plateformes</i> à une playlist collective lue en temps réel.
+                        Ajoutez des médias depuis <b>Spotify, Youtube, Deezer, Soundcloud, .. </b> à une playlist collective lue en temps réel.
                     </Typography>
                     <Typography sx={{pl:2,pr:2,mt:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
                         Votez, tchatez, réagissez et vibrez ensemble au rythme de votre playlist. <b>Entre potes, en soirée, en voiture, en voyage, ou au sport, Play-it est l'outil indispensable !</b>
@@ -52,7 +52,7 @@ const Contentslider = () => {
                         En étant tous au même endroit ..
                     </Typography>
                     <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
-                        <b>Idéal pour les soirées</b>, une room Play-it permet a chaque convive d'ajouter sa musique ou sa vidéo à la suite de la playlist, plus besoin d'utiliser le téléphone de l'hôte de la soirée !
+                        <b>Idéal pour les soirées</b>, Play-it permet a chaque convive d'ajouter sa musique ou sa vidéo à la suite de la playlist, <b>plus besoin d'utiliser le téléphone de l'hôte de la soirée !</b>
                     </Typography>
                 </Box>,
             },
@@ -65,10 +65,10 @@ const Contentslider = () => {
                         .. ou en étant chacun chez soi
                     </Typography>
                     <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
-                        Grâce à Play-it, vibre au même rythme que tes potes à des endroits différents de la planète ! 
+                        Vibre au même rythme que tes potes <b>à des endroits différents</b> de la planète ! 
                     </Typography>
                     <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
-                        En voyage, chacun dans sa voiture, chacun chez soi en révisant ou en mattant les dernières vidéos youtube sous la couette !
+                        <b>En voyage, chacun dans sa voiture, chacun chez soi</b> en révisant ou en mattant les dernières vidéos youtube sous la couette !
                     </Typography>
                 </Box>,
             },
@@ -81,10 +81,10 @@ const Contentslider = () => {
                         Une playlist.. et bien plus !
                     </Typography>
                     <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
-                        Grâce au chat, aux émoticones et aux votes, les membres de la room font partie intégrante de l'ambiance !
+                        Grâce au <b>chat, aux émoticones et aux votes</b>, les membres de la room font partie intégrante de l'ambiance !
                     </Typography>
                     <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
-                        Retrouvez et relisez les playlist qui vous on plu grâce à la lecture désynchronisée !
+                        Retrouvez et relisez les playlist qui vous on plu grâce à la <b>lecture désynchronisée</b> !
                     </Typography>
                 </Box>,
             },
