@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { Dialog, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { Box, Dialog, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 
 const PrivacyPolicyModal = ({ open, changeOpen,}) => {
@@ -21,7 +21,7 @@ const PrivacyPolicyModal = ({ open, changeOpen,}) => {
                      <Icon width="15" icon='carbon:user-avatar' style={{marginRight:'10px'}} /> Politique de confidentialité
             </DialogTitle>  
             <DialogContent dividers sx={{pt:0}}>
-                <DialogContentText sx={{pt:2}}>
+                <Box sx={{pt:2}}>
                 <h1>Privacy Policy</h1>
 <p>Last updated: June 27, 2023</p>
 <p>This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.</p>
@@ -200,7 +200,7 @@ const PrivacyPolicyModal = ({ open, changeOpen,}) => {
 <ul>
 <li>By email: contact@play-it.fr</li>
 </ul>
-                </DialogContentText>
+                </Box>
             </DialogContent>
         </Dialog>
     )

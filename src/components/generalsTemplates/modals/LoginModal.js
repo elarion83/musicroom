@@ -33,8 +33,8 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
             },
         }}
         >
-            <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1}}>
-                     <Icon width="15" icon='carbon:user-avatar' style={{marginRight:'10px'}} /> {t('ModalLoginTitle')} 
+            <DialogTitle className='flexRowCenterH varelaFontTitle' sx={{ m: 0,p:1}}>
+                    <Icon width="15" icon='carbon:user-avatar' style={{marginRight:'10px'}} /> {t('ModalLoginTitle')} 
             </DialogTitle>  
             <DialogContent dividers sx={{pt:2}}>
                 {loginErrorMessage && <Alert severity="error" sx={{mb:2}}>{loginErrorMessage}</Alert>}     
@@ -60,10 +60,10 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
                                     loading={loginLoading}
                                     variant="contained" 
                                     startIcon={<Icon icon="material-symbols:login" />}
-                                    className='main_bg_color buttonBorder btnIconFixToLeft' 
+                                    className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle' 
                                     sx={{mt:2}} 
                             onClick={e => onEmailAndPasswordSubmit()}> 
-                            {t('GeneralContinue')} 
+                            <Typography fontSize="small">{t('GeneralContinue')} </Typography>
                             </LoadingButton>                  
                         </Box> 
                         
@@ -73,11 +73,11 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
                             <LoadingButton 
                                     loading={loginLoading}
                                     loadingPosition='start'
-                                    className='borderMainColor mainColor btnIconFixToLeft'
-                                    variant="outlined"
+                                    className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle' 
+                                    variant="contained"
                                     startIcon={<Icon icon="mdi:anonymous" />}
                                     onClick={e => handleAnonymousLogin()}>
-                                    {t('ModalLoginButtonAnon')} 
+                                <Typography fontSize="small">{t('ModalLoginButtonAnon')} </Typography>
                             </LoadingButton>
                         <Divider sx={{mt:2,mb:2}}>
                             {t('GeneralOr')} 
@@ -85,11 +85,11 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
                             <LoadingButton
                                     loadingPosition='start'
                                     loading={loginLoading}
-                                    className='borderMainColor mainColor btnIconFixToLeft'
+                                    className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle' 
                                     startIcon={<Icon icon="ri:google-fill" />}
-                                    variant="outlined"
+                                    variant="contained"
                                     onClick={handleGoogleLogin}>
-                                {t('ModalLoginButtonGoogle')} 
+                                <Typography fontSize="small">{t('ModalLoginButtonGoogle')} </Typography>
                             </LoadingButton>  
                     </Grid> 
                     <Grid sx={{mt:2, mb:2}}>
@@ -102,7 +102,7 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
                             </Button> }
                     </Grid>
 
-                    <Typography fontSize="small"> {t('ModalLoginTermsSentence')} <a href="" onClick={(e) => setPrivacyPolicyModalOpen(true)}>{t('ModalLoginTermsPrivacyPolicy')}  </a> {t('GeneralAnd')} <a href="https://www.youtube.com/t/terms" rel="noreferrer" target="_blank">{t('ModalLoginTermsYoutubeTerms')}  </a>
+                    <Typography fontSize="small"> {t('ModalLoginTermsSentence')} <a href="#" onClick={(e) => setPrivacyPolicyModalOpen(true)}>{t('ModalLoginTermsPrivacyPolicy')}</a> {t('GeneralAnd')} <a href="https://www.youtube.com/t/terms" rel="noreferrer" target="_blank">{t('ModalLoginTermsYoutubeTerms')}  </a>
                     </Typography>
                     <PrivacyPolicyModal open={PrivacyPolicyModalOpen} changeOpen={setPrivacyPolicyModalOpen} />
             </DialogContent>

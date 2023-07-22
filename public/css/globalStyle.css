@@ -93,8 +93,8 @@ b, * {
 }
 
 .MuiDialogTitle-root.flexRowCenterH {
-    color: var(--white) !important;
-    background: var(--main-color);
+    color: var(--grey-dark) !important;
+    background: var(--white);
 }
 
 .MuiDialogTitle-root.flexRowCenterH .iconify {

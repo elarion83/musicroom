@@ -34,7 +34,7 @@
     "react-player": "^2.12.0",
     "react-router-dom": "^6.10.0",
     "react-scripts": "^4.0.3",
-    "react-share-social": "^0.1.55",
+    "react-share": "^4.4.1",
     "react-spotify-web-playback": "0.10.1",
     "react-spring-carousel": "^2.0.19",
     "react-swipeable-views": "^0.14.0",

@@ -21,7 +21,7 @@ import Footer from './components/generalsTemplates/Footer';
 
 import { auth, db, googleProvider } from "./services/firebase";
 
-import { Snackbar } from "@mui/material";
+import { Snackbar, Typography } from "@mui/material";
 import { PseudoGenerated } from './services/pseudoGenerator';
 
 import { CreateGoogleAnalyticsEvent } from './services/googleAnalytics';
@@ -314,11 +314,13 @@ function App( {t} ) {
             <Button variant="filled" className='main_bg_color varelaFontTitle buttonBorder' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em'}} 
               onClick={(e) => isSignedIn ? createNewRoom() : handleLoginAndRoom('createRoom')}>
                 <Icon icon="carbon:intent-request-create" width="30" style={{marginRight:'20px'}}/> 
-                {t('HomePageButtonsCreateRoom')} </Button> 
+                <Typography variant="button" sx={{pt:'3px'}}>{t('HomePageButtonsCreateRoom')} </Typography>
+              </Button> 
             <Button variant="filled" className='main_bg_color varelaFontTitle buttonBorder' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em', mb:'2em'}} 
               onClick={(e) => isSignedIn ? setJoinRoomModalOpen(true) : handleLoginAndRoom('joinRoom')}> 
                 <Icon icon="icon-park-outline:connect"  width="30" style={{marginRight:'20px'}}/>
-                {t('HomePageButtonsJoinRoom')}  </Button> 
+                <Typography variant="button" sx={{pt:'3px'}}>{t('HomePageButtonsJoinRoom')} </Typography>
+              </Button> 
 
                 <JoinRoomModal open={joinRoomModalOpen} changeOpen={setJoinRoomModalOpen} handleJoinRoom={joinRoomByRoomId} />
            
