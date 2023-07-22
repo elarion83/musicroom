@@ -57,7 +57,7 @@ const RoomTopBar = ({
                        
                     </ListItemButton>
                 </ListItem> 
-                <Divider sx={{mb:2}}/>
+                <Divider />
                 <ListItem key='roomDrawHostedBy' disablePadding>
                     <ListItemButton>
                         <ListItemIcon>
