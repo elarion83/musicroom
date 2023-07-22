@@ -81,7 +81,7 @@ const DisplayMenu = ({t, layoutDisplay, setLayoutdisplay}) => {
         onClick={handleClick}
         sx={{pt:0.8}}
       >
-        {'default' === layoutDisplay && <FullscreenIcon sx={{ml:0,mr:0}} />}
+        {'compact' !== layoutDisplay && <FullscreenIcon sx={{ml:0,mr:0}} />}
         {'compact' === layoutDisplay && <DvrIcon sx={{fontSize:'1.4em', ml:0,mr:0}} />}
         {open ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}
       </Box>
@@ -106,8 +106,8 @@ const DisplayMenu = ({t, layoutDisplay, setLayoutdisplay}) => {
           <ChatIcon />
           {t('RoomBottomDisplayInteractive')}
         </MenuItem>
-        <Divider style={{pb:0, mb:0}} />
-        <MenuItem sx={{pt:0, mt:0}} selected={layoutDisplay === 'default'} onClick={(e) => setLayoutdisplay('default')} disableRipple>
+        <Divider />
+        <MenuItem selected={layoutDisplay === 'default'} sx={{mt:'-8px', mb:'-3px'}} onClick={(e) => setLayoutdisplay('default')} disableRipple>
           <AirplayIcon />
           {t('RoomBottomDisplayClassic')}
         </MenuItem>
