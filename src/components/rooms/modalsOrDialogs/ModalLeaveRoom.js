@@ -1,9 +1,9 @@
 import Button from '@mui/material/Button';
 import React from "react";
 
-import { Dialog, DialogActions, DialogContent, DialogContentText, Typography } from "@mui/material";
-import DialogTitle from '@mui/material/DialogTitle';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/material";
+import DialogTitle from '@mui/material/DialogTitle';
  
 import { withTranslation } from 'react-i18next';
 import { SlideUp } from '../../../services/materialSlideTransition/Slide';

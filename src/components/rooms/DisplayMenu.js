@@ -1,6 +1,5 @@
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { alpha, styled } from '@mui/material/styles';
@@ -13,8 +12,8 @@ import DvrIcon from '@mui/icons-material/Dvr';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import { useEffect } from 'react';
 
-import { withTranslation } from 'react-i18next';
 import { Box, Divider } from '@mui/material';
+import { withTranslation } from 'react-i18next';
 
 const StyledMenu = styled((props) => (
   <Menu

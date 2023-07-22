@@ -1,17 +1,13 @@
 import Alert from '@mui/material/Alert';
-import Button from '@mui/material/Button';
 import React, { useState } from "react";
-import CopyToClipboard from "react-copy-to-clipboard";
-import { ShareSocial } from 'react-share-social';
 
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import ShareIcon from '@mui/icons-material/Share';
 import { AlertTitle, Dialog, DialogContent, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import DialogTitle from '@mui/material/DialogTitle';
 
-import { withTranslation } from 'react-i18next';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import { withTranslation } from 'react-i18next';
 
 const ModalEnterRoomPassword = ({ password, open, changeOpen }) => {
 
@@ -22,7 +18,7 @@ const ModalEnterRoomPassword = ({ password, open, changeOpen }) => {
 
     async function joinRoomByPassword() {
         if(userPassword.length > 0 ) {
-            if(password == userPassword) {
+            if(password === userPassword) {
                 changeOpen(false);
             } else {
                 setPasswordIsWrong(true);

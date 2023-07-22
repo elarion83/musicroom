@@ -7,13 +7,8 @@ import React, { useState } from "react";
 import Typed from "react-typed";
 import { v4 as uuid } from 'uuid';
 
-import { Icon } from '@iconify/react';
 import SearchIcon from '@mui/icons-material/Search';
 import { LoadingButton } from "@mui/lab";
-import { Button, Typography } from "@mui/material";
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import Snackbar from '@mui/material/Snackbar';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -39,8 +34,6 @@ const RoomModalAddMedia = ({ t, currentUser, validatedObjectToAdd, spotifyTokenP
     };
     
     const delay = ms => new Promise(res => setTimeout(res, ms));
-
-    const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
 
     const [addingObject, setAddingObject] = useState({title:'',source:'',url:'', addedBy: currentUser.displayName})
 

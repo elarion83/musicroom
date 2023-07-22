@@ -1,19 +1,17 @@
-
-import { Badge, Box, Fab, Grid, TextField, Tooltip, Typography } from "@mui/material";
-import React , { useEffect, useRef, useState } from "react";
-import TuneIcon from '@mui/icons-material/Tune';
 import CelebrationIcon from '@mui/icons-material/Celebration';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+import { Box, Fab, Grid, TextField, Tooltip, Typography } from "@mui/material";
+import React, { useRef, useState } from "react";
 
 import { Icon } from '@iconify/react';
 
-import { db } from '../../../services/firebase';
-import { LoadingButton } from "@mui/lab";
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
+import { LoadingButton } from "@mui/lab";
+import { db } from '../../../services/firebase';
 
-import {returnAnimateReplace} from '../../../services/animateReplace'
+import { returnAnimateReplace } from '../../../services/animateReplace';
 
 import { withTranslation } from 'react-i18next';
 

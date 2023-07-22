@@ -1,20 +1,18 @@
-import { useState } from "react";
 
 import { Icon } from '@iconify/react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import InfoIcon from '@mui/icons-material/Info';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import IconButton from '@mui/material/IconButton';
-import ShareIcon from '@mui/icons-material/Share';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-import TuneIcon from '@mui/icons-material/Tune';
-import { Divider, Drawer, FormControlLabel, Grid, List, ListItem, ListItemButton, Switch, Typography } from '@mui/material';
-import AppBar from '@mui/material/AppBar';
-import Badge from '@mui/material/Badge';
+import ShareIcon from '@mui/icons-material/Share';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SkipPrevious from '@mui/icons-material/SkipPrevious';
+import TuneIcon from '@mui/icons-material/Tune';
+import { Divider, Drawer, Grid, List, ListItem, ListItemButton, Switch, Typography } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Badge from '@mui/material/Badge';
+import IconButton from '@mui/material/IconButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';

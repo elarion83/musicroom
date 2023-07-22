@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, CardMedia, Grid, ListItemButton, ListItemText, Typography } from "@mui/material";
+import { Box, Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
 
 const SearchResultItem = ({ image, title, source, platformId, album = null, addedBy, uid, url, date = null, channelOrArtist = null, addItemToPlaylist }) => {
    
