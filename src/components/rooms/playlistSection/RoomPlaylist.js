@@ -47,7 +47,7 @@ const RoomPlaylist = ({t, isSpotifyAvailable, handleChangeIdShownInDrawer, roomP
                                         </ListItemIcon>}
                                         {(isFromSpotify(d.source) && !isSpotifyAvailable) && <Icon style={{display:'inline', marginRight:'0.5em', marginTop:'0.5em', color:'red'}} icon="ps:forbidden" />}
                                     <Grid item sx={{display:'block', zIndex:2, pl: 0, pb:0.5,pt:0.5, flexGrow:1, overflow:'hidden'}}>
-                                        <Typography component="p" className="flexRowCenterHDirectChild varelaFontTitle textEllipsis" onClick={e => (idx === idDisplaying) ? handleChangeIdActuallyDisplaying(-1) : handleChangeIdActuallyDisplaying(idx)} sx={{ pl:0,mb:-0.5,mt:0.5, wordBreak: 'break-all'}}>
+                                        <Typography component="p" className="flexRowCenterHDirectChild varelaFontTitle textEllipsis" onClick={e => (idx === idDisplaying) ? handleChangeIdActuallyDisplaying(-1) : handleChangeIdActuallyDisplaying(idx)} sx={{ pl:0,mb:-0.5,mt:0, wordBreak: 'break-all'}}>
                                             { (d.title.length === 0) ? d.url : d.title}
                                         </Typography>
                                         

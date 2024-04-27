@@ -53,6 +53,10 @@ export function cleanMediaTitle(mediaTitle) {
     return mediaTitle;
 }
 
+export function getDisplayTitle(media) {
+    return media.title ? media.title : media.url.substring(0,25)+'..'
+}
+
 export function formatNumberToMinAndSec(number) {
     var minute = ~~(Math.round(number)/60)+'m';
     var seconde = Math.round(number)%60+'s';

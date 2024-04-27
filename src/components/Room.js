@@ -17,7 +17,7 @@ import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
 import { v4 as uuid } from 'uuid';
-import {cleanMediaTitle,isFromSpotify,isPlaylistExistNotEmpty,isFromSource,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, isNotFromSpotify, formatNumberToMinAndSec} from '../services/utils';
+import {cleanMediaTitle,isFromSpotify,isPlaylistExistNotEmpty,isFromSource,mediaIndexExist,getDisplayTitle,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, isNotFromSpotify, formatNumberToMinAndSec} from '../services/utils';
 import RoomPlaylistDrawer from "./rooms/playlistSection/drawer/RoomPlaylistDrawer";
 
 //import screenfull from 'screenfull'
@@ -915,8 +915,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
                         <Box sx={{color:'var(--white)', display:'flex',gap:'10px',flexDirection:'row', alignItems:'center', width:'100%',ml:1,mt:1, fontSize: '10px', textTransform:'uppercase' }} >
                             <SoundWave waveNumber={7} isPlayingOrNo={roomIsPlaying}  /> 
-                            <Typography component={'span'} className='varelaFontTitle' >
-                                { room.playlistUrls[room.playing].title ? room.playlistUrls[room.playing].title : room.playlistUrls[room.playing].url.substring(0,25)+'..' }
+                            <Typography fontSize="small" component={'span'} className='varelaFontTitle' >
+                                { getDisplayTitle(room.playlistUrls[room.playing]) }
                             </Typography>
                         </Box>
                     </Box>}

@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { Alert, Box, Button, Dialog, DialogContent, DialogTitle, Divider, Grid, Typography } from "@mui/material";
+import { Alert, Box, Button, Dialog, Link, DialogContent, DialogTitle, Divider, Grid, Typography } from "@mui/material";
 import { useState } from "react";
 
 import TextField from '@mui/material/TextField';
@@ -102,7 +102,14 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
                             </Button> }
                     </Grid>
 
-                    <Typography fontSize="small"> {t('ModalLoginTermsSentence')} <a href="#" onClick={(e) => setPrivacyPolicyModalOpen(true)}>{t('ModalLoginTermsPrivacyPolicy')}</a> {t('GeneralAnd')} <a href="https://www.youtube.com/t/terms" rel="noreferrer" target="_blank">{t('ModalLoginTermsYoutubeTerms')}  </a>
+                    <Typography fontSize="small"> {t('ModalLoginTermsSentence')} 
+                        <Link href="#" fontSize='small' underline="hover" sx={{pl:0.5,pr:0.5}} onClick={(e) => setPrivacyPolicyModalOpen(true)}>
+                            {t('ModalLoginTermsPrivacyPolicy')}
+                        </Link>
+                        {t('GeneralAnd')} 
+                        <Link rel="noreferrer" target="_blank" underline="hover" sx={{pl:0.5,pr:0.5}} href="https://www.youtube.com/t/terms">
+                            {t('ModalLoginTermsYoutubeTerms')}
+                        </Link>
                     </Typography>
                     <PrivacyPolicyModal open={PrivacyPolicyModalOpen} changeOpen={setPrivacyPolicyModalOpen} />
             </DialogContent>

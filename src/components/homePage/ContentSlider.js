@@ -21,8 +21,7 @@ const Contentslider = () => {
       return () => {
         window.clearInterval(timer);
       };
-      // You MUST add the slide methods to the dependency list useEffect!
-    }, [slideToNextItem]);
+    });
 
     const { carouselFragment,useListenToCustomEvent,slideToItem,getCurrentActiveItem, slideToPrevItem, slideToNextItem } = useSpringCarousel({
         gutter: -40,
