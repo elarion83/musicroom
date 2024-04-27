@@ -7,7 +7,7 @@ import { Dialog, DialogContent, Typography } from "@mui/material";
 
 import { db } from '../../../services/firebase'; 
 import { useState } from "react";
-import { Box } from "@mui/system";
+import { Box, shadows } from "@mui/system";
 
 import { withTranslation } from 'react-i18next';
 
@@ -31,14 +31,15 @@ const UserRoomList = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
             <DialogContent dividers sx={{pt:2}}>
                 {Object.entries(roomList).map(([key, room]) => {
                     return(
-                    <Box onClick={(e) => joinRoomByRoomId(room.id)} key={key} sx={{mb:1, p:1,justifyContent:'start', cursor:'pointer',border:'1px solid var(--grey-light)', borderRadius:'2px'}}>
-                        <Typography fontSize='small' sx={{color:'var(--main-color)', fontWeight:'bold'}}> 
-                            Id : {room.id} 
+                    <Box onClick={(e) => joinRoomByRoomId(room.id)} key={key} 
+                    sx={{mb:1, p:1,justifyContent:'start',boxShadow: 2,minWidth:'250px', cursor:'pointer',bgcolor:'var(--main-color)',border:'1px solid var(--grey-light)', borderRadius:'4px'}}>
+                        <Typography fontSize='medium' sx={{textTransform: 'uppercase',color:'var(--white)', fontWeight:'bold'}}> 
+                            {room.id} 
                         </Typography>
-                        <Typography fontSize='small' sx={{color:'var(--main-color)'}}> 
+                        <Typography fontSize='small' sx={{color:'var(--white)'}}> 
                             {t('GeneralStatus')} : {room.actuallyPlaying ? t('GeneralPlaying') : t('GeneralPause')}
                         </Typography>
-                        <Typography fontSize='small' sx={{color:'var(--main-color)'}}> 
+                        <Typography fontSize='small' sx={{color:'var(--white)'}}> 
                             {room.playlistUrls.length } {t('GeneralMediasInPlaylist')}
                         </Typography>
                     </Box>

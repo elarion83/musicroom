@@ -14,6 +14,7 @@ import { useEffect } from 'react';
 
 import { Box, Divider } from '@mui/material';
 import { withTranslation } from 'react-i18next';
+import { isLayoutCompact, isLayoutFullScreen, isLayoutDefault, isLayoutInteractive } from '../../services/utils';
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -81,8 +82,8 @@ const DisplayMenu = ({t, layoutDisplay, setLayoutdisplay}) => {
         onClick={handleClick}
         sx={{pt:0.8}}
       >
-        {'compact' !== layoutDisplay && <FullscreenIcon sx={{ml:0,mr:0}} />}
-        {'compact' === layoutDisplay && <DvrIcon sx={{fontSize:'1.4em', ml:0,mr:0}} />}
+        {!isLayoutCompact(layoutDisplay) && <FullscreenIcon sx={{ml:0,mr:0}} />}
+        {isLayoutCompact(layoutDisplay) && <DvrIcon sx={{fontSize:'1.4em', ml:0,mr:0}} />}
         {open ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}
       </Box>
       <StyledMenu
@@ -94,20 +95,20 @@ const DisplayMenu = ({t, layoutDisplay, setLayoutdisplay}) => {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem selected={layoutDisplay === 'fullscreen'} onClick={(e) => setLayoutdisplay('fullscreen')} disableRipple>
+        <MenuItem selected={isLayoutFullScreen(layoutDisplay)} onClick={(e) => setLayoutdisplay('fullscreen')} disableRipple>
           <FullscreenIcon />
           {t('RoomBottomDisplayFullScreen')}
         </MenuItem>
-        <MenuItem selected={layoutDisplay === 'compact'} onClick={(e) => setLayoutdisplay('compact')} disableRipple>
+        <MenuItem selected={isLayoutCompact(layoutDisplay)} onClick={(e) => setLayoutdisplay('compact')} disableRipple>
           <DvrIcon />
           Compact
         </MenuItem>
-        <MenuItem selected={layoutDisplay === 'interactive'} onClick={(e) => setLayoutdisplay('interactive')} disableRipple>
+        <MenuItem selected={isLayoutInteractive(layoutDisplay)} onClick={(e) => setLayoutdisplay('interactive')} disableRipple>
           <ChatIcon />
           {t('RoomBottomDisplayInteractive')}
         </MenuItem>
         <Divider />
-        <MenuItem selected={layoutDisplay === 'default'} sx={{mt:'-8px', mb:'-3px'}} onClick={(e) => setLayoutdisplay('default')} disableRipple>
+        <MenuItem selected={isLayoutDefault(layoutDisplay)} sx={{mt:'-8px', mb:'-3px'}} onClick={(e) => setLayoutdisplay('default')} disableRipple>
           <AirplayIcon />
           {t('RoomBottomDisplayClassic')}
         </MenuItem>

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { db } from "../services/firebase";
-
+import { useIdleTimer } from 'react-idle-timer'
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -17,7 +17,7 @@ import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
 import { v4 as uuid } from 'uuid';
-import {cleanMediaTitle,isFromSpotify,isPlaylistExistNotEmpty,isFromSource,mediaIndexExist, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, isNotFromSpotify, formatNumberToMinAndSec} from '../services/utils';
+import {cleanMediaTitle,isFromSpotify,isPlaylistExistNotEmpty,isFromSource,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, isNotFromSpotify, formatNumberToMinAndSec} from '../services/utils';
 import RoomPlaylistDrawer from "./rooms/playlistSection/drawer/RoomPlaylistDrawer";
 
 //import screenfull from 'screenfull'
@@ -126,6 +126,38 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         }
     }, [layoutDisplay]);
 
+    // inactivity on fullscreen
+    const [remaining, setRemaining] = useState(0)
+    const [layoutIdle, setLayoutIdle] = useState(false);
+
+    const onIdle = () => {
+        if(isLayoutFullScreen(layoutDisplay)) {
+            setLayoutIdle(true);
+        }
+    }
+
+    const onActive = () => {
+        if(isLayoutFullScreen(layoutDisplay)) {
+            setLayoutIdle(false);
+        }
+    }
+    const { getRemainingTime } = useIdleTimer({
+        onIdle,
+        onActive,
+        timeout: 5_000,
+        throttle: 500
+    })
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setRemaining(Math.ceil(getRemainingTime() / 1000))
+        }, 500)
+
+        return () => {
+            clearInterval(interval)
+        }
+    });
+
     const playerRef = useRef({
         url: null,
         pip: false,
@@ -163,7 +195,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     });
 
     useKeypress(['Escape'], () => {
-        if(layoutDisplay === 'fullscreen' || layoutDisplay === 'interactive' ) {
+        if(isLayoutFullScreen(layoutDisplay) || isLayoutInteractive(layoutDisplay) ) {
             setLayoutdisplay('default');
         }
     });
@@ -564,7 +596,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
             part: 'snippet',
             key: process.env.REACT_APP_YOUTUBE_API_KEY,
             type:'video',
-            maxResults:9,
+            maxResults:6,
             q:lastMediaTitle,
             videoEmbeddable:true,
         }; 
@@ -629,9 +661,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
             {loaded && room.playlistUrls && <div>
                 {!room.playlistEmpty && room.playlistUrls.length > 0 && room.playing !== null && 
                     <Box sx={{bgcolor:'#303030',borderBottom: '2px solid var(--border-color)', padding:"0px 0em"}} className={room.playlistUrls[roomIdPlayed].source+'Display'}> 
-                        <Grid container spacing={0} sx={{ bgcolor:'var(--grey-dark)'}} className={layoutDisplay === 'compact' ? 'playerHide' : 'playerShow'}>
+                        <Grid container spacing={0} sx={{ bgcolor:'var(--grey-dark)'}} className={ isLayoutCompact(layoutDisplay) ? 'playerHide' : 'playerShow'}>
 
-                            <Grid item className={layoutDisplay === 'fullscreen' ? 'fullscreen' : 'playerContainer'} sm={(isFromSpotify(room.playlistUrls[roomIdPlayed].source)) ? 12 : 4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
+                            <Grid item className={isLayoutFullScreen(layoutDisplay) ? 'fullscreen' : 'playerContainer'} sm={(isFromSpotify(room.playlistUrls[roomIdPlayed].source)) ? 12 : 4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
                                 {isFromSpotify(room.playlistUrls[roomIdPlayed].source) && 
                                     <>
                                         {spotifyPlayerShow && isActuallyAdmin &&
@@ -714,7 +746,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                 
                                 <div style={{width:'100%',height:'100%',opacity:0,top:0,position:'absolute'}}></div>
                             </Grid>
-                            <Grid item sm={(isFromSpotify(room.playlistUrls[roomIdPlayed].source) || layoutDisplay === 'compact') ? 12 : 8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }} className={`player_right_side_container ${(['spotify', 'deezer'].includes(room.playlistUrls[roomIdPlayed].source)) ? "musicOnlyPlayer_header" : ""}`}>
+                            <Grid item sm={(isFromSpotify(room.playlistUrls[roomIdPlayed].source) || isLayoutCompact(layoutDisplay)) ? 12 : 8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }} className={`player_right_side_container ${(['spotify', 'deezer'].includes(room.playlistUrls[roomIdPlayed].source)) ? "musicOnlyPlayer_header" : ""}`}>
                                 { /* pip ? 'Disable PiP' : 'Enable PiP' */ }
                                  <Grid item sm={12} sx={{ padding:0,pl:1.5,ml:0, mb: 0 , mt:1, fill:'#f0f1f0'}}>
                                     <Grid item 
@@ -737,8 +769,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                         <Typography sx={{ fontSize: '10px', ml:0, mb: 1, color:'var(--grey-inspired)'}} className='fontFamilyNunito'> {~~(Math.round(playerRef.current.getCurrentTime())/60) + 'm'+Math.round(playerRef.current.getCurrentTime()) % 60+ 's / ' + formatNumberToMinAndSec(playerRef.current.getDuration())}</Typography>}
                                     </Grid>
                                 </Grid> 
-                                <Grid className='player_button_container' item sm={12} sx={{ display:'flex', flexWrap:'wrap',padding:0,pl:1.5,ml:0, pr:1.5,mb: 0 , mt:1, fill:'#f0f1f0'}}   >
-                                    {isActuallyAdmin &&  !(isShowSticky && layoutDisplay === 'default') &&
+                                {!layoutIdle && <Grid className='player_button_container' item sm={12} sx={{ display:'flex', flexWrap:'wrap',padding:0,pl:1.5,ml:0, pr:1.5,mb: 0 , mt:1, fill:'#f0f1f0'}}   >
+                                    {isActuallyAdmin && !(isShowSticky && isLayoutDefault(layoutDisplay)) &&
                                         <Grid item sm={6} className="adminButtons" xs={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:0, mb: 1.5 }}>
                                             
                                             <IconButton onClick={e => roomIdPlayed > 0 ? handleChangeActuallyPlaying(0) : ''}>
@@ -762,7 +794,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                 <LastPageIcon  fontSize="large" sx={{color: !playingLastInList(room.playlistUrls.length,room.playing) ? '#f0f1f0' : '#303134'}} />
                                             </IconButton>
 
-                                            {layoutDisplay === 'fullscreen' &&
+                                            {isLayoutFullScreen(layoutDisplay) &&
                                                 <IconButton onClick={e => setLayoutdisplay('default')} >
                                                     <FullscreenExitIcon  fontSize="large" sx={{color: '#f0f1f0' }} />
                                                 </IconButton>
@@ -781,7 +813,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                             }
                                         </Grid>
                                     }
-                                    {!isActuallyAdmin && !(isShowSticky && layoutDisplay === 'default') &&
+                                    {!isActuallyAdmin && !(isShowSticky && isLayoutDefault(layoutDisplay)) &&
                                         <Grid item sm={6} xs={12} className={guestSynchroOrNot ? 'guestButtons guestSync' : 'guestButtons guestNotSync'}  sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:0,ml:0,mr:1,pr:2, mb: 1 }}>
                                             {!guestSynchroOrNot && <><IconButton onClick={e => playingFirstInList(roomIdPlayed) ? setRoomIdPlayed(roomIdPlayed-1) : ''}>
                                                 <FirstPageIcon  fontSize="large" sx={{color :playingFirstInList(roomIdPlayed) ? '#f0f1f0': '#303134'}} />
@@ -797,13 +829,13 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                             </IconButton></>}
                                             
                                             {isNotFromSpotify(room.playlistUrls[room.playing].source) && !isShowSticky && <VolumeButton volume={localVolume} setVolume={setLocalVolume}/>}
-                                            {isNotFromSpotify(room.playlistUrls[room.playing].source) && layoutDisplay === 'fullscreen' &&
+                                            {isNotFromSpotify(room.playlistUrls[room.playing].source) && isLayoutFullScreen(layoutDisplay) &&
                                                 <IconButton onClick={e => setLayoutdisplay('default')} >
                                                     <FullscreenExitIcon fontSize="large"  sx={{color: '#f0f1f0' }} />
                                                 </IconButton>
                                             }
                                     </Grid>}
-                                </Grid>
+                                </Grid>}
                             </Grid>
                         </Grid>
                         

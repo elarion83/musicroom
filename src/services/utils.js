@@ -90,3 +90,19 @@ export function mediaIndexExist(playlist, index) {
 export function isTokenInvalid(tokenTimestamp) {
     return (typeof(tokenTimestamp) === 'number' && tokenTimestamp > 0) && ((Date.now() - tokenTimestamp) > 3600000);
 }
+
+export function isLayoutFullScreen(actualLayout) {
+    return actualLayout === 'fullscreen';
+}
+
+export function isLayoutDefault(actualLayout) {
+    return actualLayout === 'default';
+}
+
+export function isLayoutInteractive(actualLayout) {
+    return actualLayout === 'interactive';
+}
+
+export function isLayoutCompact(actualLayout) {
+    return actualLayout === 'compact';
+}
