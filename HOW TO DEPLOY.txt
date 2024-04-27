@@ -1,0 +1,8 @@
+CICD : netlify
+
+en cmd : 
+
+
+a la racine du projet : 
+npm run start / build
+netlify deploy --prod pour deploy en prod

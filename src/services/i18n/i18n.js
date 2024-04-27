@@ -80,7 +80,7 @@ const resources = {
         "ModalShareRoomUrlCopiedText": "Copied in clipboard",
         
         "ModalParamsRoomTitle": "Room settings",
-        "ModalParamsRoomConnectToSpotifyText":"Connect to Spotify",
+        "ModalParamsRoomConnectToSpotifyText":"Connect to Spotify Premium",
         "ModalParamsRoomConnectedToSpotifyText":"The room is connected to Spotify",
         "ModalParamsRoomConnectToDeezerText":"Connect to Deezer",
         "ModalParamsRoomConnectedToDeezerText":"The room is connected to Deezer",
@@ -112,9 +112,9 @@ const resources = {
         "RoomEmptyAlertWelcomeClickHere":"Click here to share it",
         "RoomEmptyAlertPlaylist":"The playlist is empty !",
         "RoomEmptyAlertPlaylistClickHere":"Click here to start",
-        "RoomEmptyAlertSpotify":"Spotify is not linked to the room !",
+        "RoomEmptyAlertSpotify":"Spotify Premium is not linked to the room !",
         "RoomEmptyAlertSpotifyClickHere":"Click here to link",
-        "RoomEmptyAlertSpotifyBold":"Spotify premium needed",
+        "RoomEmptyAlertSpotifyBold":"Spotify Premium needed",
         "RoomEmptyAlertDeezer":"Deezer is not linked to the room !",
         "RoomEmptyAlertDeezerClickHere":"Click here to link",
     }
@@ -194,7 +194,7 @@ const resources = {
         "ModalShareRoomUrlCopiedText": "Copié dans le presse papier",
 
         "ModalParamsRoomTitle": "Paramètres de la room ",
-        "ModalParamsRoomConnectToSpotifyText":"Connecter a Spotify",
+        "ModalParamsRoomConnectToSpotifyText":"Connecter a Spotify Premium",
         "ModalParamsRoomConnectedToSpotifyText":"La room est connectée a Spotify",
         "ModalParamsRoomConnectToDeezerText":"Connecter a Deezer",
         "ModalParamsRoomConnectedToDeezerText":"La room est connectée a Deezer",
@@ -227,10 +227,10 @@ const resources = {
         "RoomEmptyAlertWelcomeClickHere":"Clique ici pour la partager",
         "RoomEmptyAlertPlaylist":"La playlist est vide !",
         "RoomEmptyAlertPlaylistClickHere":"Clique ici pour commencer",
-        "RoomEmptyAlertSpotify":"Spotify n'est pas lié à la room !",
+        "RoomEmptyAlertSpotify":"Spotify Premium n'est pas connecté !",
         "RoomEmptyAlertSpotifyClickHere":"Clique ici pour lier les deux",
-        "RoomEmptyAlertSpotifyBold":"Spotify premium requis",
-        "RoomEmptyAlertDeezer":"Deezer n'est pas lié à la room !",
+        "RoomEmptyAlertSpotifyBold":"Spotify Premium requis",
+        "RoomEmptyAlertDeezer":"Deezer n'est pas connecté !",
         "RoomEmptyAlertDeezerClickHere":"Clique ici pour lier les deux",
     }
   }

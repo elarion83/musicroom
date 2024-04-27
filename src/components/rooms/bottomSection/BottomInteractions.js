@@ -141,6 +141,15 @@ const BottomInteractions = ({ t, layoutDisplay, setLayoutdisplay, paramDrawerIsO
                 sx={{ borderRadius:'2px'}}
                 message={roomNotifs[roomNotifs.length - 1].createdBy+" s'est désynchronisé !"}
             />}
+            {checkNotificationsLength && roomNotifs[roomNotifs.length - 1].type === 'AccNotPremium' && 
+                (roomNotifs[roomNotifs.length - 1].createdBy !== currentUser.displayName) && 
+                <Snackbar
+                open={((Date.now() - roomNotifs[roomNotifs.length - 1].timestamp) < 2000)}
+                key={'notif'+roomNotifs[roomNotifs.length - 1].timestamp}
+                autoHideDuration={2000}
+                sx={{ borderRadius:'2px'}}
+                message="Le compte utilisé n'est pas premium."
+            />}
 
             <Snackbar
                 open={((Date.now() - roomParams.spotify.TokenTimestamp) < 8000) && roomParams.spotify.AlreadyHaveBeenLinked}
@@ -148,6 +157,7 @@ const BottomInteractions = ({ t, layoutDisplay, setLayoutdisplay, paramDrawerIsO
                 sx={{ borderRadius:'2px'}}
                 message={roomParams.spotify.IsLinked ? roomParams.spotify.UserConnected + " a ajouté Spotify a la room !" : "La connexion Spotify a expirée"}
             />
+
 
             <Snackbar
                 open={((Date.now() - roomParams.deezer.TokenTimestamp) < 8000) && roomParams.deezer.AlreadyHaveBeenLinked}

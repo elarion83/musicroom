@@ -15,7 +15,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import { withTranslation } from 'react-i18next';
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 
-const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams , handleDisconnectFromSpotifyModal, handleDisconnectFromDeezerModal, handleChangeRoomParams}) => {
+const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams , handleDisconnectFromSpotifyModal, spotifyAccountError, handleDisconnectFromDeezerModal, handleChangeRoomParams}) => {
 
     const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
 
@@ -84,8 +84,8 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams , handleDi
                     
                     {!roomParams.deezer.IsLinked && 
                             <Button
-                            sx={{mb:1}}
-                                startIcon={<Icon style={{display:'inline',  marginRight:'0.5em'}} icon="jam:deezer" />}
+                            sx={{mb:1,bgcolor:'#b560ff'}}
+                                startIcon={<Icon style={{display:'inline',color:'white', marginRight:'0.5em'}} icon="jam:deezer" />}
                                 variant="contained" 
                                 color="success"  
                                 onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_DEEZER_AUTH_ENDPOINT}?app_id=${process.env.REACT_APP_ROOM_DEEZER_APP_ID}&redirect_uri=${REDIRECT_URI}&perms=basic_access,email`}>
@@ -109,7 +109,8 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams , handleDi
 
                     {!roomParams.spotify.IsLinked && 
                             <Button
-                                startIcon={<Icon style={{display:'inline',  marginRight:'0.5em'}} icon="mdi:spotify" />}
+                                sx={{bgcolor:'#1ed760'}}
+                                startIcon={<Icon style={{display:'inline',color:'white', marginRight:'0.5em'}} icon="mdi:spotify" />}
                                 variant="contained" 
                                 color="success"  
                                 onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>

@@ -1,7 +1,7 @@
 
 import { Divider, Drawer, LinearProgress, List, ListItem, ListItemText, Typography } from "@mui/material";
 import React from "react";
-
+import {isFromSpotify} from '../../../../services/utils';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -12,6 +12,7 @@ import DrawerPlayPauseButton from './DrawerPlayPauseButton';
 
 const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, open, changeOpen, isAdminView, userVoteArray, roomPlaylist, changeIsPlaying, handleVoteChange,handleRemoveMediaFromPlaylist, changeIdPlaying,  data, roomIsActuallyPlaying, roomIdActuallyPlaying, roomIdActuallyDisplaying }) => {
     
+    const delay = ms => new Promise(res => setTimeout(res, ms));
     function handleVotePositif(idMedia, mediaHashId) {
         roomPlaylist[idMedia].vote.up++;
         handleVoteChange(idMedia, roomPlaylist[idMedia].vote, mediaHashId, 'up');
@@ -22,8 +23,9 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, open
         handleVoteChange(idMedia, roomPlaylist[idMedia].vote, mediaHashId, 'down');
     }
     
-    function removeMediaFromPlaylist(indexToRemove) {
+    async function removeMediaFromPlaylist(indexToRemove) {
         changeOpen(false);
+        await delay(500);
         handleRemoveMediaFromPlaylist(indexToRemove);
     }
 
@@ -41,7 +43,7 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, open
                 <ListItem sx={{pt:0, mt:0}}>
                     <DrawerPlayPauseButton 
                         isAdminView={isAdminView}
-                        isPlayable={(data.source === 'spotify' && !isSpotifyAvailable) ? false : true}
+                        isPlayable={(isFromSpotify(data.source) && !isSpotifyAvailable) ? false : true}
                         isPlaying={roomIsActuallyPlaying}
                         changeIsPlaying={changeIsPlaying}
                         mediaDisplayingData={roomPlaylist[roomIdActuallyDisplaying]}
@@ -70,7 +72,7 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, open
                         backgroundColor: 'var(--grey-lighter)',
                     }}} variant="determinate" value={roomPlayedActuallyPlayed} />}
                 </ListItem>
-                {data.source === 'spotify' && !isSpotifyAvailable && 
+                {isFromSpotify(data.source) && !isSpotifyAvailable && 
                     <><Divider />
                     <ListItem sx={{pt:0, mt:0}}>
                         <ListItemText primary="Lecture Impossible" secondary="Spotify déconnecté de la room" />

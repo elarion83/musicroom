@@ -14,7 +14,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import validator from 'validator';
 import SearchResultItem from '../searchResultItem';
-
+import {cleanMediaTitle} from '../../../services/utils';
 import { withTranslation } from 'react-i18next';
 
 const RoomModalAddMedia = ({ t, currentUser, validatedObjectToAdd, spotifyTokenProps, DeezerTokenProps }) => {
@@ -53,7 +53,7 @@ const RoomModalAddMedia = ({ t, currentUser, validatedObjectToAdd, spotifyTokenP
         await delay(6000);
         setRecentlyAdded(false);
     }
-        
+
     async function getYoutubeVideoInfosFromId(videoId, addingObject) {
         var params = {
             part: 'snippet',
@@ -63,7 +63,7 @@ const RoomModalAddMedia = ({ t, currentUser, validatedObjectToAdd, spotifyTokenP
         
         await axios.get('https://www.googleapis.com/youtube/v3/videos', { params: params })
         .then(function(response) {
-            addingObject.title = response.data.items[0].snippet.title;
+            addingObject.title = cleanMediaTitle(response.data.items[0].snippet.title);
         })
         .catch(function(error) {
         });
@@ -128,7 +128,6 @@ const RoomModalAddMedia = ({ t, currentUser, validatedObjectToAdd, spotifyTokenP
                     });
                 }
                 
-                
                 if(spotifyTokenProps.length !== 0) {
                     await axios.get("https://api.spotify.com/v1/search", {
                         headers: {Authorization: `Bearer ${spotifyTokenProps}`},
@@ -152,17 +151,13 @@ const RoomModalAddMedia = ({ t, currentUser, validatedObjectToAdd, spotifyTokenP
                   <Grid item xs={12} sx={{display:'flex', flexDirection:'row'}} className="autowriter_container">
                      <Typed
                         strings={[
-                            t('GeneralSearchOn')+' YOUTUBE ',
-                            t('GeneralSearchOn')+' SPOTIFY ',
-                            'CHERCHE UNE MUSIQUE',
-                            'CHERCHE UN CLIP',
-                            'UNE VIDEO DE DOMINGO', 
-                            'UNE VIDEO DE SQUEEZIE', 
-                            'UN LIEN SOUNCLOUND',
-                            'UN LIEN YOUTUBE',
+                            t('GeneralSearchOn')+' YOUTUBE, SPOTIFY',
+                            'CHERCHE UNE MUSIQUE, UN CLIP, UN TUTO',
+                            'UNE VIDEO DE DOMINGO, SQUEEZIE, AMINEMATUE',
+                            'UN LIEN SOUNCLOUND OU YOUTUBE',
                             'HTTPS://WWW.YOUTUBE.COM/WATCH?V=MAVIDEO',
                             'HTTPS://SOUNDCLOUD.COM/THOMS-12/EBRIUS']}
-                        typeSpeed={10}
+                        typeSpeed={5}
                         showCursor={true}
                         backSpeed={15}
                         attr="placeholder"
@@ -201,14 +196,11 @@ const RoomModalAddMedia = ({ t, currentUser, validatedObjectToAdd, spotifyTokenP
                             {mediaSearchResultYoutube.length > 1 && 
                                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{mt:0}}>
                                     { mediaSearchResultYoutube.map(function(media, idyt){
-                                        var txt = document.createElement("textarea");
-                                        txt.innerHTML = media.snippet.title;
-                                        media.snippet.title = txt.innerHTML;
                                         return (
                                         <SearchResultItem 
                                             key={idyt}
                                             image={media.snippet.thumbnails.high.url}
-                                            title={media.snippet.title}
+                                            title={cleanMediaTitle(media.snippet.title)}
                                             source='youtube'
                                             uid={uuid().slice(0,10).toLowerCase()}
                                             platformId={media.id.videoId}

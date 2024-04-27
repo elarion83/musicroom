@@ -43,7 +43,11 @@ const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
                     {!isEditingPseudo && <Grid container>
                         
                         <Grid item xs={11} md={11}>
-                            <Typography> Pseudo : <b>{user.displayName}</b></Typography>
+                            <Typography> Pseudo : 
+                                <Typography component={'b'}>
+                                    {user.displayName}
+                                </Typography>
+                            </Typography>
                         </Grid>
                         <Grid item xs={1} md={1}>
                             

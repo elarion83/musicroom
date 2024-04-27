@@ -9,7 +9,7 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Paper from '@mui/material/Paper';
-
+import {isFromSpotify} from '../../../services/utils';
 
 import { Icon } from '@iconify/react';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -33,7 +33,7 @@ const RoomPlaylist = ({t, isSpotifyAvailable, handleChangeIdShownInDrawer, roomP
                     {roomPlaylist.map(function(d, idx){
                     return (
                         <Fade key={idx} in={true} xs={12} sx={{  width:'100%', p:0, m:0}}>
-                            <Grid item sx={{width:'100%', p:0,pl:2, m:0}} className={`playlist_bloc ${(d.source === 'spotify') ? !isSpotifyAvailable ? 'mediaUnavailable' : '' : 'mediaAvailable'}`}> 
+                            <Grid item sx={{width:'100%', p:0,pl:2, m:0}} className={`playlist_bloc ${(isFromSpotify(d.source)) ? !isSpotifyAvailable ? 'mediaUnavailable' : '' : 'mediaAvailable'}`}> 
                                 
                                 <ListItemButton 
                                     onClick={e => handleChangeIdShownInDrawer(idx)}
@@ -42,10 +42,10 @@ const RoomPlaylist = ({t, isSpotifyAvailable, handleChangeIdShownInDrawer, roomP
                                         transition: 'all 0.3s ease-out'
                                         }
                                          }} key={'playlist_'+idx} xs={12} selected={roomIdActuallyPlaying === idx}>
-                                        {idx === roomIdActuallyPlaying && !(d.source === 'spotify' && !isSpotifyAvailable) && <ListItemIcon sx={{ pt:'10px',color:'var(--white)',pl: 1,pr:-2, zIndex:2, display:'flex', flexDirection:'column'}}>        
+                                        {idx === roomIdActuallyPlaying && !(isFromSpotify(d.source) && !isSpotifyAvailable) && <ListItemIcon sx={{ pt:'10px',color:'var(--white)',pl: 1,pr:-2, zIndex:2, display:'flex', flexDirection:'column'}}>        
                                                 <SoundWave waveNumber={7} isPlayingOrNo={roomIsActuallyPlaying} />
                                         </ListItemIcon>}
-                                        {(d.source === 'spotify' && !isSpotifyAvailable) && <Icon style={{display:'inline', marginRight:'0.5em', marginTop:'0.5em', color:'red'}} icon="ps:forbidden" />}
+                                        {(isFromSpotify(d.source) && !isSpotifyAvailable) && <Icon style={{display:'inline', marginRight:'0.5em', marginTop:'0.5em', color:'red'}} icon="ps:forbidden" />}
                                     <Grid item sx={{display:'block', zIndex:2, pl: 0, pb:0.5,pt:0.5, flexGrow:1, overflow:'hidden'}}>
                                         <Typography component="p" className="flexRowCenterHDirectChild varelaFontTitle textEllipsis" onClick={e => (idx === idDisplaying) ? handleChangeIdActuallyDisplaying(-1) : handleChangeIdActuallyDisplaying(idx)} sx={{ pl:0,mb:0,mt:0, wordBreak: 'break-all'}}>
                                             { (d.title.length === 0) ? d.url : d.title}

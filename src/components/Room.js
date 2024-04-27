@@ -17,7 +17,7 @@ import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
 import { v4 as uuid } from 'uuid';
-
+import {cleanMediaTitle,isFromSpotify,isPlaylistExistNotEmpty,isFromSource,mediaIndexExist, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, isNotFromSpotify, formatNumberToMinAndSec} from '../services/utils';
 import RoomPlaylistDrawer from "./rooms/playlistSection/drawer/RoomPlaylistDrawer";
 
 //import screenfull from 'screenfull'
@@ -148,51 +148,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 if (doc.exists) {
                     setRoom(doc.data());
                 } else {
-                    var docData = {
-                        id: roomId.toLowerCase(),
-                        roomName:'',
-                        admin:currentUser.displayName,
-                        adminUid:currentUser.uid  ? currentUser.uid : 'anon',
-                        playing:0,
-                        actuallyPlaying:false,
-                        playlistUrls: [],
-                        playlistEmpty: true,
-                        notifsArray:[],
-                        mediaActuallyPlayingAlreadyPlayedData:{
-                            playedSeconds:0,
-                            playedPercentage:0,
-                            played:0
-                        },
-                        roomParams:{
-                            isChatActivated:true,
-                            isPrivate:false,
-                            isOnInvitation:false,
-                            isPasswordNeeded:false,
-                            password:'',
-                            isPlayingLooping:true,
-                            isAutoPlayActivated:true,
-                            syncPeopleByDefault:true,
-                            allowEverybodyToAddMedia:true,
-                            interactionsAllowed:true,
-                            interactionFrequence:20000,
-                            deezer:{
-                                IsLinked:false,
-                                AlreadyHaveBeenLinked:false,
-                                Token:'',
-                                TokenTimestamp:0,
-                                UserConnected:''
-                            },
-                            spotify:{
-                                IsLinked:false,
-                                AlreadyHaveBeenLinked:false,
-                                Token:'',
-                                TokenTimestamp:0,
-                                UserConnected:''
-                            }
-                            },
-                        interactionsArray:[],
-                        creationTimeStamp	: Date.now()
-                    };
+                    var docData = createDefaultRoomObject(roomId.toLowerCase(), currentUser);
                     db.collection(process.env.REACT_APP_ROOM_COLLECTION).doc(roomId).set(docData).then(() => {});
                     setRoom(docData);
                 }
@@ -290,10 +246,10 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }, [loaded, localData,room]);
 
     async function handlePlay(playStatus) {
-        if((typeof(room.roomParams.spotify.TokenTimestamp) === 'number' && room.roomParams.spotify.TokenTimestamp > 0) && ((Date.now() - room.roomParams.spotify.TokenTimestamp) > 3600000)) {   
+        if(isTokenInvalid(room.roomParams.spotify.TokenTimestamp)) {   
             disconnectSpotify();
         }
-        if((typeof(room.roomParams.deezer.TokenTimestamp) === 'number' && room.roomParams.deezer.TokenTimestamp > 0) && ((Date.now() - room.roomParams.deezer.TokenTimestamp) > 3600000)) {   
+        if(isTokenInvalid(room.roomParams.deezer.TokenTimestamp)) {
             disconnectDeezer();
         }
         if(isActuallyAdmin) {
@@ -370,7 +326,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     async function handleReady() {
         setPlayerReady(true);
-        if(room.playlistUrls[roomIdPlayed].source !== 'deezer') {   
+        if(isFromSource(room.playlistUrls[roomIdPlayed].source,'deezer')) {   
             playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds');
         }
     }
@@ -379,12 +335,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     async function handleMediaEnd() {
         
         if(!isActuallyAdmin && !guestSynchroOrNot) { 
-            if(room.playlistUrls[roomIdPlayed+1]) {
+            if(mediaIndexExist(room.playlistUrls,roomIdPlayed+1)) {
                 setRoomIdPlayed(roomIdPlayed+1);
             }
         }
         else {
-            if(room.playlistUrls[room.playing+1]) {
+            if(mediaIndexExist(room.playlistUrls, room.playing+1)) {
                 handleChangeActuallyPlaying(room.playing+1);
             } 
             else {
@@ -400,7 +356,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         }
     }
     async function isSpotifyAndIsNotPlayableBySpotify(numberToPlay, spotifyIsLinked) {
-        if(room.playlistUrls[numberToPlay].source === 'spotify' && !spotifyIsLinked) {
+        if(isFromSpotify(room.playlistUrls[numberToPlay].source) && !spotifyIsLinked) {
             return true;
         }
         
@@ -410,7 +366,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     function handleChangeActuallyPlaying(numberToPlay) {
         if(isActuallyAdmin) {
             if(room.playlistUrls[numberToPlay]) {
-                if(room.playlistUrls[numberToPlay].source === 'spotify' && !room.roomParams.spotify.IsLinked) {
+                if(isFromSpotify(room.playlistUrls[numberToPlay].source) && !room.roomParams.spotify.IsLinked) {
                     handleChangeActuallyPlaying(numberToPlay+1);
                     return
                 }
@@ -580,18 +536,14 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         setOpenLeaveRoomModal(leaveRoomModalIsOpen);
     }
 
-    // display function
-    function formatNumberToMinAndSec(number) {
-        
-        var minute = ~~(Math.round(number)/60)+'m';
-        var seconde = Math.round(number)%60+'s';
-        
-        return minute+' '+seconde;
-    }
-
-
     const [spotifyEndSwitchTempFix, setSpotifyEndSwitchTempFix] = useState(true);
     async function SpotifyPlayerCallBack(e){
+        if(e.errorType === 'account_error') {
+            room.notifsArray.push({type: 'AccNotPremium', timestamp: Date.now(), createdBy: currentUser.displayName});
+            roomRef.set({notifsArray: room.notifsArray},{merge:true}); 
+            disconnectSpotify();
+        }
+
         if(e.type === 'player_update') {
             if(e.previousTracks[0] && (e.track.id === e.previousTracks[0].id && spotifyEndSwitchTempFix)) {
                 if((e.track.uri !== room.playlistUrls[room.playing].source)) {
@@ -612,7 +564,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
             part: 'snippet',
             key: process.env.REACT_APP_YOUTUBE_API_KEY,
             type:'video',
-            maxResults:12,
+            maxResults:9,
             q:lastMediaTitle,
             videoEmbeddable:true,
         }; 
@@ -626,7 +578,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     hashId: uuid().slice(0,10).toLowerCase(),
                     source: 'youtube',
                     platformId:response.data.items[responseItemLength].id.videoId,
-                    title:response.data.items[responseItemLength].snippet.title,
+                    title:cleanMediaTitle(response.data.items[responseItemLength].snippet.title),
                     url:'https://www.youtube.com/watch?v='+response.data.items[responseItemLength].id.videoId, 
                     vote: {'up':0,'down':0}
                 }
@@ -679,8 +631,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     <Box sx={{bgcolor:'#303030',borderBottom: '2px solid var(--border-color)', padding:"0px 0em"}} className={room.playlistUrls[roomIdPlayed].source+'Display'}> 
                         <Grid container spacing={0} sx={{ bgcolor:'var(--grey-dark)'}} className={layoutDisplay === 'compact' ? 'playerHide' : 'playerShow'}>
 
-                            <Grid item className={layoutDisplay === 'fullscreen' ? 'fullscreen' : 'playerContainer'} sm={(room.playlistUrls[roomIdPlayed].source === 'spotify' ) ? 12 : 4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
-                                {room.playlistUrls[roomIdPlayed].source === 'spotify' && 
+                            <Grid item className={layoutDisplay === 'fullscreen' ? 'fullscreen' : 'playerContainer'} sm={(isFromSpotify(room.playlistUrls[roomIdPlayed].source)) ? 12 : 4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
+                                {isFromSpotify(room.playlistUrls[roomIdPlayed].source) && 
                                     <>
                                         {spotifyPlayerShow && isActuallyAdmin &&
                                             <SpotifyPlayer
@@ -712,10 +664,10 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                         }
                                     </>
                                 }
-                                {room.playlistUrls[roomIdPlayed].source === 'deezer' && 
+                                {isFromSource(room.playlistUrls[roomIdPlayed].source,'deezer') && 
                                     <img className="coverImg" src={room.playlistUrls[roomIdPlayed].visuel} />
                                 }
-                                {isActuallyAdmin && room.playlistUrls[roomIdPlayed].source !== 'spotify'  && <ReactPlayer sx={{ padding:0}}
+                                {isActuallyAdmin && isNotFromSpotify(room.playlistUrls[roomIdPlayed].source) && <ReactPlayer sx={{ padding:0}}
                                     ref={playerRef}
                                     className='react-player'
                                     width='100%'
@@ -739,7 +691,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                         }
                                     }}
                                 />}
-                                {!isActuallyAdmin && room.playlistUrls[roomIdPlayed] && room.playlistUrls[roomIdPlayed].source !== 'spotify'  && <ReactPlayer sx={{ padding:0}}
+                                {!isActuallyAdmin && room.playlistUrls[roomIdPlayed] && !isFromSpotify(room.playlistUrls[roomIdPlayed].source) && <ReactPlayer sx={{ padding:0}}
                                     ref={playerRef}
                                     className='react-player'
                                     width='100%'
@@ -762,16 +714,16 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                 
                                 <div style={{width:'100%',height:'100%',opacity:0,top:0,position:'absolute'}}></div>
                             </Grid>
-                            <Grid item sm={(room.playlistUrls[roomIdPlayed].source === 'spotify' || layoutDisplay === 'compact') ? 12 : 8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }} className={`player_right_side_container ${(['spotify', 'deezer'].includes(room.playlistUrls[roomIdPlayed].source)) ? "musicOnlyPlayer_header" : ""}`}>
+                            <Grid item sm={(isFromSpotify(room.playlistUrls[roomIdPlayed].source) || layoutDisplay === 'compact') ? 12 : 8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }} className={`player_right_side_container ${(['spotify', 'deezer'].includes(room.playlistUrls[roomIdPlayed].source)) ? "musicOnlyPlayer_header" : ""}`}>
                                 { /* pip ? 'Disable PiP' : 'Enable PiP' */ }
                                  <Grid item sm={12} sx={{ padding:0,pl:1.5,ml:0, mb: 0 , mt:1, fill:'#f0f1f0'}}>
                                     <Grid item 
-                                    sx={[{pb:1}, room.playlistUrls[roomIdPlayed].source === 'spotify' &&  { justifyContent: 'center' } ]} 
+                                    sx={[{pb:1}, isFromSpotify(room.playlistUrls[roomIdPlayed].source) &&  { justifyContent: 'center' } ]} 
                                     className="flexRowCenterH">
                                         { room.playlistUrls[roomIdPlayed].title && <Typography component={'span'} className='mediaTitle varelaFontTitle'>
                                         {room.playlistUrls[roomIdPlayed].title} 
                                         </Typography>}
-                                        { room.playlistUrls[roomIdPlayed].url && room.playlistUrls[roomIdPlayed].url.length === 0 || !room.playlistUrls[roomIdPlayed].title && 
+                                        { ((room.playlistUrls[roomIdPlayed].url && room.playlistUrls[roomIdPlayed].url.length === 0) || !room.playlistUrls[roomIdPlayed].title) && 
                                         <Typography component={'span'} className='varelaFontTitle' >
                                             {room.playlistUrls[roomIdPlayed].url.substring(0, 50)+'...'} 
                                         </Typography>} 
@@ -781,7 +733,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                         <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase', color:'var(--grey-inspired)' }} className='fontFamilyNunito'>
                                             {roomIsPlaying ? t('GeneralPlaying') : t('GeneralPause')}
                                         </Typography>
-                                        {playerReady && playerRef.current !== null && room.playlistUrls[roomIdPlayed].source !== 'spotify' && 
+                                        {(playerReady && playerRef.current !== null && isNotFromSpotify(room.playlistUrls[roomIdPlayed].source)) && 
                                         <Typography sx={{ fontSize: '10px', ml:0, mb: 1, color:'var(--grey-inspired)'}} className='fontFamilyNunito'> {~~(Math.round(playerRef.current.getCurrentTime())/60) + 'm'+Math.round(playerRef.current.getCurrentTime()) % 60+ 's / ' + formatNumberToMinAndSec(playerRef.current.getDuration())}</Typography>}
                                     </Grid>
                                 </Grid> 
@@ -790,11 +742,11 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                         <Grid item sm={6} className="adminButtons" xs={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:0, mb: 1.5 }}>
                                             
                                             <IconButton onClick={e => roomIdPlayed > 0 ? handleChangeActuallyPlaying(0) : ''}>
-                                                <FirstPageIcon  fontSize="large" sx={{color:roomIdPlayed > 0 ? '#f0f1f0': '#303134'}} />
+                                                <FirstPageIcon  fontSize="large" sx={{color:playingFirstInList(roomIdPlayed) ? '#f0f1f0': '#303134'}} />
                                             </IconButton>
                                             
-                                            <IconButton onClick={e => ((roomIdPlayed > 0) && isSpotifyAndIsNotPlayableBySpotify(roomIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? handleChangeActuallyPlaying(roomIdPlayed - 1) : ''}>
-                                                <SkipPrevious fontSize="large" sx={{color:((roomIdPlayed > 0) && isSpotifyAndIsNotPlayableBySpotify(roomIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? '#f0f1f0': '#303134'}} />
+                                            <IconButton onClick={e => (playingFirstInList(roomIdPlayed) && isSpotifyAndIsNotPlayableBySpotify(roomIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? handleChangeActuallyPlaying(roomIdPlayed - 1) : ''}>
+                                                <SkipPrevious fontSize="large" sx={{color:(playingFirstInList(roomIdPlayed) && isSpotifyAndIsNotPlayableBySpotify(roomIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? '#f0f1f0': '#303134'}} />
                                             </IconButton>
 
                                             <IconButton variant="contained" onClick={e => handlePlay(!room.actuallyPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
@@ -802,12 +754,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                 { !room.actuallyPlaying && <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
                                             </IconButton>
                                            
-                                            <IconButton onClick={e => (room.playlistUrls.length -1) !== roomIdPlayed ? handleChangeActuallyPlaying(room.playing + 1) : ''}>
-                                                <SkipNextIcon fontSize="large" sx={{color: (room.playlistUrls.length -1) !== room.playing ? '#f0f1f0' : '#303134'}} />
+                                            <IconButton onClick={e => !playingLastInList(room.playlistUrls.length,room.playing) ? handleChangeActuallyPlaying(room.playing + 1) : ''}>
+                                                <SkipNextIcon fontSize="large" sx={{color: !playingLastInList(room.playlistUrls.length,room.playing) ? '#f0f1f0' : '#303134'}} />
                                             </IconButton>
 
-                                            <IconButton onClick={e => (room.playlistUrls.length -1) !== room.playing ? handleChangeActuallyPlaying(room.playlistUrls.length-1) : ''}>
-                                                <LastPageIcon  fontSize="large" sx={{color: (room.playlistUrls.length -1) !== room.playing ? '#f0f1f0' : '#303134'}} />
+                                            <IconButton onClick={e => !playingLastInList(room.playlistUrls.length,room.playing) ? handleChangeActuallyPlaying(room.playlistUrls.length-1) : ''}>
+                                                <LastPageIcon  fontSize="large" sx={{color: !playingLastInList(room.playlistUrls.length,room.playing) ? '#f0f1f0' : '#303134'}} />
                                             </IconButton>
 
                                             {layoutDisplay === 'fullscreen' &&
@@ -816,7 +768,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                 </IconButton>
                                             }
                                             
-                                            {room.playlistUrls[room.playing].source !== 'spotify' && 
+                                            {isNotFromSpotify(room.playlistUrls[room.playing].source) && 
                                                 <>
                                                     <IconButton onClick={e => setPercentagePlayed(0)} >
                                                         <Icon icon="icon-park-outline:replay-music" width="30" style={{color:'#f0f1f0'}} />
@@ -824,28 +776,28 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                 </>
                                             }
                                             
-                                            {room.playlistUrls[room.playing].source !== 'spotify' && !isShowSticky &&
+                                            {isNotFromSpotify(room.playlistUrls[room.playing].source) && !isShowSticky &&
                                                 <VolumeButton volume={localVolume} setVolume={setLocalVolume}/>
                                             }
                                         </Grid>
                                     }
                                     {!isActuallyAdmin && !(isShowSticky && layoutDisplay === 'default') &&
                                         <Grid item sm={6} xs={12} className={guestSynchroOrNot ? 'guestButtons guestSync' : 'guestButtons guestNotSync'}  sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:0,ml:0,mr:1,pr:2, mb: 1 }}>
-                                            {!guestSynchroOrNot && <><IconButton onClick={e => roomIdPlayed > 0 ? setRoomIdPlayed(roomIdPlayed-1) : ''}>
-                                                <FirstPageIcon  fontSize="large" sx={{color:roomIdPlayed > 0 ? '#f0f1f0': '#303134'}} />
+                                            {!guestSynchroOrNot && <><IconButton onClick={e => playingFirstInList(roomIdPlayed) ? setRoomIdPlayed(roomIdPlayed-1) : ''}>
+                                                <FirstPageIcon  fontSize="large" sx={{color :playingFirstInList(roomIdPlayed) ? '#f0f1f0': '#303134'}} />
                                             </IconButton>
                                             
-                                            {room.playlistUrls[roomIdPlayed].source !== 'spotify' && <IconButton variant="contained" onClick={e => setRoomIsPlaying(!roomIsPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
+                                            {isNotFromSpotify(room.playlistUrls[roomIdPlayed].source) && <IconButton variant="contained" onClick={e => setRoomIsPlaying(!roomIsPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
                                                 { roomIsPlaying && <PauseCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
                                                 { !roomIsPlaying && <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
                                             </IconButton>}
 
-                                            <IconButton onClick={e => (room.playlistUrls.length -1) !== roomIdPlayed ? setRoomIdPlayed(roomIdPlayed+1) : ''}>
-                                                <LastPageIcon  fontSize="large" sx={{color: (room.playlistUrls.length -1) !== roomIdPlayed ? '#f0f1f0' : '#303134'}} />
+                                            <IconButton onClick={e => !playingLastInList(room.playlistUrls.length, roomIdPlayed) ? setRoomIdPlayed(roomIdPlayed+1) : ''}>
+                                                <LastPageIcon  fontSize="large" sx={{color: !playingLastInList(room.playlistUrls.length, roomIdPlayed) ? '#f0f1f0' : '#303134'}} />
                                             </IconButton></>}
                                             
-                                            {room.playlistUrls[room.playing].source !== 'spotify' && !isShowSticky && <VolumeButton volume={localVolume} setVolume={setLocalVolume}/>}
-                                            {room.playlistUrls[room.playing].source !== 'spotify' && layoutDisplay === 'fullscreen' &&
+                                            {isNotFromSpotify(room.playlistUrls[room.playing].source) && !isShowSticky && <VolumeButton volume={localVolume} setVolume={setLocalVolume}/>}
+                                            {isNotFromSpotify(room.playlistUrls[room.playing].source) && layoutDisplay === 'fullscreen' &&
                                                 <IconButton onClick={e => setLayoutdisplay('default')} >
                                                     <FullscreenExitIcon fontSize="large"  sx={{color: '#f0f1f0' }} />
                                                 </IconButton>
@@ -858,7 +810,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     </Box>
                 }
                 { !room.playlistEmpty && <Toolbar xs={12} sx={{ bgcolor: 'var(--grey-dark)',borderBottom: '2px solid var(--border-color)', minHeight: '45px !important', fontFamily: 'Monospace', pl:'15px', pr:'25 px' }}>
-                     <Typography component="div" sx={{ flexGrow: 1, textTransform:'uppercase', fontSize:'12px', color:'white' }}>  <b><span> { room.playlistUrls && room.playlistUrls.length } {t('GeneralMediasInPlaylist')}</span></b>
+                    <Typography component="div" sx={{ flexGrow: 1, textTransform:'uppercase', fontSize:'12px', color:'white' }}>  
+                        <Typography component="span">
+                            <Typography component="b">
+                                { room.playlistUrls && room.playlistUrls.length } {t('GeneralMediasInPlaylist')}
+                            </Typography>
+                        </Typography>
                     </Typography>
                 </Toolbar>}
                 { room.playlistEmpty && 
@@ -869,7 +826,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         deezerIsLinked={room.roomParams.deezer.IsLinked}
                     />
                 }
-                {typeof(room.playlistUrls) !== 'undefined' && room.playlistUrls && room.playlistUrls.length > 0 && 
+                {isPlaylistExistNotEmpty(room.playlistUrls) && 
                     <Box className="roomPlaylistbloc" sx={{ p:0,mb:0}}>
                         <RoomPlaylist 
                             isSpotifyAvailable={room.roomParams.spotify.IsLinked} 
@@ -926,9 +883,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
                         <Box sx={{color:'var(--white)', display:'flex',gap:'10px',flexDirection:'row', alignItems:'center', width:'100%',ml:1,mt:1, fontSize: '10px', textTransform:'uppercase' }} >
                             <SoundWave waveNumber={7} isPlayingOrNo={roomIsPlaying}  /> 
-                            <span class="varelaFontTitle">
+                            <Typography component={'span'} className='varelaFontTitle' >
                                 { room.playlistUrls[room.playing].title ? room.playlistUrls[room.playing].title : room.playlistUrls[room.playing].url.substring(0,25)+'..' }
-                            </span>
+                            </Typography>
                         </Box>
                     </Box>}
             </Grid>
