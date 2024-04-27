@@ -45,6 +45,7 @@ const RoomModalAddMedia = ({ t, currentUser, validatedObjectToAdd, spotifyTokenP
         await delay(100);
         setRecentlyAddedTitle(objectFormatted.title);
         addingObject.title='';
+        addingObject.deleted=false;
         addingObject.source='';
         addingObject.url='';
         addingObject.platformId='';
@@ -103,7 +104,7 @@ const RoomModalAddMedia = ({ t, currentUser, validatedObjectToAdd, spotifyTokenP
                     part: 'snippet',
                     key: process.env.REACT_APP_YOUTUBE_API_KEY,
                     q: searchTerm,
-                    maxResults:12,
+                    maxResults:18,
                     type: 'video'
                 } })
                 .then(function(response) {
@@ -136,7 +137,6 @@ const RoomModalAddMedia = ({ t, currentUser, validatedObjectToAdd, spotifyTokenP
                             type: "track"
                         }
                     }).then(function(response) {
-                        console.log(response.data.tracks.items);
                         setMediaSearchResultSpotify(response.data.tracks.items);
                     });
                 }

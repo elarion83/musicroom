@@ -68,7 +68,7 @@ const RoomTopBar = ({
                 </ListItem>
                 
                 <ListItem key='roomDrawSpotifyStatus' disablePadding>
-                    <ListItemButton>
+                    <ListItemButton onClick={e => handleOpenRoomParamModal(true)}>
                         <ListItemIcon>
                             <Badge invisible={isLinkedToSpotify} variant="dot" 
                                 sx={{'& .MuiBadge-badge': {
@@ -83,7 +83,7 @@ const RoomTopBar = ({
                 </ListItem>
 
                 <ListItem key='roomDrawDeezerStatus' disablePadding>
-                    <ListItemButton>
+                    <ListItemButton onClick={e => handleOpenRoomParamModal(true)}>
                         <ListItemIcon>
                             <Badge invisible={isLinkedToDeezer} variant="dot" 
                                 sx={{'& .MuiBadge-badge': {

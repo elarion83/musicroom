@@ -96,7 +96,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     const [mediaDataShowInDrawer, setMediaDataShowInDrawer] = useState();
     const [mediaDataDrawerOpen, setMediaDataDrawerOpen] = useState(false);
 
-    const [localVolume, setLocalVolume] = useState(0);
+    const [localVolume, setLocalVolume] = useState(1);
 
     const [pip] = useState(true);
     const [userCanMakeInteraction, setUserCanMakeInteraction]= useState(true);
@@ -418,7 +418,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         playedSeconds:0,
                         playedPercentage:0,
                         played:0
-                    }}, { merge: true });  
+                }}, { merge: true });  
             } else {
                 if(room.roomParams.isPlayingLooping) {
                     roomRef.set({playing: 0, actuallyPlaying:true,mediaActuallyPlayingAlreadyPlayedData:{
@@ -512,6 +512,11 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         }
     }
 
+    function handleRemoveMediaFromPlaylist(indexToRemove) {
+        room.playlistUrls.splice(indexToRemove, 1);
+        roomRef.set({playlistUrls: room.playlistUrls}, { merge: true });
+    }
+
     function handleChangeRoomParams(newParams) {
         roomRef.set({roomParams: newParams}, { merge: true });
     }
@@ -601,24 +606,28 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         }
     }
 
-    async function addMediaForAutoPlayByYoutubeId(mediaYoutubeId) {
+    async function addMediaForAutoPlayByYoutubeId(lastMediaTitle) {
         
         var params = {
             part: 'snippet',
             key: process.env.REACT_APP_YOUTUBE_API_KEY,
             type:'video',
-            relatedToVideoId: mediaYoutubeId,
+            maxResults:12,
+            q:lastMediaTitle,
+            videoEmbeddable:true,
         }; 
 
         await axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, { params: params })
             .then(function(response) {
+
+                var responseItemLength = response.data.items.length-1;
                 var suggestMedia = {
                     addedBy : 'App_AutoPlay',
                     hashId: uuid().slice(0,10).toLowerCase(),
                     source: 'youtube',
-                    platformId:response.data.items[0].id.videoId,
-                    title:response.data.items[0].snippet.title,
-                    url:'https://www.youtube.com/watch?v='+response.data.items[0].id.videoId, 
+                    platformId:response.data.items[responseItemLength].id.videoId,
+                    title:response.data.items[responseItemLength].snippet.title,
+                    url:'https://www.youtube.com/watch?v='+response.data.items[responseItemLength].id.videoId, 
                     vote: {'up':0,'down':0}
                 }
                 handleAddValidatedObjectToPlaylist(suggestMedia);
@@ -630,24 +639,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }
 
     async function addMediaForAutoPlay() {
-            if('youtube' !== room.playlistUrls[room.playing].source) {
-                
-                axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, { params: {
-                    part: 'snippet',
-                    key: process.env.REACT_APP_YOUTUBE_API_KEY,
-                    q: room.playlistUrls[room.playing].title,
-                    maxResults:1,
-                    type: 'video'
-                } })
-                .then(function(response) {
-                    addMediaForAutoPlayByYoutubeId(response.data.items[0].id.videoId);
-                })
-                .catch(function(error) {
-                    console.error(error);
-                });
-            } else {
-                addMediaForAutoPlayByYoutubeId(room.playlistUrls[room.playing].platformId);
-            } 
+        addMediaForAutoPlayByYoutubeId(room.playlistUrls[room.playing].title);
     }
    
   return (
@@ -900,6 +892,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                             changeIdPlaying={handleChangeIdActuallyPlaying}
                             changeIsPlaying={handlePlay}
                             handleVoteChange={handleVoteChange} 
+                            handleRemoveMediaFromPlaylist={handleRemoveMediaFromPlaylist}
                             userVoteArray={localData.currentUserVotes} 
                             roomPlaylist={room.playlistUrls} 
                             isSpotifyAvailable={room.roomParams.spotify.IsLinked} 

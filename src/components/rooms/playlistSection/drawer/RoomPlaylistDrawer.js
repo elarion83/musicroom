@@ -4,12 +4,13 @@ import React from "react";
 
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 import { Box } from "@mui/system";
 import { withTranslation } from 'react-i18next';
 import DrawerPlayPauseButton from './DrawerPlayPauseButton';
 
-const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, open, changeOpen, isAdminView, userVoteArray, roomPlaylist, changeIsPlaying, handleVoteChange, changeIdPlaying,  data, roomIsActuallyPlaying, roomIdActuallyPlaying, roomIdActuallyDisplaying }) => {
+const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, open, changeOpen, isAdminView, userVoteArray, roomPlaylist, changeIsPlaying, handleVoteChange,handleRemoveMediaFromPlaylist, changeIdPlaying,  data, roomIsActuallyPlaying, roomIdActuallyPlaying, roomIdActuallyDisplaying }) => {
     
     function handleVotePositif(idMedia, mediaHashId) {
         roomPlaylist[idMedia].vote.up++;
@@ -21,6 +22,11 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, open
         handleVoteChange(idMedia, roomPlaylist[idMedia].vote, mediaHashId, 'down');
     }
     
+    function removeMediaFromPlaylist(indexToRemove) {
+        changeOpen(false);
+        handleRemoveMediaFromPlaylist(indexToRemove);
+    }
+
     return(
       <Drawer
             id="mediaInfoDrawer"
@@ -92,10 +98,15 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, open
                         </Button>
                     }
                     {userVoteArray.down.includes(data.hashId) &&
-                            <Button size="small" variant="text" sx={{zIndex:5, ml:1, fontSize:'0.8em',  color:'#E91E63'}}>
+                            <Button size="small" variant="text" sx={{zIndex:5, ml:1, fontSize:'0.8em',  color:'#E91E63'}}  >
                                 <ThumbDownAltIcon fontSize="small"  sx={{mr:1,color:'#E91E63'}}/>
                                 {data.vote.down }
                             </Button>
+                    }
+                    {isAdminView && (roomIdActuallyDisplaying > roomIdActuallyPlaying) &&
+                        <Button size="small" variant="text" sx={{zIndex:5, ml:1, fontSize:'0.8em',  color:'#66BB6A'}} onClick={e => removeMediaFromPlaylist(roomIdActuallyDisplaying)}>
+                            <DeleteIcon fontSize="small" sx={{color:'#E91E63'}}/>
+                        </Button>
                     }
                 </ListItemText>
             </List>}
