@@ -15,14 +15,14 @@ import SaveIcon from '@mui/icons-material/Save';
 import { withTranslation } from 'react-i18next';
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 
-const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams , handleDisconnectFromSpotifyModal, spotifyAccountError, handleDisconnectFromDeezerModal, handleChangeRoomParams}) => {
+const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDisconnectFromSpotifyModal, spotifyAccountError, handleDisconnectFromDeezerModal, handleChangeRoomParams }) => {
 
-    const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
+    const REDIRECT_URI = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ":" + window.location.port : '');
 
     const [showPassword, setShowPassword] = useState(false);
 
     const [password, setPassword] = useState(roomParams.password);
-    
+
     async function savePassword() {
         roomParams.password = password;
         handleChangeRoomParams(roomParams);
@@ -37,10 +37,10 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams , handleDi
         roomParams.interactionsAllowed = !roomParams.interactionsAllowed;
         handleChangeRoomParams(roomParams);
     }
-    
+
     async function handleChangeIsPasswordNeeded() {
         roomParams.isPasswordNeeded = !roomParams.isPasswordNeeded;
-        if(!roomParams.isPasswordNeeded) {
+        if (!roomParams.isPasswordNeeded) {
             roomParams.password = '';
         }
         handleChangeRoomParams(roomParams);
@@ -67,38 +67,38 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams , handleDi
     }
 
     async function changeOpenInComp() {
-        if(roomParams.isPasswordNeeded && password.length === 0 && roomParams.password.length === 0 ) {
+        if (roomParams.isPasswordNeeded && password.length === 0 && roomParams.password.length === 0) {
             roomParams.isPasswordNeeded = false;
             handleChangeRoomParams(roomParams);
         }
         changeOpen(false);
     }
 
-    return(
-        <Dialog open={open} TransitionComponent={SlideUp}  onClose={(e) => changeOpenInComp(false)}>
-            <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
-                <TuneIcon fontSize="small" sx={{mr:1}} /> {t('ModalParamsRoomTitle')}
-            </DialogTitle>  
-            <DialogContent dividers sx={{pt:2}}>
+    return (
+        <Dialog open={open} TransitionComponent={SlideUp} onClose={(e) => changeOpenInComp(false)}>
+            <DialogTitle className='flexRowCenterH' sx={{ m: 0, p: 1 }}>
+                <TuneIcon fontSize="small" sx={{ mr: 1 }} /> {t('ModalParamsRoomTitle')}
+            </DialogTitle>
+            <DialogContent dividers sx={{ pt: 2 }}>
                 <FormGroup>
-                    
-                    {!roomParams.deezer.IsLinked && 
-                            <Button
-                            sx={{mb:1,bgcolor:'#b560ff'}}
-                                startIcon={<Icon style={{display:'inline',color:'white', marginRight:'0.5em'}} icon="jam:deezer" />}
-                                variant="contained" 
-                                color="success"  
-                                onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_DEEZER_AUTH_ENDPOINT}?app_id=${process.env.REACT_APP_ROOM_DEEZER_APP_ID}&redirect_uri=${REDIRECT_URI}&perms=basic_access,email`}>
-                                {t('ModalParamsRoomConnectToDeezerText')}
-                            </Button>
-                    }          
-                    {roomParams.deezer.IsLinked && 
+
+                    {!roomParams.deezer.IsLinked &&
+                        <Button
+                            sx={{ mb: 1, bgcolor: '#b560ff' }}
+                            startIcon={<Icon style={{ display: 'inline', color: 'white', marginRight: '0.5em' }} icon="jam:deezer" />}
+                            variant="contained"
+                            color="success"
+                            onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_DEEZER_AUTH_ENDPOINT}?app_id=${process.env.REACT_APP_ROOM_DEEZER_APP_ID}&redirect_uri=${REDIRECT_URI}&perms=basic_access,email`}>
+                            {t('ModalParamsRoomConnectToDeezerText')}
+                        </Button>
+                    }
+                    {roomParams.deezer.IsLinked &&
                         <Alert
-                        sx={{mb:1}}
+                            sx={{ mb: 1 }}
                             action={
                                 <Tooltip title="Forcer la déconnexion">
                                     <Button onClick={e => handleDisconnectFromDeezerModal(true)}>
-                                        <ExitToAppIcon  fontSize="small" />
+                                        <ExitToAppIcon fontSize="small" />
                                     </Button>
                                 </Tooltip>
                             }
@@ -107,22 +107,22 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams , handleDi
                         </Alert>
                     }
 
-                    {!roomParams.spotify.IsLinked && 
-                            <Button
-                                sx={{bgcolor:'#1ed760'}}
-                                startIcon={<Icon style={{display:'inline',color:'white', marginRight:'0.5em'}} icon="mdi:spotify" />}
-                                variant="contained" 
-                                color="success"  
-                                onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
-                                {t('ModalParamsRoomConnectToSpotifyText')}
-                            </Button>
-                    }          
-                    {roomParams.spotify.IsLinked && 
+                    {!roomParams.spotify.IsLinked &&
+                        <Button
+                            sx={{ bgcolor: '#1ed760' }}
+                            startIcon={<Icon style={{ display: 'inline', color: 'white', marginRight: '0.5em' }} icon="mdi:spotify" />}
+                            variant="contained"
+                            color="success"
+                            onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
+                            {t('ModalParamsRoomConnectToSpotifyText')}
+                        </Button>
+                    }
+                    {roomParams.spotify.IsLinked &&
                         <Alert
                             action={
                                 <Tooltip title="Forcer la déconnexion">
                                     <Button onClick={e => handleDisconnectFromSpotifyModal(true)}>
-                                        <ExitToAppIcon  fontSize="small" />
+                                        <ExitToAppIcon fontSize="small" />
                                     </Button>
                                 </Tooltip>
                             }
@@ -131,58 +131,58 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams , handleDi
                         </Alert>
                     }
 
-                    <Alert sx={{pl:0,mt:3,  mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.isPlayingLooping} onChange={handleChangeIsPlayingLooping} 
-                            disabled={adminView? false:true}
-                            name="switchIsPlayingLooping" />} severity={roomParams.isPlayingLooping ? 'success' : 'warning'}>
-                        <AlertTitle sx={{fontWeight:'bold'}} className='fontFamilyOpenSans'>{t('ModalParamsRoomLoopPlayingTitle')}</AlertTitle>
-                        <Typography fontSize='small' className='fontFamilyNunito'>{adminView? t('ModalParamsRoomLoopPlayingText') : t('ModalParamsRoomNotAllowedText')}</Typography>
+                    <Alert sx={{ pl: 0, mt: 3, mb: 2, alignItems: 'center' }} icon={<Switch checked={roomParams.isPlayingLooping} onChange={handleChangeIsPlayingLooping}
+                        disabled={adminView ? false : true}
+                        name="switchIsPlayingLooping" />} severity={roomParams.isPlayingLooping ? 'success' : 'warning'}>
+                        <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>{t('ModalParamsRoomLoopPlayingTitle')}</AlertTitle>
+                        <Typography fontSize='small' className='fontFamilyNunito'>{adminView ? t('ModalParamsRoomLoopPlayingText') : t('ModalParamsRoomNotAllowedText')}</Typography>
                     </Alert>
 
-                    <Alert sx={{pl:0, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.isAutoPlayActivated} onChange={handleChangeIsAutoPlayActivated} 
-                            disabled={adminView? false:true}
-                            name="switchIsAutoPlayActivated" />} severity={roomParams.isAutoPlayActivated ? 'success' : 'warning'}>
-                        <AlertTitle sx={{fontWeight:'bold'}} className='fontFamilyOpenSans'>{t('ModalParamsRoomAutoPlayingTitle')}</AlertTitle>
-                        <Typography fontSize='small' className='fontFamilyNunito'>{adminView? t('ModalParamsRoomAutoPlayingText') : t('ModalParamsRoomNotAllowedText')}</Typography>
+                    <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }} icon={<Switch checked={roomParams.isAutoPlayActivated} onChange={handleChangeIsAutoPlayActivated}
+                        disabled={adminView ? false : true}
+                        name="switchIsAutoPlayActivated" />} severity={roomParams.isAutoPlayActivated ? 'success' : 'warning'}>
+                        <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>{t('ModalParamsRoomAutoPlayingTitle')}</AlertTitle>
+                        <Typography fontSize='small' className='fontFamilyNunito'>{adminView ? t('ModalParamsRoomAutoPlayingText') : t('ModalParamsRoomNotAllowedText')}</Typography>
                     </Alert>
 
-                    <Alert sx={{pl:0, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.interactionsAllowed} onChange={handleChangeIsInterractionsAllowed} 
-                            disabled={adminView? false:true}
-                            name="switchInteractionsAllowed" />} severity={roomParams.interactionsAllowed ? 'success' : 'warning'}>
-                        <AlertTitle sx={{fontWeight:'bold'}} className='fontFamilyOpenSans'>{t('ModalParamsRoomInteractionAllowedTitle')}</AlertTitle>
-                        <Typography fontSize='small' className='fontFamilyNunito'>{adminView? t('ModalParamsRoomInteractionAllowedText') : t('ModalParamsRoomNotAllowedText')}</Typography>
-                    </Alert>
-                    
-                    <Alert sx={{pl:0, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.isChatActivated} onChange={handleChangeIsChatActivated} 
-                            disabled={adminView? false:true}
-                            name="switchIsChatActivated" />} severity={roomParams.isChatActivated ? 'success' : 'warning'}>
-                        <AlertTitle sx={{fontWeight:'bold'}} className='fontFamilyOpenSans'>{t('ModalParamsRoomChatAllowedTitle')}</AlertTitle>
-                        <Typography fontSize='small' className='fontFamilyNunito'>{adminView? t('ModalParamsRoomChatAllowedText') : t('ModalParamsRoomNotAllowedText')}</Typography>
+                    <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }} icon={<Switch checked={roomParams.interactionsAllowed} onChange={handleChangeIsInterractionsAllowed}
+                        disabled={adminView ? false : true}
+                        name="switchInteractionsAllowed" />} severity={roomParams.interactionsAllowed ? 'success' : 'warning'}>
+                        <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>{t('ModalParamsRoomInteractionAllowedTitle')}</AlertTitle>
+                        <Typography fontSize='small' className='fontFamilyNunito'>{adminView ? t('ModalParamsRoomInteractionAllowedText') : t('ModalParamsRoomNotAllowedText')}</Typography>
                     </Alert>
 
-                    <Alert sx={{pl:0, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.isPasswordNeeded} onChange={handleChangeIsPasswordNeeded} 
-                            disabled={adminView? false:true}
-                            name="switchInteractionsAllowed" />} severity={roomParams.isPasswordNeeded ? 'success' : 'warning'}>
-                        <AlertTitle sx={{fontWeight:'bold'}} className='fontFamilyOpenSans'>Mot de passe requis</AlertTitle>
+                    <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }} icon={<Switch checked={roomParams.isChatActivated} onChange={handleChangeIsChatActivated}
+                        disabled={adminView ? false : true}
+                        name="switchIsChatActivated" />} severity={roomParams.isChatActivated ? 'success' : 'warning'}>
+                        <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>{t('ModalParamsRoomChatAllowedTitle')}</AlertTitle>
+                        <Typography fontSize='small' className='fontFamilyNunito'>{adminView ? t('ModalParamsRoomChatAllowedText') : t('ModalParamsRoomNotAllowedText')}</Typography>
+                    </Alert>
+
+                    <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }} icon={<Switch checked={roomParams.isPasswordNeeded} onChange={handleChangeIsPasswordNeeded}
+                        disabled={adminView ? false : true}
+                        name="switchInteractionsAllowed" />} severity={roomParams.isPasswordNeeded ? 'success' : 'warning'}>
+                        <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>Mot de passe requis</AlertTitle>
                         {!adminView && <Typography fontSize='small'>{t('ModalParamsRoomNotAllowedText')}</Typography>}
                         {adminView && !roomParams.isPasswordNeeded && <Typography fontSize='small'>Rendre la room accessible par mot de passe</Typography>}
-                        {adminView && roomParams.isPasswordNeeded && 
+                        {adminView && roomParams.isPasswordNeeded &&
                             <TextField
                                 value={password}
-                                type={showPassword ? 'text' : 'password'} 
-                                onChange={(e) => setPassword(e.target.value)} 
-                                sx={{bgcolor:'var(--white)', mt:1}} 
-                                size="small" 
-                                id="outlined-basic" 
-                                label="Mot de passe" 
-                                variant="outlined" 
+                                type={showPassword ? 'text' : 'password'}
+                                onChange={(e) => setPassword(e.target.value)}
+                                sx={{ bgcolor: 'var(--white)', mt: 1 }}
+                                size="small"
+                                id="outlined-basic"
+                                label="Mot de passe"
+                                variant="outlined"
                                 InputProps={{
                                     startAdornment: (
-                                        <InputAdornment sx={{ml:'-10px'}} position="start">
+                                        <InputAdornment sx={{ ml: '-10px' }} position="start">
                                             <IconButton
                                                 aria-label="Afficher / Cacher le mot de passe de la room"
                                                 onClick={(e) => setShowPassword(!showPassword)}
                                                 edge="end"
-                                                >
+                                            >
                                                 {showPassword ? <VisibilityOff /> : <Visibility />}
                                             </IconButton>
                                         </InputAdornment>
@@ -192,7 +192,7 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams , handleDi
                                             {password !== roomParams.password && <IconButton
                                                 onClick={(e) => savePassword()}
                                                 edge="end"
-                                                >
+                                            >
                                                 <SaveIcon />
                                             </IconButton>}
                                         </InputAdornment>
@@ -201,15 +201,15 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams , handleDi
                             />
                         }
                     </Alert>
-                    
-                    <Alert sx={{pl:0, mb:2, alignItems: 'center'}} icon={<Switch checked={roomParams.syncPeopleByDefault} onChange={handleChangeSyncPeopleByDefault} 
-                            disabled={adminView? false:true}
-                            name="switchSyncPeopleByDefault" />} severity={roomParams.syncPeopleByDefault ? 'success' : 'warning'}>
-                        <AlertTitle sx={{fontWeight:'bold'}}>Synchronisés par défaut</AlertTitle>
-                        <Typography fontSize='small'>{adminView? 'Synchronise automatiquement les utilisateurs a l\'hôte de la room' : t('ModalParamsRoomNotAllowedText')}</Typography>
+
+                    <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }} icon={<Switch checked={roomParams.syncPeopleByDefault} onChange={handleChangeSyncPeopleByDefault}
+                        disabled={adminView ? false : true}
+                        name="switchSyncPeopleByDefault" />} severity={roomParams.syncPeopleByDefault ? 'success' : 'warning'}>
+                        <AlertTitle sx={{ fontWeight: 'bold' }}>Synchronisés par défaut</AlertTitle>
+                        <Typography fontSize='small'>{adminView ? 'Synchronise automatiquement les utilisateurs a l\'hôte de la room' : t('ModalParamsRoomNotAllowedText')}</Typography>
                     </Alert>
 
-                    
+
                 </FormGroup>
             </DialogContent>
         </Dialog>

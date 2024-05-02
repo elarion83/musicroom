@@ -43,7 +43,7 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, open
                 <ListItem sx={{pt:0, mt:0}}>
                     <DrawerPlayPauseButton 
                         isAdminView={isAdminView}
-                        isPlayable={(isFromSpotify(data.source) && !isSpotifyAvailable) ? false : true}
+                        isPlayable={(isFromSpotify(data) && !isSpotifyAvailable) ? false : true}
                         isPlaying={roomIsActuallyPlaying}
                         changeIsPlaying={changeIsPlaying}
                         mediaDisplayingData={roomPlaylist[roomIdActuallyDisplaying]}
@@ -72,7 +72,7 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, open
                         backgroundColor: 'var(--grey-lighter)',
                     }}} variant="determinate" value={roomPlayedActuallyPlayed} />}
                 </ListItem>
-                {isFromSpotify(data.source) && !isSpotifyAvailable && 
+                {isFromSpotify(data) && !isSpotifyAvailable && 
                     <><Divider />
                     <ListItem sx={{pt:0, mt:0}}>
                         <ListItemText primary="Lecture Impossible" secondary="Spotify déconnecté de la room" />

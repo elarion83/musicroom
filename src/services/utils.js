@@ -53,8 +53,8 @@ export function cleanMediaTitle(mediaTitle) {
     return mediaTitle;
 }
 
-export function getDisplayTitle(media) {
-    return media.title ? media.title : media.url.substring(0,25)+'..'
+export function getDisplayTitle(media, length = 25) {
+    return media.title ? media.title : media.url.substring(0,length)+'..'
 }
 
 export function formatNumberToMinAndSec(number) {
@@ -67,8 +67,12 @@ export function isFromSource(itemSource, sourceCheck) {
     return itemSource === sourceCheck;
 }
 
-export function isFromSpotify(source) {
-    return source === 'spotify';
+export function isFromSpotify(media) {
+    return media.source === 'spotify';
+}
+
+export function isFromDeezer(media) {
+    return media.source === 'deezer';
 }
 
 export function isNotFromSpotify(source) {
@@ -109,4 +113,23 @@ export function isLayoutInteractive(actualLayout) {
 
 export function isLayoutCompact(actualLayout) {
     return actualLayout === 'compact';
+}
+
+export async function createInteractionAnimation(type, layoutDisplay = 'unknown') {
+    var n = 0;
+    while(n < 1) {
+        const interactionDisplay = document.createElement("img");
+        interactionDisplay.src = "img/"+type+".png";
+        interactionDisplay.classList.add("interactionImageContainer");
+        interactionDisplay.style.left = Math.random() * 100 + "vw";
+        if(layoutDisplay === 'interactive') {
+            interactionDisplay.style.zIndex = 2100;
+        }
+        interactionDisplay.style.animationDuration = Math.random() * 5 + 3 + "s ";
+        document.body.appendChild(interactionDisplay);
+        setTimeout(() => {
+            interactionDisplay.remove();
+        }, 2000);
+        n++
+    }
 }

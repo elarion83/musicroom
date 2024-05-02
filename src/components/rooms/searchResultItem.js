@@ -5,7 +5,7 @@ const SearchResultItem = ({ image, title, source, platformId, album = null, adde
     return (
         <Grid className="searchResultItem" item xs={6} sm={4} md={3} xl={2}>
             <Card sx={{ maxWidth: 345, cursor:'pointer' }} title={title}
-            onClick={(e) => addItemToPlaylist({title:title, source:source, platformId:platformId, url:url, visuel:image, addedBy: addedBy, vote: {'up':0,'down':0}, hashId: uid})}>
+            onClick={(e) => addItemToPlaylist({title:title,deleted:false, source:source, platformId:platformId, url:url, visuel:image, addedBy: addedBy, vote: {'up':0,'down':0}, hashId: uid})}>
                 <CardMedia
                     sx={{ height: 140 }}
                     image={image}

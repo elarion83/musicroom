@@ -77,7 +77,7 @@ const resources = {
         
         "ModalShareRoomTitle": "Share the room",
         "ModalShareRoomCopyUrl": "Copy url",
-        "ModalShareRoomUrlCopiedText": "Copied in clipboard",
+        "ModalShareRoomUrlCopiedText": "URL Copied !",
         
         "ModalParamsRoomTitle": "Room settings",
         "ModalParamsRoomConnectToSpotifyText":"Connect to Spotify Premium",
@@ -191,7 +191,7 @@ const resources = {
         
         "ModalShareRoomTitle": "Partager la room",
         "ModalShareRoomCopyUrl": "Copier l'url",
-        "ModalShareRoomUrlCopiedText": "Copié dans le presse papier",
+        "ModalShareRoomUrlCopiedText": "URL copiée !",
 
         "ModalParamsRoomTitle": "Paramètres de la room ",
         "ModalParamsRoomConnectToSpotifyText":"Connecter a Spotify Premium",

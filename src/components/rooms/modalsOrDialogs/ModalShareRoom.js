@@ -5,19 +5,19 @@ import CopyToClipboard from "react-copy-to-clipboard";
 
 import {
     EmailIcon,
-  EmailShareButton,
-  FacebookIcon,
-  FacebookShareButton,
-  InstapaperIcon,
-  InstapaperShareButton,
-  RedditIcon,
-  RedditShareButton,
-  TelegramIcon,
-  TelegramShareButton,
-  TwitterIcon,
-  TwitterShareButton,
-  WhatsappIcon,
-  WhatsappShareButton,
+    EmailShareButton,
+    FacebookIcon,
+    FacebookShareButton,
+    InstapaperIcon,
+    InstapaperShareButton,
+    RedditIcon,
+    RedditShareButton,
+    TelegramIcon,
+    TelegramShareButton,
+    TwitterIcon,
+    TwitterShareButton,
+    WhatsappIcon,
+    WhatsappShareButton,
 } from "react-share";
 
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -31,7 +31,7 @@ import { SlideUp } from '../../../services/materialSlideTransition/Slide';
 const ModalShareRoom = ({ t, roomUrl, open, changeOpen }) => {
 
     const [copiedToClipboard, setCopiedToClipboard] = useState(false);
-    
+
     const delay = ms => new Promise(res => setTimeout(res, ms));
     async function setCopiedToClipboardToTrueAndFalse() {
         setCopiedToClipboard(true);
@@ -39,15 +39,15 @@ const ModalShareRoom = ({ t, roomUrl, open, changeOpen }) => {
         setCopiedToClipboard(false);
     }
 
-    return(
-        <Dialog open={open} TransitionComponent={SlideUp}  onClose={(e) => changeOpen(false)} className='modal_share_room'>
-            <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
-                <ShareIcon fontSize="small" sx={{mr:1}} /> {t('ModalShareRoomTitle')}
-            </DialogTitle>  
-            <DialogContent dividers sx={{pt:2}}>
+    return (
+        <Dialog open={open} TransitionComponent={SlideUp} onClose={(e) => changeOpen(false)} className='modal_share_room'>
+            <DialogTitle className='flexRowCenterH' sx={{ m: 0, p: 1 }}>
+                <ShareIcon fontSize="small" sx={{ mr: 1 }} /> {t('ModalShareRoomTitle')}
+            </DialogTitle>
+            <DialogContent dividers sx={{ pt: 2 }}>
                 <EmailShareButton
                     url={roomUrl}
-                    subject='ee'
+                    subject='Join my room on play-it !'
                     body="body"
                     className="Demo__some-network__share-button"
                 >
@@ -56,7 +56,7 @@ const ModalShareRoom = ({ t, roomUrl, open, changeOpen }) => {
 
                 <RedditShareButton
                     url={roomUrl}
-                    title='ee'
+                    title='Join my room on play-it !'
                     windowWidth={660}
                     windowHeight={460}
                     className="Demo__some-network__share-button"
@@ -66,7 +66,7 @@ const ModalShareRoom = ({ t, roomUrl, open, changeOpen }) => {
 
                 <WhatsappShareButton
                     url={roomUrl}
-                    title='ee'
+                    title='Join my room on play-it !'
                     separator=":: "
                     className="Demo__some-network__share-button"
                 >
@@ -75,7 +75,7 @@ const ModalShareRoom = ({ t, roomUrl, open, changeOpen }) => {
 
                 <TelegramShareButton
                     url={roomUrl}
-                    title='ee'
+                    title='Join my room on play-it !'
                     className="Demo__some-network__share-button"
                 >
                     <TelegramIcon size={45} round />
@@ -83,7 +83,7 @@ const ModalShareRoom = ({ t, roomUrl, open, changeOpen }) => {
 
                 <TwitterShareButton
                     url={roomUrl}
-                    title='ee'
+                    title='Join my room on play-it !'
                     className="Demo__some-network__share-button"
                 >
                     <TwitterIcon size={45} round />
@@ -91,7 +91,7 @@ const ModalShareRoom = ({ t, roomUrl, open, changeOpen }) => {
 
                 <FacebookShareButton
                     url={roomUrl}
-                    quote='ee'
+                    quote='Join my room on play-it !'
                     className="Demo__some-network__share-button"
                 >
                     <FacebookIcon size={45} round />
@@ -99,14 +99,14 @@ const ModalShareRoom = ({ t, roomUrl, open, changeOpen }) => {
 
                 <InstapaperShareButton
                     url={roomUrl}
-                    title='ee'
+                    title='Join my room on play-it !'
                     className="Demo__some-network__share-button"
                 >
                     <InstapaperIcon size={45} round />
                 </InstapaperShareButton>
-                <Grid sx={{mt:2}}>
-                    <CopyToClipboard onCopy={(e) => setCopiedToClipboardToTrueAndFalse()} text={( roomUrl)}>
-                            <Button variant="contained"><ContentCopyIcon sx={{ mr: 1.5 }} /> {t('ModalShareRoomCopyUrl')} </Button> 
+                <Grid sx={{ mt: 2 }}>
+                    <CopyToClipboard onCopy={(e) => setCopiedToClipboardToTrueAndFalse()} text={(roomUrl)}>
+                        <Button variant="contained"><ContentCopyIcon sx={{ mr: 1.5 }} /> {t('ModalShareRoomCopyUrl')} </Button>
                     </CopyToClipboard>
                     {copiedToClipboard && <Alert severity="success" sx={{ mt: 1.5 }} > {t('ModalShareRoomUrlCopiedText')} </Alert>}
                 </Grid>
