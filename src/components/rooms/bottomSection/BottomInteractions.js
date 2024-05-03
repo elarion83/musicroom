@@ -14,6 +14,7 @@ import { useState } from 'react';
 
 import {returnAnimateReplace } from '../../../services/animateReplace';
 
+import { waitingTextReaction } from '../../../services/utils';
 import {CreateGoogleAnalyticsEvent} from '../../../services/googleAnalytics';
 
 import { withTranslation } from 'react-i18next';
@@ -31,39 +32,57 @@ const BottomInteractions = ({ t, layoutDisplay, setLayoutdisplay, paramDrawerIsO
         }, 500);
     }
 
+    const reactsArray = {
+        laugh: {
+            name:'laugh',
+            color:'orange',
+            animation:'animate__animated animate__fadeInUp animate__delay-1s animate__faster',
+            icon:<EmojiEmotionsIcon fontSize="small" sx={{color:'var(--white)'}} />
+        },
+        heart: {
+            name:'heart',
+            color:'var(--red-2) !important',
+            animation:'animate__animated animate__fadeInUp animate__delay-1s',
+            icon:<FavoriteIcon fontSize="small" sx={{color:'var(--white)'}} />
+        },
+        party: {
+            name:'party',
+            color:'#ff9c22 !important',
+            animation:'animate__animated animate__fadeInUp animate__delay-1s animate__fast',
+            icon:<CelebrationIcon fontSize="small" sx={{color:'var(--white)'}} />
+        }
+    }
+
+    const notifsTextArray = {
+        userArrived:'//AUTHOR// a rejoins la room !',
+        userLeaved: '//AUTHOR// a quitté la room !',
+        userSync:'//AUTHOR// s\'est synchronisé!',
+        userUnSync: '//AUTHOR// s\'est désynchronisé!',
+        AccNotPremium: "Le compte utilisé n'est pas premium."
+    };  
+
+    const lastNotifType = roomNotifs.length > 0 ? roomNotifs[roomNotifs.length - 1].type : 'none';
+    
     return(
         <Grid className={`room_bottom_interactions ${isChatExpanded ? "chatExpanded" : ""}`} >
             {(!isChatExpanded && layoutDisplay !== 'interactive') && <div>
-                <Tooltip 
-                    ref={el => animatedElementsRef.push(el)} 
-                    className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-1s animate__faster'}
-                    title={!userCanMakeInteraction ? t('GeneralEvery')+' '+ (roomParams.interactionFrequence/1000) +" "+t('GeneralSeconds'): ''}>  
-                    <Fab size="small" variant="extended" className='room_small_button_interactions' 
-                        sx={{ ml:1, boxShadow:20,mr:1, ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} 
-                        onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('laugh') : ''}>
-                        <EmojiEmotionsIcon fontSize="small" sx={{color:'var(--white)'}} />
-                        {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
-                    </Fab>
-                </Tooltip>
-                <Tooltip ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-1s animate__fast'}
-                    title={!userCanMakeInteraction ? t('GeneralEvery')+' '+ (roomParams.interactionFrequence/1000) +" "+t('GeneralSeconds'): ''}>  
-                    <Fab size="small" variant="extended" className='room_small_button_interactions' 
-                        sx={{mr:1, ...(userCanMakeInteraction && {bgcolor: '#ff9c22 !important'}) }} 
-                        onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
-                        <CelebrationIcon fontSize="small" sx={{color:'var(--white)'}} />
-                        {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
-                    </Fab>
-                </Tooltip>
-                <Tooltip ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-1s '}
-                    title={!userCanMakeInteraction ? t('GeneralEvery')+' '+ (roomParams.interactionFrequence/1000) +" "+t('GeneralSeconds'): ''}>  
-                    <Fab size="small" variant="extended" className='room_small_button_interactions' 
-                        sx={{ mr:0, ...(userCanMakeInteraction && {bgcolor: 'var(--red-2) !important'}) }} 
-                        onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('heart') : ''}>
-                        <FavoriteIcon fontSize="small" sx={{color:'var(--white)'}} />
-                        {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
-                    </Fab>
-                </Tooltip>
-
+                {Object.entries(reactsArray).map(([key, react]) => {
+                    return(
+                        <Tooltip 
+                            key={key}
+                            ref={el => animatedElementsRef.push(el)} 
+                            className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : react.animation}
+                            title={!userCanMakeInteraction ? waitingTextReaction(roomParams.interactionFrequence): ''}>  
+                            <Fab size="small" variant="extended" className='room_small_button_interactions' 
+                                sx={{ ml:1, boxShadow:20,mr:1, ...(userCanMakeInteraction && {bgcolor: react.color}) }} 
+                                onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction(key) : ''}>
+                                {react.icon}
+                                {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
+                            </Fab>
+                        </Tooltip>
+                    );
+                })}
+               
                 <Fab ref={el => animatedElementsRef.push(el)}
                     sx={{width:'56px',height:'56px', mt:'-4em'}}
                     className='main_bg_color animate__animated animate__fadeInUp'
@@ -77,6 +96,7 @@ const BottomInteractions = ({ t, layoutDisplay, setLayoutdisplay, paramDrawerIsO
                         <Icon icon="tabler:messages" width='20'/>
                     </Fab>
                 </Tooltip>
+
                 <Tooltip ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUp animate__delay-1s' title={t('RoomLeftMenuRoomParams')}>  
                     <Badge invisible={roomParams.spotify.IsLinked} variant="dot" sx={{'& .MuiBadge-badge': {
                             right:'10px',
@@ -105,52 +125,15 @@ const BottomInteractions = ({ t, layoutDisplay, setLayoutdisplay, paramDrawerIsO
                 <Chat currentUser={currentUser} layoutDisplay={layoutDisplay} setLayoutdisplay={setLayoutdisplay} roomId={roomId} createNewRoomInteraction={createNewRoomInteraction} userCanMakeInteraction={userCanMakeInteraction} roomParams={roomParams} className='chatBox' hideTchat={e => setIsChatExpanded(false)} />
             }
             
-            {checkNotificationsLength && roomNotifs[roomNotifs.length - 1].type === 'userArrived' && 
-                (roomNotifs[roomNotifs.length - 1].createdBy !== currentUser.displayName) && 
+            {checkNotificationsLength && (roomNotifs[roomNotifs.length - 1].createdBy !== currentUser.displayName) && notifsTextArray[roomNotifs[roomNotifs.length - 1].type] &&
                 <Snackbar
-                open={((Date.now() - roomNotifs[roomNotifs.length - 1].timestamp) < 2000)}
-                key={'notif'+roomNotifs[roomNotifs.length - 1].timestamp}
-                autoHideDuration={2000}
-                sx={{ borderRadius:'2px'}}
-                message={roomNotifs[roomNotifs.length - 1].createdBy+" a rejoins la room !"}
-            />}
-            {checkNotificationsLength && roomNotifs[roomNotifs.length - 1].type === 'userLeaved' && 
-                (roomNotifs[roomNotifs.length - 1].createdBy !== currentUser.displayName) && 
-                <Snackbar
-                open={((Date.now() - roomNotifs[roomNotifs.length - 1].timestamp) < 2000)}
-                key={'notif'+roomNotifs[roomNotifs.length - 1].timestamp}
-                autoHideDuration={2000}
-                sx={{ borderRadius:'2px'}}
-                message={roomNotifs[roomNotifs.length - 1].createdBy+" a quitté la room !"}
-            />}
-            {checkNotificationsLength && roomNotifs[roomNotifs.length - 1].type === 'userSync' && 
-                (roomNotifs[roomNotifs.length - 1].createdBy !== currentUser.displayName) && 
-                <Snackbar
-                open={((Date.now() - roomNotifs[roomNotifs.length - 1].timestamp) < 2000)}
-                key={'notif'+roomNotifs[roomNotifs.length - 1].timestamp}
-                autoHideDuration={2000}
-                sx={{ borderRadius:'2px'}}
-                message={roomNotifs[roomNotifs.length - 1].createdBy+" s'est synchronisé!"}
-            />}
-            {checkNotificationsLength && roomNotifs[roomNotifs.length - 1].type === 'userUnSync' && 
-                (roomNotifs[roomNotifs.length - 1].createdBy !== currentUser.displayName) && 
-                <Snackbar
-                open={((Date.now() - roomNotifs[roomNotifs.length - 1].timestamp) < 2000)}
-                key={'notif'+roomNotifs[roomNotifs.length - 1].timestamp}
-                autoHideDuration={2000}
-                sx={{ borderRadius:'2px'}}
-                message={roomNotifs[roomNotifs.length - 1].createdBy+" s'est désynchronisé !"}
-            />}
-            {checkNotificationsLength && roomNotifs[roomNotifs.length - 1].type === 'AccNotPremium' && 
-                (roomNotifs[roomNotifs.length - 1].createdBy !== currentUser.displayName) && 
-                <Snackbar
-                open={((Date.now() - roomNotifs[roomNotifs.length - 1].timestamp) < 2000)}
-                key={'notif'+roomNotifs[roomNotifs.length - 1].timestamp}
-                autoHideDuration={2000}
-                sx={{ borderRadius:'2px'}}
-                message="Le compte utilisé n'est pas premium."
-            />}
-
+                    open={((Date.now() - roomNotifs[roomNotifs.length - 1].timestamp) < 2000)}
+                    key={'notif'+roomNotifs[roomNotifs.length - 1].timestamp}
+                    autoHideDuration={2000}
+                    sx={{ borderRadius:'2px'}}
+                    message={ notifsTextArray[lastNotifType].replace('//AUTHOR//', roomNotifs[roomNotifs.length - 1].createdBy)}
+                />
+            }
             <Snackbar
                 open={((Date.now() - roomParams.spotify.TokenTimestamp) < 8000) && roomParams.spotify.AlreadyHaveBeenLinked}
                 autoHideDuration={8000}

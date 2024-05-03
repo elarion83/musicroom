@@ -37,160 +37,163 @@ const RoomTopBar = ({
                 setGuestSynchroOrNot,
                 volume,
                 setVolume,
-                paramDrawerIsOpen, handleOpenDrawerParam, roomId, roomAdmin, isLinkedToSpotify,isLinkedToDeezer, handleOpenRoomParamModal,handleOpenShareModal,handleOpenLeaveRoomModal, }) => {
+                paramDrawerIsOpen, handleOpenDrawerParam, isLinkedToSpotify,isLinkedToDeezer, handleOpenRoomParamModal,handleOpenShareModal,handleOpenLeaveRoomModal, }) => {
 
   return (
     <AppBar sx={{position: (isShowSticky) ? "fixed": 'initial', top:0, bgcolor: 'var(--grey-dark)',borderBottom: '2px solid var(--border-color)'}} >
         
         <Toolbar className={isShowSticky ? "stickyRoomTopBar": ''} xs={12} sx={{ minHeight: '45px !important', fontFamily: 'Monospace', paddingLeft:'10px !important' }}>
-                <Drawer
-            id="menu-appbar"
-            anchor='left'
-            onClose={(e) => handleOpenDrawerParam(false)}
-            open={paramDrawerIsOpen}
-        >
-            <List sx={{pt:0}}>  
-                <ListItem sx={{bgcolor:'var(--white)'}} key='roomDrawClose' disablePadding>
-                    <ListItemButton onClick={(e) => handleOpenDrawerParam(false)} sx={{display:'flex',justifyContent:'flex-end'}}>
-                        <ChevronLeftIcon />
-                        <Typography fontSize="small" sx={{pl:1, textTransform:'uppercase'}}>Room <b style={{textTransform:'uppercase'}}>{ roomId } </b> </Typography>
-                       
-                    </ListItemButton>
-                </ListItem> 
-                <Divider />
-                <ListItem key='roomDrawHostedBy' disablePadding>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <InfoIcon />
-                        </ListItemIcon>
-                        <Typography>{isAdminView ? t('RoomLeftMenuHost') : t('RoomLeftMenuHostedBy')} {!isAdminView ? <b>{roomAdmin}</b> : '' }</Typography>
-                    </ListItemButton>
-                </ListItem>
-                
-                <ListItem key='roomDrawSpotifyStatus' disablePadding>
-                    <ListItemButton onClick={e => handleOpenRoomParamModal(true)}>
-                        <ListItemIcon>
-                            <Badge invisible={isLinkedToSpotify} variant="dot" 
-                                sx={{'& .MuiBadge-badge': {
-                                        right:'0px',
-                                        bgcolor:'var(--red-2)'
-                                    }, ml:'-2px'}} >
-                                    <Icon icon="mdi:spotify" width="27"  />
-                            </Badge>
-                        </ListItemIcon>
-                        <Typography>Spotify {isLinkedToSpotify ? t('GeneralLinked') : t('GeneralNotLinked')}</Typography>
-                    </ListItemButton>
-                </ListItem>
+            <Drawer
+                id="menu-appbar"
+                anchor='left'
+                onClose={(e) => handleOpenDrawerParam(false)}
+                open={paramDrawerIsOpen}
+            >
+                <List sx={{pt:0}}>  
+                    <ListItem sx={{bgcolor:'var(--white)'}} key='roomDrawClose' disablePadding>
+                        <ListItemButton onClick={(e) => handleOpenDrawerParam(false)} sx={{display:'flex',justifyContent:'flex-end'}}>
+                            <ChevronLeftIcon />
+                            <Typography fontSize="small" sx={{pl:1, textTransform:'uppercase'}}>Room <b style={{textTransform:'uppercase'}}>{ room.id } </b> </Typography>
+                        
+                        </ListItemButton>
+                    </ListItem> 
+                    <Divider />
+                    <ListItem key='roomDrawHostedBy' disablePadding>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                <InfoIcon />
+                            </ListItemIcon>
+                            <Typography>{isAdminView ? t('RoomLeftMenuHost') : t('RoomLeftMenuHostedBy')} {!isAdminView ? <b>{room.admin}</b> : '' }</Typography>
+                        </ListItemButton>
+                    </ListItem>
+                    
+                    <ListItem key='roomDrawSpotifyStatus' disablePadding>
+                        <ListItemButton onClick={e => handleOpenRoomParamModal(true)}>
+                            <ListItemIcon>
+                                <Badge invisible={isLinkedToSpotify} variant="dot" 
+                                    sx={{'& .MuiBadge-badge': {
+                                            right:'0px',
+                                            bgcolor:'var(--red-2)'
+                                        }, ml:'-2px'}} >
+                                        <Icon icon="mdi:spotify" width="27"  />
+                                </Badge>
+                            </ListItemIcon>
+                            <Typography>Spotify {isLinkedToSpotify ? t('GeneralLinked') : t('GeneralNotLinked')}</Typography>
+                        </ListItemButton>
+                    </ListItem>
 
-                <ListItem key='roomDrawDeezerStatus' disablePadding>
-                    <ListItemButton onClick={e => handleOpenRoomParamModal(true)}>
-                        <ListItemIcon>
-                            <Badge invisible={isLinkedToDeezer} variant="dot" 
-                                sx={{'& .MuiBadge-badge': {
-                                        right:'0px',
-                                        bgcolor:'var(--red-2)'
-                                    }, ml:'-2px'}} >
-                                    <Icon icon="jam:deezer" width="27"  />
-                            </Badge>
-                        </ListItemIcon>
-                        <Typography>Deezer {isLinkedToDeezer ? t('GeneralLinked') : t('GeneralNotLinked')}</Typography>
-                    </ListItemButton>
-                </ListItem>
+                    <ListItem key='roomDrawDeezerStatus' disablePadding>
+                        <ListItemButton onClick={e => handleOpenRoomParamModal(true)}>
+                            <ListItemIcon>
+                                <Badge invisible={isLinkedToDeezer} variant="dot" 
+                                    sx={{'& .MuiBadge-badge': {
+                                            right:'0px',
+                                            bgcolor:'var(--red-2)'
+                                        }, ml:'-2px'}} >
+                                        <Icon icon="jam:deezer" width="27"  />
+                                </Badge>
+                            </ListItemIcon>
+                            <Typography>Deezer {isLinkedToDeezer ? t('GeneralLinked') : t('GeneralNotLinked')}</Typography>
+                        </ListItemButton>
+                    </ListItem>
 
-                <Divider sx={{mb:1, mt:1}}/>
-                
-                <ListItem key='roomDrawRoomParams' disablePadding>
-                    <ListItemButton onClick={e => handleOpenRoomParamModal(true)}>
-                        <ListItemIcon>
-                            <TuneIcon />
-                        </ListItemIcon>
-                        <Typography>{t('RoomLeftMenuRoomParams')}</Typography>
-                    </ListItemButton>
-                </ListItem>
-                <ListItem key='roomDrawRoomShare' disablePadding>
-                    <ListItemButton onClick={e => handleOpenShareModal(true)}>
-                        <ListItemIcon>
-                            <ShareIcon />
-                        </ListItemIcon>
-                        <Typography>{t('RoomLeftMenuRoomShare')}</Typography>
-                    </ListItemButton>
-                </ListItem>
-                
-                 {!isAdminView && <ListItem key='roomDrawSync' disablePadding onClick={(e) => setGuestSynchroOrNot(!guestSynchroOrNot)}>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <Switch
-                                size='small'
-                                sx={{ml:-1}}
-                                checked={guestSynchroOrNot}
-                                onChange={(e) => setGuestSynchroOrNot(!guestSynchroOrNot)}
-                                inputProps={{ 'aria-label': 'controlled' }}
-                            />
-                        </ListItemIcon>
-                        <Typography>{guestSynchroOrNot ? t('RoomLeftMenuSync') : t('RoomLeftMenuNotSync')}</Typography>
-                    </ListItemButton>
-                </ListItem>}
+                    <Divider sx={{mb:1, mt:1}}/>
+                    
+                    <ListItem key='roomDrawRoomParams' disablePadding>
+                        <ListItemButton onClick={e => handleOpenRoomParamModal(true)}>
+                            <ListItemIcon>
+                                <TuneIcon />
+                            </ListItemIcon>
+                            <Typography>{t('RoomLeftMenuRoomParams')}</Typography>
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem key='roomDrawRoomShare' disablePadding>
+                        <ListItemButton onClick={e => handleOpenShareModal(true)}>
+                            <ListItemIcon>
+                                <ShareIcon />
+                            </ListItemIcon>
+                            <Typography>{t('RoomLeftMenuRoomShare')}</Typography>
+                        </ListItemButton>
+                    </ListItem>
+                    
+                    {!isAdminView && <ListItem key='roomDrawSync' disablePadding onClick={(e) => setGuestSynchroOrNot(!guestSynchroOrNot)}>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                <Switch
+                                    size='small'
+                                    sx={{ml:-1}}
+                                    checked={guestSynchroOrNot}
+                                    onChange={(e) => setGuestSynchroOrNot(!guestSynchroOrNot)}
+                                    inputProps={{ 'aria-label': 'controlled' }}
+                                />
+                            </ListItemIcon>
+                            <Typography>{guestSynchroOrNot ? t('RoomLeftMenuSync') : t('RoomLeftMenuNotSync')}</Typography>
+                        </ListItemButton>
+                    </ListItem>}
 
-                <Divider  sx={{mt:1, mb:1}}/>
-                <ListItem key='roomDrawRoomLeave' disablePadding>
-                    <ListItemButton onClick={e => handleOpenLeaveRoomModal(true)}>
-                        <ListItemIcon>
-                            <ExitToAppIcon />
-                        </ListItemIcon>
-                        <Typography>{t('RoomLeftMenuRoomLeave')}</Typography>
-                    </ListItemButton>
-                </ListItem>
-            </List>
-        </Drawer>
+                    <Divider  sx={{mt:1, mb:1}}/>
+                    <ListItem key='roomDrawRoomLeave' disablePadding>
+                        <ListItemButton onClick={e => handleOpenLeaveRoomModal(true)}>
+                            <ListItemIcon>
+                                <ExitToAppIcon />
+                            </ListItemIcon>
+                            <Typography>{t('RoomLeftMenuRoomLeave')}</Typography>
+                        </ListItemButton>
+                    </ListItem>
+                </List>
+            </Drawer>
             <Tooltip  className='animate__animated animate__fadeInLeft animate__delay-1s animate__fast' title={t('RoomLeftMenuRoomParams')} sx={{ bgColor:'#30363c'}}>
-                    <Badge invisible={isLinkedToSpotify && isLinkedToDeezer} variant="dot" sx={{'& .MuiBadge-badge': {
-                        right:'10px',
-                        bgcolor:'var(--red-2)'
-                    }}} >
-                        <TuneIcon 
-                        onClick={e => handleOpenDrawerParam(!paramDrawerIsOpen)} 
-                        sx={{mr:1, cursor:'pointer', color:'var(--white)'}}/>
-                    </Badge>
+                <Badge invisible={isLinkedToSpotify && isLinkedToDeezer} variant="dot" sx={{'& .MuiBadge-badge': {
+                    right:'10px',
+                    bgcolor:'var(--red-2)'
+                }}} >
+                    <TuneIcon 
+                    onClick={e => handleOpenDrawerParam(!paramDrawerIsOpen)} 
+                    sx={{mr:1, cursor:'pointer', color:'var(--white)'}}/>
+                </Badge>
             </Tooltip>
                 
             <Typography  className='animate__animated animate__fadeInLeft animate__fast' component="div" sx={{ flexGrow: 1 , textTransform:'uppercase', fontSize:'12px',}}>
-                Room <b style={{textTransform:'uppercase'}}><span>{ roomId }</span> </b> 
+                Room <b style={{textTransform:'uppercase'}}><span>{ room.id }</span> </b> 
             </Typography>
             
             {isShowSticky &&
                 <Grid className="animate__animated animate__fadeInDown stickyButtons"> 
-                    {isAdminView && <IconButton onClick={e => ((room.playing > 0) && isSpotifyAndIsNotPlayableBySpotify(room.playing-1, room.roomParams.isLinkedToSpotify)) ? handleChangeActuallyPlaying(room.playing - 1) : ''}>
-                        <SkipPrevious fontSize="large" sx={{color:((room.playing > 0) && isSpotifyAndIsNotPlayableBySpotify(room.playing-1, room.roomParams.isLinkedToSpotify)) ? '#f0f1f0': '#303134'}} />
-                    </IconButton>}
+                    {isAdminView && 
+                        <>
+                            <IconButton onClick={e => ((room.playing > 0) && isSpotifyAndIsNotPlayableBySpotify(room.playing-1, room.roomParams.isLinkedToSpotify)) ? handleChangeActuallyPlaying(room.playing - 1) : ''}>
+                                <SkipPrevious fontSize="large" sx={{color:((room.playing > 0) && isSpotifyAndIsNotPlayableBySpotify(room.playing-1, room.roomParams.isLinkedToSpotify)) ? '#f0f1f0': '#303134'}} />
+                            </IconButton>
 
-                    {isAdminView && <IconButton variant="contained" onClick={e => handlePlay(!roomIsPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
-                        { room.actuallyPlaying && <PauseCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
-                        { !room.actuallyPlaying && <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
-                    </IconButton>}
-                    
-                    {isAdminView && <IconButton onClick={e => (room.playlistUrls.length -1) !== room.playing ? handleChangeActuallyPlaying(room.playing + 1) : ''}>
-                        <SkipNextIcon fontSize="large" sx={{color: (room.playlistUrls.length -1) !== room.playing ? '#f0f1f0' : '#303134'}} />
-                    </IconButton>}
+                            <IconButton variant="contained" onClick={e => handlePlay(!roomIsPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
+                                { room.actuallyPlaying && <PauseCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
+                                { !room.actuallyPlaying && <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
+                            </IconButton>
 
-                    {!isAdminView && !guestSynchroOrNot && <IconButton onClick={e => ((roomIdPlayed > 0) && isSpotifyAndIsNotPlayableBySpotify(roomIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? setRoomIdPlayed(roomIdPlayed - 1) : ''}>
-                        <SkipPrevious fontSize="large" sx={{color:((roomIdPlayed > 0) && isSpotifyAndIsNotPlayableBySpotify(roomIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? '#f0f1f0': '#303134'}} />
-                    </IconButton>}
+                            <IconButton onClick={e => (room.playlistUrls.length -1) !== room.playing ? handleChangeActuallyPlaying(room.playing + 1) : ''}>
+                                <SkipNextIcon fontSize="large" sx={{color: (room.playlistUrls.length -1) !== room.playing ? '#f0f1f0' : '#303134'}} />
+                            </IconButton>
+                        </>
+                    }
 
-                    {!isAdminView && !guestSynchroOrNot &&<IconButton variant="contained" onClick={e => setRoomIsPlaying(!roomIsPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
-                        { roomIsPlaying && <PauseCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
-                        { !roomIsPlaying && <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
-                    </IconButton>}
-
-                    {!isAdminView && !guestSynchroOrNot && <IconButton onClick={e => (room.playlistUrls.length -1) !== roomIdPlayed ? setRoomIdPlayed(roomIdPlayed + 1) : ''}>
-                        <SkipNextIcon fontSize="large" sx={{color: (room.playlistUrls.length -1) !== roomIdPlayed ? '#f0f1f0' : '#303134'}} />
-                    </IconButton>}
-                    
+                    {!isAdminView && !guestSynchroOrNot && 
+                        <>
+                            <IconButton onClick={e => ((roomIdPlayed > 0) && isSpotifyAndIsNotPlayableBySpotify(roomIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? setRoomIdPlayed(roomIdPlayed - 1) : ''}>
+                                <SkipPrevious fontSize="large" sx={{color:((roomIdPlayed > 0) && isSpotifyAndIsNotPlayableBySpotify(roomIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? '#f0f1f0': '#303134'}} />
+                            </IconButton>
+                            <IconButton variant="contained" onClick={e => setRoomIsPlaying(!roomIsPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
+                                { roomIsPlaying && <PauseCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
+                                { !roomIsPlaying && <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
+                            </IconButton>
+                            <IconButton onClick={e => (room.playlistUrls.length -1) !== roomIdPlayed ? setRoomIdPlayed(roomIdPlayed + 1) : ''}>
+                                <SkipNextIcon fontSize="large" sx={{color: (room.playlistUrls.length -1) !== roomIdPlayed ? '#f0f1f0' : '#303134'}} />
+                            </IconButton>
+                        </>
+                    }
                     <VolumeButton volume={volume} setVolume={setVolume}/>
-
-                </Grid>}
+                </Grid>
+            }
         </Toolbar>
-        
-       
     </AppBar>
   )
 };

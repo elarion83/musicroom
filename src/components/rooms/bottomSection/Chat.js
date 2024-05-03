@@ -12,8 +12,9 @@ import { LoadingButton } from "@mui/lab";
 import { db } from '../../../services/firebase';
 
 import { returnAnimateReplace } from '../../../services/animateReplace';
-
+import { waitingTextReaction, waitingTextChat } from '../../../services/utils';
 import { withTranslation } from 'react-i18next';
+
 
 const Chat = ({t, layoutDisplay, setLayoutdisplay, roomParams, currentUser, roomId, userCanMakeInteraction,createNewRoomInteraction, hideTchat}) => {
 
@@ -49,7 +50,7 @@ const Chat = ({t, layoutDisplay, setLayoutdisplay, roomParams, currentUser, room
     async function sendMessage() {
         if(messageToSend.length > 0) {
             setIsSendingMessage(true);
-            setCantSendMessageReason(t('GeneralWait')+' '+sendMessageTimeToWait+' '+t('GeneralSeconds'));
+            setCantSendMessageReason(waitingTextChat(sendMessageTimeToWait));
             db.collection(process.env.REACT_APP_MESSAGE_COLLECTION).add({
                 author: currentUser.displayName,
                 roomId: roomId,
@@ -65,12 +66,13 @@ const Chat = ({t, layoutDisplay, setLayoutdisplay, roomParams, currentUser, room
                     setIsMessageSentOk(false);
                 }, 500);
 
-                setInterval(function() {
+                var waitingLoop = setInterval(function() {
                     sendMessageTimeToWait--;
-                    setCantSendMessageReason(t('GeneralWait')+' '+sendMessageTimeToWait+' '+t('GeneralSeconds'));
+                    setCantSendMessageReason(waitingTextChat(sendMessageTimeToWait));
                     if (sendMessageTimeToWait === 0) {
                         setCanSendMessage(true);
                         sendMessageTimeToWait = 10;
+                        clearInterval(waitingLoop);
                     }
                 }, 1000);
             });
@@ -104,21 +106,21 @@ const Chat = ({t, layoutDisplay, setLayoutdisplay, roomParams, currentUser, room
                         </Fab>
                     </Tooltip>}
                     <Tooltip  ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInLeft animate__fast'}
-                        title={!userCanMakeInteraction ? t('GeneralEvery')+' '+ (roomParams.interactionFrequence/1000)  +" "+t('GeneralSeconds'): ''}>  
+                        title={!userCanMakeInteraction ? waitingTextReaction(roomParams.interactionFrequence): ''}>  
                         <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mt:1,mr:0, ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('laugh') : ''}>
                             <EmojiEmotionsIcon fontSize="small" sx={{color:'var(--white)'}} />
                             {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
                         </Fab>
                     </Tooltip>
                     <Tooltip  ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInLeft '}
-                        title={!userCanMakeInteraction ? t('GeneralEvery')+' '+ (roomParams.interactionFrequence/1000)  +" "+t('GeneralSeconds'): ''}>  
+                        title={!userCanMakeInteraction ? waitingTextReaction(roomParams.interactionFrequence): ''}>  
                         <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{mt:1,mr:0, ...(userCanMakeInteraction && {bgcolor: '#ff9c22 !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
                             <CelebrationIcon fontSize="small" sx={{color:'var(--white)'}} />
                             {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
                         </Fab>
                     </Tooltip>
                     <Tooltip  ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInLeft'}
-                        title={!userCanMakeInteraction ? t('GeneralEvery')+' '+ (roomParams.interactionFrequence/1000)  +" "+t('GeneralSeconds'): ''}>  
+                        title={!userCanMakeInteraction ? waitingTextReaction(roomParams.interactionFrequence): ''}>  
                         <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mt:1,mr:0, ...(userCanMakeInteraction && {bgcolor: 'var(--red-2) !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('heart') : ''}>
                             <FavoriteIcon fontSize="small" sx={{color:'var(--white)'}} />
                             {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}

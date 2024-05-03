@@ -108,6 +108,8 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
                         part: 'snippet',
                         key: process.env.REACT_APP_YOUTUBE_API_KEY,
                         q: searchTerm,
+                        relevanceLanguage:'fr',
+                        regionCode:'fr',
                         maxResults: 12,
                         type: 'video'
                     }
@@ -128,9 +130,9 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
 
                 if (DeezerTokenProps.length !== 0) {
                     await axios.get(process.env.REACT_APP_BACK_FOLDER_URL + '/deezer/search?search=' + searchTerm + '&token=' + DeezerTokenProps)
-                        .then(function (response) {
-                            setMediaSearchResultDeezer(response.data.data);
-                        });
+                    .then(function (response) {
+                        setMediaSearchResultDeezer(response.data.data);
+                    });
                 }
 
                 if (spotifyTokenProps.length !== 0) {
@@ -249,7 +251,7 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
                                                     platformId={media.id.videoId}
                                                     addedBy={addingObject.addedBy}
                                                     url={'https://www.youtube.com/watch?v=' + media.id.videoId}
-                                                    date={dateFormat(media.snippet.publishedAt, 'd mmm yyyy à HH:MM')}
+                                                    date={dateFormat(media.snippet.publishedAt, 'd mmm yyyy')}
                                                     channelOrArtist={media.snippet.channelTitle}
                                                     addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject}
                                                 />)

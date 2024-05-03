@@ -1,3 +1,5 @@
+import i18n from "i18next";
+
 export function createDefaultRoomObject(roomId, roomOwner) {
     return {
         id: roomId.toLowerCase(),
@@ -25,7 +27,7 @@ export function createDefaultRoomObject(roomId, roomOwner) {
             syncPeopleByDefault:true,
             allowEverybodyToAddMedia:true,
             interactionsAllowed:true,
-            interactionFrequence:20000,
+            interactionFrequence:5000,
             deezer:{
                 IsLinked:false,
                 AlreadyHaveBeenLinked:false,
@@ -73,10 +75,6 @@ export function isFromSpotify(media) {
 
 export function isFromDeezer(media) {
     return media.source === 'deezer';
-}
-
-export function isNotFromSpotify(source) {
-    return source !== 'spotify';
 }
 
 export function isPlaylistExistNotEmpty(playlist) {
@@ -132,4 +130,15 @@ export async function createInteractionAnimation(type, layoutDisplay = 'unknown'
         }, 2000);
         n++
     }
+}
+
+export function waitingTextReaction(delayMs) {
+    return i18n.t('GeneralEvery')+' '+ (delayMs/1000)  +" "+i18n.t('GeneralSeconds');
+}
+export function waitingTextChat(delay) {
+    return i18n.t('GeneralWait')+' '+delay+' '+i18n.t('GeneralSeconds');
+}
+
+export function isUndefined(val) {
+    return typeof(val) === 'undefined';
 }

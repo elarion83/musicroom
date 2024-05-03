@@ -17,7 +17,8 @@ const SearchResultItem = ({ image, title, source, platformId, album = null, adde
                     </Typography>
                     <Box>
                         {album != null && <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>Album <b>{album} </b></Typography>}
-                        {date != null && <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>Ajouté le <b>{date} </b></Typography>}
+                        {channelOrArtist != null && <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}><b>{channelOrArtist} </b></Typography>}
+                        {date != null && <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}><b>{date} </b></Typography>}
                     </Box>
                 </CardContent>
             </Card>
