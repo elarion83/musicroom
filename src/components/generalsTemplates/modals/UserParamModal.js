@@ -7,6 +7,7 @@ import { Alert, AlertTitle, Dialog, DialogContent, FormGroup, Grid, IconButton, 
 import { useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import { LoadingButton } from "@mui/lab";
+import { auth, db, googleProvider } from "../../../services/firebase";
 
 import { withTranslation } from 'react-i18next';
 
@@ -27,6 +28,7 @@ const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
         setIsEditingUserLoading(false);
         changeOpen(false);
     }
+
     return(
         <Dialog open={open} onClose={(e) => changeOpen(false)}>
             <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
@@ -40,12 +42,17 @@ const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
                             <Typography fontSize='small'>{t('ModalUserSettingsEditNotAllowedText')}</Typography>
                         </Alert>
                     }
-                    {!isEditingPseudo && <Grid container>
+                     <Grid container>
                         
                         <Grid item xs={11} md={11}>
                             <Typography> Pseudo : 
                                 <Typography component={'b'}>
                                     {user.displayName}
+                                </Typography>
+                            </Typography>
+                            <Typography> Connecté via : 
+                                <Typography component={'b'}>
+                                    {user.loginType}
                                 </Typography>
                             </Typography>
                         </Grid>
@@ -55,7 +62,7 @@ const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
                                 <EditIcon />
                             </IconButton>}
                         </Grid>
-                    </Grid>}
+                    </Grid>
                     {isEditingPseudo && <Grid>
                         
                         <Grid item sx={12} md={12}>
