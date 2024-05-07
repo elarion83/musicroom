@@ -1,10 +1,14 @@
 import i18n from "i18next";
 
+import { v4 as uuid } from 'uuid';
+
+
 export function createDefaultRoomObject(roomId, roomOwner) {
     return {
-        id: roomId.toLowerCase(),
+        id: roomId,
         roomName:'',
         admin:roomOwner.displayName,
+        adminPass:uuid().slice(0,4).toLowerCase(),
         adminUid:roomOwner.uid  ? roomOwner.uid : 'anon',
         playing:0,
         actuallyPlaying:false,
