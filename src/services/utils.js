@@ -142,3 +142,13 @@ export function waitingTextChat(delay) {
 export function isUndefined(val) {
     return typeof(val) === 'undefined';
 }
+
+export function getRandomHexColor() {
+  const r = Math.floor(Math.random() * 256).toString(16).padStart(2, '0');
+  const g = Math.floor(Math.random() * 256).toString(16).padStart(2, '0');
+  const b = Math.floor(Math.random() * 256).toString(16).padStart(2, '0');
+  
+  const hexColor = `#${r}${g}${b}`;
+  
+  return hexColor;
+}

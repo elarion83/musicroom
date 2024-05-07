@@ -25,6 +25,8 @@ import { Snackbar, Typography } from "@mui/material";
 import { PseudoGenerated } from './services/pseudoGenerator';
 
 import { CreateGoogleAnalyticsEvent } from './services/googleAnalytics';
+import { getRandomHexColor } from "./services/utils";
+import {replaceCurrentUrlWithHomeUrl, replaceCurrentUrlWithRoomUrl, replaceCurrentUrlWithRoomUrlForDeezer, replaceCurrentUrlWithRoomUrlForSpotify} from './services/redirects';
 
 import { withTranslation } from 'react-i18next';
 function App( {t} ) {
@@ -78,8 +80,7 @@ function App( {t} ) {
       }
 
       setIsAppLoading(false);
-    }
-    )
+    })
     return () => unregisterAuthObserver()
   }, [])
   
@@ -154,7 +155,8 @@ function App( {t} ) {
     setIsLoginLoading(false);
     setUserInfo({
       displayName:PseudoGenerated,
-      loginType:'anon'
+      loginType:'anon',
+      color: getRandomHexColor(),
     });
 
     localStorage.setItem("Play-It_AnonymouslyPseudo",  PseudoGenerated);
@@ -169,10 +171,16 @@ function App( {t} ) {
     CreateGoogleAnalyticsEvent('Actions','Anonym. login','Anonym. login');
   }
 
+  async function setLoginFailed(error) {
+    setLoginErrorMessage(error);
+    setIsLoginLoading(false);
+  }
+
   async function newUserRegisterAfterFirebaseAuth(userUid, registerType) {
       var userData={
         displayName:PseudoGenerated, 
         creationTime:Date.now(),
+        color: getRandomHexColor(),
         uid:userUid,
         loginType:registerType,
         userParams:{
@@ -202,8 +210,7 @@ function App( {t} ) {
           }
         })
         .catch((err) => {
-            setIsLoginLoading(false);
-            setLoginErrorMessage('Une erreur est survenue');
+            setLoginFailed('Une erreur est survenue');
         });
 
   }
@@ -211,30 +218,27 @@ function App( {t} ) {
   async function handlePasswordAndMailLogin(email,password) {
     setIsLoginLoading(true);
     await auth.createUserWithEmailAndPassword(email, password)
-            .then((userCredential) => {
-                newUserRegisterAfterFirebaseAuth(userCredential.user.uid, 'Mail');
-            })
-            .catch((error) => {
-                if(error.code === "auth/email-already-in-use") {
-                    auth.signInWithEmailAndPassword(email, password)
-                        .then((userCredential) => {
-                            // Signed in
-                            handleLoginOkSnack();
-                            setIsLoginLoading(false);
-                            doActionAfterLogin();
-                            CreateGoogleAnalyticsEvent('Actions','Mail login','Mail login');
-                            return userCredential.user;
-                        })
-                        .catch((error) => {
-                            setLoginErrorMessage(error.message);
-                            setIsLoginLoading(false);
-                        })
-                } else {
-                    setLoginErrorMessage(error.message);
+      .then((userCredential) => {
+          newUserRegisterAfterFirebaseAuth(userCredential.user.uid, 'Mail');
+      })
+      .catch((error) => {
+        if(error.code === "auth/email-already-in-use") {
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Signed in
+                    handleLoginOkSnack();
                     setIsLoginLoading(false);
-                }
-            })
-
+                    doActionAfterLogin();
+                    CreateGoogleAnalyticsEvent('Actions','Mail login','Mail login');
+                    return userCredential.user;
+                })
+                .catch((error) => {
+                  setLoginFailed(error.message);
+                })
+        } else {
+          setLoginFailed(error.message);
+        }
+      })
   }
 
   function handleLoginOkSnack() {
@@ -276,22 +280,6 @@ function App( {t} ) {
     CreateGoogleAnalyticsEvent('Actions','Quit room','Quit room');
   }
 
-  function replaceCurrentUrlWithHomeUrl() {
-    window.history.replaceState('string','', window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : ''));
-  }
-
-  function replaceCurrentUrlWithRoomUrl(roomId) {
-    window.history.replaceState('string','', window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '')+'?rid='+roomId.replace(/\s/g,''));
-  }
-
-  function replaceCurrentUrlWithRoomUrlForSpotify(roomId, token) {
-    window.history.replaceState('string','', window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '')+'?rid='+roomId.replace(/\s/g,'')+'&spotoken='+token);
-  }
-
-  function replaceCurrentUrlWithRoomUrlForDeezer(roomId, token) {
-    window.history.replaceState('string','', window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '')+'?rid='+roomId.replace(/\s/g,'')+'&deetoken='+token);
-  }
-
   function setUserInfoEdit(user) {
       db.collection(process.env.REACT_APP_USERS_COLLECTION).doc(user.uid).set(user).then();
       setUserInfo(user);
@@ -309,26 +297,27 @@ function App( {t} ) {
               )}
             </Toolbar>
           </AppBar>
-        {!roomId && <Box sx={{  paddingBottom:'10px !important', bgcolor:'rgba(48, 48, 48, 0)',height: 'auto', pl:2, pr:2}} >
-          <Container maxWidth="sm" sx={{pt:3}}>
-            <Contentslider />
-            
-            <Button variant="filled" className='main_bg_color varelaFontTitle buttonBorder' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em'}} 
-              onClick={(e) => isSignedIn ? createNewRoom() : handleLoginAndRoom('createRoom')}>
-                <Icon icon="carbon:intent-request-create" width="30" style={{marginRight:'20px'}}/> 
-                <Typography variant="button" sx={{pt:'3px'}}>{t('HomePageButtonsCreateRoom')} </Typography>
-              </Button> 
-            <Button variant="filled" className='main_bg_color varelaFontTitle buttonBorder' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em', mb:'2em'}} 
-              onClick={(e) => isSignedIn ? setJoinRoomModalOpen(true) : handleLoginAndRoom('joinRoom')}> 
-                <Icon icon="icon-park-outline:connect"  width="30" style={{marginRight:'20px'}}/>
-                <Typography variant="button" sx={{pt:'3px'}}>{t('HomePageButtonsJoinRoom')} </Typography>
-              </Button> 
+          {!roomId && 
+            <Box sx={{  paddingBottom:'10px !important', bgcolor:'rgba(48, 48, 48, 0)',height: 'auto', pl:2, pr:2}} >
+              <Container maxWidth="sm" sx={{pt:3}}>
+                <Contentslider />
+                
+                <Button variant="filled" className='main_bg_color varelaFontTitle buttonBorder' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em'}} 
+                  onClick={(e) => isSignedIn ? createNewRoom() : handleLoginAndRoom('createRoom')}>
+                    <Icon icon="carbon:intent-request-create" width="30" style={{marginRight:'20px'}}/> 
+                    <Typography variant="button" sx={{pt:'3px'}}>{t('HomePageButtonsCreateRoom')} </Typography>
+                  </Button> 
+                <Button variant="filled" className='main_bg_color varelaFontTitle buttonBorder' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em', mb:'2em'}} 
+                  onClick={(e) => isSignedIn ? setJoinRoomModalOpen(true) : handleLoginAndRoom('joinRoom')}> 
+                    <Icon icon="icon-park-outline:connect"  width="30" style={{marginRight:'20px'}}/>
+                    <Typography variant="button" sx={{pt:'3px'}}>{t('HomePageButtonsJoinRoom')} </Typography>
+                  </Button> 
 
-                <JoinRoomModal open={joinRoomModalOpen} changeOpen={setJoinRoomModalOpen} handleJoinRoom={joinRoomByRoomId} />
-           
-            </Container>
-        </Box>
-        }
+                    <JoinRoomModal open={joinRoomModalOpen} changeOpen={setJoinRoomModalOpen} handleJoinRoom={joinRoomByRoomId} />
+              
+                </Container>
+            </Box>
+          }
         {roomId && isSignedIn && <Room currentUser={userInfos} className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain} setStickyDisplay={setStickyDisplay}></Room>}
 
         {!isSignedIn && !isAppLoading && (roomId || loginModalOpen) && <LoginModal 

@@ -53,6 +53,7 @@ const Chat = ({t, layoutDisplay, setLayoutdisplay, roomParams, currentUser, room
             setCantSendMessageReason(waitingTextChat(sendMessageTimeToWait));
             db.collection(process.env.REACT_APP_MESSAGE_COLLECTION).add({
                 author: currentUser.displayName,
+                authorColor: currentUser.color,
                 roomId: roomId,
                 text:messageToSend,
                 timestamp: Date.now(),
@@ -145,9 +146,10 @@ const Chat = ({t, layoutDisplay, setLayoutdisplay, roomParams, currentUser, room
                                 </Typography>
                             </Box>
                             {Object.entries(messagesToDisplay).map(([key, value]) => {
+                                var messageColor = value.authorColor ?? 'var(--main-color)';
                                 return(
                                 <Box key={key} sx={{display:'flex',mb:1, justifyContent:'start'}}>
-                                    <Typography fontSize='small' sx={{color:'var(--main-color)', fontWeight:'bold'}}> 
+                                    <Typography fontSize='small' sx={{color:messageColor, fontWeight:'bold'}}> 
                                         {value.author}: 
                                     </Typography>
                                     <Typography fontSize='small' sx={{ml:1, color:'var(--white)'}}>

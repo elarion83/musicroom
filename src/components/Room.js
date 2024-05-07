@@ -191,7 +191,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     });
 
     useKeypress(['Escape'], () => {
-        if(isLayoutFullScreen(layoutDisplay) || isLayoutInteractive(layoutDisplay) ) {
+        if(isLayoutFullScreen(layoutDisplay) || isLayoutInteractive(layoutDisplay)) {
             setLayoutdisplay('default');
         }
     });
@@ -466,23 +466,13 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }
 
     function handleVoteChange(idMedia, NewValue, mediaHashId, voteType) {
-        
         CreateGoogleAnalyticsEvent('Actions','Vote','Vote');
         room.playlistUrls[idMedia].vote = NewValue;
 
-        if('up' === voteType) {
-            if(!localData.currentUserVotes.up.includes(mediaHashId)) {
-                localData.currentUserVotes.up.push(mediaHashId);
-                roomRef.set({playlistUrls: room.playlistUrls}, { merge: true });
-                localStorage.setItem("Play-It_UserInfoVotes",  JSON.stringify(localData.currentUserVotes));
-            }
-        }
-        else {
-            if(!localData.currentUserVotes.down.includes(mediaHashId)) {
-                localData.currentUserVotes.down.push(mediaHashId);
-                roomRef.set({playlistUrls: room.playlistUrls}, { merge: true });
-                localStorage.setItem("Play-It_UserInfoVotes",  JSON.stringify(localData.currentUserVotes));
-            }
+        if(!localData.currentUserVotes[voteType].includes(mediaHashId)) {
+            localData.currentUserVotes[voteType].push(mediaHashId);
+            roomRef.set({playlistUrls: room.playlistUrls}, { merge: true });
+            localStorage.setItem("Play-It_UserInfoVotes",  JSON.stringify(localData.currentUserVotes));
         }
     }
 
