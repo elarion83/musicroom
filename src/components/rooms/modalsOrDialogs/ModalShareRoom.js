@@ -2,23 +2,7 @@ import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import React, { useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
-
-import {
-    EmailIcon,
-    EmailShareButton,
-    FacebookIcon,
-    FacebookShareButton,
-    InstapaperIcon,
-    InstapaperShareButton,
-    RedditIcon,
-    RedditShareButton,
-    TelegramIcon,
-    TelegramShareButton,
-    TwitterIcon,
-    TwitterShareButton,
-    WhatsappIcon,
-    WhatsappShareButton,
-} from "react-share";
+import { shareArray } from '../../../services/utilsArray';
 
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import ShareIcon from '@mui/icons-material/Share';
@@ -45,65 +29,25 @@ const ModalShareRoom = ({ t, roomUrl, open, changeOpen }) => {
                 <ShareIcon fontSize="small" sx={{ mr: 1 }} /> {t('ModalShareRoomTitle')}
             </DialogTitle>
             <DialogContent dividers sx={{ pt: 2 }}>
-                <EmailShareButton
-                    url={roomUrl}
-                    subject='Join my room on play-it !'
-                    body="body"
-                    className="Demo__some-network__share-button"
-                >
-                    <EmailIcon size={45} round />
-                </EmailShareButton>
 
-                <RedditShareButton
-                    url={roomUrl}
-                    title='Join my room on play-it !'
-                    windowWidth={660}
-                    windowHeight={460}
-                    className="Demo__some-network__share-button"
-                >
-                    <RedditIcon size={45} round />
-                </RedditShareButton>
+                {Object.entries(shareArray).map(([key, share]) => {
+                    const ShareButtonComponent = share.button;
+                    const ShareIconComponent = share.icon;
+                    return(
+                        <ShareButtonComponent
+                            url={roomUrl}
+                            key={key}
+                            subject='Join my room on play-it !'
+                            title='Join my room on play-it !'
+                            quote='Join my room on play-it !'
+                            separator=":: "
+                            className="Demo__some-network__share-button"
+                        >
+                            <ShareIconComponent size={45} round />
+                        </ShareButtonComponent>
+                    );
+                })}
 
-                <WhatsappShareButton
-                    url={roomUrl}
-                    title='Join my room on play-it !'
-                    separator=":: "
-                    className="Demo__some-network__share-button"
-                >
-                    <WhatsappIcon size={45} round />
-                </WhatsappShareButton>
-
-                <TelegramShareButton
-                    url={roomUrl}
-                    title='Join my room on play-it !'
-                    className="Demo__some-network__share-button"
-                >
-                    <TelegramIcon size={45} round />
-                </TelegramShareButton>
-
-                <TwitterShareButton
-                    url={roomUrl}
-                    title='Join my room on play-it !'
-                    className="Demo__some-network__share-button"
-                >
-                    <TwitterIcon size={45} round />
-                </TwitterShareButton>
-
-                <FacebookShareButton
-                    url={roomUrl}
-                    quote='Join my room on play-it !'
-                    className="Demo__some-network__share-button"
-                >
-                    <FacebookIcon size={45} round />
-                </FacebookShareButton>
-
-                <InstapaperShareButton
-                    url={roomUrl}
-                    title='Join my room on play-it !'
-                    className="Demo__some-network__share-button"
-                >
-                    <InstapaperIcon size={45} round />
-                </InstapaperShareButton>
                 <Grid sx={{ mt: 2 }}>
                     <CopyToClipboard onCopy={(e) => setCopiedToClipboardToTrueAndFalse()} text={(roomUrl)}>
                         <Button variant="contained"><ContentCopyIcon sx={{ mr: 1.5 }} /> {t('ModalShareRoomCopyUrl')} </Button>
