@@ -13,7 +13,7 @@ import { Icon } from '@iconify/react';
 import { useState } from 'react';
 
 import {returnAnimateReplace } from '../../../services/animateReplace';
-import { waitingTextReaction } from '../../../services/utils';
+import { waitingTextReaction, GFontIcon } from '../../../services/utils';
 import { notifsTextArray , reactsArray} from '../../../services/utilsArray';
 import {CreateGoogleAnalyticsEvent} from '../../../services/googleAnalytics';
 
@@ -62,7 +62,7 @@ const BottomInteractions = ({ t, layoutDisplay, setLayoutdisplay, paramDrawerIsO
                     sx={{width:'56px',height:'56px', mt:'-4em'}}
                     className='main_bg_color animate__animated animate__fadeInUp'
                     aria-label="add" onClick={(e) => setOpenAddToPlaylistModal(true)}>
-                    <Icon className='addMediaIcon' icon="iconoir:music-double-note-add" />
+                    <GFontIcon icon='format_list_bulleted_add' customClass='addMediaIcon' />
                 </Fab>
 
                 <Tooltip ref={el => animatedElementsRef.push(el)} className={!roomParams.isChatActivated ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-1s'} title={t('RoomBottomButtonChatShow')}>  

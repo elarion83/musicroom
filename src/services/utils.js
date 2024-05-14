@@ -1,3 +1,4 @@
+import React from 'react';
 import i18n from "i18next";
 
 import { v4 as uuid } from 'uuid';
@@ -155,4 +156,9 @@ export function getRandomHexColor() {
   const hexColor = `#${r}${g}${b}`;
   
   return hexColor;
+}
+
+export function GFontIcon({icon, customClass = '', style = ''}) {
+    const combinedClass = `material-symbols-outlined ${customClass}`;
+    return <span className={combinedClass}>{icon}</span>;
 }

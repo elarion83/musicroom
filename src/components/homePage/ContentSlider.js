@@ -29,7 +29,7 @@ const Contentslider = () => {
             {
                 id: '0',
                 renderItem: 
-                <Box className={activeItem === 0 ? 'slideBox activeSlideBox' : 'slideBox'} onClick={(e) => slideToItem(0)} > 
+                <Box className={(activeItem === '0' || activeItem === 0) ? 'slideBox activeSlideBox' : 'slideBox'} onClick={(e) => slideToItem(0)} > 
                     <Icon icon="iconoir:playlist" width="30" className='mainIcon' />
                     <Typography sx={{pl:2,pr:2,mb:3}} variant="h5" gutterBottom className='varelaFontTitle'>
                         Créez une playlist en temps réel a plusieurs

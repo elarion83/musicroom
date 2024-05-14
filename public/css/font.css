@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
 
 .ftwght300 {font-weight: 300;}
 .ftwght400 {font-weight: 400;}
@@ -23,4 +24,7 @@ h1,h2,h3,h4,h5,h6,span {
 }
 .fontFamilyNunito {
   font-family: var( --title-text-nunito) !important;
+}
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined' !important;
 }

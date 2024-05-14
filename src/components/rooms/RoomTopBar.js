@@ -20,6 +20,7 @@ import 'animate.css';
 
 import { withTranslation } from 'react-i18next';
 import VolumeButton from "./playerSection/VolumeButton";
+import { GFontIcon } from '../../services/utils';
 
 const RoomTopBar = ({
                 t,
@@ -141,6 +142,13 @@ const RoomTopBar = ({
                         </ListItemButton>
                     </ListItem>
                 </List>
+
+                <Divider  sx={{mt:5, mb:1}}/>
+                <ListItem key='playlistDrawAPK' disablePadding>
+                    <ListItemButton href="http://dev.play-it.fr/back/play-it-android.apk">
+                        {<GFontIcon icon="install_mobile"/>} <Typography sx={{ml:2}}>Télécharger l'APK</Typography>
+                    </ListItemButton>
+                </ListItem>
             </Drawer>
             <Tooltip  className='animate__animated animate__fadeInLeft animate__delay-1s animate__fast' title={t('RoomLeftMenuRoomParams')} sx={{ bgColor:'#30363c'}}>
                 <Badge invisible={isLinkedToSpotify && isLinkedToDeezer} variant="dot" sx={{'& .MuiBadge-badge': {
