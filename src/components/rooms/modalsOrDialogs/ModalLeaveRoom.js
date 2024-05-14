@@ -11,7 +11,7 @@ import { SlideUp } from '../../../services/materialSlideTransition/Slide';
 const ModalLeaveRoom = ({ t, open, changeOpen, handleQuitRoom }) => {
 
     return (
-        <Dialog open={open} TransitionComponent={SlideUp} keepMounted onClose={(e) => changeOpen(false)} >
+        <Dialog open={open} TransitionComponent={SlideUp} keepMounted onClose={(e) => changeOpen(false)} sx={{zIndex:1350}}>
 
             <DialogTitle className='flexRowCenterH' sx={{ m: 0, p: 1 }}>
                 <ExitToAppIcon fontSize="small" sx={{ mr: 1 }} /> {t('ModalLeaveRoomTitle')}

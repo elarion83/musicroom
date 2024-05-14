@@ -73,3 +73,18 @@ export function searchTextArray() {
     'HTTPS://WWW.YOUTUBE.COM/WATCH?V=MAVIDEO',
     'HTTPS://SOUNDCLOUD.COM/THOMS-12/EBRIUS'];
 }
+
+export const playerRefObject = {
+    url: null,
+    pip: false,
+    playing: true,
+    controls: false,
+    light: false,
+    volume: 0,
+    muted: false,
+    played: 0,
+    loaded: 0,
+    duration: 0,
+    playbackRate: 1.0,
+    loop: false
+}

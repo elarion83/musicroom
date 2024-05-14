@@ -26,6 +26,7 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
     async function savePassword() {
         roomParams.password = password;
         handleChangeRoomParams(roomParams);
+        setShowPassword(false);
     }
 
     async function handleChangeIsPlayingLooping() {
@@ -131,34 +132,34 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
                     }
 
                     <Alert sx={{ pl: 0, mt: 3, mb: 2, alignItems: 'center' }} icon={<Switch checked={roomParams.isPlayingLooping} onChange={handleChangeIsPlayingLooping}
-                        disabled={adminView}
+                        disabled={!adminView}
                         name="switchIsPlayingLooping" />} severity={roomParams.isPlayingLooping ? 'success' : 'warning'}>
                         <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>{t('ModalParamsRoomLoopPlayingTitle')}</AlertTitle>
                         <Typography fontSize='small' className='fontFamilyNunito'>{adminView ? t('ModalParamsRoomLoopPlayingText') : t('ModalParamsRoomNotAllowedText')}</Typography>
                     </Alert>
 
                     <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }} icon={<Switch checked={roomParams.isAutoPlayActivated} onChange={handleChangeIsAutoPlayActivated}
-                        disabled={adminView}
+                        disabled={!adminView}
                         name="switchIsAutoPlayActivated" />} severity={roomParams.isAutoPlayActivated ? 'success' : 'warning'}>
                         <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>{t('ModalParamsRoomAutoPlayingTitle')}</AlertTitle>
                         <Typography fontSize='small' className='fontFamilyNunito'>{adminView ? t('ModalParamsRoomAutoPlayingText') : t('ModalParamsRoomNotAllowedText')}</Typography>
                     </Alert>
 
                     <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }} icon={<Switch checked={roomParams.interactionsAllowed} onChange={handleChangeIsInterractionsAllowed}
-                        disabled={adminView}
+                        disabled={!adminView}
                         name="switchInteractionsAllowed" />} severity={roomParams.interactionsAllowed ? 'success' : 'warning'}>
                         <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>{t('ModalParamsRoomInteractionAllowedTitle')}</AlertTitle>
                         <Typography fontSize='small' className='fontFamilyNunito'>{adminView ? t('ModalParamsRoomInteractionAllowedText') : t('ModalParamsRoomNotAllowedText')}</Typography>
                     </Alert>
 
                     <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }} icon={<Switch checked={roomParams.isChatActivated} onChange={handleChangeIsChatActivated}
-                        disabled={adminView}
+                        disabled={!adminView}
                         name="switchIsChatActivated" />} severity={roomParams.isChatActivated ? 'success' : 'warning'}>
                         <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>{t('ModalParamsRoomChatAllowedTitle')}</AlertTitle>
                         <Typography fontSize='small' className='fontFamilyNunito'>{adminView ? t('ModalParamsRoomChatAllowedText') : t('ModalParamsRoomNotAllowedText')}</Typography>
                     </Alert>
                     <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }} icon={<Switch checked={roomParams.isPasswordNeeded} onChange={handleChangeIsPasswordNeeded}
-                        disabled={adminView}
+                        disabled={!adminView}
                         name="switchInteractionsAllowed" />} severity={roomParams.isPasswordNeeded ? 'success' : 'warning'}>
                         <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>Mot de passe requis</AlertTitle>
                         {!adminView && <Typography fontSize='small'>{t('ModalParamsRoomNotAllowedText')}</Typography>}
@@ -175,7 +176,7 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
                                 variant="outlined"
                                 InputProps={{
                                     startAdornment: (
-                                        <InputAdornment sx={{ ml: '-10px' }} position="start">
+                                        <InputAdornment sx={{ ml: '-10px', maxHeight:0 }} position="start">
                                             <IconButton
                                                 aria-label="Afficher / Cacher le mot de passe de la playlist"
                                                 onClick={(e) => setShowPassword(!showPassword)}
@@ -186,14 +187,14 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
                                         </InputAdornment>
                                     ),
                                     endAdornment: (
-                                        <InputAdornment position="end">
-                                            {password !== roomParams.password && <IconButton
+                                        <>{password !== roomParams.password && <InputAdornment sx={{ maxHeight:0 }} position="end">
+                                            <IconButton
                                                 onClick={(e) => savePassword()}
                                                 edge="end"
                                             >
                                                 <SaveIcon />
-                                            </IconButton>}
-                                        </InputAdornment>
+                                            </IconButton>
+                                        </InputAdornment>}</>
                                     )
                                 }}
                             />
@@ -201,7 +202,7 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
                     </Alert>
 
                     <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }} icon={<Switch checked={roomParams.syncPeopleByDefault} onChange={handleChangeSyncPeopleByDefault}
-                        disabled={adminView}
+                        disabled={!adminView}
                         name="switchSyncPeopleByDefault" />} severity={roomParams.syncPeopleByDefault ? 'success' : 'warning'}>
                         <AlertTitle sx={{ fontWeight: 'bold' }}>Synchronisés par défaut</AlertTitle>
                         <Typography fontSize='small'>{adminView ? 'Synchronise automatiquement les utilisateurs a l\'hôte de la playlist' : t('ModalParamsRoomNotAllowedText')}</Typography>

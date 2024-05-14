@@ -98,8 +98,8 @@ export function mediaIndexExist(playlist, index) {
     return 'undefined' !== typeof playlist[index];
 }
 
-export function isTokenInvalid(tokenTimestamp) {
-    return (typeof(tokenTimestamp) === 'number' && tokenTimestamp > 0) && ((Date.now() - tokenTimestamp) > 3600000);
+export function isTokenInvalid(tokenTimestamp, delay) {
+    return (typeof(tokenTimestamp) === 'number' && tokenTimestamp > 0) && ((Date.now() - tokenTimestamp) > delay);
 }
 
 export function isLayoutFullScreen(actualLayout) {

@@ -51,7 +51,7 @@ const ModalEnterRoomPassword = ({ password, open, changeOpen }) => {
                     variant="outlined" 
                     InputProps={{
                         startAdornment: (
-                            <InputAdornment sx={{ml:'-10px'}} position="start">
+                            <InputAdornment sx={{ml:'-10px', maxHeight:0 }} position="start">
                                 <IconButton
                                     aria-label="Afficher / Cacher le mot de passe de la playlist"
                                     onClick={(e) => setShowPassword(!showPassword)}
@@ -62,7 +62,7 @@ const ModalEnterRoomPassword = ({ password, open, changeOpen }) => {
                             </InputAdornment>
                         ),
                         endAdornment: (
-                            <InputAdornment position="end">
+                            <InputAdornment position="end"  sx={{ maxHeight:0 }}>
                                 <IconButton
                                     onClick={(e) => joinRoomByPassword()} 
                                     aria-label="Afficher / Cacher le mot de passe de la playlist"

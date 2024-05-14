@@ -49,6 +49,7 @@ import VolumeButton from "./rooms/playerSection/VolumeButton";
 import EmptyPlaylist from "./rooms/playlistSection/EmptyPlaylist";
 import { Icon } from "@iconify/react";
 import { Forward10, Replay10 } from "@mui/icons-material";
+import { playerRefObject } from "../services/utilsArray";
 
 const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
@@ -79,7 +80,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     // for desynchro || FINAL CLIENT ROOM DATAS
 	const [roomIdPlayed, setRoomIdPlayed] = useState(0);
-	const [roomIsPlaying, setRoomIsPlaying] = useState(0);
+	const [roomIsPlaying, setRoomIsPlaying] = useState(true);
     const [guestSynchroOrNot, setGuestSynchroOrNot] = useState(true);
 
     const [openInvitePeopleToRoomModal, setOpenInvitePeopleToRoomModal] = useState(false);
@@ -155,20 +156,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         }
     });
 
-    const playerRef = useRef({
-        url: null,
-        pip: false,
-        playing: true,
-        controls: false,
-        light: false,
-        volume: 0,
-        muted: false,
-        played: 0,
-        loaded: 0,
-        duration: 0,
-        playbackRate: 1.0,
-        loop: false
-    });
+    const playerRef = useRef(playerRefObject);
 
     const [isActuallyAdmin, setIsActuallyAdmin] = useState(false);
     const delay = ms => new Promise(res => setTimeout(res, ms));
@@ -215,18 +203,15 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         if( typeof playerRef.current.seekTo === 'function') {
             if(guestSynchroOrNot) {
                 roomRef.get().then((doc) => {
-                    playerRef.current.seekTo(doc.data().mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds');   
-                    
-                    room.notifsArray.push({type: 'userSync', timestamp: Date.now(), createdBy: currentUser.displayName});
-                    roomRef.set({notifsArray: room.notifsArray},{merge:true});     
-                    CreateGoogleAnalyticsEvent('Actions','Playlist synchro','Playlist '+roomId);
+                    playerRef.current.seekTo(doc.data().mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds');  
                 });
-            } else {
-                room.notifsArray.push({type: 'userUnSync', timestamp: Date.now(), createdBy: currentUser.displayName});
-                roomRef.set({notifsArray: room.notifsArray},{merge:true});   
+            } else if(!guestSynchroOrNot && !isActuallyAdmin) {
                 playerRef.current.seekTo(0, 'seconds');
-                CreateGoogleAnalyticsEvent('Actions','Playlist désynchro','Playlist '+roomId);
             }
+
+            room.notifsArray.push({type: guestSynchroOrNot ? 'userSync' : 'userUnSync', timestamp: Date.now(), createdBy: currentUser.displayName});
+            roomRef.set({notifsArray: room.notifsArray},{merge:true});   
+            CreateGoogleAnalyticsEvent('Actions', guestSynchroOrNot ? 'Playlist synchro' : 'Playlist désynchro','Playlist '+roomId);  
         }
 	}, [guestSynchroOrNot]);
 
@@ -273,10 +258,10 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }, [room.interactionsArray]);
     
     async function handlePlay(playStatus) {
-        if(isTokenInvalid(room.roomParams.spotify.TokenTimestamp)) {   
+        if(isTokenInvalid(room.roomParams.spotify.TokenTimestamp, 3600000)) {   
             disconnectSpotify();
         }
-        if(isTokenInvalid(room.roomParams.deezer.TokenTimestamp)) {
+        if(isTokenInvalid(room.roomParams.deezer.TokenTimestamp, 3600000)) {
             disconnectDeezer();
         }
         if(isActuallyAdmin) {
@@ -331,7 +316,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     async function handleReady() {
         setPlayerReady(true);
-        if(!isActuallyAdmin && guestSynchroOrNot) {
+        if(isActuallyAdmin || guestSynchroOrNot) {
             playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds'); 
             setRoomIsPlaying(room.actuallyPlaying);
         }
@@ -422,7 +407,11 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         playedPercentage:event.played*100,
                         played:event.played
                     } }, { merge: true });
-            } 
+            } else if(!isActuallyAdmin && guestSynchroOrNot) {
+                if(Math.abs(event.playedSeconds - room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds) > 6) {
+                    playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds');
+                }
+            }
         }
     }
     
@@ -708,7 +697,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                     <Grid className='player_button_container' item sm={12} sx={{ display:'flex', flexWrap:'wrap',padding:0,pl:1.5,ml:0, pr:1.5,mb: 0 , mt:1, fill:'#f0f1f0'}}   >
                                                         {!(isShowSticky && isLayoutDefault(layoutDisplay)) &&
                                                             <>
-                                                                <Grid item sm={6} className={isActuallyAdmin ? "adminButtons" : guestSynchroOrNot ? 'guestButtons guestSync' : 'guestButtons guestNotSync'} xs={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:0, mb: 1.5 }}>
+                                                                <Grid item sm={6} className={isActuallyAdmin ? "adminButtons" : guestSynchroOrNot ? 'guestButtons guestSync' : 'guestButtons guestNotSync'} xs={12} 
+                                                                sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:0, mb: 1.5, color:'red' }}>
                                                                     {isActuallyAdmin && 
                                                                         <>
                                                                             <IconButton onClick={e => (playingFirstInList(roomIdPlayed) && isSpotifyAndIsNotPlayableBySpotify(roomIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? handleChangeActuallyPlaying(roomIdPlayed - 1) : ''}>
@@ -716,12 +706,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                                             </IconButton>
 
                                                                             <IconButton onClick={e => handleChangeSecondsPlayed(room, -10)}>
-                                                                                <Replay10 fontSize="large" sx={{color:'#f0f1f0'}} />
+                                                                                <Replay10 fontSize="large" sx={{ color : room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds > 10 ? '#f0f1f0': '#303134'}} />
                                                                             </IconButton>
 
-                                                                            <IconButton variant="contained" onClick={e => handlePlay(!room.actuallyPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
-                                                                                { room.actuallyPlaying && <PauseCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
-                                                                                { !room.actuallyPlaying && <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
+                                                                            <IconButton variant="contained" onClick={e => handlePlay(!room.actuallyPlaying)} sx={{ color:'#f0f1f0', position:'sticky', top:0, zIndex:2500}} >
+                                                                                { room.actuallyPlaying && <PauseCircleOutlineIcon fontSize="large" />}
+                                                                                { !room.actuallyPlaying && <PlayCircleOutlineIcon fontSize="large" />}
                                                                             </IconButton>
                                                                             
                                                                             <IconButton onClick={e => handleChangeSecondsPlayed(room, +10)}>
@@ -742,9 +732,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                                                 </IconButton>
                                                                             
                                                                                 {!isFromSpotify(room.playlistUrls[roomIdPlayed]) && 
-                                                                                    <IconButton variant="contained" onClick={e => setRoomIsPlaying(!roomIsPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
-                                                                                        { roomIsPlaying && <PauseCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
-                                                                                        { !roomIsPlaying && <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
+                                                                                    <IconButton variant="contained" onClick={e => setRoomIsPlaying(!roomIsPlaying)} sx={{color:'#f0f1f0', position:'sticky', top:0, zIndex:2500}} >
+                                                                                        { roomIsPlaying && <PauseCircleOutlineIcon fontSize="large"/>}
+                                                                                        { !roomIsPlaying && <PlayCircleOutlineIcon fontSize="large"/>}
                                                                                     </IconButton>
                                                                                 }
 

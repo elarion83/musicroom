@@ -46,6 +46,7 @@ const RoomTopBar = ({
         <Toolbar className={isShowSticky ? "stickyRoomTopBar": ''} xs={12} sx={{ minHeight: '45px !important', fontFamily: 'Monospace', paddingLeft:'10px !important' }}>
             <SwipeableDrawer
                 id="menu-appbar"
+                sx={{zIndex:1300}}
                 anchor='left'
                 onClose={(e) => handleOpenDrawerParam(false)}
                 onOpen={(e) => handleOpenDrawerParam(true)}
