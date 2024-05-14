@@ -32,7 +32,7 @@ const Contentslider = () => {
                 <Box className={(activeItem === '0' || activeItem === 0) ? 'slideBox activeSlideBox' : 'slideBox'} onClick={(e) => slideToItem(0)} > 
                     <Icon icon="iconoir:playlist" width="30" className='mainIcon' />
                     <Typography sx={{pl:2,pr:2,mb:3}} variant="h5" gutterBottom className='varelaFontTitle'>
-                        Créez une playlist en temps réel a plusieurs
+                        Une playlist en temps réel a plusieurs !
                     </Typography>
                     <Typography sx={{pl:2,pr:2,mb:2,mt:3, color:'var(--white)'}} className='fontFamilyOpenSans'>
                         Ajoutez des médias depuis <b>Spotify, Youtube, Deezer, Soundcloud, .. </b> à une playlist collective lue en temps réel.
