@@ -9,7 +9,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SkipPrevious from '@mui/icons-material/SkipPrevious';
 import TuneIcon from '@mui/icons-material/Tune';
-import { Divider, Drawer, Grid, List, ListItem, ListItemButton, Switch, Typography } from '@mui/material';
+import { Divider, SwipeableDrawer, Grid, List, ListItem, ListItemButton, Switch, Typography } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Badge from '@mui/material/Badge';
 import IconButton from '@mui/material/IconButton';
@@ -44,10 +44,11 @@ const RoomTopBar = ({
     <AppBar sx={{position: (isShowSticky) ? "fixed": 'initial', top:0, bgcolor: 'var(--grey-dark)',borderBottom: '2px solid var(--border-color)'}} >
         
         <Toolbar className={isShowSticky ? "stickyRoomTopBar": ''} xs={12} sx={{ minHeight: '45px !important', fontFamily: 'Monospace', paddingLeft:'10px !important' }}>
-            <Drawer
+            <SwipeableDrawer
                 id="menu-appbar"
                 anchor='left'
                 onClose={(e) => handleOpenDrawerParam(false)}
+                onOpen={(e) => handleOpenDrawerParam(true)}
                 open={paramDrawerIsOpen}
             >
                 <List sx={{pt:0}}>  
@@ -146,10 +147,13 @@ const RoomTopBar = ({
                 <Divider  sx={{mt:5, mb:1}}/>
                 <ListItem key='playlistDrawAPK' disablePadding>
                     <ListItemButton href="http://dev.play-it.fr/back/play-it-android.apk">
-                        {<GFontIcon icon="install_mobile"/>} <Typography sx={{ml:2}}>Télécharger l'APK</Typography>
+                        <ListItemIcon>
+                            {<GFontIcon icon="install_mobile"/>}
+                        </ListItemIcon> 
+                        <Typography>Télécharger l'APK</Typography>
                     </ListItemButton>
                 </ListItem>
-            </Drawer>
+            </SwipeableDrawer>
             <Tooltip  className='animate__animated animate__fadeInLeft animate__delay-1s animate__fast' title={t('RoomLeftMenuRoomParams')} sx={{ bgColor:'#30363c'}}>
                 <Badge invisible={isLinkedToSpotify && isLinkedToDeezer} variant="dot" sx={{'& .MuiBadge-badge': {
                     right:'10px',

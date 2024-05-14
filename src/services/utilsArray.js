@@ -1,3 +1,5 @@
+import React from 'react';
+import i18n from "i18next";
 import CelebrationIcon from '@mui/icons-material/Celebration';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -61,4 +63,13 @@ export const shareArray = {
         button:InstapaperShareButton,
         icon:InstapaperIcon
     }
+}
+
+export function searchTextArray() {
+    return [i18n.t('GeneralSearchOn') + ' YOUTUBE, SPOTIFY',
+    'CHERCHE UNE MUSIQUE, UN CLIP, UN TUTO',
+    'UNE VIDEO DE DOMINGO, SQUEEZIE, AMINEMATUE',
+    'UN LIEN SOUNCLOUND OU YOUTUBE',
+    'HTTPS://WWW.YOUTUBE.COM/WATCH?V=MAVIDEO',
+    'HTTPS://SOUNDCLOUD.COM/THOMS-12/EBRIUS'];
 }

@@ -12,7 +12,7 @@ const SearchResultItem = ({ image, title, source, platformId, album = null, adde
                     title={title}
                 />
                 <CardContent sx={{bgcolor:'var(--white)', flexGrow:1}}>
-                    <Typography gutterBottom component="div" className="varelaFontTitle textEllipsis">
+                    <Typography gutterBottom component="div" className="varelaFontTitle">
                     {title.substring(0, 50)}
                     </Typography>
                     <Box>

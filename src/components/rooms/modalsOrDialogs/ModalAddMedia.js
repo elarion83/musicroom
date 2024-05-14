@@ -20,6 +20,7 @@ import { Button, Dialog, Typography } from '@mui/material';
 import SoundWave from "../../../services/SoundWave";
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { searchTextArray } from '../../../services/utilsArray';
 
 const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUser, validatedObjectToAdd, spotifyTokenProps, DeezerTokenProps }) => {
 
@@ -175,11 +176,11 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
                 {room.playlistEmpty &&
                     <Box sx={{ display: 'flex', flexDirection: 'column', padding: '1em' }}>
                         <Typography component="span"> Playlist {t('GeneralEmpty')} </Typography>
-                        <Typography sx={{ color: 'var(--white)', display: 'block', width: '100%', ml: 0, fontSize: '12px', textTransform: 'uppercase' }} > #{room.id}</Typography>
+                        <Typography sx={{ color: 'var(--white)', display: 'block', width: '100%', ml: 0, fontSize: '12px', textTransform: 'uppercase' }} > Playlist <b>{room.id}</b></Typography>
                     </Box>}
                 {typeof (room.playlistUrls) !== 'undefined' && !room.playlistEmpty &&
                     <Box sx={{ display: 'flex', flexDirection: 'column', p: '8px' }}>
-                        <Typography sx={{ color: 'var(--white)', display: 'block', width: '100%', ml: 0, pl: 0, fontSize: '12px', textTransform: 'uppercase' }} > #{room.id}</Typography>
+                        <Typography sx={{ color: 'var(--white)', display: 'block', width: '100%', ml: 0, pl: 0, fontSize: '12px', textTransform: 'uppercase' }} > Playlist <b>{room.id}</b></Typography>
 
                         <Box sx={{ color: 'var(--white)', display: 'flex', gap: '10px', flexDirection: 'row', alignItems: 'center', width: '100%', ml: 1, mt: 1, fontSize: '10px', textTransform: 'uppercase' }} >
                             <SoundWave waveNumber={7} isPlayingOrNo={roomIsPlaying} />
@@ -193,13 +194,7 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
 
                 <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'row' }} className="autowriter_container">
                     <Typed
-                        strings={[
-                            t('GeneralSearchOn') + ' YOUTUBE, SPOTIFY',
-                            'CHERCHE UNE MUSIQUE, UN CLIP, UN TUTO',
-                            'UNE VIDEO DE DOMINGO, SQUEEZIE, AMINEMATUE',
-                            'UN LIEN SOUNCLOUND OU YOUTUBE',
-                            'HTTPS://WWW.YOUTUBE.COM/WATCH?V=MAVIDEO',
-                            'HTTPS://SOUNDCLOUD.COM/THOMS-12/EBRIUS']}
+                        strings={searchTextArray()}
                         typeSpeed={5}
                         showCursor={true}
                         backSpeed={15}
