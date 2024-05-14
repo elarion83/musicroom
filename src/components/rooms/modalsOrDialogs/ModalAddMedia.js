@@ -20,7 +20,7 @@ import { Button, Dialog, Typography } from '@mui/material';
 import SoundWave from "../../../services/SoundWave";
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { searchTextArray } from '../../../services/utilsArray';
+import { searchTextArray, youtubeApiSearchObject } from '../../../services/utilsArray';
 
 const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUser, validatedObjectToAdd, spotifyTokenProps, DeezerTokenProps }) => {
 
@@ -105,15 +105,7 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
             } else {
 
                 axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, {
-                    params: {
-                        part: 'snippet',
-                        key: process.env.REACT_APP_YOUTUBE_API_KEY,
-                        q: searchTerm,
-                        relevanceLanguage:'fr',
-                        regionCode:'fr',
-                        maxResults: 12,
-                        type: 'video'
-                    }
+                    params: youtubeApiSearchObject(searchTerm,12)
                 })
                     .then(function (response) {
                         setMediaSearchResultYoutube(response.data.items);

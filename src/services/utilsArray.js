@@ -88,3 +88,16 @@ export const playerRefObject = {
     playbackRate: 1.0,
     loop: false
 }
+
+export function youtubeApiSearchObject(search, maxResults) {
+    return {
+        part: 'snippet',
+        key: process.env.REACT_APP_YOUTUBE_API_KEY,
+        q: search,
+        relevanceLanguage:'fr',
+        regionCode:'fr',
+        maxResults: maxResults,
+        videoEmbeddable:true,
+        type: 'video'
+    }
+}

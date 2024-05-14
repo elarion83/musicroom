@@ -49,7 +49,7 @@ import VolumeButton from "./rooms/playerSection/VolumeButton";
 import EmptyPlaylist from "./rooms/playlistSection/EmptyPlaylist";
 import { Icon } from "@iconify/react";
 import { Forward10, Replay10 } from "@mui/icons-material";
-import { playerRefObject } from "../services/utilsArray";
+import { playerRefObject, youtubeApiSearchObject } from "../services/utilsArray";
 
 const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
@@ -536,14 +536,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     async function addMediaForAutoPlayByYoutubeId(lastMediaTitle) {
         
-        var params = {
-            part: 'snippet',
-            key: process.env.REACT_APP_YOUTUBE_API_KEY,
-            type:'video',
-            maxResults:6,
-            q:lastMediaTitle,
-            videoEmbeddable:true,
-        }; 
+        var params = youtubeApiSearchObject(lastMediaTitle,4);
 
         await axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, { params: params })
             .then(function(response) {
@@ -551,6 +544,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 var responseItemLength = response.data.items.length-1;
                 var suggestMedia = {
                     addedBy : 'App_AutoPlay',
+                    visuel: response.data.items[responseItemLength].snippet.thumbnails.high.url,
                     hashId: uuid().slice(0,10).toLowerCase(),
                     source: 'youtube',
                     platformId:response.data.items[responseItemLength].id.videoId,
