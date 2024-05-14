@@ -48,6 +48,7 @@ import ModalEnterRoomPassword from "./rooms/modalsOrDialogs/ModalEnterRoomPasswo
 import VolumeButton from "./rooms/playerSection/VolumeButton";
 import EmptyPlaylist from "./rooms/playlistSection/EmptyPlaylist";
 import { Icon } from "@iconify/react";
+import { Forward10, Replay10 } from "@mui/icons-material";
 
 const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
@@ -398,27 +399,18 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         }
     }
     
-    function setPercentagePlayed(percentagePlayed) {
-        roomRef.set({mediaActuallyPlayingAlreadyPlayedData:{
-            playedSeconds:percentagePlayed,
-            playedPercentage:percentagePlayed,
-            played:percentagePlayed
-        }}, { merge: true });
-        playerRef.current.seekTo(percentagePlayed, 'seconds');
-    }
-
-    function setSecondsPlayed(secondsPlayed) {
+    async function setSecondsPlayed(secondsPlayed) {
         roomRef.set({mediaActuallyPlayingAlreadyPlayedData:{
             playedSeconds:secondsPlayed
         }}, { merge: true });
         playerRef.current.seekTo(secondsPlayed, 'seconds');
     }
 
-    function handleFastForward(room) {
-        var actuallyPlayingStart = room.actuallyPlaying;
+    async function handleChangeSecondsPlayed(room, number) {
         roomRef.set({actuallyPlaying:false}, { merge: true });
-        setSecondsPlayed(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds+10);
-        if(actuallyPlayingStart) { roomRef.set({actuallyPlaying:true}, { merge: true }); }
+        setSecondsPlayed(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds+number);
+        await delay(300);
+        roomRef.set({actuallyPlaying:true}, { merge: true });
     }
 
     function handleProgress(event) {
@@ -719,25 +711,25 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                                 <Grid item sm={6} className={isActuallyAdmin ? "adminButtons" : guestSynchroOrNot ? 'guestButtons guestSync' : 'guestButtons guestNotSync'} xs={12} sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:0, mb: 1.5 }}>
                                                                     {isActuallyAdmin && 
                                                                         <>
-                                                                            <IconButton onClick={e => roomIdPlayed > 0 ? handleChangeActuallyPlaying(0) : ''}>
-                                                                                <FirstPageIcon  fontSize="large" sx={{color:playingFirstInList(roomIdPlayed) ? '#f0f1f0': '#303134'}} />
-                                                                            </IconButton>
-                                                                            
                                                                             <IconButton onClick={e => (playingFirstInList(roomIdPlayed) && isSpotifyAndIsNotPlayableBySpotify(roomIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? handleChangeActuallyPlaying(roomIdPlayed - 1) : ''}>
                                                                                 <SkipPrevious fontSize="large" sx={{color:(playingFirstInList(roomIdPlayed) && isSpotifyAndIsNotPlayableBySpotify(roomIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? '#f0f1f0': '#303134'}} />
+                                                                            </IconButton>
+
+                                                                            <IconButton onClick={e => handleChangeSecondsPlayed(room, -10)}>
+                                                                                <Replay10 fontSize="large" sx={{color:'#f0f1f0'}} />
                                                                             </IconButton>
 
                                                                             <IconButton variant="contained" onClick={e => handlePlay(!room.actuallyPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
                                                                                 { room.actuallyPlaying && <PauseCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
                                                                                 { !room.actuallyPlaying && <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
                                                                             </IconButton>
-                                                                        
-                                                                            <IconButton onClick={e => !playingLastInList(room.playlistUrls.length,room.playing) ? handleChangeActuallyPlaying(room.playing + 1) : ''}>
-                                                                                <SkipNextIcon fontSize="large" sx={{color: !playingLastInList(room.playlistUrls.length,room.playing) ? '#f0f1f0' : '#303134'}} />
+                                                                            
+                                                                            <IconButton onClick={e => handleChangeSecondsPlayed(room, +10)}>
+                                                                                <Forward10 fontSize="large" sx={{color:'#f0f1f0'}} />
                                                                             </IconButton>
 
-                                                                            <IconButton onClick={e => !playingLastInList(room.playlistUrls.length,room.playing) ? handleChangeActuallyPlaying(room.playlistUrls.length-1) : ''}>
-                                                                                <LastPageIcon  fontSize="large" sx={{color: !playingLastInList(room.playlistUrls.length,room.playing) ? '#f0f1f0' : '#303134'}} />
+                                                                            <IconButton onClick={e => !playingLastInList(room.playlistUrls.length,room.playing) ? handleChangeActuallyPlaying(room.playing + 1) : ''}>
+                                                                                <SkipNextIcon fontSize="large" sx={{color: !playingLastInList(room.playlistUrls.length,room.playing) ? '#f0f1f0' : '#303134'}} />
                                                                             </IconButton>
                                                                         </>
                                                                     }
@@ -776,7 +768,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                                             }
 
                                                                             {isActuallyAdmin && 
-                                                                                <IconButton onClick={e => setPercentagePlayed(0)} >
+                                                                                <IconButton onClick={e => setSecondsPlayed(0)} >
                                                                                     <Icon icon="icon-park-outline:replay-music" width="30" style={{color:'#f0f1f0'}} />
                                                                                 </IconButton>
                                                                             }
