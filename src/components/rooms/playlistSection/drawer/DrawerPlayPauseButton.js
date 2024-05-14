@@ -8,35 +8,33 @@ import SoundWave from "../../../../services/SoundWave";
 
 const DrawerPlayPauseButton = ({ isAdminView,isPlayable, isPlaying, mediaDisplayingData, changeIsPlaying, changeIdPlaying, idActuallyPlaying, idActuallyDisplaying }) => {
     return(
-        <Box>
-        {isAdminView && <ListItemIcon sx={{cursor:'pointer', zIndex:2, position:'relative', display:'flex'}}>
-                {idActuallyPlaying === idActuallyDisplaying && 
+        <Box >
+            <ListItemIcon sx={{cursor:'pointer', zIndex:2, position:'relative', display:'flex'}}>
+                {isAdminView &&
                     <>
-                        {isPlaying &&
-                            <Box sx={{pl:2}} onClick={e => changeIsPlaying(false)}>
-                                <SoundWave waveNumber={7} isPlayingOrNo={isPlaying}  /></Box>
+                        {idActuallyPlaying === idActuallyDisplaying && 
+                            <>
+                                {isPlaying &&
+                                    <Box sx={{pl:2}} onClick={e => changeIsPlaying(false)}>
+                                        <SoundWave waveNumber={7} isPlayingOrNo={isPlaying}  />
+                                    </Box>
+                                }
+                                {!isPlaying &&
+                                    <PlayCircleOutlineIcon sx={{ml:1}} fontSize="large" onClick={e => changeIsPlaying(true)}  />
+                                }
+                            </>
                         }
-                        {!isPlaying &&
-                            <PlayCircleOutlineIcon sx={{ml:1}} fontSize="large" onClick={e => changeIsPlaying(true)}  />
-                        }
+                    {idActuallyPlaying !== idActuallyDisplaying && isPlayable &&
+                        <PlayCircleOutlineIcon sx={{ml:1}} fontSize="large" onClick={e => changeIdPlaying(idActuallyDisplaying)}  />
+                    }
                     </>
                 }
-                {idActuallyPlaying !== idActuallyDisplaying && isPlayable &&
-                    <PlayCircleOutlineIcon sx={{ml:1}} fontSize="large" onClick={e => changeIdPlaying(idActuallyDisplaying)}  />
+                {!isAdminView && 
+                    <Box sx={{pl:2}}>
+                        <SoundWave waveNumber={7} isPlayingOrNo={isPlaying}  />
+                    </Box>
                 }
-                {idActuallyPlaying !== idActuallyDisplaying && !isPlayable &&
-                    <img src={mediaDisplayingData.visuel} alt={mediaDisplayingData.title} width="50px" style={{paddingTop:'1em'}}/>
-                }
-        </ListItemIcon>}
-        {!isAdminView && (idActuallyPlaying === idActuallyDisplaying) && 
-            <ListItemIcon sx={{cursor:'pointer'}}>
-            <SoundWave waveNumber={7} sx={{pl:0.5}}isPlayingOrNo={isPlaying} />
-        </ListItemIcon>}
-        {!isAdminView && (idActuallyPlaying !== idActuallyDisplaying) && 
-            <ListItemIcon sx={{cursor:'pointer'}}>
-            <img src={mediaDisplayingData.visuel} alt={mediaDisplayingData.title} width="50px" style={{paddingTop:'1em'}}/>
-        </ListItemIcon>}
-        
+            </ListItemIcon>
         </Box>
     )
 };
