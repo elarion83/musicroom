@@ -37,9 +37,9 @@ const ModalShareRoom = ({ t, roomUrl, open, changeOpen }) => {
                         <ShareButtonComponent
                             url={roomUrl}
                             key={key}
-                            subject='Join my room on play-it !'
-                            title='Join my room on play-it !'
-                            quote='Join my room on play-it !'
+                            subject='Join my playlist on play-it !'
+                            title='Join my playlist on play-it !'
+                            quote='Join my playlist on play-it !'
                             separator=":: "
                             className="Demo__some-network__share-button"
                         >

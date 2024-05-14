@@ -75,7 +75,7 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, open
                 {isFromSpotify(data) && !isSpotifyAvailable && 
                     <><Divider />
                     <ListItem sx={{pt:0, mt:0}}>
-                        <ListItemText primary="Lecture Impossible" secondary="Spotify déconnecté de la room" />
+                        <ListItemText primary="Lecture Impossible" secondary="Spotify déconnecté de la playlist" />
                     </ListItem></>
                 }
                 <Divider />

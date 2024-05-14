@@ -54,7 +54,7 @@ const RoomTopBar = ({
                     <ListItem sx={{bgcolor:'var(--white)'}} key='roomDrawClose' disablePadding>
                         <ListItemButton onClick={(e) => handleOpenDrawerParam(false)} sx={{display:'flex',justifyContent:'flex-end'}}>
                             <ChevronLeftIcon />
-                            <Typography fontSize="small" sx={{pl:1, textTransform:'uppercase'}}>Room <b style={{textTransform:'uppercase'}}>{ room.id } </b> </Typography>
+                            <Typography fontSize="small" sx={{pl:1, textTransform:'uppercase'}}>Playlist <b style={{textTransform:'uppercase'}}>{ room.id } </b> </Typography>
                         
                         </ListItemButton>
                     </ListItem> 
@@ -162,7 +162,7 @@ const RoomTopBar = ({
             </Tooltip>
                 
             <Typography  className='animate__animated animate__fadeInLeft animate__fast' component="div" sx={{ flexGrow: 1 , textTransform:'uppercase', fontSize:'12px',}}>
-                Room <b style={{textTransform:'uppercase'}}><span>{ room.id }</span> </b> 
+                Playlist <b style={{textTransform:'uppercase'}}><span>{ room.id }</span> </b> 
             </Typography>
             
             {isShowSticky &&

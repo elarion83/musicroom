@@ -164,7 +164,7 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
                         name="switchInteractionsAllowed" />} severity={roomParams.isPasswordNeeded ? 'success' : 'warning'}>
                         <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>Mot de passe requis</AlertTitle>
                         {!adminView && <Typography fontSize='small'>{t('ModalParamsRoomNotAllowedText')}</Typography>}
-                        {adminView && !roomParams.isPasswordNeeded && <Typography fontSize='small'>Rendre la room accessible par mot de passe</Typography>}
+                        {adminView && !roomParams.isPasswordNeeded && <Typography fontSize='small'>Rendre la playlist accessible par mot de passe</Typography>}
                         {adminView && roomParams.isPasswordNeeded &&
                             <TextField
                                 value={password}
@@ -179,7 +179,7 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
                                     startAdornment: (
                                         <InputAdornment sx={{ ml: '-10px' }} position="start">
                                             <IconButton
-                                                aria-label="Afficher / Cacher le mot de passe de la room"
+                                                aria-label="Afficher / Cacher le mot de passe de la playlist"
                                                 onClick={(e) => setShowPassword(!showPassword)}
                                                 edge="end"
                                             >
@@ -206,7 +206,7 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
                         disabled={adminView ? false : true}
                         name="switchSyncPeopleByDefault" />} severity={roomParams.syncPeopleByDefault ? 'success' : 'warning'}>
                         <AlertTitle sx={{ fontWeight: 'bold' }}>Synchronisés par défaut</AlertTitle>
-                        <Typography fontSize='small'>{adminView ? 'Synchronise automatiquement les utilisateurs a l\'hôte de la room' : t('ModalParamsRoomNotAllowedText')}</Typography>
+                        <Typography fontSize='small'>{adminView ? 'Synchronise automatiquement les utilisateurs a l\'hôte de la playlist' : t('ModalParamsRoomNotAllowedText')}</Typography>
                     </Alert>
 
 

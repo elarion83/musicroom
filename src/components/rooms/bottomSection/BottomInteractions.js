@@ -113,7 +113,7 @@ const BottomInteractions = ({ t, layoutDisplay, setLayoutdisplay, paramDrawerIsO
                 open={((Date.now() - roomParams.spotify.TokenTimestamp) < 5000) && roomParams.spotify.AlreadyHaveBeenLinked}
                 autoHideDuration={5000}
                 sx={{ borderRadius:'2px'}}
-                message={roomParams.spotify.IsLinked ? roomParams.spotify.UserConnected + " a ajouté Spotify a la room !" : "La connexion Spotify a expirée"}
+                message={roomParams.spotify.IsLinked ? roomParams.spotify.UserConnected + " a ajouté Spotify a la playlist !" : "La connexion Spotify a expirée"}
             />
 
 
@@ -121,7 +121,7 @@ const BottomInteractions = ({ t, layoutDisplay, setLayoutdisplay, paramDrawerIsO
                 open={((Date.now() - roomParams.deezer.TokenTimestamp) < 5000) && roomParams.deezer.AlreadyHaveBeenLinked}
                 autoHideDuration={5000}
                 sx={{ borderRadius:'2px'}}
-                message={roomParams.deezer.IsLinked ? roomParams.deezer.UserConnected + " a ajouté Deezer a la room !" : "La connexion Deezer a expirée"}
+                message={roomParams.deezer.IsLinked ? roomParams.deezer.UserConnected + " a ajouté Deezer a la playlist !" : "La connexion Deezer a expirée"}
             />
         </Grid>
     )

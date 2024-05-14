@@ -121,14 +121,14 @@ function App( {t} ) {
     var newRoomId = uuid().slice(0,5).toLowerCase()
     joinRoomByRoomId(newRoomId);
 
-    CreateGoogleAnalyticsEvent('Actions','Création room','Room id :'+newRoomId);
+    CreateGoogleAnalyticsEvent('Actions','Création playlist','Playlist id :'+newRoomId);
   }
 
   function joinRoomByRoomId(idRoom) {
     setRoomId(idRoom.toLowerCase().trim());
     replaceCurrentUrlWithRoomUrl(idRoom.toLowerCase().trim());
     setJoinRoomModalOpen(false);
-    CreateGoogleAnalyticsEvent('Actions','Rejoin. Room','Room id :'+idRoom);
+    CreateGoogleAnalyticsEvent('Actions','Rejoin. playlist','Playlist id :'+idRoom);
   }
   
   // when join room or create room button pressed, if not logged in we need to do the right action after login
@@ -277,7 +277,7 @@ function App( {t} ) {
     localStorage.removeItem("Play-It_SpotifyToken");
     replaceCurrentUrlWithHomeUrl();
     
-    CreateGoogleAnalyticsEvent('Actions','Quit room','Quit room');
+    CreateGoogleAnalyticsEvent('Actions','Quit playlist','Quit playlist');
   }
 
   function setUserInfoEdit(user) {

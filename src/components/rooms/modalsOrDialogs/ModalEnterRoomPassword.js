@@ -36,8 +36,8 @@ const ModalEnterRoomPassword = ({ password, open, changeOpen }) => {
             <DialogContent dividers sx={{pt:0}}>
                
                 <Alert sx={{pl:1, mb:2, mt:1, alignItems: 'center'}} severity='warning'>
-                    <AlertTitle sx={{fontWeight:'bold'}}>Room protégée par mot de passe</AlertTitle>
-                    <Typography fontSize='small'>La room est protégée par un mot de passe. Vous devez le renseigner.</Typography>
+                    <AlertTitle sx={{fontWeight:'bold'}}>Playlist protégée par mot de passe</AlertTitle>
+                    <Typography fontSize='small'>La playlist est protégée par un mot de passe. Vous devez le renseigner.</Typography>
                 </Alert>
                 <TextField
                     error={passwordIsWrong ? true : false}
@@ -53,7 +53,7 @@ const ModalEnterRoomPassword = ({ password, open, changeOpen }) => {
                         startAdornment: (
                             <InputAdornment sx={{ml:'-10px'}} position="start">
                                 <IconButton
-                                    aria-label="Afficher / Cacher le mot de passe de la room"
+                                    aria-label="Afficher / Cacher le mot de passe de la playlist"
                                     onClick={(e) => setShowPassword(!showPassword)}
                                     edge="end"
                                     >
@@ -65,7 +65,7 @@ const ModalEnterRoomPassword = ({ password, open, changeOpen }) => {
                             <InputAdornment position="end">
                                 <IconButton
                                     onClick={(e) => joinRoomByPassword()} 
-                                    aria-label="Afficher / Cacher le mot de passe de la room"
+                                    aria-label="Afficher / Cacher le mot de passe de la playlist"
                                     edge="end"
                                     >
                                     <ArrowCircleRightIcon/>

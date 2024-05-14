@@ -175,11 +175,11 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
                 {room.playlistEmpty &&
                     <Box sx={{ display: 'flex', flexDirection: 'column', padding: '1em' }}>
                         <Typography component="span"> Playlist {t('GeneralEmpty')} </Typography>
-                        <Typography sx={{ color: 'var(--white)', display: 'block', width: '100%', ml: 0, fontSize: '12px', textTransform: 'uppercase' }} > Room {room.id}</Typography>
+                        <Typography sx={{ color: 'var(--white)', display: 'block', width: '100%', ml: 0, fontSize: '12px', textTransform: 'uppercase' }} > #{room.id}</Typography>
                     </Box>}
                 {typeof (room.playlistUrls) !== 'undefined' && !room.playlistEmpty &&
                     <Box sx={{ display: 'flex', flexDirection: 'column', p: '8px' }}>
-                        <Typography sx={{ color: 'var(--white)', display: 'block', width: '100%', ml: 0, pl: 0, fontSize: '12px', textTransform: 'uppercase' }} > Room {room.id}</Typography>
+                        <Typography sx={{ color: 'var(--white)', display: 'block', width: '100%', ml: 0, pl: 0, fontSize: '12px', textTransform: 'uppercase' }} > #{room.id}</Typography>
 
                         <Box sx={{ color: 'var(--white)', display: 'flex', gap: '10px', flexDirection: 'row', alignItems: 'center', width: '100%', ml: 1, mt: 1, fontSize: '10px', textTransform: 'uppercase' }} >
                             <SoundWave waveNumber={7} isPlayingOrNo={roomIsPlaying} />

@@ -80,7 +80,7 @@ const Contentslider = () => {
                         Une playlist.. et bien plus !
                     </Typography>
                     <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
-                        Grâce au <b>chat, aux émoticones et aux votes</b>, les membres de la room font partie intégrante de l'ambiance !
+                        Grâce au <b>chat, aux émoticones et aux votes</b>, les membres de la playlist font partie intégrante de l'ambiance !
                     </Typography>
                     <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
                         Retrouvez et relisez les playlist qui vous on plu grâce à la <b>lecture désynchronisée</b> !

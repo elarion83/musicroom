@@ -206,7 +206,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
             localData.currentUserVotes = JSON.parse(localStorage.getItem("Play-It_UserInfoVotes"));
         }
 
-        document.title = 'Room ' + roomId + ' - Play-It';
+        document.title = 'Playlist ' + roomId + ' - Play-It';
 
 	}, [roomId]);
 
@@ -218,13 +218,13 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     
                     room.notifsArray.push({type: 'userSync', timestamp: Date.now(), createdBy: currentUser.displayName});
                     roomRef.set({notifsArray: room.notifsArray},{merge:true});     
-                    CreateGoogleAnalyticsEvent('Actions','Room synchro','Room '+roomId);
+                    CreateGoogleAnalyticsEvent('Actions','Playlist synchro','Playlist '+roomId);
                 });
             } else {
                 room.notifsArray.push({type: 'userUnSync', timestamp: Date.now(), createdBy: currentUser.displayName});
                 roomRef.set({notifsArray: room.notifsArray},{merge:true});   
                 playerRef.current.seekTo(0, 'seconds');
-                CreateGoogleAnalyticsEvent('Actions','Room désynchro','Room '+roomId);
+                CreateGoogleAnalyticsEvent('Actions','Playlist désynchro','Playlist '+roomId);
             }
         }
 	}, [guestSynchroOrNot]);
@@ -252,9 +252,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         } 
 
         if(roomIsPlaying) {
-            document.title = t('GeneralPlaying')+' - Room ' + roomId + ' - Play-It';
+            document.title = t('GeneralPlaying')+' - Playlist ' + roomId + ' - Play-It';
         } else {
-            document.title = 'Room ' + roomId + ' - Play-It';
+            document.title = 'Playlist ' + roomId + ' - Play-It';
         }
         
 		getRoomData(roomId); 
@@ -318,7 +318,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     async function createNewRoomInteraction(type) {
         
-        CreateGoogleAnalyticsEvent('Actions','Room Interaction','Room '+roomId+' - '+type);
+        CreateGoogleAnalyticsEvent('Actions','Playlist Interaction','Playlist '+roomId+' - '+type);
 		getRoomData(roomId); 
         room.interactionsArray.push({timestamp:Date.now(), type:type, createdBy: currentUser.displayName});
         roomRef.update({interactionsArray: room.interactionsArray});

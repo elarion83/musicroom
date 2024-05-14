@@ -4,8 +4,8 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, InstapaperIcon, InstapaperShareButton, RedditIcon, RedditShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
 
 export const notifsTextArray = {
-    userArrived:'//AUTHOR// a rejoins la room !',
-    userLeaved: '//AUTHOR// a quitté la room !',
+    userArrived:'//AUTHOR// a rejoins la playlist !',
+    userLeaved: '//AUTHOR// a quitté la playlist !',
     userSync:'//AUTHOR// s\'est synchronisé!',
     userUnSync: '//AUTHOR// s\'est désynchronisé!',
     AccNotPremium: "Le compte utilisé n'est pas premium."
