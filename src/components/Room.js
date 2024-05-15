@@ -73,7 +73,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }, [scrollFromTopTrigger, setStickyDisplay]);
 
     // for desynchro || FINAL CLIENT ROOM DATAS
-	const [roomIdPlayed, setRoomIdPlayed] = useState(0);
+	const [roomIdPlayed, changeMediaActuallyPlayingGuest] = useState(0);
 	const [roomIsPlaying, setRoomIsPlaying] = useState(true);
     const [guestSynchroOrNot, setGuestSynchroOrNot] = useState(true);
 
@@ -213,7 +213,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         if(loaded && room) {
             room.notifsArray.push({type: 'userArrived', timestamp: Date.now(), createdBy: currentUser.displayName});
             roomRef.set({notifsArray: room.notifsArray},{merge:true});
-            setRoomIdPlayed(room.playing);
+            changeMediaActuallyPlayingGuest(room.playing);
             setRoomIsPlaying(room.actuallyPlaying);
         } 
     }, [loaded, guestSynchroOrNot]);
@@ -221,7 +221,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     useEffect(() => {
         if(guestSynchroOrNot) {
             setRoomIsPlaying(room.actuallyPlaying);
-            setRoomIdPlayed(room.playing);
+            changeMediaActuallyPlayingGuest(room.playing);
         } 
     }, [room.actuallyPlaying, room.playing]);
 
@@ -243,6 +243,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 	useEffect(() => {
         if(room.interactionsArray && room.interactionsArray.length > 0) {
             room.interactionsArray.forEach(function (item, index, object) {
+                console.log(Date.now());
                 if(Date.now() - item.timestamp < 500) { 
                     createInteractionAnimation(item.type, layoutDisplay);
                 }
@@ -298,6 +299,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         setPlayerReady(true);
         if(isActuallyAdmin || guestSynchroOrNot) {
             playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds'); 
+            console.log('ee',room.actuallyPlaying);
             setRoomIsPlaying(room.actuallyPlaying);
         }
         if(isFromDeezer(room.playlistUrls[roomIdPlayed])) {   
@@ -310,7 +312,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         
         if(!isActuallyAdmin && !guestSynchroOrNot) { 
             if(mediaIndexExist(room.playlistUrls,roomIdPlayed+1)) {
-                setRoomIdPlayed(roomIdPlayed+1);
+                changeMediaActuallyPlayingGuest(roomIdPlayed+1);
             }
         }
         else {
@@ -520,7 +522,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     roomIsPlaying={roomIsPlaying}
                     setRoomIsPlaying={setRoomIsPlaying}
                     roomIdPlayed={roomIdPlayed}
-                    setRoomIdPlayed={setRoomIdPlayed}
+                    changeMediaActuallyPlayingGuest={changeMediaActuallyPlayingGuest}
                     isAdminView={isActuallyAdmin}
                     isShowSticky={isShowSticky}
                     handlePlay={handlePlay}
@@ -673,7 +675,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                                         <>
                                                                         {!guestSynchroOrNot && 
                                                                             <>
-                                                                                <IconButton onClick={e => playingFirstInList(roomIdPlayed) ? setRoomIdPlayed(roomIdPlayed-1) : ''}>
+                                                                                <IconButton onClick={e => playingFirstInList(roomIdPlayed) ? changeMediaActuallyPlayingGuest(roomIdPlayed-1) : ''}>
                                                                                     <FirstPageIcon  fontSize="large" sx={{color :playingFirstInList(roomIdPlayed) ? '#f0f1f0': '#303134'}} />
                                                                                 </IconButton>
                                                                             
@@ -684,7 +686,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                                                     </IconButton>
                                                                                 }
 
-                                                                                <IconButton onClick={e => !playingLastInList(room.playlistUrls.length, roomIdPlayed) ? setRoomIdPlayed(roomIdPlayed+1) : ''}>
+                                                                                <IconButton onClick={e => !playingLastInList(room.playlistUrls.length, roomIdPlayed) ? changeMediaActuallyPlayingGuest(roomIdPlayed+1) : ''}>
                                                                                     <LastPageIcon  fontSize="large" sx={{color: !playingLastInList(room.playlistUrls.length, roomIdPlayed) ? '#f0f1f0' : '#303134'}} />
                                                                                 </IconButton>
                                                                             </>

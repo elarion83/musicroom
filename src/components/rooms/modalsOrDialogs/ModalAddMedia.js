@@ -109,6 +109,7 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
                 })
                     .then(function (response) {
                         setMediaSearchResultYoutube(response.data.items);
+                        setIsSearching(false);
                     })
                     .catch(function (error) {
                         console.error(error);
@@ -118,7 +119,6 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
                     .then((response) => response.json())
                     .then((responseJson) => {
                         setMediaSearchResultDailyMotion(responseJson.list);
-                        setIsSearching(false);
                     });
 
                 if (DeezerTokenProps.length !== 0) {
