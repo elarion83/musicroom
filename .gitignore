@@ -32,3 +32,4 @@ yarn-error.log*
 # Local Netlify folder
 .netlify
 src/components/not_used/
+HOW TO DEPLOY.txt
