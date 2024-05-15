@@ -82,6 +82,11 @@
     z-index: 5;
 }
 
+.emptyPlaylistAlert {
+    background-image: url('../img/textura.png');
+    background-size: cover;
+}
+
 @media (max-width: 600px) { 
     .DrawerGradient {
         background-size: 200%;

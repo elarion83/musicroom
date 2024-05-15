@@ -10,7 +10,7 @@ const EmptyPlaylist = ({t, setOpenInvitePeopleToRoomModal, setOpenAddToPlaylistM
        <>
         <Alert severity="success" variant="filled" 
             icon={<Icon icon="uil:smile-beam" width="35"/>} 
-            className='animate__animated animate__fadeInUp animate__slow'
+            className='animate__animated animate__fadeInUp animate__slow emptyPlaylistAlert'
             onClick={(e) => setOpenInvitePeopleToRoomModal(true)}
             sx={{m:2, border:'2px solid var(--green-2)', cursor:'pointer'}}> 
             <AlertTitle className='varelaFontTitle' sx={{mb:0}}>{t('RoomEmptyAlertWelcome')} </AlertTitle> 
@@ -20,7 +20,7 @@ const EmptyPlaylist = ({t, setOpenInvitePeopleToRoomModal, setOpenAddToPlaylistM
             variant="filled" 
             icon={<Icon icon="iconoir:music-double-note-add" width="35" />} 
             sx={{m:2, border:'2px solid #febc21', cursor:'pointer'}} 
-            className='animate__animated animate__fadeInUp animate__slow'
+            className='animate__animated animate__fadeInUp animate__slow emptyPlaylistAlert'
             onClick={(e) => setOpenAddToPlaylistModal(true)} >
             <AlertTitle className='varelaFontTitle'>{t('RoomEmptyAlertPlaylist')}</AlertTitle>
             <p style={{color:'var(--white)', margin:0}}>{t('RoomEmptyAlertPlaylistClickHere')}</p>
@@ -41,7 +41,7 @@ const EmptyPlaylist = ({t, setOpenInvitePeopleToRoomModal, setOpenAddToPlaylistM
             <Alert severity="warning" variant="filled" 
             icon={<Icon icon="mdi:spotify" width="30" />} 
             sx={{m:2, border:'2px solid #febc21',cursor:'pointer'}} 
-            className='animate__animated animate__delay-1s animate__fadeInUp animate__slow'
+            className='animate__animated animate__delay-1s animate__fadeInUp animate__slow emptyPlaylistAlert'
             onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
             <AlertTitle className='varelaFontTitle' sx={{margin:'3px 0 0 0'}}>{t('RoomEmptyAlertSpotify')}</AlertTitle>
         </Alert>}
