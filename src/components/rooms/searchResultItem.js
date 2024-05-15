@@ -1,6 +1,7 @@
 import { Box, Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
+import { formatNumberToMinAndSec } from "../../services/utils";
 
-const SearchResultItem = ({ image, title, source, platformId, album = null, addedBy, uid, url, date = null, channelOrArtist = null, addItemToPlaylist }) => {
+const SearchResultItem = ({ duration,image, title, source, platformId, album = null, addedBy, uid, url, date = null, channelOrArtist = null, addItemToPlaylist }) => {
    
     return (
         <Grid className="searchResultItem" item xs={6} sm={4} md={3} xl={2}>
@@ -19,6 +20,7 @@ const SearchResultItem = ({ image, title, source, platformId, album = null, adde
                         {album != null && <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}>Album <b>{album} </b></Typography>}
                         {channelOrArtist != null && <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}><b>{channelOrArtist} </b></Typography>}
                         {date != null && <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}><b>{date} </b></Typography>}
+                        {duration != null && <Typography sx={{ ml:0, mb: 0, fontSize: '10px' }}><b>{formatNumberToMinAndSec(duration)} </b></Typography>}
                     </Box>
                 </CardContent>
             </Card>

@@ -114,7 +114,7 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
                         console.error(error);
                     });
 
-                fetch('https://api.dailymotion.com/videos?fields=id,thumbnail_url%2Ctitle&country=fr&search=' + searchTerm + '&limit=10')
+              /*  fetch('https://api.dailymotion.com/videos?fields=id,thumbnail_url,views_total,owner,owner.screenname,duration%2Ctitle&country=fr&search=' + searchTerm + '&limit=18')
                     .then((response) => response.json())
                     .then((responseJson) => {
                         setMediaSearchResultDailyMotion(responseJson.list);
@@ -126,7 +126,7 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
                     .then(function (response) {
                         setMediaSearchResultDeezer(response.data.data);
                     });
-                }
+                }*/
 
                 if (spotifyTokenProps.length !== 0) {
                     await axios.get("https://api.spotify.com/v1/search", {
@@ -219,8 +219,8 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
                     <Tabs value={tabIndex} onChange={handleTabChange} sx={{ bgcolor: '#202124' }}>
                         <Tab sx={{ color: 'var(--white)' }} label="Youtube" disabled={mediaSearchResultYoutube.length > 1 ? false : true} />
                         <Tab sx={{ color: 'var(--white)' }} label="Spotify" disabled={mediaSearchResultSpotify && mediaSearchResultSpotify.length > 1 ? false : true} />
-                        <Tab sx={{ color: 'var(--white)' }} label="Deezer" disabled={mediaSearchResultDeezer && mediaSearchResultDeezer.length > 1 ? false : true} />
-                        <Tab sx={{ color: 'var(--white)' }} label="Dailymotion" disabled={mediaSearchResultDailyMotion.length > 1 ? false : true} />
+                       {/* <Tab sx={{ color: 'var(--white)' }} label="Deezer" disabled={mediaSearchResultDeezer && mediaSearchResultDeezer.length > 1 ? false : true} />
+                        <Tab sx={{ color: 'var(--white)' }} label="Dailymotion" disabled={mediaSearchResultDailyMotion.length > 1 ? false : true} /> */}
                     </Tabs>
                     <Box sx={{ lineHeight: "15px", p: 0, pt: 0, mb: 0 }}>
                         {tabIndex === 0 && (
@@ -270,7 +270,7 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
                                 </Grid>}
                             </Box>
                         )}
-                        {tabIndex === 2 && (
+                   {/*     {tabIndex === 2 && (
                             <Box>
                                 {mediaSearchResultDeezer.length > 1 &&
                                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ mt: 0 }}>
@@ -303,9 +303,11 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
                                                     key={iddm}
                                                     image={media.thumbnail_url}
                                                     title={media.title}
+                                                    duration={media.duration}
                                                     source='dailymotion'
                                                     uid={uuid().slice(0, 10).toLowerCase()}
                                                     platformId={media.id}
+                                                    channelOrArtist={media['owner.screenname']}
                                                     addedBy={addingObject.addedBy}
                                                     url={'https://www.dailymotion.com/video/' + media.id}
                                                     addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject}
@@ -314,8 +316,8 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
                                     </Grid>
                                 </Grid>}
                             </Box>
-                        )}
-                    </Box>
+                        )}  */}
+                    </Box> 
                 </Grid>}
                 <Snackbar
                     open={recentlyAdded}

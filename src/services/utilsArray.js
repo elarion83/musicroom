@@ -96,6 +96,7 @@ export function youtubeApiSearchObject(search, maxResults) {
         q: search,
         relevanceLanguage:'fr',
         regionCode:'fr',
+        order:'viewCount',
         maxResults: maxResults,
         videoEmbeddable:true,
         type: 'video'

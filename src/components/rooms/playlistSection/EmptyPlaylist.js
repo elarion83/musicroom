@@ -26,7 +26,7 @@ const EmptyPlaylist = ({t, setOpenInvitePeopleToRoomModal, setOpenAddToPlaylistM
             <p style={{color:'var(--white)', margin:0}}>{t('RoomEmptyAlertPlaylistClickHere')}</p>
         </Alert>
         
-        {!deezerIsLinked && 
+       {/* {!deezerIsLinked && 
             <Alert severity="warning" variant="filled" 
             icon={<Icon icon="jam:deezer" width="30" />} 
             sx={{m:2, border:'2px solid #febc21',cursor:'pointer'}} 
@@ -34,6 +34,8 @@ const EmptyPlaylist = ({t, setOpenInvitePeopleToRoomModal, setOpenAddToPlaylistM
                 onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_DEEZER_AUTH_ENDPOINT}?app_id=${process.env.REACT_APP_ROOM_DEEZER_APP_ID}&redirect_uri=${REDIRECT_URI}&perms=basic_access,email`}>
             <AlertTitle className='varelaFontTitle' sx={{margin:'3px 0 0 0'}}>{t('RoomEmptyAlertDeezer')}</AlertTitle>
         </Alert>}
+
+        */}
 
         {!spotifyIsLinked && 
             <Alert severity="warning" variant="filled" 
