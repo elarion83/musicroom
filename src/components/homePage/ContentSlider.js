@@ -31,9 +31,9 @@ const Contentslider = () => {
                 renderItem: 
                 <Box className={(activeItem === '0' || activeItem === 0) ? 'slideBox activeSlideBox' : 'slideBox'} onClick={(e) => slideToItem(0)} > 
                     <img alt="" src="../../../../img/icons_animated/disco.gif" class="mainIcon"/>
-                    <img alt="" src="../../../../img/icons_animated/womenheandbanging.gif" class="mainIcon altIcon right small"/>
+                    <img alt="" src="../../../../img/icons_animated/womenheandbanging.gif" class="mainIcon altIcon top small"/>
                     <img alt="" src="../../../../img/icons_animated/menheandbanging.gif" class="mainIcon altIcon middle left small"/>
-                    <img alt="" src="../../../../img/icons_animated/playlistadd.gif" class="mainIcon altIcon top right small"/>
+                    <img alt="" src="../../../../img/icons_animated/playlistadd.gif" class="mainIcon altIcon middle right small"/>
                     <Typography sx={{pl:2,pr:2,mb:3}} variant="h5" gutterBottom className='varelaFontTitle'>
                         Une playlist en temps réel a plusieurs !
                     </Typography>
