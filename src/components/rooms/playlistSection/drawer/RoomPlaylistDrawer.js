@@ -30,7 +30,7 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, room
             anchor='bottom'
             onClose={(e) => changeOpen(false)}
             open={open}
-            sx={{zIndex:2000, borderTopLeftRadius:'5px'}}
+            sx={{zIndex:2000}}
         >
             <Box className="DrawerBackButton" onClick={(e) => changeOpen(false)} ></Box>
             <Divider />                        
@@ -80,7 +80,7 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, room
                             </ListItem>
                         </>
                     }
-                    <Divider />
+                    <Divider variant="middle" light={true} sx={{width:'50%'}} />
                     <ListItemText sx={{m:1,ml:2}}>
                         <Button size="small" variant="text" 
                             onClick={e => userVoteArray.up.includes(data.hashId) ? '' : handleVoteChangeInComp(roomIdActuallyDisplaying, data.hashId, 'up')}
