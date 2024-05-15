@@ -5,7 +5,7 @@ import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import { Box } from "@mui/system";
 import { ListItemIcon } from "@mui/material";
 import SoundWave from "../../../../services/SoundWave";
-import { changeMediaActuallyPlaying } from "../../../../services/utilsRoom";
+import { changeMediaActuallyPlaying } from "../../../../services/roomUtils";
 const DrawerPlayPauseButton = ({ isAdminView,isPlayable, isPlaying, mediaDisplayingData, room, roomRef,changeIsPlaying, changeIdPlaying, idActuallyPlaying, idActuallyDisplaying }) => {
     return(
         <Box >

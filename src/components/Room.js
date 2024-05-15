@@ -50,8 +50,7 @@ import EmptyPlaylist from "./rooms/playlistSection/EmptyPlaylist";
 import { Icon } from "@iconify/react";
 import { Forward10, Replay10 } from "@mui/icons-material";
 import { playerRefObject, youtubeApiSearchObject } from "../services/utilsArray";
-import { changeMediaActuallyPlaying } from "../services/utilsRoom";
-import { handleReady } from "../services/utilsPlayer";
+import { changeMediaActuallyPlaying } from "../services/roomUtils";
 
 const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
@@ -315,6 +314,18 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         await delay(room.roomParams.interactionFrequence);
         setUserCanMakeInteraction(true);
     }
+
+    async function handleReady() {
+        setPlayerReady(true);
+        if(isActuallyAdmin || guestSynchroOrNot) {
+            playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds'); 
+            setRoomIsPlaying(room.actuallyPlaying);
+        }
+        if(isFromDeezer(room.playlistUrls[roomIdPlayed])) {   
+            playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds');
+        }
+    }
+
     
     async function handleMediaEnd() {
         
@@ -325,7 +336,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         }
         else {
             if(mediaIndexExist(room.playlistUrls, room.playing+1)) {
-                changeMediaActuallyPlaying(room.playing+1);
+                changeMediaActuallyPlaying(roomIdPlayed + 1, 'next', isActuallyAdmin, room, roomRef)
             } 
             else {
                 if(isActuallyAdmin) {
@@ -333,7 +344,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         addMediaForAutoPlayByYoutubeId(room.playlistUrls[room.playing].title);
                     }
                     else if(room.roomParams.isPlayingLooping) {
-                        changeMediaActuallyPlaying(0);
+                        changeMediaActuallyPlaying(0, 'next', isActuallyAdmin, room, roomRef)
                     }
                 }
             }
@@ -614,7 +625,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                         onProgress={e => handleProgress(e)}
                                                         progressInterval = {1000}
                                                         //onStart={e => handlePlay(true)}
-                                                        onReady={e => handleReady(isActuallyAdmin,guestSynchroOrNot,room,playerRef,setRoomIsPlaying(),setPlayerReady(),roomIdPlayed)}
+                                                        onReady={e => handleReady()}
                                                         onPlay={e => isActuallyAdmin ? handlePlay(true) : ''}
                                                         onPause={e => handlePlay(false)}
                                                         onEnded={e => handleMediaEnd()}
@@ -658,7 +669,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                                 sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:0, mb: 1.5, color:'red' }}>
                                                                     {isActuallyAdmin && 
                                                                         <>
-                                                                            <IconButton onClick={e => (playingFirstInList(roomIdPlayed) && isSpotifyAndIsNotPlayableBySpotify(roomIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? changeMediaActuallyPlaying(roomIdPlayed - 1, 'prev') : ''}>
+                                                                            <IconButton onClick={e => (playingFirstInList(roomIdPlayed) && isSpotifyAndIsNotPlayableBySpotify(roomIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? changeMediaActuallyPlaying(roomIdPlayed - 1, 'prev', isActuallyAdmin, room, roomRef) : ''}>
                                                                                 <SkipPrevious fontSize="large" sx={{color:(playingFirstInList(roomIdPlayed) && isSpotifyAndIsNotPlayableBySpotify(roomIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? '#f0f1f0': '#303134'}} />
                                                                             </IconButton>
 
@@ -675,7 +686,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                                                 <Forward10 fontSize="large" sx={{color:'#f0f1f0'}} />
                                                                             </IconButton>
 
-                                                                            <IconButton onClick={e => !playingLastInList(room.playlistUrls.length,room.playing) ? changeMediaActuallyPlaying(room.playing + 1) : ''}>
+                                                                            <IconButton onClick={e => !playingLastInList(room.playlistUrls.length,room.playing) ? changeMediaActuallyPlaying(roomIdPlayed + 1, 'next', isActuallyAdmin, room, roomRef) : ''}>
                                                                                 <SkipNextIcon fontSize="large" sx={{color: !playingLastInList(room.playlistUrls.length,room.playing) ? '#f0f1f0' : '#303134'}} />
                                                                             </IconButton>
                                                                         </>
