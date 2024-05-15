@@ -1,4 +1,5 @@
-import { isFromSpotify } from "./utils"; 
+import { db } from "./firebase";
+import { createDefaultRoomObject, isFromSpotify } from "./utils"; 
 
 export function changeMediaActuallyPlaying(numberToPlay, wayOfChange = 'next', isAdmin = false, room, roomRef) {
     if(isAdmin) {
@@ -21,4 +22,16 @@ export function changeMediaActuallyPlaying(numberToPlay, wayOfChange = 'next', i
 
 export function getLastNotif(roomNotifs = []) {
     return roomNotifs[roomNotifs.length - 1];
+}
+
+export async function getRoomTest(roomRef, roomId, currentUser) {
+    
+    const fireBaseEntry = await roomRef.get().then((doc) => {
+        return doc;
+    });
+
+    var roomDataInit = fireBaseEntry.exists ? fireBaseEntry.data() : createDefaultRoomObject(roomId, currentUser);
+    if(!fireBaseEntry.exists) { db.collection(process.env.REACT_APP_ROOM_COLLECTION).doc(roomId).set(roomDataInit).then(() => {});}
+
+    return roomDataInit;
 }
