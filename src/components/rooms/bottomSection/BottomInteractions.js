@@ -15,6 +15,7 @@ import { notifsTextArray , reactsArray} from '../../../services/utilsArray';
 import {CreateGoogleAnalyticsEvent} from '../../../services/googleAnalytics';
 
 import { withTranslation } from 'react-i18next';
+import { getLastNotif } from '../../../services/utilsRoom';
 
 const BottomInteractions = ({ t, layoutDisplay, setLayoutdisplay, paramDrawerIsOpen, handleOpenDrawerParam, currentUser, roomId, roomParams, roomNotifs, userCanMakeInteraction, createNewRoomInteraction, setOpenAddToPlaylistModal,handleOpenShareModal,handleOpenLeaveRoomModal, OpenAddToPlaylistModal, checkRoomExist, checkInterractionLength,checkNotificationsLength }) => {
 
@@ -29,11 +30,7 @@ const BottomInteractions = ({ t, layoutDisplay, setLayoutdisplay, paramDrawerIsO
         }, 500);
     }
 
-    const lastNotifType = roomNotifs.length > 0 ? roomNotifs[roomNotifs.length - 1].type : 'none';
-    
-    async function getLastNotif(roomNotifs = []) {
-        return roomNotifs[roomNotifs.length - 1];
-    }
+    const lastNotifType = roomNotifs.length > 0 ? getLastNotif(roomNotifs).type : 'none';
 
     return(
         <Grid className={`room_bottom_interactions ${isChatExpanded ? "chatExpanded" : ""}`} >
@@ -97,13 +94,13 @@ const BottomInteractions = ({ t, layoutDisplay, setLayoutdisplay, paramDrawerIsO
                 <Chat currentUser={currentUser} layoutDisplay={layoutDisplay} setLayoutdisplay={setLayoutdisplay} roomId={roomId} createNewRoomInteraction={createNewRoomInteraction} userCanMakeInteraction={userCanMakeInteraction} roomParams={roomParams} className='chatBox' hideTchat={e => setIsChatExpanded(false)} />
             }
             
-            {checkNotificationsLength && (getLastNotif().createdBy !== currentUser.displayName) && notifsTextArray[getLastNotif().type] &&
+            {checkNotificationsLength && (getLastNotif(roomNotifs).createdBy !== currentUser.displayName) && notifsTextArray[getLastNotif(roomNotifs).type] &&
                 <Snackbar
-                    open={((Date.now() - getLastNotif().timestamp) < 2000)}
-                    key={'notif'+getLastNotif().timestamp}
+                    open={((Date.now() - getLastNotif(roomNotifs).timestamp) < 2000)}
+                    key={'notif'+getLastNotif(roomNotifs).timestamp}
                     autoHideDuration={2000}
                     sx={{ borderRadius:'2px'}}
-                    message={ notifsTextArray[lastNotifType].replace('//AUTHOR//', getLastNotif().createdBy)}
+                    message={ notifsTextArray[lastNotifType].replace('//AUTHOR//', getLastNotif(roomNotifs).createdBy)}
                 />
             }
             <Snackbar
