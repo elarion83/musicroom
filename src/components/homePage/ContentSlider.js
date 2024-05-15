@@ -30,7 +30,7 @@ const Contentslider = () => {
                 id: '0',
                 renderItem: 
                 <Box className={(activeItem === '0' || activeItem === 0) ? 'slideBox activeSlideBox' : 'slideBox'} onClick={(e) => slideToItem(0)} > 
-                    <Icon icon="iconoir:playlist" width="30" className='mainIcon' />
+                    <img src="../../../../img/icons_animated/disco.gif" class="mainIcon"/>
                     <Typography sx={{pl:2,pr:2,mb:3}} variant="h5" gutterBottom className='varelaFontTitle'>
                         Une playlist en temps réel a plusieurs !
                     </Typography>
@@ -46,7 +46,8 @@ const Contentslider = () => {
                 id: '1',
                 renderItem: 
                 <Box className={activeItem == 1 ? 'slideBox activeSlideBox' : 'slideBox'} onClick={(e) => slideToItem(1)}> 
-                    <Icon icon="carbon:network-2" width="30" className='mainIcon' />
+                    <img src="../../../../img/icons_animated/confetti.gif" class="mainIcon"/>
+
                     <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
                         En étant tous au même endroit ..
                     </Typography>

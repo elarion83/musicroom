@@ -50,7 +50,7 @@ import EmptyPlaylist from "./rooms/playlistSection/EmptyPlaylist";
 import { Icon } from "@iconify/react";
 import { Forward10, Replay10 } from "@mui/icons-material";
 import { playerRefObject, youtubeApiSearchObject } from "../services/utilsArray";
-import { changeMediaActuallyPlaying } from "../services/roomUtils";
+import { changeMediaActuallyPlaying } from "../services/utilsRoom";
 
 const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 

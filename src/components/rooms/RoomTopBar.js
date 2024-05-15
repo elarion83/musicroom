@@ -21,7 +21,7 @@ import 'animate.css';
 import { withTranslation } from 'react-i18next';
 import VolumeButton from "./playerSection/VolumeButton";
 import { GFontIcon } from '../../services/utils';
-import { changeMediaActuallyPlaying } from '../../services/roomUtils';
+import { changeMediaActuallyPlaying } from '../../services/utilsRoom';
 const RoomTopBar = ({
                 t,
                 room,roomRef,
