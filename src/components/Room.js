@@ -50,7 +50,8 @@ import EmptyPlaylist from "./rooms/playlistSection/EmptyPlaylist";
 import { Icon } from "@iconify/react";
 import { Forward10, Replay10 } from "@mui/icons-material";
 import { playerRefObject, youtubeApiSearchObject } from "../services/utilsArray";
-import { changeMediaActuallyPlaying } from "../services/roomUtils";
+import { changeMediaActuallyPlaying } from "../services/utilsRoom";
+import { handleReady } from "../services/utilsPlayer";
 
 const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
@@ -314,18 +315,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         await delay(room.roomParams.interactionFrequence);
         setUserCanMakeInteraction(true);
     }
-
-    async function handleReady() {
-        setPlayerReady(true);
-        if(isActuallyAdmin || guestSynchroOrNot) {
-            playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds'); 
-            setRoomIsPlaying(room.actuallyPlaying);
-        }
-        if(isFromDeezer(room.playlistUrls[roomIdPlayed])) {   
-            playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds');
-        }
-    }
-
     
     async function handleMediaEnd() {
         
@@ -625,7 +614,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                         onProgress={e => handleProgress(e)}
                                                         progressInterval = {1000}
                                                         //onStart={e => handlePlay(true)}
-                                                        onReady={e => handleReady()}
+                                                        onReady={e => handleReady(isActuallyAdmin,guestSynchroOrNot,room,playerRef,setRoomIsPlaying(),setPlayerReady(),roomIdPlayed)}
                                                         onPlay={e => isActuallyAdmin ? handlePlay(true) : ''}
                                                         onPause={e => handlePlay(false)}
                                                         onEnded={e => handleMediaEnd()}
