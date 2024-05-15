@@ -51,7 +51,7 @@ const JoinRoomModal = ({ t, open, handleJoinRoom, changeOpen}) => {
                         <input {...digits[4]} />
                     </div>
                 </Box>
-                <Typography fontSize="small"> Ex : 5454S, E45FR</Typography>
+                <Typography component="span" fontSize="small"> Ex : 5454S, E45FR</Typography>
               </DialogContentText>
             </DialogContent>
             <DialogActions>

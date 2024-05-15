@@ -1,15 +1,16 @@
 .joinRoomForm {
     display: flex;
+    gap: 10px;
 }
 
 .joinRoomForm .input {
     position: relative;
     width: 50px;
     height: auto;
-    margin-left: 5px;
-    margin-right: 5px;
     background-color: var(--main-color);
-    border-radius: 3px;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    transition: border-color 0.3s ease;
 }
 .joinRoomForm .input input{
     border-radius: 3px;

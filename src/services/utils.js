@@ -119,22 +119,18 @@ export function isLayoutCompact(actualLayout) {
 }
 
 export async function createInteractionAnimation(type, layoutDisplay = 'unknown') {
-    var n = 0;
-    while(n < 1) {
-        const interactionDisplay = document.createElement("img");
-        interactionDisplay.src = "img/"+type+".png";
-        interactionDisplay.classList.add("interactionImageContainer");
-        interactionDisplay.style.left = Math.random() * 100 + "vw";
-        if(layoutDisplay === 'interactive') {
-            interactionDisplay.style.zIndex = 2100;
-        }
-        interactionDisplay.style.animationDuration = Math.random() * 5 + 3 + "s ";
-        document.body.appendChild(interactionDisplay);
-        setTimeout(() => {
-            interactionDisplay.remove();
-        }, 2000);
-        n++
+    const interactionDisplay = document.createElement("img");
+    interactionDisplay.src = "img/"+type+".png";
+    interactionDisplay.classList.add("interactionImageContainer");
+    interactionDisplay.style.left = Math.random() * 100 + "vw";
+    if(layoutDisplay === 'interactive') {
+        interactionDisplay.style.zIndex = 2100;
     }
+    interactionDisplay.style.animationDuration = Math.random() * 5 + 3 + "s ";
+    document.body.appendChild(interactionDisplay);
+    setTimeout(() => {
+        interactionDisplay.remove();
+    }, 2000);
 }
 
 export function waitingTextReaction(delayMs) {

@@ -225,7 +225,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         } 
     }, [room.actuallyPlaying, room.playing]);
 
-
 	useEffect(() => {
         if(currentUser.displayName === room.admin || currentUser.displayName === room.admin) {
             setIsActuallyAdmin(true);
@@ -243,8 +242,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 	useEffect(() => {
         if(room.interactionsArray && room.interactionsArray.length > 0) {
             room.interactionsArray.forEach(function (item, index, object) {
-                console.log(Date.now());
-                if(Date.now() - item.timestamp < 500) { 
+                if((Date.now() - item.timestamp) < 500) { 
                     createInteractionAnimation(item.type, layoutDisplay);
                 }
             });
@@ -297,17 +295,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     async function handleReady() {
         setPlayerReady(true);
-        if(isActuallyAdmin || guestSynchroOrNot) {
-            playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds'); 
-            console.log('ee',room.actuallyPlaying);
+        playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds'); 
+        if(isActuallyAdmin || guestSynchroOrNot) {  
             setRoomIsPlaying(room.actuallyPlaying);
-        }
-        if(isFromDeezer(room.playlistUrls[roomIdPlayed])) {   
-            playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds');
         }
     }
 
-    
     async function handleMediaEnd() {
         
         if(!isActuallyAdmin && !guestSynchroOrNot) { 

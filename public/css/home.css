@@ -40,6 +40,12 @@
     margin-right: auto;
 }
 
+.createRoom,
+.joinRoom {
+    background: url('../img/textura.png');
+    background-size: 100%;
+}
+
 @media (max-width: 800px) { 
     .homeSlider .mainIcon {
         width: 100%;
