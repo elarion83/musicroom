@@ -39,6 +39,28 @@
     margin-left: auto;
     margin-right: auto;
 }
+.homeSlider img.altIcon {
+    width: 116px;
+    top: 150px;
+    opacity: 0.5;
+    left: 20%;
+    position: absolute;
+}
+.homeSlider img.altIcon.left {
+    left: 30%;
+}
+
+.homeSlider img.altIcon.top {
+    top:50px;
+    left: 32%;
+}
+.homeSlider img.altIcon.small {
+    width: 56px;
+}
+.homeSlider img.altIcon.right {
+    left: 60%;
+}
+
 
 .createRoom,
 .joinRoom {

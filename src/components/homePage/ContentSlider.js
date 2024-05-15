@@ -47,6 +47,8 @@ const Contentslider = () => {
                 renderItem: 
                 <Box className={activeItem === '1' ? 'slideBox activeSlideBox' : 'slideBox'} onClick={(e) => slideToItem(1)}> 
                     <img alt="" src="../../../../img/icons_animated/confetti.gif" class="mainIcon"/>
+                    <img alt="" src="../../../../img/icons_animated/glasses.gif" class="mainIcon altIcon left small"/>
+                    <img alt="" src="../../../../img/icons_animated/bluetooth.gif" class="mainIcon altIcon right small"/>
 
                     <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
                         En étant tous au même endroit ..
@@ -60,7 +62,10 @@ const Contentslider = () => {
                 id: '2',
                 renderItem: 
                 <Box className={activeItem === '2' ? 'slideBox activeSlideBox' : 'slideBox'} onClick={(e) => slideToItem(2)}> 
-                    <Icon icon="carbon:network-4" width="30" className='mainIcon' />
+                    <img alt="" src="../../../../img/icons_animated/globe.gif" class="mainIcon"/>
+                    <img alt="" src="../../../../img/icons_animated/pin1.gif" class="mainIcon altIcon top left small"/>
+                    <img alt="" src="../../../../img/icons_animated/pin2.gif" class="mainIcon altIcon left small"/>
+                    <img alt="" src="../../../../img/icons_animated/pin3.gif" class="mainIcon altIcon right small"/>
                     <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
                         .. ou en étant chacun chez soi
                     </Typography>
@@ -76,7 +81,9 @@ const Contentslider = () => {
                 id: '3',
                 renderItem: 
                 <Box className={activeItem === '3' ? 'slideBox activeSlideBox' : 'slideBox'} onClick={(e) => slideToItem(3)}> 
-                    <Icon icon="lucide:party-popper" width="30" className='mainIcon' />
+                    <img alt="" src="../../../../img/icons_animated/chat.gif" class="mainIcon"/>
+                    <img alt="" src="../../../../img/icons_animated/music_note.gif" class="mainIcon altIcon left small"/>
+                    <img alt="" src="../../../../img/icons_animated/speakers.gif" class="mainIcon altIcon right small"/>
                     <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
                         Une playlist.. et bien plus !
                     </Typography>
