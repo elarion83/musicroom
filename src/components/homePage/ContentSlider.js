@@ -31,6 +31,9 @@ const Contentslider = () => {
                 renderItem: 
                 <Box className={(activeItem === '0' || activeItem === 0) ? 'slideBox activeSlideBox' : 'slideBox'} onClick={(e) => slideToItem(0)} > 
                     <img alt="" src="../../../../img/icons_animated/disco.gif" class="mainIcon"/>
+                    <img alt="" src="../../../../img/icons_animated/womenheandbanging.gif" class="mainIcon altIcon right small"/>
+                    <img alt="" src="../../../../img/icons_animated/menheandbanging.gif" class="mainIcon altIcon middle left small"/>
+                    <img alt="" src="../../../../img/icons_animated/playlistadd.gif" class="mainIcon altIcon top right small"/>
                     <Typography sx={{pl:2,pr:2,mb:3}} variant="h5" gutterBottom className='varelaFontTitle'>
                         Une playlist en temps réel a plusieurs !
                     </Typography>
@@ -48,7 +51,8 @@ const Contentslider = () => {
                 <Box className={activeItem === '1' ? 'slideBox activeSlideBox' : 'slideBox'} onClick={(e) => slideToItem(1)}> 
                     <img alt="" src="../../../../img/icons_animated/confetti.gif" class="mainIcon"/>
                     <img alt="" src="../../../../img/icons_animated/glasses.gif" class="mainIcon altIcon left small"/>
-                    <img alt="" src="../../../../img/icons_animated/bluetooth.gif" class="mainIcon altIcon right small"/>
+                    <img alt="" src="../../../../img/icons_animated/hat.gif" class="mainIcon altIcon top left small"/>
+                    <img alt="" src="../../../../img/icons_animated/bluetooth.gif" class="mainIcon altIcon middle right small"/>
 
                     <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
                         En étant tous au même endroit ..
@@ -64,6 +68,7 @@ const Contentslider = () => {
                 <Box className={activeItem === '2' ? 'slideBox activeSlideBox' : 'slideBox'} onClick={(e) => slideToItem(2)}> 
                     <img alt="" src="../../../../img/icons_animated/globe.gif" class="mainIcon"/>
                     <img alt="" src="../../../../img/icons_animated/pin1.gif" class="mainIcon altIcon top left small"/>
+                    <img alt="" src="../../../../img/icons_animated/amazonspeaker.gif" class="mainIcon altIcon top right small"/>
                     <img alt="" src="../../../../img/icons_animated/pin2.gif" class="mainIcon altIcon left small"/>
                     <img alt="" src="../../../../img/icons_animated/pin3.gif" class="mainIcon altIcon right small"/>
                     <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>

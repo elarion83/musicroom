@@ -37,11 +37,13 @@
     width: 150px;
     transform: none;
     margin-left: auto;
+    z-index: 2;
     margin-right: auto;
 }
 .homeSlider img.altIcon {
     width: 116px;
     top: 150px;
+    z-index: 1;
     opacity: 0.5;
     left: 20%;
     position: absolute;
@@ -50,6 +52,9 @@
     left: 30%;
 }
 
+.homeSlider img.altIcon.middle {
+    top:80px;
+}
 .homeSlider img.altIcon.top {
     top:50px;
     left: 32%;
