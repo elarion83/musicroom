@@ -80,7 +80,7 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, room
                             </ListItem>
                         </>
                     }
-                    <Divider variant="middle" light={true} sx={{width:'50%'}} />
+                    <Divider variant="middle" light={true} sx={{width:'40%'}} />
                     <ListItemText sx={{m:1,ml:2}}>
                         <Button size="small" variant="text" 
                             onClick={e => userVoteArray.up.includes(data.hashId) ? '' : handleVoteChangeInComp(roomIdActuallyDisplaying, data.hashId, 'up')}
