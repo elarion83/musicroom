@@ -7,7 +7,6 @@ import { Alert, AlertTitle, Dialog, DialogContent, FormGroup, Grid, IconButton, 
 import { useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import { LoadingButton } from "@mui/lab";
-import { auth, db, googleProvider } from "../../../services/firebase";
 
 import { withTranslation } from 'react-i18next';
 

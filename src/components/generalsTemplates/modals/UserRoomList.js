@@ -7,7 +7,7 @@ import { Dialog, DialogContent, Typography } from "@mui/material";
 
 import { db } from '../../../services/firebase'; 
 import { useState } from "react";
-import { Box, shadows } from "@mui/system";
+import { Box } from "@mui/system";
 
 import { withTranslation } from 'react-i18next';
 

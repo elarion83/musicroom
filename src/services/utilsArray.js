@@ -101,3 +101,11 @@ export function youtubeApiSearchObject(search, maxResults) {
         type: 'video'
     }
 }
+
+export const emptyToken = {
+    IsLinked:false,
+    AlreadyHaveBeenLinked:true,
+    Token:'',
+    TokenTimestamp:Date.now(),
+    UserConnected:''
+}

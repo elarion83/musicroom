@@ -1,5 +1,5 @@
 
-import { Divider, Drawer, LinearProgress, List, ListItem, ListItemText, Typography } from "@mui/material";
+import { Divider, Drawer, List, ListItem, ListItemText, Typography } from "@mui/material";
 import React from "react";
 import {isFromSpotify} from '../../../../services/utils';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';

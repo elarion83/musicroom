@@ -5,7 +5,6 @@ import { db } from "../services/firebase";
 import { useIdleTimer } from 'react-idle-timer'
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
@@ -16,10 +15,9 @@ import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
 import { v4 as uuid } from 'uuid';
-import {cleanMediaTitle,isFromSpotify,isFromDeezer,isUndefined,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,isFromSource,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec} from '../services/utils';
+import {cleanMediaTitle,isFromSpotify,isFromDeezer,isUndefined,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec} from '../services/utils';
 import RoomPlaylistDrawer from "./rooms/playlistSection/drawer/RoomPlaylistDrawer";
 
-//import screenfull from 'screenfull'
 import FirstPageIcon from '@mui/icons-material/FirstPage';
 import LastPageIcon from '@mui/icons-material/LastPage';
 
@@ -49,7 +47,7 @@ import VolumeButton from "./rooms/playerSection/VolumeButton";
 import EmptyPlaylist from "./rooms/playlistSection/EmptyPlaylist";
 import { Icon } from "@iconify/react";
 import { Forward10, Replay10 } from "@mui/icons-material";
-import { playerRefObject, youtubeApiSearchObject } from "../services/utilsArray";
+import { emptyToken, playerRefObject, youtubeApiSearchObject } from "../services/utilsArray";
 import { changeMediaActuallyPlaying } from "../services/utilsRoom";
 
 const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
@@ -66,13 +64,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     useEffect(() => {
         const handleScroll = (event) => {
-            if(window.scrollY >= scrollFromTopTrigger) {
-                setIsShowSticky(true);
-                setStickyDisplay(true);
-            } else {
-                setIsShowSticky(false);
-                setStickyDisplay(false);
-            }
+            setIsShowSticky(window.scrollY >= scrollFromTopTrigger);
+            setStickyDisplay(window.scrollY >= scrollFromTopTrigger);
         };
 
         window.addEventListener('scroll', handleScroll);
@@ -280,26 +273,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }
 
     async function disconnectSpotify() {
-         roomRef.set({roomParams:{
-            spotify:{
-                IsLinked:false,
-                AlreadyHaveBeenLinked:true,
-                Token:'',
-                TokenTimestamp:Date.now(),
-                UserConnected:''
-            }}}, { merge: true });
+        roomRef.set({roomParams:{spotify:emptyToken}}, { merge: true });
         setOpenForceDisconnectSpotifyModal(false);
     }
 
     async function disconnectDeezer() {
-        roomRef.set({roomParams:{
-            deezer:{
-                IsLinked:false,
-                AlreadyHaveBeenLinked:true,
-                Token:'',
-                TokenTimestamp:Date.now(),
-                UserConnected:''
-            }}}, { merge: true });
+        roomRef.set({roomParams:{deezer:emptyToken}}, { merge: true });
         setOpenForceDisconnectDeezerModal(false);
     }
 
@@ -353,8 +332,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     async function isSpotifyAndIsNotPlayableBySpotify(numberToPlay, spotifyIsLinked) {
         if(isFromSpotify(room.playlistUrls[numberToPlay]) && !spotifyIsLinked) {
             return true;
-        }
-        
+        }   
         return false;
     }
   
@@ -611,7 +589,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                 }
                                                 
                                                 {isFromDeezer(room.playlistUrls[roomIdPlayed]) && 
-                                                    <img className="coverImg" src={room.playlistUrls[roomIdPlayed].visuel} />
+                                                    <img className="coverImg" alt={"Cover of "+room.playlistUrls[roomIdPlayed].title} src={room.playlistUrls[roomIdPlayed].visuel} />
                                                 }
 
                                                 {!isFromSpotify(room.playlistUrls[roomIdPlayed]) && room.playlistUrls[roomIdPlayed] && 

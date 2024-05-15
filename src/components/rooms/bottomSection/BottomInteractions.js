@@ -1,6 +1,3 @@
-import CelebrationIcon from '@mui/icons-material/Celebration';
-import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { Fab, Grid, Snackbar, Tooltip } from '@mui/material';
 import React from "react";

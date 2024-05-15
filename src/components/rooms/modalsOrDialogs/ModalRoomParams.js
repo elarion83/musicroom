@@ -2,7 +2,6 @@ import React, { useState } from "react";
 
 import DialogTitle from '@mui/material/DialogTitle';
 
-
 import { Icon } from '@iconify/react';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import TuneIcon from '@mui/icons-material/Tune';
@@ -15,7 +14,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import { withTranslation } from 'react-i18next';
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 
-const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDisconnectFromSpotifyModal, spotifyAccountError, handleDisconnectFromDeezerModal, handleChangeRoomParams }) => {
+const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDisconnectFromSpotifyModal, handleDisconnectFromDeezerModal, handleChangeRoomParams }) => {
 
     const REDIRECT_URI = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ":" + window.location.port : '');
 
@@ -54,11 +53,6 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
 
     async function handleChangeSyncPeopleByDefault() {
         roomParams.syncPeopleByDefault = !roomParams.syncPeopleByDefault;
-        handleChangeRoomParams(roomParams);
-    }
-
-    async function handleChangeIsOnInvitation() {
-        roomParams.isOnInvitation = !roomParams.isOnInvitation;
         handleChangeRoomParams(roomParams);
     }
 

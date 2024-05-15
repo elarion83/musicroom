@@ -3,7 +3,7 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import axios from "axios";
 import dateFormat from "dateformat";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Typed from "react-typed";
 import { v4 as uuid } from 'uuid';
 
@@ -40,7 +40,7 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
 
     const delay = ms => new Promise(res => setTimeout(res, ms));
 
-    const [addingObject, setAddingObject] = useState({ title: '', deleted: false, source: '', url: '', addedBy: currentUser.displayName })
+    const addingObject = { title: '', deleted: false, source: '', url: '', addedBy: currentUser.displayName };
 
 
     async function handleCheckAndAddObjectToPlaylistFromObject(objectFormatted) {
