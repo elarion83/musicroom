@@ -21,9 +21,10 @@ import 'animate.css';
 import { withTranslation } from 'react-i18next';
 import VolumeButton from "./playerSection/VolumeButton";
 import { GFontIcon } from '../../services/utils';
-
+import { changeMediaActuallyPlaying } from '../../services/roomUtils';
 const RoomTopBar = ({
                 t,
+                room,roomRef,
                 isShowSticky,
                 handlePlay,
                 roomIsPlaying,
@@ -31,8 +32,6 @@ const RoomTopBar = ({
                 roomIdPlayed,
                 setRoomIdPlayed,
                 isAdminView,
-                room,
-                handleChangeActuallyPlaying,
                 isSpotifyAndIsNotPlayableBySpotify,
                 guestSynchroOrNot,
                 setGuestSynchroOrNot,
@@ -174,7 +173,7 @@ const RoomTopBar = ({
                 <Grid className="animate__animated animate__fadeInDown stickyButtons"> 
                     {isAdminView && 
                         <>
-                            <IconButton onClick={e => ((room.playing > 0) && isSpotifyAndIsNotPlayableBySpotify(room.playing-1, room.roomParams.isLinkedToSpotify)) ? handleChangeActuallyPlaying(room.playing - 1) : ''}>
+                            <IconButton onClick={e => ((room.playing > 0) && isSpotifyAndIsNotPlayableBySpotify(room.playing-1, room.roomParams.isLinkedToSpotify)) ? changeMediaActuallyPlaying(room.playing - 1, 'prev', isAdminView, room, roomRef) : ''}>
                                 <SkipPrevious fontSize="large" sx={{color:((room.playing > 0) && isSpotifyAndIsNotPlayableBySpotify(room.playing-1, room.roomParams.isLinkedToSpotify)) ? '#f0f1f0': '#303134'}} />
                             </IconButton>
 
@@ -183,7 +182,7 @@ const RoomTopBar = ({
                                 { !room.actuallyPlaying && <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
                             </IconButton>
 
-                            <IconButton onClick={e => (room.playlistUrls.length -1) !== room.playing ? handleChangeActuallyPlaying(room.playing + 1) : ''}>
+                            <IconButton onClick={e => (room.playlistUrls.length -1) !== room.playing ? changeMediaActuallyPlaying(room.playing + 1, 'next', isAdminView, room, roomRef) : ''}>
                                 <SkipNextIcon fontSize="large" sx={{color: (room.playlistUrls.length -1) !== room.playing ? '#f0f1f0' : '#303134'}} />
                             </IconButton>
                         </>

@@ -10,7 +10,7 @@ import { Box } from "@mui/system";
 import { withTranslation } from 'react-i18next';
 import DrawerPlayPauseButton from './DrawerPlayPauseButton';
 
-const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, open, changeOpen, isAdminView, userVoteArray, roomPlaylist, changeIsPlaying, handleVoteChange,handleRemoveMediaFromPlaylist, changeIdPlaying,  data, roomIsActuallyPlaying, roomIdActuallyPlaying, roomIdActuallyDisplaying }) => {
+const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, room,roomRef,open, changeOpen, isAdminView, userVoteArray, roomPlaylist, changeIsPlaying, handleVoteChange,handleRemoveMediaFromPlaylist, changeIdPlaying,  data, roomIsActuallyPlaying, roomIdActuallyPlaying, roomIdActuallyDisplaying }) => {
     
     const delay = ms => new Promise(res => setTimeout(res, ms));
     function handleVoteChangeInComp(idMedia, mediaHashId, type) {
@@ -43,6 +43,8 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, open
                 <List sx={{ width: '100%', mb:'15em', p:0}}>
                     <ListItem sx={{pt:0, mt:0}}>
                         <DrawerPlayPauseButton 
+                            room={room}
+                            roomRef={roomRef}
                             isAdminView={isAdminView}
                             isPlayable={(isFromSpotify(data) && !isSpotifyAvailable) ? false : true}
                             isPlaying={roomIsActuallyPlaying}

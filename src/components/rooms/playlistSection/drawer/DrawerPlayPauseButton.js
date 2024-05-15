@@ -5,8 +5,8 @@ import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import { Box } from "@mui/system";
 import { ListItemIcon } from "@mui/material";
 import SoundWave from "../../../../services/SoundWave";
-
-const DrawerPlayPauseButton = ({ isAdminView,isPlayable, isPlaying, mediaDisplayingData, changeIsPlaying, changeIdPlaying, idActuallyPlaying, idActuallyDisplaying }) => {
+import { changeMediaActuallyPlaying } from "../../../../services/roomUtils";
+const DrawerPlayPauseButton = ({ isAdminView,isPlayable, isPlaying, mediaDisplayingData, room, roomRef,changeIsPlaying, changeIdPlaying, idActuallyPlaying, idActuallyDisplaying }) => {
     return(
         <Box >
             <ListItemIcon sx={{cursor:'pointer', zIndex:2, position:'relative', display:'flex'}}>
@@ -25,13 +25,13 @@ const DrawerPlayPauseButton = ({ isAdminView,isPlayable, isPlaying, mediaDisplay
                             </>
                         }
                     {idActuallyPlaying !== idActuallyDisplaying && isPlayable &&
-                        <PlayCircleOutlineIcon sx={{ml:1}} fontSize="large" onClick={e => changeIdPlaying(idActuallyDisplaying)}  />
+                        <PlayCircleOutlineIcon sx={{ml:1}} fontSize="large" onClick={e => changeMediaActuallyPlaying(idActuallyDisplaying,'next',isAdminView,room, roomRef)}  />
                     }
                     </>
                 }
                 {!isAdminView && 
                     <Box sx={{pl:2}}>
-                        <SoundWave waveNumber={7} isPlayingOrNo={isPlaying}  />
+                        <SoundWave waveNumber={7} isPlayingOrNo={idActuallyPlaying === idActuallyDisplaying && isPlaying}  />
                     </Box>
                 }
             </ListItemIcon>
