@@ -28,6 +28,9 @@
     flex-grow: 0;
     width: 100%;
     text-align: center;
+    background-image: url('../img/textura.png');
+    background-size: 50px 250px;
+    background-repeat: round;
 }
 
 .joinRoomForm .input::after {

@@ -53,7 +53,7 @@ const RoomTopBar = ({
             >
                 <List sx={{pt:0}}>  
                     <ListItem sx={{bgcolor:'var(--white)'}} key='roomDrawClose' disablePadding>
-                        <ListItemButton onClick={(e) => handleOpenDrawerParam(false)} sx={{display:'flex',justifyContent:'flex-end'}}>
+                        <ListItemButton className="leftDrawerTop" onClick={(e) => handleOpenDrawerParam(false)} sx={{display:'flex',justifyContent:'flex-end'}}>
                             <ChevronLeftIcon />
                             <Typography fontSize="small" sx={{pl:1, textTransform:'uppercase'}}>Playlist <b style={{textTransform:'uppercase'}}>{ room.id } </b> </Typography>
                         

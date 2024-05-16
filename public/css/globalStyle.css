@@ -28,7 +28,14 @@ body,html {
     min-height: 100vh;
 }
 
-.flexRowCenterH {
+.blurtextura {
+  background-image: url('../img/circles.png');
+  background-size: contain;
+}
+
+.MuiDialog-container .flexRowCenterH {
+  background-image:url('../img/textura.png');
+  background-size: cover;
   position: relative;
 }
 
@@ -92,9 +99,11 @@ b, * {
   border-color: var(--main-color) !important;
 }
 
+
 .MuiDialogTitle-root.flexRowCenterH {
-    color: var(--grey-dark) !important;
-    background: var(--white);
+  color: var(--grey-dark) !important;
+  background: url('../img/textura.png');
+  background-size: 100%;
 }
 
 .MuiDialogTitle-root.flexRowCenterH .iconify {

@@ -47,7 +47,6 @@ text-transform: uppercase;
 background-color:rgba(255, 255, 255, 0.1) !important;
 }
 
-
 @media (max-width: 500px) { 
 
 .spotify_header .player_button_container>div {
@@ -74,21 +73,21 @@ background-color:rgba(255, 255, 255, 0.1) !important;
 }
 
 .interactionImageContainer {
-position: fixed;
-top: 70vh;
-width: 25px;
-height: auto;
-opacity: 0;
-transform: translateY(0) translateX(0);
-z-index: 1200;
-animation: fall 3s linear forwards;
+    position: fixed;
+    top: 70vh;
+    width: 25px;
+    height: auto;
+    opacity: 0;
+    transform: translateY(0) translateX(0);
+    z-index: 1200;
+    animation: fall 3s linear forwards;
 }
 
 
 .icon_overlay {
-position: absolute;
-width: 70%;
-opacity: .6;
-transform: rotate(0deg);
-animation : rotate 4s ease-in-out infinite;
+    position: absolute;
+    width: 70%;
+    opacity: .6;
+    transform: rotate(0deg);
+    animation : rotate 4s ease-in-out infinite;
 }

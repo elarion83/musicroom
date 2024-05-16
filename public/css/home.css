@@ -4,7 +4,7 @@
 }
 .homeSlider .slideBox {
     opacity: 0.2;
-    padding: 1em 0 2em 0em;
+    padding: 0.5em 0;
     background: var(--grey-dark);
     border-radius: 5px;
     transform: scale(0.7);
@@ -12,6 +12,8 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    background-image: url('../img/circles.png');
+    background-size: contain;
 }
 .homeSlider .activeSlideBox {
     opacity: 1;
@@ -22,6 +24,7 @@
 .homeSlider h5 {
     font-size: 1.6em;
     text-align: center;
+    margin-bottom: 0;
 }
 
 .homeSlider img.mainIcon {
@@ -58,8 +61,7 @@
 }
 
 
-.createRoom,
-.joinRoom {
+.texturaBgButton,.leftDrawerTop  {
     background: url('../img/textura.png');
     background-size: 100%;
 }

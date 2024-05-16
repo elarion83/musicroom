@@ -60,7 +60,7 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
                                     loading={loginLoading}
                                     variant="contained" 
                                     startIcon={<Icon icon="material-symbols:login" />}
-                                    className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle' 
+                                    className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton' 
                                     sx={{mt:2}} 
                             onClick={e => onEmailAndPasswordSubmit()}> 
                             <Typography fontSize="small">{t('GeneralContinue')} </Typography>
@@ -73,7 +73,7 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
                             <LoadingButton 
                                     loading={loginLoading}
                                     loadingPosition='start'
-                                    className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle' 
+                                    className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton' 
                                     variant="contained"
                                     startIcon={<Icon icon="mdi:anonymous" />}
                                     onClick={e => handleAnonymousLogin()}>
@@ -85,7 +85,7 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
                             <LoadingButton
                                     loadingPosition='start'
                                     loading={loginLoading}
-                                    className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle' 
+                                    className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton' 
                                     startIcon={<Icon icon="ri:google-fill" />}
                                     variant="contained"
                                     onClick={handleGoogleLogin}>

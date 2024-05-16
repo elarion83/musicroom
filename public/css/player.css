@@ -24,4 +24,6 @@
     flex-direction: column !important;
     justify-content: space-between;
     height: auto !important;
+    background-image: url('../img/circles.png');
+    background-size: contain;
 }
