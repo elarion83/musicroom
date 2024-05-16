@@ -84,7 +84,7 @@ const RoomTopBar = ({
                         </ListItemButton>
                     </ListItem>
 
-                    <ListItem key='roomDrawDeezerStatus' disablePadding>
+               {/*     <ListItem key='roomDrawDeezerStatus' disablePadding>
                         <ListItemButton onClick={e => handleOpenRoomParamModal(true)}>
                             <ListItemIcon>
                                 <Badge invisible={isLinkedToDeezer} variant="dot" 
@@ -98,7 +98,7 @@ const RoomTopBar = ({
                             <Typography>Deezer {isLinkedToDeezer ? t('GeneralLinked') : t('GeneralNotLinked')}</Typography>
                         </ListItemButton>
                     </ListItem>
-
+                */}
                     <Divider sx={{mb:1, mt:1}}/>
                     
                     <ListItem key='roomDrawRoomParams' disablePadding>
