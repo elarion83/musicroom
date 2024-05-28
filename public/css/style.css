@@ -19,6 +19,7 @@
 
 @import 'layout.css';
 
+@import 'playlistList.css';
 
 .votebuttons > button {
 padding: 2px !important;

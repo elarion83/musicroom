@@ -47,6 +47,8 @@ const RoomTopBar = ({
                 id="menu-appbar"
                 sx={{zIndex:1300}}
                 anchor='left'
+                hysteresis={0.2}
+                swipeAreaWidth={50}
                 onClose={(e) => handleOpenDrawerParam(false)}
                 onOpen={(e) => handleOpenDrawerParam(true)}
                 open={paramDrawerIsOpen}
@@ -104,7 +106,7 @@ const RoomTopBar = ({
                     <ListItem key='roomDrawRoomParams' disablePadding>
                         <ListItemButton onClick={e => handleOpenRoomParamModal(true)}>
                             <ListItemIcon>
-                                <TuneIcon />
+                                <TuneIcon />    
                             </ListItemIcon>
                             <Typography>{t('RoomLeftMenuRoomParams')}</Typography>
                         </ListItemButton>
@@ -155,7 +157,7 @@ const RoomTopBar = ({
                 </ListItem>
             </SwipeableDrawer>
             <Tooltip  className='animate__animated animate__fadeInLeft animate__delay-1s animate__fast' title={t('RoomLeftMenuRoomParams')} sx={{ bgColor:'#30363c'}}>
-                <Badge invisible={isLinkedToSpotify && isLinkedToDeezer} variant="dot" sx={{'& .MuiBadge-badge': {
+                <Badge invisible={isLinkedToSpotify && isLinkedToDeezer} variant="dot" sx={{zIndex:'1200','& .MuiBadge-badge': {
                     right:'10px',
                     bgcolor:'var(--red-2)'
                 }}} >

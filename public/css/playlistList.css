@@ -1,0 +1,7 @@
+.iconPlaylistList {
+  position: absolute;
+  right: 35px;
+  transform: scale(4);
+  top: 25px;
+  opacity: 0.2;
+}

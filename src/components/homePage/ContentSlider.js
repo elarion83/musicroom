@@ -38,7 +38,7 @@ const Contentslider = () => {
                         Une playlist en temps réel a plusieurs !
                     </Typography>
                     <Typography sx={{pl:2,pr:2,mb:2,mt:3, color:'var(--white)'}} className='fontFamilyOpenSans'>
-                        Ajoutez des médias depuis <b>Spotify, Youtube, Deezer, Soundcloud, .. </b> à une playlist collective lue en temps réel.
+                        Ajoutez des médias depuis <b>Spotify et Youtube</b> à une playlist collective lue en temps réel.
                     </Typography>
                     <Typography sx={{pl:2,pr:2,mt:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
                         Votez, tchatez, réagissez et vibrez ensemble au rythme de votre playlist. <b>Entre potes, en soirée, en voiture, en voyage, ou au sport, Play-it est l'outil indispensable !</b>

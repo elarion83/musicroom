@@ -57,7 +57,7 @@ const UserTopBar = ({ t, user, setUserInfo, handleLogout, handleOpenLoginModal, 
               variant="outlined" 
               sx={{color:'var(--white)', borderColor:'var(--white)'}}
               startIcon={<LoginIcon sx={{color:'var(--white)'}}/>}
-              onClick={(e) => {handleOpenLoginModal(true)}} > Login </Button>
+              onClick={(e) => {handleOpenLoginModal(true)}} > {t('GeneralLogin')} </Button>
             }
           <Menu
             anchorEl={anchorEl}
@@ -70,15 +70,15 @@ const UserTopBar = ({ t, user, setUserInfo, handleLogout, handleOpenLoginModal, 
             >
             <MenuItem onClick={e => setUserParamModalOpen(true)}>
                 <ListItemIcon>
-                <TuneIcon fontSize="small" />
+                  <TuneIcon fontSize="small" />
                 </ListItemIcon>
                 <Typography>
-                { user.displayName } 
+                  { user.displayName } 
                 </Typography>
             </MenuItem>
             {!localStorage.getItem("Play-It_AnonymouslyLoggedIn") && <MenuItem onClick={e => setUserRoomListModalOpen(true)}>
                 <ListItemIcon>
-                <AppsIcon fontSize="small" />
+                  <AppsIcon fontSize="small" />
                 </ListItemIcon>
                 <Typography>        
                   {t('UserMenuMyRooms')} 
@@ -88,7 +88,7 @@ const UserTopBar = ({ t, user, setUserInfo, handleLogout, handleOpenLoginModal, 
             <MenuItem onClick={e => handleLogout()}>
                 <ListItemIcon>
                 <Logout fontSize="small" />
-                </ListItemIcon>
+                  </ListItemIcon>
                 {t('GeneralLogout')}
             </MenuItem>
           </Menu>

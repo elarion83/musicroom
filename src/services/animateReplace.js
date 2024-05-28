@@ -4,7 +4,7 @@ export function returnAnimateReplace(animatedRefElements, replaceArray, replace)
         var mapClassReplace = replaceArray;
         
         var outAnimationClassName = inAnimationClassName.replace(replace, function(matched){
-        return mapClassReplace[matched];
+            return mapClassReplace[matched];
         });
         animatedElem.className=outAnimationClassName;
     });

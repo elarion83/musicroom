@@ -8,6 +8,7 @@ const resources = {
   en: {
     translation: {
         "GeneralContinue":'Continue',
+        "GeneralLogin" : "Login",
         "GeneralLogout":'Logout',
         "GeneralSearchOn":'Search on',
         "GeneralOr":'Or',
@@ -32,9 +33,11 @@ const resources = {
         "GeneralLinked" : " linked",
         "GeneralMediasInPlaylist":'Media(s) in playlist',
         "GeneralHome":'Homepage',
+        "GeneralAnon" : "Anonymous",
         "GeneralLength":"Length",
         "GeneralSnackWelcome" : "Welcome",
         "GeneralSnackSeeYouSoon" : "See you soon !",
+        "GeneralNickname" : "Nickname",
         
         "UserMenuMyRooms" : "My playlists",
 
@@ -60,6 +63,9 @@ const resources = {
         "ModalUserSettingsEditNotAllowedText" : "Profile editing is not possible in anonymous mode.",
         "ModalUserSettingsLabelLoginType" : "Login type",
 
+        "ModalUserRoomListEmpty" : "You have no playlist",
+        "ModalUserRoomListCreated" : "Created on",
+        
         "ModalJoinRoomIDOfTheRoom": "ID of the playlist you want to join",
         "ModalJoinRoomButtonJoin": "Join",
         
@@ -100,6 +106,8 @@ const resources = {
         "ModalRoomForceDeezerDisconnectTitle":"Force disconnect from Deezer?",
         "ModalRoomForceDeezerDisconnectText":"Deezer playback and search will no longer be available.",
 
+        "ModalChangePlaylistAdmin" : 'Change playlist host',
+
         "RoomLeftMenuHost":"You are the host",
         "RoomLeftMenuHostedBy":"Hosted by",
         "RoomLeftMenuNotSync" : "Unsynchronized",
@@ -122,6 +130,7 @@ const resources = {
   fr: {
     translation: {
         "GeneralContinue":'Continuer',
+        "GeneralLogin":'Connexion',
         "GeneralLogout":'Déconnexion',
         "GeneralSearchOn":'Chercher sur',
         "GeneralOr":'Ou',
@@ -146,9 +155,11 @@ const resources = {
         "GeneralEmpty":'vide',
         "GeneralEvery":'Toutes les',
         "GeneralHome":'Accueil',
+        "GeneralAnon" : "Anonyme",
         "GeneralLength":"Longueur",
         "GeneralSnackWelcome" : "Bienvenue",
         "GeneralSnackSeeYouSoon" : "A bientôt !",
+        "GeneralNickname" : "Pseudo",
         
         "UserMenuMyRooms" : "Mes playlists",
 
@@ -173,6 +184,9 @@ const resources = {
         "ModalUserSettingsEditNotAllowedTitle" : "Edition impossible",
         "ModalUserSettingsEditNotAllowedText" : "L'édition du profil est impossible en anonyme.",
         "ModalUserSettingsLabelLoginType" : "Type de connexion",
+
+        "ModalUserRoomListEmpty" : "Vous n'avez aucune playlist",
+        "ModalUserRoomListCreated" : "Crée le",
 
         "ModalJoinRoomIDOfTheRoom": "ID de la playlist a rejoindre",
         "ModalJoinRoomButtonJoin": "Rejoindre",
@@ -213,6 +227,8 @@ const resources = {
 
         "ModalRoomForceDeezerDisconnectTitle":"Forcer la deconnexion de Deezer ?",
         "ModalRoomForceDeezerDisconnectText":"La lecture et la recherche via Deezer ne sera plus disponible.",
+
+        "ModalChangePlaylistAdmin" : 'Changer l\'hôte de la room',
 
         "RoomLeftMenuHost":"Vous êtes l'hôte",
         "RoomLeftMenuHostedBy":"Hosté par",

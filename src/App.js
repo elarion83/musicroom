@@ -72,7 +72,7 @@ function App( {t} ) {
         });
       }
       else if(localStorage.getItem("Play-It_AnonymouslyLoggedIn")) {
-        setUserInfo({displayName:localStorage.getItem("Play-It_AnonymouslyPseudo")});
+        setUserInfo({displayName:localStorage.getItem("Play-It_AnonymouslyPseudo"), loginType:'anon'});
         setIsSignedIn(true);
       }
       else {
@@ -288,7 +288,7 @@ function App( {t} ) {
   return (
     <>
       <CssBaseline />
-      <Container maxWidth={false} className='main_container' sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
+      <Container maxWidth={false} className={roomId ? 'main_container' : 'main_container homecontainer'} sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
          <AppBar className={roomId ? stickyDisplay ? 'topBarIsInRoomSticky' : 'topBarIsInRoom' : 'topBarClassic'} position="static" sx={{bgcolor: '#202124'}}>
             <Toolbar>
               <img src="img/logo_py1.png" style={{ width: 'auto', maxWidth:'50%', maxHeight:'30px'}} alt="Play-It logo"/>
@@ -324,16 +324,17 @@ function App( {t} ) {
           }
         {roomId && isSignedIn && <Room currentUser={userInfos} className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain} setStickyDisplay={setStickyDisplay}></Room>}
 
-        {!isSignedIn && !isAppLoading && (roomId || loginModalOpen) && <LoginModal 
-        open={true} 
-        changeOpen={(e) => setLoginModalOpen(false)}
-        handleAnonymousLogin={anonymousLogin}
-        handleGoogleLogin={handleGoogleLogin}
-        handlePasswordAndMailLogin={handlePasswordAndMailLogin}
-        loginErrorMessage={loginErrorMessage}
-        loginLoading={isLoginLoading}
-        redirectToHome={handleQuitRoomMain}
-        roomId={roomId}
+        {!isSignedIn && !isAppLoading && (roomId || loginModalOpen) && 
+        <LoginModal 
+          open={true} 
+          changeOpen={(e) => setLoginModalOpen(false)}
+          handleAnonymousLogin={anonymousLogin}
+          handleGoogleLogin={handleGoogleLogin}
+          handlePasswordAndMailLogin={handlePasswordAndMailLogin}
+          loginErrorMessage={loginErrorMessage}
+          loginLoading={isLoginLoading}
+          redirectToHome={handleQuitRoomMain}
+          roomId={roomId}
         />}
 
         <Snackbar
