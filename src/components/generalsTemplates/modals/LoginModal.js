@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { Alert, Box, Button, Dialog, Link, DialogContent, DialogTitle, Divider, Grid, Typography } from "@mui/material";
+import { Alert, Box, Button, Dialog, Link, DialogContent, Divider, Grid, Typography } from "@mui/material";
 import { useState } from "react";
 
 import TextField from '@mui/material/TextField';
@@ -9,6 +9,7 @@ import PrivacyPolicyModal from '../modals/PrivacyPolicyModal';
 
 import { withTranslation } from 'react-i18next';
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
+import ModalsHeader from "./ModalsHeader";
 
 const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLogin, handlePasswordAndMailLogin, loginLoading, redirectToHome, roomId, loginErrorMessage}) => {
     
@@ -33,9 +34,8 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
             },
         }}
         >
-            <DialogTitle className='flexRowCenterH varelaFontTitle' sx={{ m: 0,p:1}}>
-                    <Icon width="15" icon='carbon:user-avatar' style={{marginRight:'10px'}} /> {t('ModalLoginTitle')} 
-            </DialogTitle>  
+            <ModalsHeader icon={() => <Icon icon='carbon:user-avatar' style={{marginRight:'10px'}} />} title={t('ModalLoginTitle')} />
+ 
             <DialogContent dividers sx={{pt:2}}>
                 {loginErrorMessage && <Alert severity="error" sx={{mb:2}}>{loginErrorMessage}</Alert>}     
                     <Grid container direction="column" >

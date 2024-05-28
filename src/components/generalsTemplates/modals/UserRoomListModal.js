@@ -1,17 +1,16 @@
 import React from "react";
 
-import DialogTitle from '@mui/material/DialogTitle';
-
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Dialog, DialogContent, Typography } from "@mui/material";
-
+import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import { db } from '../../../services/firebase'; 
 import { useState } from "react";
 import { Box } from "@mui/system";
+import AppsIcon from '@mui/icons-material/Apps';
 
 import { withTranslation } from 'react-i18next';
+import ModalsHeader from "./ModalsHeader";
 
-const UserRoomList = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
+const UserRoomListModal = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
 
     const [roomList] = useState({});
     if(user.uid) {
@@ -23,21 +22,35 @@ const UserRoomList = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
             });
         });
     }
+
+    async function joinRoomByRoomIdInComp(roomId) {
+        joinRoomByRoomId(roomId);
+        changeOpen(false);
+    }
+
     return(
         <Dialog open={open} onClose={(e) => changeOpen(false)}>
-            <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
-                <AccountCircleIcon fontSize="small" sx={{mr:1}} /> {t('UserMenuMyRooms')}
-            </DialogTitle>  
-            <DialogContent dividers sx={{pt:2}}>
+
+            <ModalsHeader icon={() => <AppsIcon fontSize="small" sx={{mr:1}} />} title={t('UserMenuMyRooms')} />
+
+            <DialogContent dividers sx={{pt:2, pl:1, pr:1}}>
+                {Object.keys(roomList).length === 0 &&
+                    <Typography fontSize='small'> 
+                        {t('ModalUserRoomListEmpty')}.
+                    </Typography>
+                }
                 {Object.entries(roomList).map(([key, room]) => {
+
+                    var createdDate = new Date(room.creationTimeStamp).toLocaleDateString('fr-FR');
                     return(
-                    <Box onClick={(e) => joinRoomByRoomId(room.id)} key={key} 
-                    sx={{mb:1, p:1,justifyContent:'start',boxShadow: 2,minWidth:'250px', cursor:'pointer',bgcolor:'var(--main-color)',border:'1px solid var(--grey-light)', borderRadius:'4px'}}>
+                    <Box onClick={(e) => joinRoomByRoomIdInComp(room.id)} key={key} 
+                    sx={{mb:1, p:1,justifyContent:'start',position:'relative', overflow:'hidden',boxShadow: 2,minWidth:'350px', cursor:'pointer',bgcolor:'var(--main-color)',border:'1px solid var(--grey-light)', borderRadius:'4px'}}>
+                        <QueueMusicIcon className="iconPlaylistList" fontSize="small" sx={{mr:1}} />
                         <Typography fontSize='medium' sx={{textTransform: 'uppercase',color:'var(--white)', fontWeight:'bold'}}> 
-                            {room.id} 
+                          ID : {room.id} 
                         </Typography>
                         <Typography fontSize='small' sx={{color:'var(--white)'}}> 
-                            {t('GeneralStatus')} : {room.actuallyPlaying ? t('GeneralPlaying') : t('GeneralPause')}
+                            {t('ModalUserRoomListCreated')} {createdDate}
                         </Typography>
                         <Typography fontSize='small' sx={{color:'var(--white)'}}> 
                             {room.playlistUrls.length } {t('GeneralMediasInPlaylist')}
@@ -51,4 +64,4 @@ const UserRoomList = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
     )
 };
 
-export default withTranslation()(UserRoomList);
+export default withTranslation()(UserRoomListModal);

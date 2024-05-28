@@ -16,7 +16,7 @@ import Typography from '@mui/material/Typography';
 import { Button } from '@mui/material';
 import AppsIcon from '@mui/icons-material/Apps';
 import UserParamModal from './modals/UserParamModal';
-import UserRoomList from './modals/UserRoomList';
+import UserRoomListModal from './modals/UserRoomListModal';
 
 import { withTranslation } from 'react-i18next';
 
@@ -93,7 +93,7 @@ const UserTopBar = ({ t, user, setUserInfo, handleLogout, handleOpenLoginModal, 
             </MenuItem>
           </Menu>
           <UserParamModal open={userParamModalOpen} changeOpen={setUserParamModalOpen} user={user} setUserInfo={setUserInfo} />
-          <UserRoomList open={userRoomListModalOpen} changeOpen={setUserRoomListModalOpen} user={user} joinRoomByRoomId={joinRoomByRoomId} />
+          <UserRoomListModal open={userRoomListModalOpen} changeOpen={setUserRoomListModalOpen} user={user} joinRoomByRoomId={joinRoomByRoomId} />
         </Box>
             
     )

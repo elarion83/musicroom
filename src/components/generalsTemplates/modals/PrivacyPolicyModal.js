@@ -1,6 +1,8 @@
 import { Icon } from "@iconify/react";
-import { Box, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Box, Dialog, DialogContent } from "@mui/material";
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
+import SecurityIcon from '@mui/icons-material/Security';
+import ModalsHeader from "./ModalsHeader";
 
 const PrivacyPolicyModal = ({ open, changeOpen,}) => {
     
@@ -16,10 +18,9 @@ const PrivacyPolicyModal = ({ open, changeOpen,}) => {
                 },
             },
         }}
-        >
-            <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1}}>
-                     <Icon width="15" icon='carbon:user-avatar' style={{marginRight:'10px'}} /> Politique de confidentialité
-            </DialogTitle>  
+        >               
+            <ModalsHeader icon={() => <SecurityIcon />} title="Politique de confidentialité" />
+
             <DialogContent dividers sx={{pt:0}}>
                 <Box sx={{pt:2}}>
                 <h1>Privacy Policy</h1>

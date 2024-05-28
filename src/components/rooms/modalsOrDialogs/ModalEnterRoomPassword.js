@@ -1,15 +1,14 @@
 import Alert from '@mui/material/Alert';
 import React, { useState } from "react";
 
-import ShareIcon from '@mui/icons-material/Share';
 import { AlertTitle, Dialog, DialogContent, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
-import DialogTitle from '@mui/material/DialogTitle';
-
+import PasswordIcon from '@mui/icons-material/Password';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import { withTranslation } from 'react-i18next';
+import ModalsHeader from '../../generalsTemplates/modals/ModalsHeader';
 
-const ModalEnterRoomPassword = ({ password, open, changeOpen }) => {
+const ModalEnterRoomPassword = ({ t, password, open, changeOpen }) => {
 
     const [userPassword, setUserPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -30,9 +29,8 @@ const ModalEnterRoomPassword = ({ password, open, changeOpen }) => {
 
     return(
        <Dialog open={open}>
-            <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
-                <ShareIcon fontSize="small" sx={{mr:1}} /> Mot de passe
-            </DialogTitle>  
+            <ModalsHeader icon={() => <PasswordIcon />} title={t('ModalLoginFormPlaceholderPassword')} />
+
             <DialogContent dividers sx={{pt:0}}>
                
                 <Alert sx={{pl:1, mb:2, mt:1, alignItems: 'center'}} severity='warning'>

@@ -1,7 +1,5 @@
 import React from "react";
 
-import DialogTitle from '@mui/material/DialogTitle';
-
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Alert, AlertTitle, Dialog, DialogContent, FormGroup, Grid, IconButton, TextField, Typography } from "@mui/material";
 import { useState } from "react";
@@ -9,6 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { LoadingButton } from "@mui/lab";
 
 import { withTranslation } from 'react-i18next';
+import ModalsHeader from "./ModalsHeader";
 
 const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
 
@@ -30,9 +29,9 @@ const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
 
     return(
         <Dialog open={open} onClose={(e) => changeOpen(false)}>
-            <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
-                <AccountCircleIcon fontSize="small" sx={{mr:1}} />{t('ModalUserSettingsTitle')}
-            </DialogTitle>  
+            
+            <ModalsHeader icon={() => <AccountCircleIcon />} title={t('ModalUserSettingsTitle')} />
+
             <DialogContent dividers sx={{pt:2}}>
                 <FormGroup>
                     {user.loginType === "anon" && 
@@ -44,14 +43,14 @@ const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
                      <Grid container>
                         
                         <Grid item xs={11} md={11}>
-                            <Typography> Pseudo : 
-                                <Typography component={'b'}>
+                            <Typography> {t('GeneralNickname')} : 
+                                <Typography component='span' sx={{pl:1}}>
                                     {user.displayName}
                                 </Typography>
                             </Typography>
-                            <Typography> Connecté via : 
-                                <Typography component={'b'}>
-                                    {user.loginType}
+                            <Typography> {t('GeneralLogin')} {t('GeneralVia')} : 
+                                <Typography component={'b'} sx={{pl:1}}>
+                                    {'anon' === user.loginType ? t('GeneralAnon') : user.loginType}
                                 </Typography>
                             </Typography>
                         </Grid>

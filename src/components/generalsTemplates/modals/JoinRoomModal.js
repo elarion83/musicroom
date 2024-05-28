@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { Icon } from "@iconify/react";
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from "@mui/material";
+import { Dialog, DialogActions, DialogContent, DialogContentText, Typography } from "@mui/material";
 import useDigitInput from 'react-digit-input';
 import { Box } from '@mui/system';
 import { LoadingButton } from '@mui/lab';
 
 import { withTranslation } from 'react-i18next';
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
+import ModalsHeader from './ModalsHeader';
 
 const JoinRoomModal = ({ t, open, handleJoinRoom, changeOpen}) => {
     const [value, onChange] = React.useState('');
@@ -28,9 +29,8 @@ const JoinRoomModal = ({ t, open, handleJoinRoom, changeOpen}) => {
     
     return(
          <Dialog open={open} TransitionComponent={SlideUp} onClose={(e) => changeOpen(false)} >
-            <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
-                <Icon icon='icon-park-outline:connect' style={{marginRight:'10px'}} /> {t('HomePageButtonsJoinRoom')}
-            </DialogTitle>  
+            <ModalsHeader icon={() => <Icon icon='icon-park-outline:connect' style={{marginRight:'10px'}} />} title={t('HomePageButtonsJoinRoom')} />
+
             <DialogContent dividers>
               <DialogContentText>
                 <Typography sx={{mb:1}}> {t('ModalJoinRoomIDOfTheRoom')}</Typography>

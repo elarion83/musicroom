@@ -1,8 +1,10 @@
-import { Dialog, DialogContent, DialogContentText, DialogTitle, Grid } from '@mui/material';
+import { Dialog, DialogContent, DialogContentText, Grid } from '@mui/material';
 import React from "react";
 
 import { Icon } from '@iconify/react';
 import { SlideUp } from '../../../services/materialSlideTransition/Slide';
+import PolicyIcon from '@mui/icons-material/Policy';
+import ModalsHeader from './ModalsHeader';
 
 const MentionsLegalesModal = ({open, changeOpen}) => {
     
@@ -17,9 +19,8 @@ const MentionsLegalesModal = ({open, changeOpen}) => {
                     },
                 }}
                 >
-                <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1}}>
-                        <Icon icon='carbon:user-avatar' style={{marginRight:'10px'}} /> Mentions légales
-                </DialogTitle>  
+                <ModalsHeader icon={() => <PolicyIcon />} title="Mentions légales" />
+
                 <DialogContent dividers sx={{pt:0}}>
                     <DialogContentText sx={{pt:2}}>
                     

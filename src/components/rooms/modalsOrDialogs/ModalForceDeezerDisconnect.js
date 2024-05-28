@@ -3,10 +3,10 @@ import Button from '@mui/material/Button';
 import React, { useState } from "react";
 
 import { Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/material";
-import DialogTitle from '@mui/material/DialogTitle';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 import { withTranslation } from 'react-i18next';
+import ModalsHeader from '../../generalsTemplates/modals/ModalsHeader';
 
 const ModalForceDeezerDisconnect = ({ t, open, changeOpen, handleDisconnectDeezer }) => {
 
@@ -21,9 +21,8 @@ const ModalForceDeezerDisconnect = ({ t, open, changeOpen, handleDisconnectDeeze
 
     return(
         <Dialog open={open} keepMounted onClose={(e) => changeOpen(false)} sx={{zIndex:10000}}> 
-            <DialogTitle className='flexRowCenterH' sx={{ m: 0,p:1 }}>
-                <ExitToAppIcon fontSize="small" sx={{mr:1}} />{t('ModalRoomForceDeezerDisconnectTitle')} 
-            </DialogTitle>  
+            <ModalsHeader icon={() => <ExitToAppIcon />} title={t('ModalRoomForceDeezerDisconnectTitle')} />
+
             <DialogContent dividers>
                 <DialogContentText >
                     {t('ModalRoomForceDeezerDisconnectText')}

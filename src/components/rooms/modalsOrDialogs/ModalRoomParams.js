@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 
-import DialogTitle from '@mui/material/DialogTitle';
-
 import { Icon } from '@iconify/react';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import TuneIcon from '@mui/icons-material/Tune';
@@ -13,6 +11,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import SaveIcon from '@mui/icons-material/Save';
 import { withTranslation } from 'react-i18next';
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
+import ModalsHeader from "../../generalsTemplates/modals/ModalsHeader";
 
 const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDisconnectFromSpotifyModal, handleDisconnectFromDeezerModal, handleChangeRoomParams }) => {
 
@@ -70,9 +69,8 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
     }
     return (
         <Dialog open={open} TransitionComponent={SlideUp} onClose={(e) => changeOpenInComp(false)}>
-            <DialogTitle className='flexRowCenterH' sx={{ m: 0, p: 1 }}>
-                <TuneIcon fontSize="small" sx={{ mr: 1 }} /> {t('ModalParamsRoomTitle')}
-            </DialogTitle>
+            <ModalsHeader icon={() => <TuneIcon />} title={t('ModalParamsRoomTitle')} />
+
             <DialogContent dividers sx={{ pt: 2 }}>
                 <FormGroup>
 
@@ -125,34 +123,34 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
                         </Alert>
                     }
 
-                    <Alert sx={{ pl: 0, mt: 3, mb: 2, alignItems: 'center' }} className="blurtextura" icon={<Switch checked={roomParams.isPlayingLooping} onChange={handleChangeIsPlayingLooping}
+                    <Alert sx={{ pl: 0, mt: 3, mb: 2, alignItems: 'center' }}  icon={<Switch checked={roomParams.isPlayingLooping} onChange={handleChangeIsPlayingLooping}
                         disabled={!adminView} 
                         name="switchIsPlayingLooping" />} severity={roomParams.isPlayingLooping ? 'success' : 'warning'}>
                         <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>{t('ModalParamsRoomLoopPlayingTitle')}</AlertTitle>
                         <Typography fontSize='small' className='fontFamilyNunito'>{adminView ? t('ModalParamsRoomLoopPlayingText') : t('ModalParamsRoomNotAllowedText')}</Typography>
                     </Alert>
 
-                    <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }} className="blurtextura" icon={<Switch checked={roomParams.isAutoPlayActivated} onChange={handleChangeIsAutoPlayActivated}
+                    <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }}  icon={<Switch checked={roomParams.isAutoPlayActivated} onChange={handleChangeIsAutoPlayActivated}
                         disabled={!adminView} 
                         name="switchIsAutoPlayActivated" />} severity={roomParams.isAutoPlayActivated ? 'success' : 'warning'}>
                         <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>{t('ModalParamsRoomAutoPlayingTitle')}</AlertTitle>
                         <Typography fontSize='small' className='fontFamilyNunito'>{adminView ? t('ModalParamsRoomAutoPlayingText') : t('ModalParamsRoomNotAllowedText')}</Typography>
                     </Alert>
 
-                    <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }} className="blurtextura" icon={<Switch checked={roomParams.interactionsAllowed} onChange={handleChangeIsInterractionsAllowed}
+                    <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }}  icon={<Switch checked={roomParams.interactionsAllowed} onChange={handleChangeIsInterractionsAllowed}
                         disabled={!adminView} 
                         name="switchInteractionsAllowed" />} severity={roomParams.interactionsAllowed ? 'success' : 'warning'}>
                         <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>{t('ModalParamsRoomInteractionAllowedTitle')}</AlertTitle>
                         <Typography fontSize='small' className='fontFamilyNunito'>{adminView ? t('ModalParamsRoomInteractionAllowedText') : t('ModalParamsRoomNotAllowedText')}</Typography>
                     </Alert>
 
-                    <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }} className="blurtextura" icon={<Switch checked={roomParams.isChatActivated} onChange={handleChangeIsChatActivated}
+                    <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }}  icon={<Switch checked={roomParams.isChatActivated} onChange={handleChangeIsChatActivated}
                         disabled={!adminView} 
                         name="switchIsChatActivated" />} severity={roomParams.isChatActivated ? 'success' : 'warning'}>
                         <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>{t('ModalParamsRoomChatAllowedTitle')}</AlertTitle>
                         <Typography fontSize='small' className='fontFamilyNunito'>{adminView ? t('ModalParamsRoomChatAllowedText') : t('ModalParamsRoomNotAllowedText')}</Typography>
                     </Alert>
-                    <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }} className="blurtextura" icon={<Switch checked={roomParams.isPasswordNeeded} onChange={handleChangeIsPasswordNeeded}
+                    <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }}  icon={<Switch checked={roomParams.isPasswordNeeded} onChange={handleChangeIsPasswordNeeded}
                         disabled={!adminView} 
                         name="switchInteractionsAllowed" />} severity={roomParams.isPasswordNeeded ? 'success' : 'warning'}>
                         <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>Mot de passe requis</AlertTitle>
@@ -195,7 +193,7 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
                         }
                     </Alert>
 
-                    <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }} className="blurtextura" icon={<Switch checked={roomParams.syncPeopleByDefault} onChange={handleChangeSyncPeopleByDefault}
+                    <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }}  icon={<Switch checked={roomParams.syncPeopleByDefault} onChange={handleChangeSyncPeopleByDefault}
                         disabled={!adminView} 
                         name="switchSyncPeopleByDefault" />} severity={roomParams.syncPeopleByDefault ? 'success' : 'warning'}>
                         <AlertTitle sx={{ fontWeight: 'bold' }}>Synchronisés par défaut</AlertTitle>
