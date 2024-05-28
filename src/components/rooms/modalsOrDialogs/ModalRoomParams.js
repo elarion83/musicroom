@@ -74,7 +74,7 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
             <DialogContent dividers sx={{ pt: 2 }}>
                 <FormGroup>
 
-                    {!roomParams.deezer.IsLinked &&
+                    {/*!roomParams.deezer.IsLinked &&
                         <Button
                             sx={{ mb: 1, bgcolor: '#b560ff' }}
                             startIcon={<Icon style={{ display: 'inline', color: 'white', marginRight: '0.5em' }} icon="jam:deezer" />}
@@ -97,7 +97,7 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
                         >
                             {t('ModalParamsRoomConnectedToDeezerText')}
                         </Alert>
-                    }
+                    */}
 
                     {!roomParams.spotify.IsLinked &&
                         <Button

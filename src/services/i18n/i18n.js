@@ -65,6 +65,8 @@ const resources = {
 
         "ModalUserRoomListEmpty" : "You have no playlist",
         "ModalUserRoomListCreated" : "Created on",
+        "ModalUserRoomListJoinRoomText" : "Join the room",
+
         
         "ModalJoinRoomIDOfTheRoom": "ID of the playlist you want to join",
         "ModalJoinRoomButtonJoin": "Join",
@@ -187,6 +189,7 @@ const resources = {
 
         "ModalUserRoomListEmpty" : "Vous n'avez aucune playlist",
         "ModalUserRoomListCreated" : "Crée le",
+        "ModalUserRoomListJoinRoomText" : "Rejoindre la room",
 
         "ModalJoinRoomIDOfTheRoom": "ID de la playlist a rejoindre",
         "ModalJoinRoomButtonJoin": "Rejoindre",
