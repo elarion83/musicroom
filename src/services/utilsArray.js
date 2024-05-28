@@ -116,3 +116,9 @@ export const timestampToDateoptions = {
   month: 'long', 
   year: 'numeric'
 };
+
+export const timestampToHoursAndMinOptions = {
+  hour: '2-digit', 
+  minute: '2-digit', 
+  hour12: false
+};

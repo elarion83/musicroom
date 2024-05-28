@@ -310,12 +310,14 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         }
         else {
             if(mediaIndexExist(room.playlistUrls, room.playing+1)) {
-                changeMediaActuallyPlaying(roomIdPlayed + 1, 'next', isActuallyAdmin, room, roomRef)
+                changeMediaActuallyPlaying(roomIdPlayed + 1, 'next', isActuallyAdmin, room, roomRef)            
+                playerRef.current.seekTo(0, 'seconds'); 
             } 
             else {
                 if(isActuallyAdmin) {
                     if(room.roomParams.isAutoPlayActivated) {
                         addMediaForAutoPlayByYoutubeId(room.playlistUrls[room.playing].title);
+                        playerRef.current.seekTo(0, 'seconds'); 
                     }
                     else if(room.roomParams.isPlayingLooping) {
                         changeMediaActuallyPlaying(0, 'next', isActuallyAdmin, room, roomRef)
@@ -341,7 +343,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     async function handleChangeSecondsPlayed(room, number) {
         roomRef.set({actuallyPlaying:false}, { merge: true });
         setSecondsPlayed(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds+number);
-        await delay(300);
+        await delay(1000);
         roomRef.set({actuallyPlaying:true}, { merge: true });
     }
 

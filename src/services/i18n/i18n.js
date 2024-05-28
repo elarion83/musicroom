@@ -101,6 +101,8 @@ const resources = {
         "ModalParamsRoomLoopPlayingText": "If the playlist is finished, the player returns to the first media.",
         "ModalParamsRoomAutoPlayingTitle": "Enable Autoplay",
         "ModalParamsRoomAutoPlayingText": "The player will automatically add media to the playlist.",
+        "ModalParamsRoomAutoSyncTitle": "Synchronized by default",
+        "ModalParamsRoomAutoSyncText": "Automatically synchronizes users to the playlist host.",
   
         "ModalRoomForceSpotifyDisconnectTitle":"Force disconnect from Spotify?",
         "ModalRoomForceSpotifyDisconnectText":"Spotify playback and search will no longer be available.",
@@ -224,6 +226,8 @@ const resources = {
         "ModalParamsRoomLoopPlayingText": "Si la playlist est finie, le lecteur reviens au premier média.",
         "ModalParamsRoomAutoPlayingTitle": "Lecture automatique",
         "ModalParamsRoomAutoPlayingText": "Le lecteur ajoutera automatiquement des médias à la playlist.",
+        "ModalParamsRoomAutoSyncTitle": "Synchronisés par défaut",
+        "ModalParamsRoomAutoSyncText": "Synchronise automatiquement les utilisateurs a l\'hôte de la playlist.",
 
         "ModalRoomForceSpotifyDisconnectTitle":"Forcer la deconnexion de Spotify ?",
         "ModalRoomForceSpotifyDisconnectText":"La lecture et la recherche via Spotify ne sera plus disponible.",

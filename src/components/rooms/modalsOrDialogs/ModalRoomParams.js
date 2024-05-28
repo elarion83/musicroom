@@ -12,6 +12,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import { withTranslation } from 'react-i18next';
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 import ModalsHeader from "../../generalsTemplates/modals/ModalsHeader";
+import { timestampToHoursAndMinOptions } from "../../../services/utilsArray";
 
 const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDisconnectFromSpotifyModal, handleDisconnectFromDeezerModal, handleChangeRoomParams }) => {
 
@@ -67,6 +68,40 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
         }
         changeOpen(false);
     }
+
+    var paramsArray = {
+        playingLooping : {
+            checked:roomParams.isPlayingLooping,
+            change : handleChangeIsPlayingLooping,
+            title:t('ModalParamsRoomLoopPlayingTitle'),
+            text:t('ModalParamsRoomLoopPlayingText')
+        },
+        autoplay : {
+            checked:roomParams.isAutoPlayActivated,
+            change : handleChangeIsAutoPlayActivated,
+            title:t('ModalParamsRoomAutoPlayingTitle'),
+            text:t('ModalParamsRoomAutoPlayingText')
+        },
+        interractionsAllowed: {
+            checked:roomParams.interactionsAllowed,
+            change : handleChangeIsInterractionsAllowed,
+            title:t('ModalParamsRoomInteractionAllowedTitle'),
+            text:t('ModalParamsRoomInteractionAllowedText')
+        },
+        chatAllowed: {
+            checked:roomParams.isChatActivated,
+            change : handleChangeIsChatActivated,
+            title:t('ModalParamsRoomChatAllowedTitle'),
+            text:t('ModalParamsRoomChatAllowedText')
+        },
+        syncByDefault: {
+            checked:roomParams.syncPeopleByDefault,
+            change : handleChangeSyncPeopleByDefault,
+            title:t('ModalParamsRoomAutoSyncTitle'),
+            text:t('ModalParamsRoomAutoSyncText')
+        }
+    }
+
     return (
         <Dialog open={open} TransitionComponent={SlideUp} onClose={(e) => changeOpenInComp(false)}>
             <ModalsHeader icon={() => <TuneIcon />} title={t('ModalParamsRoomTitle')} />
@@ -101,7 +136,7 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
 
                     {!roomParams.spotify.IsLinked &&
                         <Button
-                            sx={{ bgcolor: '#1ed760' }}
+                            sx={{ bgcolor: '#1ed760', mb:3 }}
                             startIcon={<Icon style={{ display: 'inline', color: 'white', marginRight: '0.5em' }} icon="mdi:spotify" />}
                             variant="contained"
                             color="success"
@@ -111,6 +146,7 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
                     }
                     {roomParams.spotify.IsLinked &&
                         <Alert
+                        sx={{mb:3}}
                             action={
                                 <Tooltip title="Forcer la déconnexion">
                                     <Button onClick={e => handleDisconnectFromSpotifyModal(true)}>
@@ -119,42 +155,32 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
                                 </Tooltip>
                             }
                         >
-                            {t('ModalParamsRoomConnectedToSpotifyText')}
+                            <b>{t('ModalParamsRoomConnectedToSpotifyText')}</b>
+                            <Typography fontSize='small' className='fontFamilyNunito'>
+                                Grâce à {roomParams.spotify.UserConnected} à {' '}
+                                {new Date(roomParams.spotify.TokenTimestamp).toLocaleTimeString('fr-FR', timestampToHoursAndMinOptions).replace(':', 'h')}
+                            </Typography>
                         </Alert>
                     }
 
-                    <Alert sx={{ pl: 0, mt: 3, mb: 2, alignItems: 'center' }}  icon={<Switch checked={roomParams.isPlayingLooping} onChange={handleChangeIsPlayingLooping}
-                        disabled={!adminView} 
-                        name="switchIsPlayingLooping" />} severity={roomParams.isPlayingLooping ? 'success' : 'warning'}>
-                        <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>{t('ModalParamsRoomLoopPlayingTitle')}</AlertTitle>
-                        <Typography fontSize='small' className='fontFamilyNunito'>{adminView ? t('ModalParamsRoomLoopPlayingText') : t('ModalParamsRoomNotAllowedText')}</Typography>
-                    </Alert>
+                    {Object.entries(paramsArray).map(([key, param]) => {
+                        return(
+                        <Alert key={key} sx={{ pl: 0, mb: 2, alignItems: 'center' }}  icon={<Switch checked={param.checked} onChange={param.change}
+                            disabled={!adminView} 
+                            name={key} />} severity={param.checked ? 'success' : 'warning'}>
+                            <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>{param.title}</AlertTitle>
+                            <Typography fontSize='small' className='fontFamilyNunito'>{adminView ? param.text : t('ModalParamsRoomNotAllowedText')}</Typography>
+                        </Alert>
+                        )
+                    })}
 
-                    <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }}  icon={<Switch checked={roomParams.isAutoPlayActivated} onChange={handleChangeIsAutoPlayActivated}
-                        disabled={!adminView} 
-                        name="switchIsAutoPlayActivated" />} severity={roomParams.isAutoPlayActivated ? 'success' : 'warning'}>
-                        <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>{t('ModalParamsRoomAutoPlayingTitle')}</AlertTitle>
-                        <Typography fontSize='small' className='fontFamilyNunito'>{adminView ? t('ModalParamsRoomAutoPlayingText') : t('ModalParamsRoomNotAllowedText')}</Typography>
-                    </Alert>
-
-                    <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }}  icon={<Switch checked={roomParams.interactionsAllowed} onChange={handleChangeIsInterractionsAllowed}
-                        disabled={!adminView} 
-                        name="switchInteractionsAllowed" />} severity={roomParams.interactionsAllowed ? 'success' : 'warning'}>
-                        <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>{t('ModalParamsRoomInteractionAllowedTitle')}</AlertTitle>
-                        <Typography fontSize='small' className='fontFamilyNunito'>{adminView ? t('ModalParamsRoomInteractionAllowedText') : t('ModalParamsRoomNotAllowedText')}</Typography>
-                    </Alert>
-
-                    <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }}  icon={<Switch checked={roomParams.isChatActivated} onChange={handleChangeIsChatActivated}
-                        disabled={!adminView} 
-                        name="switchIsChatActivated" />} severity={roomParams.isChatActivated ? 'success' : 'warning'}>
-                        <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>{t('ModalParamsRoomChatAllowedTitle')}</AlertTitle>
-                        <Typography fontSize='small' className='fontFamilyNunito'>{adminView ? t('ModalParamsRoomChatAllowedText') : t('ModalParamsRoomNotAllowedText')}</Typography>
-                    </Alert>
                     <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }}  icon={<Switch checked={roomParams.isPasswordNeeded} onChange={handleChangeIsPasswordNeeded}
                         disabled={!adminView} 
                         name="switchInteractionsAllowed" />} severity={roomParams.isPasswordNeeded ? 'success' : 'warning'}>
                         <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>Mot de passe requis</AlertTitle>
-                        {!adminView && <Typography fontSize='small'>{t('ModalParamsRoomNotAllowedText')}</Typography>}
+                        {!adminView && 
+                            <Typography fontSize='small'>{t('ModalParamsRoomNotAllowedText')}</Typography>
+                        }
                         {adminView && !roomParams.isPasswordNeeded && <Typography fontSize='small'>Rendre la playlist accessible par mot de passe</Typography>}
                         {adminView && roomParams.isPasswordNeeded &&
                             <TextField
@@ -192,15 +218,6 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
                             />
                         }
                     </Alert>
-
-                    <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }}  icon={<Switch checked={roomParams.syncPeopleByDefault} onChange={handleChangeSyncPeopleByDefault}
-                        disabled={!adminView} 
-                        name="switchSyncPeopleByDefault" />} severity={roomParams.syncPeopleByDefault ? 'success' : 'warning'}>
-                        <AlertTitle sx={{ fontWeight: 'bold' }}>Synchronisés par défaut</AlertTitle>
-                        <Typography fontSize='small'>{adminView ? 'Synchronise automatiquement les utilisateurs a l\'hôte de la playlist' : t('ModalParamsRoomNotAllowedText')}</Typography>
-                    </Alert>
-
-
                 </FormGroup>
             </DialogContent>
         </Dialog>
