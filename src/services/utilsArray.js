@@ -110,3 +110,9 @@ export const emptyToken = {
     TokenTimestamp:Date.now(),
     UserConnected:''
 }
+
+export const timestampToDateoptions = {
+  day: '2-digit', 
+  month: 'long', 
+  year: 'numeric'
+};

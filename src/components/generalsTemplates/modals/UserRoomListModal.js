@@ -9,6 +9,7 @@ import AppsIcon from '@mui/icons-material/Apps';
 
 import { withTranslation } from 'react-i18next';
 import ModalsHeader from "./ModalsHeader";
+import { timestampToDateoptions } from "../../../services/utilsArray";
 
 const UserRoomListModal = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
 
@@ -41,16 +42,16 @@ const UserRoomListModal = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
                 }
                 {Object.entries(roomList).map(([key, room]) => {
 
-                    var createdDate = new Date(room.creationTimeStamp).toLocaleDateString('fr-FR');
+                    var createdDate = new Date(room.creationTimeStamp).toLocaleDateString('fr-FR', timestampToDateoptions);
                     return(
-                    <Box onClick={(e) => joinRoomByRoomIdInComp(room.id)} key={key} 
+                    <Box title={t('ModalUserRoomListJoinRoomText')} onClick={(e) => joinRoomByRoomIdInComp(room.id)} key={key} 
                     sx={{mb:1, p:1,justifyContent:'start',position:'relative', overflow:'hidden',boxShadow: 2,minWidth:'350px', cursor:'pointer',bgcolor:'var(--main-color)',border:'1px solid var(--grey-light)', borderRadius:'4px'}}>
                         <QueueMusicIcon className="iconPlaylistList" fontSize="small" sx={{mr:1}} />
-                        <Typography fontSize='medium' sx={{textTransform: 'uppercase',color:'var(--white)', fontWeight:'bold'}}> 
-                          ID : {room.id} 
+                        <Typography fontSize='medium' sx={{textTransform: 'uppercase',color:'var(--white)'}}> 
+                          ID : <b>{room.id}</b>
                         </Typography>
                         <Typography fontSize='small' sx={{color:'var(--white)'}}> 
-                            {t('ModalUserRoomListCreated')} {createdDate}
+                            {t('ModalUserRoomListCreated')} <b>{createdDate}</b>
                         </Typography>
                         <Typography fontSize='small' sx={{color:'var(--white)'}}> 
                             {room.playlistUrls.length } {t('GeneralMediasInPlaylist')}
