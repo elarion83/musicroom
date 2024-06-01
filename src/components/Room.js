@@ -49,6 +49,7 @@ import { Icon } from "@iconify/react";
 import { Forward10, Replay10 } from "@mui/icons-material";
 import { emptyToken, playerRefObject, youtubeApiSearchObject } from "../services/utilsArray";
 import { changeMediaActuallyPlaying } from "../services/utilsRoom";
+import ModalChangeRoomAdmin from "./rooms/modalsOrDialogs/ModalChangeRoomAdmin";
 
 const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
@@ -81,6 +82,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     const [openPassWordModal, setOpenPassWordModal] = useState(true);
     const [OpenAddToPlaylistModal, setOpenAddToPlaylistModal] = useState(false);
     const [openRoomParamModal, setOpenRoomParamModal] = useState(false);
+    const [openRoomChangeAdminModal, setOpenRoomChangeAdminModal] = useState(false);
     const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
 
     const [openRoomDrawer, setOpenRoomDrawer] = useState(false);
@@ -228,7 +230,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 	useEffect(() => {
         if(currentUser.displayName === room.admin || currentUser.displayName === room.admin) {
             setIsActuallyAdmin(true);
-        } 
+        } else {
+            setIsActuallyAdmin(false);
+        }
 
         if(roomIsPlaying) {
             document.title = t('GeneralPlaying')+' - Playlist ' + roomId + ' - Play-It';
@@ -449,6 +453,10 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         setOpenInvitePeopleToRoomModal(ShareModalIsOpen);
     }
 
+    function handleOpenChangeAdminModal(changeAdminModalIsOpen) {
+        setOpenRoomChangeAdminModal(changeAdminModalIsOpen);
+    }
+
     function handleOpenRoomParamModal(roomParamModalIsOpen) {
         if(roomParamModalIsOpen) {
             CreateGoogleAnalyticsEvent('Actions','Open paramModal','Open paramModal');
@@ -508,6 +516,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         .catch(function(error) {
         });
     }
+
+    async function changeAdmin() {
+        room.notifsArray.push({type: 'changeAdmin', timestamp: Date.now(), createdBy: currentUser.displayName});
+        roomRef.set({notifsArray: room.notifsArray, admin: currentUser.displayName},{merge:true}); 
+        setOpenRoomDrawer(false);
+    }
     return (
         <div className="flex flex-col w-full gap-0 relative " style={{height:'auto'}} > 
             {loaded && room.roomParams !== undefined && room.roomParams.spotify !== undefined && room.roomParams.deezer !== undefined && 
@@ -525,6 +539,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying}
                     handleOpenRoomParamModal={handleOpenRoomParamModal}
                     handleOpenShareModal={handleOpenShareModal}
+                    handleOpenChangeAdminModal={handleOpenChangeAdminModal}
                     guestSynchroOrNot={guestSynchroOrNot}
                     setGuestSynchroOrNot={setGuestSynchroOrNot}
                     paramDrawerIsOpen={openRoomDrawer}
@@ -817,7 +832,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     /> 
                 </>
             } 
-
+            <ModalChangeRoomAdmin open={openRoomChangeAdminModal} changeAdmin={changeAdmin} playlistAdminPass={room.adminPass} changeOpen={setOpenRoomChangeAdminModal} adminView={isActuallyAdmin} />
             <ModalShareRoom open={openInvitePeopleToRoomModal} changeOpen={setOpenInvitePeopleToRoomModal} roomUrl={ localData.domain +'/?rid='+roomId} />
             <ModalLeaveRoom open={openLeaveRoomModal} changeOpen={setOpenLeaveRoomModal} handleQuitRoom={handleQuitRoomInComp} />
             <ModalForceSpotifyDisconnect open={openForceDisconnectSpotifyModal} changeOpen={setOpenForceDisconnectSpotifyModal} handleDisconnectSpotify={disconnectSpotify} />

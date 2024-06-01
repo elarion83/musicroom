@@ -10,7 +10,8 @@ export const notifsTextArray = {
     userLeaved: '//AUTHOR// a quitté la playlist !',
     userSync:'//AUTHOR// s\'est synchronisé!',
     userUnSync: '//AUTHOR// s\'est désynchronisé!',
-    AccNotPremium: "Le compte utilisé n'est pas premium."
+    AccNotPremium: "Le compte utilisé n'est pas premium.",
+    changeAdmin: "//AUTHOR// est désormais hôte !"
 };  
 
 export const reactsArray = {

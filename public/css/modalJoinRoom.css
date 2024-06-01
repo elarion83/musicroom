@@ -42,3 +42,12 @@
     background-color: var(--white);
     left: 4px;
 }
+
+/* Join room submit form is also used in the change host modal */
+.joinRoomForm.adminForm {
+    display: flex;
+    gap: 10px;
+    justify-content: space-evenly;
+    max-width: 400px;  
+    margin: 1em auto;
+}

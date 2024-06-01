@@ -17,6 +17,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import 'animate.css';
+import Groups3Icon from '@mui/icons-material/Groups3';
 
 import { withTranslation } from 'react-i18next';
 import VolumeButton from "./playerSection/VolumeButton";
@@ -30,6 +31,7 @@ const RoomTopBar = ({
                 roomIsPlaying,
                 setRoomIsPlaying,
                 roomIdPlayed,
+                handleOpenChangeAdminModal,
                 changeMediaActuallyPlayingGuest,
                 isAdminView,
                 isSpotifyAndIsNotPlayableBySpotify,
@@ -136,6 +138,16 @@ const RoomTopBar = ({
                     </ListItem>}
 
                     <Divider  sx={{mt:1, mb:1}}/>
+                    
+                    {guestSynchroOrNot && <ListItem key='roomDrawRoomSharee' disablePadding>
+                        <ListItemButton onClick={e => handleOpenChangeAdminModal(true)}>
+                            <ListItemIcon>
+                                <Groups3Icon />
+                            </ListItemIcon>
+                            <Typography>
+                                {isAdminView ? t('ModalChangePlaylistAdmin') : t('ModalChangePlaylistAdmin2') }</Typography>
+                        </ListItemButton>
+                    </ListItem>}
                     <ListItem key='roomDrawRoomLeave' disablePadding>
                         <ListItemButton onClick={e => handleOpenLeaveRoomModal(true)}>
                             <ListItemIcon>

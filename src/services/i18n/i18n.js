@@ -110,7 +110,8 @@ const resources = {
         "ModalRoomForceDeezerDisconnectTitle":"Force disconnect from Deezer?",
         "ModalRoomForceDeezerDisconnectText":"Deezer playback and search will no longer be available.",
 
-        "ModalChangePlaylistAdmin" : 'Change playlist host',
+        "ModalChangePlaylistAdmin" : 'Change host',
+        "ModalChangePlaylistAdmin2" : 'Become host',
 
         "RoomLeftMenuHost":"You are the host",
         "RoomLeftMenuHostedBy":"Hosted by",
@@ -235,7 +236,8 @@ const resources = {
         "ModalRoomForceDeezerDisconnectTitle":"Forcer la deconnexion de Deezer ?",
         "ModalRoomForceDeezerDisconnectText":"La lecture et la recherche via Deezer ne sera plus disponible.",
 
-        "ModalChangePlaylistAdmin" : 'Changer l\'hôte de la room',
+        "ModalChangePlaylistAdmin" : 'Changer l\'hôte',
+        "ModalChangePlaylistAdmin2" : 'Devenir hôte',
 
         "RoomLeftMenuHost":"Vous êtes l'hôte",
         "RoomLeftMenuHostedBy":"Hosté par",
