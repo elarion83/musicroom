@@ -43,7 +43,7 @@ const BottomInteractions = ({ t, layoutDisplay, setLayoutdisplay, paramDrawerIsO
                             className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : react.animation}
                             title={!userCanMakeInteraction ? waitingTextReaction(roomParams.interactionFrequence): ''}>  
                             <Fab size="small" variant="extended" className='room_small_button_interactions' 
-                                sx={{ ml:1, boxShadow:20,mr:1, ...(userCanMakeInteraction && {bgcolor: react.color}) }} 
+                                sx={{ ml:0.5, boxShadow:20,zIndex:99999,mr:0.5, ...(userCanMakeInteraction && {bgcolor: react.color}) }} 
                                 onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction(key) : ''}>
                                 {react.icon}
                                 {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
@@ -73,14 +73,14 @@ const BottomInteractions = ({ t, layoutDisplay, setLayoutdisplay, paramDrawerIsO
                             zIndex:10000
                         }}} >
                         <Fab size="small" variant="extended" className='room_small_button_interactions' 
-                        sx={{justifyContent: 'center', ml:1}} onClick={e => handleOpenDrawerParam(!paramDrawerIsOpen)} >
+                        sx={{justifyContent: 'center', ml:0.5}} onClick={e => handleOpenDrawerParam(!paramDrawerIsOpen)} >
                             <TuneIcon fontSize="small" />
                         </Fab>
                     </Badge>
                 </Tooltip>
                 <Tooltip  ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUp animate__delay-1s'>  
                     <Fab size="small" variant="extended" className='room_small_button_interactions'  
-                        sx={{justifyContent: 'center', ml:1}}  >
+                        sx={{justifyContent: 'center', ml:0.5}}  >
                         <DisplayMenu 
                             layoutDisplay={layoutDisplay}
                             setLayoutdisplay={setLayoutdisplay}

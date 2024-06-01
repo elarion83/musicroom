@@ -253,7 +253,7 @@ const resources = {
         "RoomEmptyAlertWelcome":"Bienvenue dans la playlist !",
         "RoomEmptyAlertWelcomeClickHere":"Clique ici pour la partager",
         "RoomEmptyAlertPlaylist":"La playlist est vide !",
-        "RoomEmptyAlertPlaylistClickHere":"Clique ici pour commencer",
+        "RoomEmptyAlertPlaylistClickHere":"Clique ici ou swipe up pour ajouter à la playlist !",
         "RoomEmptyAlertSpotify":"Spotify Premium n'est pas connecté !",
         "RoomEmptyAlertSpotifyClickHere":"Clique ici pour lier les deux",
         "RoomEmptyAlertSpotifyBold":"Spotify Premium requis",

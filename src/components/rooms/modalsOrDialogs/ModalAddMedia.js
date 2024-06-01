@@ -16,11 +16,12 @@ import validator from 'validator';
 import SearchResultItem from '../searchResultItem';
 import { cleanMediaTitle, getDisplayTitle } from '../../../services/utils';
 import { withTranslation } from 'react-i18next';
-import { Button, Dialog, Typography } from '@mui/material';
+import { Button, Dialog, SwipeableDrawer, Typography } from '@mui/material';
 import SoundWave from "../../../services/SoundWave";
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { searchTextArray, youtubeApiSearchObject } from '../../../services/utilsArray';
+import { KeyboardArrowDown } from '@mui/icons-material';
 
 const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUser, validatedObjectToAdd, spotifyTokenProps, DeezerTokenProps }) => {
 
@@ -145,42 +146,18 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
     }
 
     return (
-        <Dialog
-            fullScreen
-            open={open}
-            keepMounted
-            TransitionComponent={SlideUp}
-            onClose={(e) => changeOpen(false)}
-            className='black_style_dialog'
-        >
-
-            <Grid sx={{ bgcolor: '#202124', pb: 0, flexFlow: 'nowrap' }} container  >
-                <Button
-                    className='modal_full_screen_close_left'
-                    onClick={(e) => changeOpen(false)}
-                    aria-label="close"
-                    sx={{ bgcolor: '#131416', mr: 1, borderRadius: 0 }}
-                    xs={12}
-                >
-                    <ArrowBackIosNewIcon sx={{ fontSize: '2em', color: 'var(--main-color)', fill: 'var(--main-color)' }} className='animate__animated animate__fadeInLeft animate__fast' />
-                </Button >
-                {room.playlistEmpty &&
-                    <Box sx={{ display: 'flex', flexDirection: 'column', padding: '1em' }}>
-                        <Typography component="span"> Playlist {t('GeneralEmpty')} </Typography>
-                        <Typography sx={{ color: 'var(--white)', display: 'block', width: '100%', ml: 0, fontSize: '12px', textTransform: 'uppercase' }} > Playlist <b>{room.id}</b></Typography>
-                    </Box>}
-                {typeof (room.playlistUrls) !== 'undefined' && !room.playlistEmpty &&
-                    <Box sx={{ display: 'flex', flexDirection: 'column', p: '8px' }}>
-                        <Typography sx={{ color: 'var(--white)', display: 'block', width: '100%', ml: 0, pl: 0, fontSize: '12px', textTransform: 'uppercase' }} > Playlist <b>{room.id}</b></Typography>
-
-                        <Box sx={{ color: 'var(--white)', display: 'flex', gap: '10px', flexDirection: 'row', alignItems: 'center', width: '100%', ml: 1, mt: 1, fontSize: '10px', textTransform: 'uppercase' }} >
-                            <SoundWave waveNumber={7} isPlayingOrNo={roomIsPlaying} />
-                            <Typography fontSize="small" component={'span'} className='varelaFontTitle' >
-                                {getDisplayTitle(room.playlistUrls[room.playing])}
-                            </Typography>
-                        </Box>
-                    </Box>}
-            </Grid>
+            <SwipeableDrawer
+                id="menu-appbar"
+                className='black_style_dialog'
+                sx={{zIndex:1300}}
+                anchor='bottom'
+                hysteresis={0.2}
+                TransitionComponent={SlideUp}
+                swipeAreaWidth={room.playlistEmpty ? 350 : 100}
+                onClose={(e) => changeOpen(false)}
+                onOpen={(e) => changeOpen(true)}
+                open={open}
+            >
             <Container sx={{ padding: '3em', pt: 0, height: '100vh', zIndex: 3 }} className="full_width_modal_content_container">
 
                 <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'row' }} className="autowriter_container">
@@ -325,7 +302,35 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
                     message={recentlyAddedTitle + " ajouté !"}
                 />
             </Container>
-        </Dialog>
+
+            <Grid sx={{ bgcolor: '#202124', pb: 0, flexFlow: 'nowrap', position:'fixed', bottom:0, zIndex:1500 }} container  >
+                <Button
+                    className='modal_full_screen_close_left'
+                    onClick={(e) => changeOpen(false)}
+                    aria-label="close"
+                    sx={{ bgcolor: '#131416', mr: 1, borderRadius: 0 }}
+                    xs={12}
+                >
+                    <KeyboardArrowDown sx={{ fontSize: '3.5em', color: 'var(--main-color)', fill: 'var(--main-color)' }} className='animate__animated animate__fadeInLeft animate__fast' />
+                </Button >
+                {room.playlistEmpty &&
+                    <Box sx={{ display: 'flex', flexDirection: 'column', padding: '1em' }}>
+                        <Typography component="span"> Playlist {t('GeneralEmpty')} </Typography>
+                        <Typography sx={{ color: 'var(--white)', display: 'block', width: '100%', ml: 0, fontSize: '12px', textTransform: 'uppercase' }} > Playlist <b>{room.id}</b></Typography>
+                    </Box>}
+                {typeof (room.playlistUrls) !== 'undefined' && !room.playlistEmpty &&
+                    <Box sx={{ display: 'flex', flexDirection: 'column', p: '8px' }}>
+                        <Typography sx={{ color: 'var(--white)', display: 'block', width: '100%', ml: 0, pl: 0, fontSize: '12px', textTransform: 'uppercase' }} > Playlist <b>{room.id}</b></Typography>
+
+                        <Box sx={{ color: 'var(--white)', display: 'flex', gap: '10px', flexDirection: 'row', alignItems: 'center', width: '100%', ml: 1, mt: 1, fontSize: '10px', textTransform: 'uppercase' }} >
+                            <SoundWave waveNumber={7} isPlayingOrNo={roomIsPlaying} />
+                            <Typography fontSize="small" component={'span'} className='varelaFontTitle' >
+                                {getDisplayTitle(room.playlistUrls[room.playing])}
+                            </Typography>
+                        </Box>
+                    </Box>}
+            </Grid>
+        </SwipeableDrawer>
     )
 };
 
