@@ -100,7 +100,6 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
                 addingObject.vote = { 'up': 0, 'down': 0 };
                 addingObject.hashId = uuid().slice(0, 10).toLowerCase()
                 handleCheckAndAddObjectToPlaylistFromObject(addingObject);
-                setSearchTerm('');
                 setIsSearching(false);
             } else {
 

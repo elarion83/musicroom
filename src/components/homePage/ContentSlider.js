@@ -30,10 +30,10 @@ const Contentslider = () => {
                 id: '0',
                 renderItem: 
                 <Box className={(activeItem === '0' || activeItem === 0) ? 'slideBox activeSlideBox' : 'slideBox'} onClick={(e) => slideToItem(0)} > 
-                    <img alt="" src="../../../../img/icons_animated/disco.gif" class="mainIcon"/>
-                    <img alt="" src="../../../../img/icons_animated/womenheandbanging.gif" class="mainIcon altIcon top small"/>
-                    <img alt="" src="../../../../img/icons_animated/menheandbanging.gif" class="mainIcon altIcon middle left small"/>
-                    <img alt="" src="../../../../img/icons_animated/playlistadd.gif" class="mainIcon altIcon middle right small"/>
+                    <img alt="" src="../../../../img/icons_animated/disco.gif" className="mainIcon"/>
+                    <img alt="" src="../../../../img/icons_animated/womenheandbanging.gif" className="mainIcon altIcon top small"/>
+                    <img alt="" src="../../../../img/icons_animated/menheandbanging.gif" className="mainIcon altIcon middle left small"/>
+                    <img alt="" src="../../../../img/icons_animated/playlistadd.gif" className="mainIcon altIcon middle right small"/>
                     <Typography sx={{pl:2,pr:2,mb:3}} variant="h5" gutterBottom className='varelaFontTitle'>
                         Une playlist en temps réel a plusieurs !
                     </Typography>
@@ -49,10 +49,10 @@ const Contentslider = () => {
                 id: '1',
                 renderItem: 
                 <Box className={activeItem === '1' ? 'slideBox activeSlideBox' : 'slideBox'} onClick={(e) => slideToItem(1)}> 
-                    <img alt="" src="../../../../img/icons_animated/confetti.gif" class="mainIcon"/>
-                    <img alt="" src="../../../../img/icons_animated/glasses.gif" class="mainIcon altIcon left small"/>
-                    <img alt="" src="../../../../img/icons_animated/hat.gif" class="mainIcon altIcon top left small"/>
-                    <img alt="" src="../../../../img/icons_animated/bluetooth.gif" class="mainIcon altIcon middle right small"/>
+                    <img alt="" src="../../../../img/icons_animated/confetti.gif" className="mainIcon"/>
+                    <img alt="" src="../../../../img/icons_animated/glasses.gif" className="mainIcon altIcon left small"/>
+                    <img alt="" src="../../../../img/icons_animated/hat.gif" className="mainIcon altIcon top left small"/>
+                    <img alt="" src="../../../../img/icons_animated/bluetooth.gif" className="mainIcon altIcon middle right small"/>
 
                     <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
                         En étant tous au même endroit ..
@@ -66,11 +66,11 @@ const Contentslider = () => {
                 id: '2',
                 renderItem: 
                 <Box className={activeItem === '2' ? 'slideBox activeSlideBox' : 'slideBox'} onClick={(e) => slideToItem(2)}> 
-                    <img alt="" src="../../../../img/icons_animated/globe.gif" class="mainIcon"/>
-                    <img alt="" src="../../../../img/icons_animated/pin1.gif" class="mainIcon altIcon top left small"/>
-                    <img alt="" src="../../../../img/icons_animated/amazonspeaker.gif" class="mainIcon altIcon top right small"/>
-                    <img alt="" src="../../../../img/icons_animated/pin2.gif" class="mainIcon altIcon left small"/>
-                    <img alt="" src="../../../../img/icons_animated/pin3.gif" class="mainIcon altIcon right small"/>
+                    <img alt="" src="../../../../img/icons_animated/globe.gif" className="mainIcon"/>
+                    <img alt="" src="../../../../img/icons_animated/pin1.gif" className="mainIcon altIcon top left small"/>
+                    <img alt="" src="../../../../img/icons_animated/amazonspeaker.gif" className="mainIcon altIcon top right small"/>
+                    <img alt="" src="../../../../img/icons_animated/pin2.gif" className="mainIcon altIcon left small"/>
+                    <img alt="" src="../../../../img/icons_animated/pin3.gif" className="mainIcon altIcon right small"/>
                     <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
                         .. ou en étant chacun chez soi
                     </Typography>
@@ -86,9 +86,9 @@ const Contentslider = () => {
                 id: '3',
                 renderItem: 
                 <Box className={activeItem === '3' ? 'slideBox activeSlideBox' : 'slideBox'} onClick={(e) => slideToItem(3)}> 
-                    <img alt="" src="../../../../img/icons_animated/chat.gif" class="mainIcon"/>
-                    <img alt="" src="../../../../img/icons_animated/music_note.gif" class="mainIcon altIcon left small"/>
-                    <img alt="" src="../../../../img/icons_animated/speakers.gif" class="mainIcon altIcon right small"/>
+                    <img alt="" src="../../../../img/icons_animated/chat.gif" className="mainIcon"/>
+                    <img alt="" src="../../../../img/icons_animated/music_note.gif" className="mainIcon altIcon left small"/>
+                    <img alt="" src="../../../../img/icons_animated/speakers.gif" className="mainIcon altIcon right small"/>
                     <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
                         Une playlist.. et bien plus !
                     </Typography>

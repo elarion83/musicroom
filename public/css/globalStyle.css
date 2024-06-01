@@ -118,12 +118,13 @@ b, * {
 }
 
 .playlistAdminPass {
-  background: var(--grey-dark);
+  color: var(--grey-dark) !important;
+  background: var(--main-color);
   padding: 5px;
   width: 100%;
   display: block;
   border-radius: 10px;
   text-align: center;
   font-size: 3em;
-  border: 3px dashed var(--main-color);
+  border: 3px dashed var(--grey-dark);
 }

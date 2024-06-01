@@ -88,6 +88,21 @@ const RoomTopBar = ({
                         </ListItemButton>
                     </ListItem>
 
+                    
+                    {!isAdminView && <ListItem key='roomDrawSync' disablePadding onClick={(e) => setGuestSynchroOrNot(!guestSynchroOrNot)}>
+                        <ListItemButton>
+                            <ListItemIcon>
+                                <Switch
+                                    size='small'
+                                    sx={{ml:-1}}
+                                    checked={guestSynchroOrNot}
+                                    onChange={(e) => setGuestSynchroOrNot(!guestSynchroOrNot)}
+                                    inputProps={{ 'aria-label': 'controlled' }}
+                                />
+                            </ListItemIcon>
+                            <Typography>{guestSynchroOrNot ? t('RoomLeftMenuSync') : t('RoomLeftMenuNotSync')}</Typography>
+                        </ListItemButton>
+                    </ListItem>}
                {/*     <ListItem key='roomDrawDeezerStatus' disablePadding>
                         <ListItemButton onClick={e => handleOpenRoomParamModal(true)}>
                             <ListItemIcon>
@@ -113,32 +128,6 @@ const RoomTopBar = ({
                             <Typography>{t('RoomLeftMenuRoomParams')}</Typography>
                         </ListItemButton>
                     </ListItem>
-                    <ListItem key='roomDrawRoomShare' disablePadding>
-                        <ListItemButton onClick={e => handleOpenShareModal(true)}>
-                            <ListItemIcon>
-                                <ShareIcon />
-                            </ListItemIcon>
-                            <Typography>{t('RoomLeftMenuRoomShare')}</Typography>
-                        </ListItemButton>
-                    </ListItem>
-                    
-                    {!isAdminView && <ListItem key='roomDrawSync' disablePadding onClick={(e) => setGuestSynchroOrNot(!guestSynchroOrNot)}>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <Switch
-                                    size='small'
-                                    sx={{ml:-1}}
-                                    checked={guestSynchroOrNot}
-                                    onChange={(e) => setGuestSynchroOrNot(!guestSynchroOrNot)}
-                                    inputProps={{ 'aria-label': 'controlled' }}
-                                />
-                            </ListItemIcon>
-                            <Typography>{guestSynchroOrNot ? t('RoomLeftMenuSync') : t('RoomLeftMenuNotSync')}</Typography>
-                        </ListItemButton>
-                    </ListItem>}
-
-                    <Divider  sx={{mt:1, mb:1}}/>
-                    
                     {guestSynchroOrNot && <ListItem key='roomDrawRoomSharee' disablePadding>
                         <ListItemButton onClick={e => handleOpenChangeAdminModal(true)}>
                             <ListItemIcon>
@@ -148,6 +137,18 @@ const RoomTopBar = ({
                                 {isAdminView ? t('ModalChangePlaylistAdmin') : t('ModalChangePlaylistAdmin2') }</Typography>
                         </ListItemButton>
                     </ListItem>}
+                    
+                    <Divider  sx={{mt:1, mb:1}}/>
+                    
+                    <ListItem key='roomDrawRoomShare' disablePadding>
+                        <ListItemButton onClick={e => handleOpenShareModal(true)}>
+                            <ListItemIcon>
+                                <ShareIcon />
+                            </ListItemIcon>
+                            <Typography>{t('RoomLeftMenuRoomShare')}</Typography>
+                        </ListItemButton>
+                    </ListItem>
+
                     <ListItem key='roomDrawRoomLeave' disablePadding>
                         <ListItemButton onClick={e => handleOpenLeaveRoomModal(true)}>
                             <ListItemIcon>

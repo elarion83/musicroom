@@ -48,6 +48,6 @@
     display: flex;
     gap: 10px;
     justify-content: space-evenly;
-    max-width: 400px;  
+    max-width: 250px;  
     margin: 1em auto;
 }

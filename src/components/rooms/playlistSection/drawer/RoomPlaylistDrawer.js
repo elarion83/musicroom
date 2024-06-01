@@ -39,7 +39,7 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, room
                 <Box className="DrawerGradient" sx={{backgroundImage:'url('+roomPlaylist[roomIdActuallyDisplaying].visuel+')'}}>
                 </Box>
                     
-               {/* <img class="DrawerImg" src={roomPlaylist[roomIdActuallyDisplaying].visuel} alt={roomPlaylist[roomIdActuallyDisplaying].title} /> */}
+               {/* <img className="DrawerImg" src={roomPlaylist[roomIdActuallyDisplaying].visuel} alt={roomPlaylist[roomIdActuallyDisplaying].title} /> */}
                 <List sx={{ width: '100%', mb:'15em', p:0}}>
                     <ListItem sx={{pt:0, mt:0}}>
                         <DrawerPlayPauseButton 

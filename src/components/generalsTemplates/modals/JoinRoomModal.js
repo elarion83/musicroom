@@ -32,7 +32,6 @@ const JoinRoomModal = ({ t, open, handleJoinRoom, changeOpen}) => {
             <ModalsHeader icon={() => <Icon icon='icon-park-outline:connect' style={{marginRight:'10px'}} />} title={t('HomePageButtonsJoinRoom')} />
 
             <DialogContent dividers>
-              <DialogContentText>
                 <Typography sx={{mb:1}}> {t('ModalJoinRoomIDOfTheRoom')}</Typography>
                 <Box className='joinRoomForm'>
                     <div className='input'>
@@ -52,7 +51,6 @@ const JoinRoomModal = ({ t, open, handleJoinRoom, changeOpen}) => {
                     </div>
                 </Box>
                 <Typography component="span" fontSize="small"> Ex : 5454S, E45FR</Typography>
-              </DialogContentText>
             </DialogContent>
             <DialogActions>
                 <LoadingButton loading={isJoining}  variant="outlined" position="end">
