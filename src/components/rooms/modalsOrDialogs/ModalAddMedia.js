@@ -147,7 +147,7 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
 
     return (
             <SwipeableDrawer
-                id="menu-appbar"
+                id="modal-add-media"
                 className='black_style_dialog'
                 sx={{zIndex:1300}}
                 anchor='bottom'
@@ -298,15 +298,15 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
                 <Snackbar
                     open={recentlyAdded}
                     autoHideDuration={6000}
-                    sx={{ borderRadius: '2px' }}
+                    sx={{ borderRadius: '2px', zIndex:2501, mb:4, bottom:'40px' }}
                     message={recentlyAddedTitle + " ajouté !"}
                 />
             </Container>
 
-            <Grid sx={{ bgcolor: '#202124', pb: 0, flexFlow: 'nowrap', position:'fixed', bottom:0, zIndex:1500 }} container  >
+            <Grid sx={{ bgcolor: '#202124', pb: 0, cursor:'pointer', flexFlow: 'nowrap', position:'fixed', bottom:0, zIndex:100 }} container 
+                    onClick={(e) => changeOpen(false)} >
                 <Button
                     className='modal_full_screen_close_left'
-                    onClick={(e) => changeOpen(false)}
                     aria-label="close"
                     sx={{ bgcolor: '#131416', mr: 1, borderRadius: 0 }}
                     xs={12}
