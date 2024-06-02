@@ -40,6 +40,7 @@ const resources = {
         "GeneralSnackSeeYouSoon" : "See you soon !",
         "GeneralNickname" : "Nickname",
         
+        "UserMenuMyProfile" : "My profile",
         "UserMenuMyRooms" : "My playlists",
 
         "HomePageButtonsCreateRoom" : "Create a playlist",
@@ -168,6 +169,8 @@ const resources = {
         "GeneralSnackSeeYouSoon" : "A bientôt !",
         "GeneralNickname" : "Pseudo",
         
+        
+        "UserMenuMyProfile" : "Mon profil",
         "UserMenuMyRooms" : "Mes playlists",
 
         "HomePageButtonsCreateRoom" : "Créer une playlist",
