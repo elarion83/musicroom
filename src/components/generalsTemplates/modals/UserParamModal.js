@@ -8,6 +8,7 @@ import { LoadingButton } from "@mui/lab";
 
 import { withTranslation } from 'react-i18next';
 import ModalsHeader from "./ModalsHeader";
+import { ReactSVG } from "react-svg";
 
 const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
 
@@ -33,6 +34,18 @@ const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
             <ModalsHeader icon={() => <AccountCircleIcon />} title={t('ModalUserSettingsTitle')} />
 
             <DialogContent dividers sx={{pt:2}}>
+                
+                <ReactSVG src={"./img/avatars/botts"+user.avatarId+".svg"} 
+                    style={{'width': '110px','height': '110px', 'margin':'1em auto 1em auto', 'background': '#cecece',  'border-radius': '50%',  'padding': '4px'}}
+                />
+                <Typography sx={{textAlign:'center', mb:2, fontWeight:'bold'}}>
+                    {user.displayName}
+                    {user.loginType !== "anon" && 
+                    <IconButton aria-label="delete" sx={{p:0, ml:1}} color="primary" onClick={(e) => setIsEditingPseudo(true)} >
+                        <EditIcon />
+                    </IconButton>}
+                </Typography>
+                            
                 <FormGroup>
                     {user.loginType === "anon" && 
                         <Alert sx={{mb:2, alignItems: 'center'}}  severity='warning'>
@@ -40,27 +53,6 @@ const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
                             <Typography fontSize='small'>{t('ModalUserSettingsEditNotAllowedText')}</Typography>
                         </Alert>
                     }
-                     <Grid container>
-                        
-                        <Grid item xs={11} md={11}>
-                            <Typography> {t('GeneralNickname')} : 
-                                <Typography component='span' sx={{pl:1}}>
-                                    {user.displayName}
-                                </Typography>
-                            </Typography>
-                            <Typography> {t('GeneralLogin')} {t('GeneralVia')} : 
-                                <Typography component={'b'} sx={{pl:1}}>
-                                    {'anon' === user.loginType ? t('GeneralAnon') : user.loginType}
-                                </Typography>
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={1} md={1}>
-                            
-                            {user.loginType !== "anon" && <IconButton aria-label="delete" sx={{p:0}} color="primary" onClick={(e) => setIsEditingPseudo(true)} >
-                                <EditIcon />
-                            </IconButton>}
-                        </Grid>
-                    </Grid>
                     {isEditingPseudo && <Grid>
                         
                         <Grid item sx={12} md={12}>

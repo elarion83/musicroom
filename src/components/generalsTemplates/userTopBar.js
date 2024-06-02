@@ -4,11 +4,9 @@ import React, { useState } from "react";
 import TuneIcon from '@mui/icons-material/Tune';
 import LoginIcon from '@mui/icons-material/Login';
 import Logout from '@mui/icons-material/Logout';
-import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import AvatarIcon from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
@@ -17,9 +15,8 @@ import { Button } from '@mui/material';
 import AppsIcon from '@mui/icons-material/Apps';
 import UserParamModal from './modals/UserParamModal';
 import UserRoomListModal from './modals/UserRoomListModal';
-
+import { ReactSVG } from "react-svg";
 import { withTranslation } from 'react-i18next';
-
 const UserTopBar = ({ t, user, setUserInfo, handleLogout, handleOpenLoginModal, joinRoomByRoomId }) => {
 
   // menu
@@ -49,9 +46,12 @@ const UserTopBar = ({ t, user, setUserInfo, handleLogout, handleOpenLoginModal, 
               aria-haspopup="true"
               aria-expanded={open ? 'true' : undefined}
             >
-              <Avatar sx={{ bgcolor: 'var(--red-2)', textTransform:'uppercase' }} ><AvatarIcon /></Avatar>
+              <ReactSVG src={"./img/avatars/botts"+user.avatarId+".svg"} 
+                style={{'width': '35px','height': '35px',  'background': '#756b6b',  'border-radius': '50%',  'padding': '4px'}}
+               />
             </IconButton>
           </Tooltip>}
+              
           {!user.displayName && 
             <Button 
               variant="outlined" 

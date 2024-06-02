@@ -72,7 +72,7 @@ function App( {t} ) {
         });
       }
       else if(localStorage.getItem("Play-It_AnonymouslyLoggedIn")) {
-        setUserInfo({displayName:localStorage.getItem("Play-It_AnonymouslyPseudo"), loginType:'anon',color: localStorage.getItem("Play-It_AnonymouslyColor")});
+        setUserInfo({displayName:localStorage.getItem("Play-It_AnonymouslyPseudo"),avatarId:localStorage.getItem("Play-It_AnonymouslyAvatarId"), loginType:'anon',color: localStorage.getItem("Play-It_AnonymouslyColor")});
         setIsSignedIn(true);
       }
       else {
@@ -153,14 +153,18 @@ function App( {t} ) {
     setIsLoginLoading(true);
     await delay(500);
     setIsLoginLoading(false);
+    var avatarId = Math. floor(Math. random()*9) + 1;
     setUserInfo({
       displayName:PseudoGenerated,
       loginType:'anon',
       color: getRandomHexColor(),
+      avatarId:avatarId,
     });
 
     localStorage.setItem("Play-It_AnonymouslyPseudo",  PseudoGenerated);
     localStorage.setItem("Play-It_AnonymouslyColor",  getRandomHexColor());
+    localStorage.setItem("Play-It_AnonymouslyAvatarId",avatarId);
+    
     localStorage.setItem("Play-It_AnonymouslyLoggedIn",  true);
 
     setIsSignedIn(true);
@@ -182,6 +186,7 @@ function App( {t} ) {
         displayName:PseudoGenerated, 
         creationTime:Date.now(),
         color: getRandomHexColor(),
+        avatarId:Math. floor(Math. random()*9) + 1,
         uid:userUid,
         loginType:registerType,
         userParams:{
