@@ -53,7 +53,7 @@ const Chat = ({t, layoutDisplay, setLayoutdisplay, roomParams, currentUser, room
             setCantSendMessageReason(waitingTextChat(sendMessageTimeToWait));
             db.collection(process.env.REACT_APP_MESSAGE_COLLECTION).add({
                 author: currentUser.displayName,
-                authorColor: currentUser.color,
+                authorColor: currentUser.color ?? 'var(--main-color)',
                 roomId: roomId,
                 text:messageToSend,
                 timestamp: Date.now(),

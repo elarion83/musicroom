@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import React from "react";
 
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import { Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/material";
+import { Alert, Dialog, DialogActions, DialogContent, DialogContentText } from "@mui/material";
 
 import { withTranslation } from 'react-i18next';
 import { SlideUp } from '../../../services/materialSlideTransition/Slide';
@@ -16,7 +16,10 @@ const ModalLeaveRoom = ({ t, open, changeOpen, handleQuitRoom }) => {
 
             <DialogContent dividers>
                 <DialogContentText className='fontFamilyNunito'>
-                    {t('ModalLeaveRoomText')}
+
+                    <Alert severity="info">
+                        {t('ModalLeaveRoomText')}
+                    </Alert>
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
