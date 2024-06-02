@@ -72,7 +72,7 @@ function App( {t} ) {
         });
       }
       else if(localStorage.getItem("Play-It_AnonymouslyLoggedIn")) {
-        setUserInfo({displayName:localStorage.getItem("Play-It_AnonymouslyPseudo"), loginType:'anon',color: getRandomHexColor()});
+        setUserInfo({displayName:localStorage.getItem("Play-It_AnonymouslyPseudo"), loginType:'anon',color: localStorage.getItem("Play-It_AnonymouslyColor")});
         setIsSignedIn(true);
       }
       else {
@@ -160,6 +160,7 @@ function App( {t} ) {
     });
 
     localStorage.setItem("Play-It_AnonymouslyPseudo",  PseudoGenerated);
+    localStorage.setItem("Play-It_AnonymouslyColor",  getRandomHexColor());
     localStorage.setItem("Play-It_AnonymouslyLoggedIn",  true);
 
     setIsSignedIn(true);
