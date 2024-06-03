@@ -161,17 +161,21 @@
  */
 @-webkit-keyframes slide-down-out {
   0% {
-    bottom:0;
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
   }
   100% {
-    bottom:-30vh;
+    -webkit-transform: translateY(1000px);
+            transform: translateY(1000px);
   }
 }
 @keyframes slide-down-out {
   0% {
-    bottom:0;
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
   }
   100% {
-    bottom:-30vh;
+    -webkit-transform: translateY(1000px);
+            transform: translateY(1000px);
   }
 }

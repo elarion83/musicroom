@@ -80,7 +80,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     const [guestSynchroOrNot, setGuestSynchroOrNot] = useState(true);
 
     const [isTutorialShown, setIsTutorialShown] = useState(true);
-
+    const [tutoTranslateY, hideTuto] = useState('0');
     const [openInvitePeopleToRoomModal, setOpenInvitePeopleToRoomModal] = useState(false);
     const [openPassWordModal, setOpenPassWordModal] = useState(true);
     const [OpenAddToPlaylistModal, setOpenAddToPlaylistModal] = useState(false);
@@ -106,7 +106,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     // layout
     const [layoutDisplay, setLayoutdisplay] = useState('default');
     const [layoutDisplayClass, setLayoutDisplayClass] = useState('defaultLayout');
-
     useEffect(() => {
         switch (layoutDisplay) {
             case 'compact':
@@ -172,6 +171,15 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     var docData = createDefaultRoomObject(roomId.toLowerCase(), currentUser);
                     db.collection(process.env.REACT_APP_ROOM_COLLECTION).doc(roomId).set(docData).then(() => {});
                     setRoom(docData);
+                }
+
+                if(isTutorialShown) {
+                    setTimeout(() => {
+                        hideTuto('-35vh');
+                        setTimeout(() => {
+                            setIsTutorialShown(false);                
+                        }, 2000);               
+                    }, 8000);
                 }
                 setLoaded(true);
             });
@@ -846,6 +854,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
             <ModalForceDeezerDisconnect open={openForceDisconnectDeezerModal} changeOpen={setOpenForceDisconnectDeezerModal} handleDisconnectDeezer={disconnectDeezer} />
             {isTutorialShown && 
             <RoomTutorial 
+                slideOutProp={tutoTranslateY}
                 layout={isPlaylistExistNotEmpty(room.playlistUrls) ? room.playlistUrls.length > 6 ? 'small': 'classic' : 'classic'}
             />}
         </div>
