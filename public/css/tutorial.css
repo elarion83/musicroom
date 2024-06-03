@@ -11,12 +11,20 @@
     padding-top: 2em;
     transition: bottom 3s cubic-bezier(0.250, 0.460, 0.450, 0.940);
 }
+
+.roomTutorialContainer.small {
+    height: 24vh;
+    z-index: 1100;
+}
 .roomTutorialContainer .SlideUp {
     margin-top: 80px;
     font-size: 2em;
     color: white;
     -webkit-animation: slide-top 3s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite both;
         animation: slide-top 3s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite both;
+}
+.roomTutorialContainer.small .SlideUp {
+    margin-top: 0px;
 }
 
 .roomTutorialContainer .ClickUp {
