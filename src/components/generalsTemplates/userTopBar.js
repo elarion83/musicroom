@@ -47,7 +47,7 @@ const UserTopBar = ({ t, user, setUserInfo, handleLogout, handleOpenLoginModal, 
               aria-expanded={open ? 'true' : undefined}
             >
               <ReactSVG src={"./img/avatars/botts"+user.avatarId+".svg"} 
-                style={{'width': '35px','height': '35px', 'outline': '2px solid rgba(255, 255, 255, 0.53)', 'background': '#756b6b',  'border-radius': '50%',  'padding': '4px'}}
+                style={{'width': '35px','height': '35px', 'outline': '2px solid rgba(255, 255, 255, 0.53)', 'background': '#756b6b',  'borderRadius': '50%',  'padding': '4px'}}
                />
             </IconButton>
           </Tooltip>}

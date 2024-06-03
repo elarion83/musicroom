@@ -1,0 +1,42 @@
+.roomTutorialContainer {
+    position: fixed;
+    bottom: 0;  
+    border-bottom: 2px dashed rgba(106, 173, 245, 0.79);
+    border-left: 2px dashed rgba(0, 123, 255, 0.79);
+    border-right: 2px dashed rgba(0, 123, 255, 0.79);
+    background: linear-gradient(to top, rgba(0, 123, 255, 1), rgba(0, 123, 255, 0));
+    height: 30vh;
+    width: 100%;
+    text-align: center;
+    padding-top: 2em;
+}
+.roomTutorialContainer .SlideUp {
+    margin-top: 80px;
+    font-size: 2em;
+    color: white;
+    -webkit-animation: slide-top 3s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite both;
+        animation: slide-top 3s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite both;
+}
+
+.roomTutorialContainer .ClickUp {
+    margin-top: 40px;
+    font-size: 3em;
+    margin-left: -10px;
+    color: white;
+    -webkit-animation: scale-up-center 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite both;
+        animation: scale-up-center 2s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite both;
+}
+
+.roomTutorialContainer.desktop {
+    display: none;
+}
+
+@media (min-width: 800px) { 
+    .roomTutorialContainer.phoneAndTablet {
+        display: none;
+    }
+    .roomTutorialContainer.desktop {
+        display: block;
+        padding-top: 5em;
+    }
+}

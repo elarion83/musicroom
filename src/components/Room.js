@@ -15,7 +15,7 @@ import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
 import { v4 as uuid } from 'uuid';
-import {cleanMediaTitle,isFromSpotify,isFromDeezer,isUndefined,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec} from '../services/utils';
+import {cleanMediaTitle,isFromSpotify,isFromDeezer,isUndefined,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay} from '../services/utils';
 import RoomPlaylistDrawer from "./rooms/playlistSection/drawer/RoomPlaylistDrawer";
 
 import FirstPageIcon from '@mui/icons-material/FirstPage';
@@ -50,6 +50,7 @@ import { Forward10, Replay10 } from "@mui/icons-material";
 import { emptyToken, playerRefObject, youtubeApiSearchObject } from "../services/utilsArray";
 import { changeMediaActuallyPlaying } from "../services/utilsRoom";
 import ModalChangeRoomAdmin from "./rooms/modalsOrDialogs/ModalChangeRoomAdmin";
+import RoomTutorial from "./rooms/RoomTutorial";
 
 const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
@@ -77,6 +78,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 	const [roomIdPlayed, changeMediaActuallyPlayingGuest] = useState(0);
 	const [roomIsPlaying, setRoomIsPlaying] = useState(true);
     const [guestSynchroOrNot, setGuestSynchroOrNot] = useState(true);
+
+    const [isTutorialShown, setIsTutorialShown] = useState(true);
 
     const [openInvitePeopleToRoomModal, setOpenInvitePeopleToRoomModal] = useState(false);
     const [openPassWordModal, setOpenPassWordModal] = useState(true);
@@ -152,10 +155,15 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         }
     });
 
+    useEffect(() => {
+        if(OpenAddToPlaylistModal && isTutorialShown) {
+            setIsTutorialShown(false);
+        }
+    }, [OpenAddToPlaylistModal]) ;
+
     const playerRef = useRef(playerRefObject);
 
     const [isActuallyAdmin, setIsActuallyAdmin] = useState(false);
-    const delay = ms => new Promise(res => setTimeout(res, ms));
     const getRoomData = (roomId) => {
             roomRef.get().then((doc) => {
                 if (doc.exists) {
@@ -192,7 +200,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         }
 
         document.title = 'Playlist ' + roomId + ' - Play-It';
-
 	}, [roomId]);
 
 	useEffect(() => {
@@ -837,6 +844,10 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
             <ModalLeaveRoom open={openLeaveRoomModal} changeOpen={setOpenLeaveRoomModal} handleQuitRoom={handleQuitRoomInComp} />
             <ModalForceSpotifyDisconnect open={openForceDisconnectSpotifyModal} changeOpen={setOpenForceDisconnectSpotifyModal} handleDisconnectSpotify={disconnectSpotify} />
             <ModalForceDeezerDisconnect open={openForceDisconnectDeezerModal} changeOpen={setOpenForceDisconnectDeezerModal} handleDisconnectDeezer={disconnectDeezer} />
+            {isTutorialShown && 
+            <RoomTutorial 
+                layout={isPlaylistExistNotEmpty(room.playlistUrls) ? room.playlistUrls.length > 6 ? 'small': 'classic' : 'classic'}
+            />}
         </div>
     );
 };
