@@ -25,7 +25,7 @@ import { Snackbar, Typography } from "@mui/material";
 import { PseudoGenerated } from './services/pseudoGenerator';
 
 import { CreateGoogleAnalyticsEvent } from './services/googleAnalytics';
-import { GFontIcon, getRandomHexColor } from "./services/utils";
+import { GFontIcon, getRandomHexColor, randomInt } from "./services/utils";
 import {replaceCurrentUrlWithHomeUrl, replaceCurrentUrlWithRoomUrl, replaceCurrentUrlWithRoomUrlForDeezer, replaceCurrentUrlWithRoomUrlForSpotify} from './services/redirects';
 
 import { withTranslation } from 'react-i18next';
@@ -153,7 +153,7 @@ function App( {t} ) {
     setIsLoginLoading(true);
     await delay(500);
     setIsLoginLoading(false);
-    var avatarId = Math. floor(Math. random()*9) + 1;
+    var avatarId = randomInt(1,9);
     setUserInfo({
       displayName:PseudoGenerated,
       loginType:'anon',
@@ -186,7 +186,7 @@ function App( {t} ) {
         displayName:PseudoGenerated, 
         creationTime:Date.now(),
         color: getRandomHexColor(),
-        avatarId:Math. floor(Math. random()*9) + 1,
+        avatarId:randomInt(1,9),
         uid:userUid,
         loginType:registerType,
         userParams:{

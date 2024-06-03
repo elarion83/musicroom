@@ -158,3 +158,9 @@ export function GFontIcon({icon, customClass = '', style = ''}) {
     const combinedClass = `material-symbols-outlined ${customClass}`;
     return <span className={combinedClass}>{icon}</span>;
 }
+
+export const delay = ms => new Promise(res => setTimeout(res, ms));
+
+export function randomInt(min, max) {
+    return Math.floor(Math.random()*max) + min;
+}
