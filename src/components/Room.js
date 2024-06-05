@@ -15,7 +15,7 @@ import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
 import { v4 as uuid } from 'uuid';
-import {cleanMediaTitle,isFromSpotify,isFromDeezer,isUndefined,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay} from '../services/utils';
+import {cleanMediaTitle,isFromSpotify,isFromDeezer,isUndefined,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, getYoutubeLocaleTrendsMusic, getLocale} from '../services/utils';
 import RoomPlaylistDrawer from "./rooms/playlistSection/drawer/RoomPlaylistDrawer";
 
 import FirstPageIcon from '@mui/icons-material/FirstPage';
@@ -84,6 +84,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     const [openInvitePeopleToRoomModal, setOpenInvitePeopleToRoomModal] = useState(false);
     const [openPassWordModal, setOpenPassWordModal] = useState(true);
     const [OpenAddToPlaylistModal, setOpenAddToPlaylistModal] = useState(false);
+    const [addMediaModalAlreadyOpened, setAddMediaModalAlreadyOpened] = useState(false);
     const [openRoomParamModal, setOpenRoomParamModal] = useState(false);
     const [openRoomChangeAdminModal, setOpenRoomChangeAdminModal] = useState(false);
     const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
@@ -106,6 +107,30 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     // layout
     const [layoutDisplay, setLayoutdisplay] = useState('default');
     const [layoutDisplayClass, setLayoutDisplayClass] = useState('defaultLayout');
+
+    
+    const [youtubeLocaleTrends, setYoutubeLocaleTrends] = useState(null);
+    // init youtube trends when opening for the first time the modal
+    useEffect(() => {
+        if(OpenAddToPlaylistModal && !addMediaModalAlreadyOpened) {
+            var params = {
+                part: 'snippet',
+                key: process.env.REACT_APP_YOUTUBE_API_KEY,
+                chart: 'mostPopular',
+                maxResults: 4,
+                regionCode: getLocale(),
+            };
+            axios.get('https://www.googleapis.com/youtube/v3/videos', { params: params })
+            .then(function (response) {
+                console.log(response.data.items);
+               setYoutubeLocaleTrends(response.data.items);
+            })
+            .catch(function (error) {
+            });
+            setAddMediaModalAlreadyOpened(true);
+        }
+    }, [OpenAddToPlaylistModal]);
+
     useEffect(() => {
         switch (layoutDisplay) {
             case 'compact':
@@ -121,7 +146,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 setLayoutDisplayClass('defaultLayout');
         }
     }, [layoutDisplay]);
-
     // inactivity on fullscreen
     const [remaining, setRemaining] = useState(0)
     const [layoutIdle, setLayoutIdle] = useState(false);
@@ -807,6 +831,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         open={OpenAddToPlaylistModal} 
                         changeOpen={setOpenAddToPlaylistModal}
                         currentUser={currentUser} 
+                        youtubeLocaleTrends={youtubeLocaleTrends}
                         DeezerTokenProps={room.roomParams.deezer.Token} 
                         spotifyTokenProps={room.roomParams.spotify.Token} 
                         validatedObjectToAdd={handleAddValidatedObjectToPlaylist} 

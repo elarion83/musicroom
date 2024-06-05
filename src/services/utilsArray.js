@@ -4,6 +4,9 @@ import CelebrationIcon from '@mui/icons-material/Celebration';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, InstapaperIcon, InstapaperShareButton, RedditIcon, RedditShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
+import { Box, Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
+import { formatNumberToMinAndSec } from './utils';
+import SearchResultItemNew from '../components/rooms/searchResultItemNew';
 
 export const notifsTextArray = {
     userArrived:'//AUTHOR// a rejoins la playlist !',
@@ -123,3 +126,43 @@ export const timestampToHoursAndMinOptions = {
   minute: '2-digit', 
   hour12: false
 };
+
+export const mockYoutubeTrendResult = [
+            {
+                id: '0',
+                renderItem: 
+                <SearchResultItemNew />,
+            },
+            {
+                id: '0',
+                renderItem: 
+                <SearchResultItemNew />,
+            },
+            {
+                id: '0',
+                renderItem: 
+                <SearchResultItemNew />,
+            },
+            {
+                id: '0',
+                renderItem: 
+                <SearchResultItemNew />,
+            },
+            {
+                id: '0',
+                renderItem: 
+                <SearchResultItemNew />,
+            },
+            {
+                id: '0',
+                renderItem: 
+                <SearchResultItemNew />,
+            },
+            {
+                id: '0',
+                renderItem: 
+                <SearchResultItemNew />,
+            },
+            
+           
+        ];

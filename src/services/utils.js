@@ -2,6 +2,7 @@ import React from 'react';
 import i18n from "i18next";
 
 import { v4 as uuid } from 'uuid';
+import axios from 'axios';
 
 
 export function createDefaultRoomObject(roomId, roomOwner) {

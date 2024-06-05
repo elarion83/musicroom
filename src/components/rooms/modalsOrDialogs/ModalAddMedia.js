@@ -14,17 +14,18 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import validator from 'validator';
 import SearchResultItem from '../searchResultItem';
-import { cleanMediaTitle, getDisplayTitle } from '../../../services/utils';
+import { cleanMediaTitle, getDisplayTitle, getLocale } from '../../../services/utils';
 import { withTranslation } from 'react-i18next';
 import { Button, Dialog, SwipeableDrawer, Typography } from '@mui/material';
 import SoundWave from "../../../services/SoundWave";
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { searchTextArray, youtubeApiSearchObject } from '../../../services/utilsArray';
+import { mockYoutubeTrendResult, searchTextArray, youtubeApiSearchObject } from '../../../services/utilsArray';
 import { KeyboardArrowDown } from '@mui/icons-material';
-
-const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUser, validatedObjectToAdd, spotifyTokenProps, DeezerTokenProps }) => {
-
+import { useTable } from '../../../services/youtubeResults';
+import  NewContentslider  from '../../../services/SpringCarousel';
+import SearchResultItemNew from '../searchResultItemNew';
+const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, roomIsPlaying, currentUser, validatedObjectToAdd, spotifyTokenProps, DeezerTokenProps }) => {
     const [mediaSearchResultYoutube, setMediaSearchResultYoutube] = useState([]);
     const [mediaSearchResultDailyMotion, setMediaSearchResultDailyMotion] = useState([]);
     const [mediaSearchResultDeezer, setMediaSearchResultDeezer] = useState([]);
@@ -74,6 +75,7 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
             });
     }
 
+
     async function handleSearchForMedia() {
         setIsSearching(true);
         if (searchTerm !== '') {
@@ -102,6 +104,7 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
                 addingObject.hashId = uuid().slice(0, 10).toLowerCase()
                 handleCheckAndAddObjectToPlaylistFromObject(addingObject);
                 setIsSearching(false);
+                setSearchTerm('');
             } else {
 
                 axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, {
@@ -191,6 +194,34 @@ const RoomModalAddMedia = ({ t, open, room, changeOpen, roomIsPlaying, currentUs
                         <SearchIcon />
                     </LoadingButton>
                 </Grid>
+
+                {youtubeLocaleTrends && searchTerm.length == 0 && youtubeLocaleTrends.length > 1 && <Container sx={{padding:'0 !important'}}>
+                    <Typography variant="h6" sx={{mt:1}} gutterBottom>
+                        En tendance
+                    </Typography>
+                    
+                    <Container sx={{display:'flex', gap:'10px'}}>
+                    {youtubeLocaleTrends.map(function (media, idyt) {
+                        return (
+                            <SearchResultItemNew
+                                key={idyt}
+                                image={media.snippet.thumbnails.high.url}
+                                title={cleanMediaTitle(media.snippet.title)}
+                                source='youtube'
+                                uid={uuid().slice(0, 10).toLowerCase()}
+                                platformId={media.id}
+                                addedBy={addingObject.addedBy}
+                                url={'https://www.youtube.com/watch?v=' + media.id.videoId}
+                                date={dateFormat(media.snippet.publishedAt, 'd mmm yyyy')}
+                                channelOrArtist={media.snippet.channelTitle}
+                                addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject}
+                            />)
+                    })}
+                    </Container>
+                </Container>}
+
+
+
                 {mediaSearchResultYoutube.length > 1 && <Grid item xs={12}>
                     <Tabs value={tabIndex} onChange={handleTabChange} sx={{ bgcolor: '#202124' }}>
                         <Tab sx={{ color: 'var(--white)' }} label="Youtube" disabled={mediaSearchResultYoutube.length > 1 ? false : true} />
