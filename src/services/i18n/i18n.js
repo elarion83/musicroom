@@ -1,5 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import { getLocale } from "../utils";
 
 // the translations
 // (tip move them in a JSON file and import them,
@@ -67,7 +68,7 @@ const resources = {
 
         "ModalUserRoomListEmpty" : "You have no playlist",
         "ModalUserRoomListCreated" : "Created on",
-        "ModalUserRoomListJoinRoomText" : "Join the room",
+        "ModalUserRoomListJoinRoomText" : "Join the playlist",
 
         
         "ModalJoinRoomIDOfTheRoom": "ID of the playlist you want to join",
@@ -82,7 +83,7 @@ const resources = {
         "ModalLoginTermsPrivacyPolicy": "privacy policy",
         "ModalLoginTermsYoutubeTerms": "Youtube terms of use.",
         
-        "ModalLeaveRoomTitle": "Leave the romm ?",
+        "ModalLeaveRoomTitle": "Leave the playlist",
         "ModalLeaveRoomText": "You're about to leave the playlist to go back to reception. Are you sure?",
         
         "ModalShareRoomTitle": "Share the playlist",
@@ -197,7 +198,7 @@ const resources = {
 
         "ModalUserRoomListEmpty" : "Vous n'avez aucune playlist",
         "ModalUserRoomListCreated" : "Crée le",
-        "ModalUserRoomListJoinRoomText" : "Rejoindre la room",
+        "ModalUserRoomListJoinRoomText" : "Rejoindre la playlist",
 
         "ModalJoinRoomIDOfTheRoom": "ID de la playlist a rejoindre",
         "ModalJoinRoomButtonJoin": "Rejoindre",
@@ -211,7 +212,7 @@ const resources = {
         "ModalLoginTermsPrivacyPolicy": "Politique de confidentialité",
         "ModalLoginTermsYoutubeTerms": "les conditions d'utilisation de Youtube.",
         
-        "ModalLeaveRoomTitle": "Quitter la playlist ?",
+        "ModalLeaveRoomTitle": "Quitter la playlist",
         "ModalLeaveRoomText": "Vous êtes sur le point de quitter la playlist pour retourner à l'accueil. Êtes-vous sûrs ?",
         
         "ModalShareRoomTitle": "Partager la playlist",
@@ -266,16 +267,12 @@ const resources = {
   }
 };
 
-var lang = 'en';
-if(navigator.language === 'fr' || navigator.language === 'fr-FR') {
-    lang = 'fr';
-}
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     resources,
-    lng: lang,
+    lng: getLocale(),
     interpolation: {
       escapeValue: false // react already safes from xss
     }

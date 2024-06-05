@@ -54,7 +54,7 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, room
                             idActuallyPlaying={roomIdActuallyPlaying}
                             idActuallyDisplaying={roomIdActuallyDisplaying} />
                         <ListItemText 
-                            sx={{zIndex:2}} 
+                             
                             primary={
                                 <React.Fragment>
                                     <Typography className="varelaFontTitle"sx={{textShadow:'1px 1px 1px #423d3d'}}  >

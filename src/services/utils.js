@@ -164,3 +164,11 @@ export const delay = ms => new Promise(res => setTimeout(res, ms));
 export function randomInt(min, max) {
     return Math.floor(Math.random()*max) + min;
 }
+
+export function getLocale() {
+    var lang = 'en';
+    if(navigator.language === 'fr' || navigator.language === 'fr-FR') {
+        lang = 'fr';
+    }
+    return lang;
+}

@@ -6,16 +6,19 @@
     border-right: 2px dashed rgba(0, 123, 255, 0.79);
     background: linear-gradient(to top, rgba(0, 123, 255, 1), rgba(0, 123, 255, 0));
     height: 30vh;
+    min-height: 200px;
     width: 100%;
     text-align: center;
-    padding-top: 2em;
+    padding-top: 4.5em;
     transition: bottom 3s cubic-bezier(0.250, 0.460, 0.450, 0.940);
 }
 
-.roomTutorialContainer.small {
-    height: 24vh;
-    z-index: 1100;
+.roomTutorialContainer p {
+    font-weight: 500;
+    color:white;
+    text-shadow: 2px 2px 6px rgba(0,0,0,1), 0px -5px 35px rgba(0,0,0,1);
 }
+
 .roomTutorialContainer .SlideUp {
     margin-top: 80px;
     font-size: 2em;
@@ -23,12 +26,9 @@
     -webkit-animation: slide-top 3s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite both;
         animation: slide-top 3s cubic-bezier(0.250, 0.460, 0.450, 0.940) infinite both;
 }
-.roomTutorialContainer.small .SlideUp {
-    margin-top: 0px;
-}
 
 .roomTutorialContainer .ClickUp {
-    margin-top: 40px;
+    margin-top: 20px;
     font-size: 3em;
     margin-left: -10px;
     color: white;
@@ -46,6 +46,12 @@
     }
     .roomTutorialContainer.desktop {
         display: block;
-        padding-top: 5em;
+    }
+}
+
+
+@media (max-width: 800px) { 
+    .roomTutorialContainer.phoneAndTablet {
+        background: linear-gradient(to top, rgba(0, 123, 255, 1) 40%, rgba(0, 123, 255, 0));
     }
 }

@@ -1,5 +1,6 @@
 .playlist_bloc {
     position: relative;
+    z-index: 0;
     margin:0 !important;
 }
 .playlist_bloc .MuiAccordionDetails-root {

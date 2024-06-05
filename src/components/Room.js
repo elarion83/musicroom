@@ -261,7 +261,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 	useEffect(() => {
         if(room.interactionsArray && room.interactionsArray.length > 0) {
             room.interactionsArray.forEach(function (item, index, object) {
-                if((Date.now() - item.timestamp) < 500) { 
+                if((Date.now() - item.timestamp) < 1000) { 
                     createInteractionAnimation(item.type, layoutDisplay);
                 }
             });

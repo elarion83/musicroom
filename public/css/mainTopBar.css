@@ -12,6 +12,20 @@
     display: none;
 }
 
+.userAvatar {
+    width: 35px;
+    height: 35px;
+    outline: rgba(255, 255, 255, 0.53) solid 2px;
+    background: rgb(117, 107, 107);
+    border-radius: 50%;
+    padding: 4px;
+}
+
+.topBarIsInRoom .userAvatar {
+    height: 30px;
+    width: 30px;
+}
+
 .topBarIsInRoom .MuiIconButton-sizeSmall {
     padding: 0;
 }
