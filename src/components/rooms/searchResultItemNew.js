@@ -12,13 +12,14 @@ const SearchResultItemNew = ({ duration,image, title, source, platformId, album 
                 image={image}
                 title={title}
             />
-            <CardContent className='resultBoxContent' sx={{bgcolor:'var(--white)',position:'relative',maxWidth:'200px',mt:'-42px', padding:'5px 5px 0px 5px !important',flexGrow:1}}>
+            <CardContent className='resultBoxContent' sx={{bgcolor:'var(--white)',position:'relative',mt:'-42px', padding:'5px 5px 0px 5px !important',flexGrow:1}}>
+                <Typography className="fontFamilyNunito" sx={{ ml:0, mb: 0, fontSize: '9px', fontWeight:'lighter'}}><b>{channelOrArtist} </b></Typography>
+
                 <Typography gutterBottom component="div" fontSize='12px'  className="resulttitle varelaFontTitle">
                 {title}
                 </Typography>
                 <Box sx={{position:'relative'}}>
-                    <Typography sx={{ ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase' }}><b>{channelOrArtist} </b></Typography>
-                    <Typography sx={{ ml:0, mb: 0, fontSize: '10px' }}><b>{formatNumberToMinAndSec(duration)} </b></Typography>
+                    {duration != null && <Typography sx={{ ml:0, mb: 0, fontSize: '10px' }}><b>{formatNumberToMinAndSec(duration)} </b></Typography>}
                 </Box>                                
 
             </CardContent>

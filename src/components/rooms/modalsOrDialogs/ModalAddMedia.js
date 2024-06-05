@@ -239,7 +239,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ mt: 0 }}>
                                         {mediaSearchResultYoutube.map(function (media, idyt) {
                                             return (
-                                                <SearchResultItem
+                                                <SearchResultItemNew
                                                     key={idyt}
                                                     image={media.snippet.thumbnails.high.url}
                                                     title={cleanMediaTitle(media.snippet.title)}
@@ -262,7 +262,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ mt: 0 }}>
                                         {mediaSearchResultSpotify.map(function (media, idsp) {
                                             return (
-                                                <SearchResultItem
+                                                <SearchResultItemNew
                                                     key={idsp}
                                                     image={media.album.images[0].url}
                                                     title={media.artists[0].name + ' - ' + media.name}
