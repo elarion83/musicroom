@@ -114,10 +114,10 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     useEffect(() => {
         if(OpenAddToPlaylistModal && !addMediaModalAlreadyOpened) {
             var params = {
-                part: 'snippet',
+                part: 'snippet,contentDetails',
                 key: process.env.REACT_APP_YOUTUBE_API_KEY,
                 chart: 'mostPopular',
-                maxResults: 4,
+                maxResults: 2,
                 regionCode: getLocale(),
             };
             axios.get('https://www.googleapis.com/youtube/v3/videos', { params: params })

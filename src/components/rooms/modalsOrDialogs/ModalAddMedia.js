@@ -14,7 +14,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import validator from 'validator';
 import SearchResultItem from '../searchResultItem';
-import { cleanMediaTitle, getDisplayTitle, getLocale } from '../../../services/utils';
+import { YTV3APIDurationToReadable, cleanMediaTitle, getDisplayTitle, getLocale } from '../../../services/utils';
 import { withTranslation } from 'react-i18next';
 import { Button, Dialog, SwipeableDrawer, Typography } from '@mui/material';
 import SoundWave from "../../../services/SoundWave";
@@ -33,6 +33,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
     const [searchTerm, setSearchTerm] = useState('');
     const [recentlyAdded, setRecentlyAdded] = useState(false);
     const [recentlyAddedTitle, setRecentlyAddedTitle] = useState('');
+    const [showYoutubeTrends, setShowYoutubeTrends] = useState(true);
     const [isSearching, setIsSearching] = useState(false);
 
     const [tabIndex, setTabIndex] = useState(0);
@@ -112,6 +113,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                 })
                     .then(function (response) {
                         setMediaSearchResultYoutube(response.data.items);
+                        setShowYoutubeTrends(false);
                         setIsSearching(false);
                     })
                     .catch(function (error) {
@@ -195,21 +197,22 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                     </LoadingButton>
                 </Grid>
 
-                {youtubeLocaleTrends && searchTerm.length == 0 && youtubeLocaleTrends.length > 1 && <Container sx={{padding:'0 !important'}}>
+                {youtubeLocaleTrends && showYoutubeTrends && youtubeLocaleTrends.length > 0 && <Container sx={{padding:'0 !important'}}>
                     <Typography variant="h6" sx={{mt:1}} gutterBottom>
                         En tendance
                     </Typography>
                     
-                    <Container sx={{display:'flex', gap:'10px'}}>
+                    <Container sx={{display:'flex', flexWrap:'wrap', gap:'10px'}}>
                     {youtubeLocaleTrends.map(function (media, idyt) {
                         return (
                             <SearchResultItemNew
                                 key={idyt}
                                 image={media.snippet.thumbnails.high.url}
-                                title={cleanMediaTitle(media.snippet.title)}
+                                title={media.snippet.title}
                                 source='youtube'
                                 uid={uuid().slice(0, 10).toLowerCase()}
                                 platformId={media.id}
+                                duration={YTV3APIDurationToReadable(media.contentDetails.duration)}
                                 addedBy={addingObject.addedBy}
                                 url={'https://www.youtube.com/watch?v=' + media.id.videoId}
                                 date={dateFormat(media.snippet.publishedAt, 'd mmm yyyy')}
