@@ -15,7 +15,7 @@ import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
 import { v4 as uuid } from 'uuid';
-import {cleanMediaTitle,isFromSpotify,isFromDeezer,isUndefined,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, getYoutubeLocaleTrendsMusic, getLocale, isVarExist, isProdEnv} from '../services/utils';
+import {cleanMediaTitle,isFromSpotify,isFromDeezer,isUndefined,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, getYoutubeLocaleTrendsMusic, getLocale, isVarExist, isProdEnv, getLocStorVotes, setPageTitle, getPlayerSec} from '../services/utils';
 import RoomPlaylistDrawer from "./rooms/playlistSection/drawer/RoomPlaylistDrawer";
 
 import FirstPageIcon from '@mui/icons-material/FirstPage';
@@ -57,8 +57,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     // global for room
 	const roomRef = db.collection(process.env.REACT_APP_ROOM_COLLECTION).doc(roomId);
-    const [localData] = useState({domain:window.location.hostname, currentUserVotes:{up:[], down:[]} });
+    const [localData] = useState({domain:window.location.hostname, currentUserVotes:getLocStorVotes() });
 	const [loaded, setLoaded] = useState(false);
+
 	const [room, setRoom] = useState({});
 
     // sticky toolbar
@@ -165,34 +166,164 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     const playerRef = useRef(playerRefObject);
 
-    async function createEmptyRoom(emptyRoomObject, roomId) {
-        db.collection(process.env.REACT_APP_ROOM_COLLECTION).doc(roomId).set(emptyRoomObject).then(() => {});
-        setRoom(emptyRoomObject);
+
+
+
+
+
+
+    async function initTutorial() {
+        if(isTutorialShown) {
+            setTimeout(() => {
+                hideTuto('-35vh');
+                setTimeout(() => {
+                    setIsTutorialShown(false);                
+                }, 2000);               
+            }, 8000);
+        }
+    }
+
+    async function initRoomAsync(roomDatas, currentUser) {
+        setRoom(roomDatas);
+        initTutorial();
+        setLoaded(true);
+    }
+
+    async function initRoom(roomDatas, roomId = '', create = true, currentUser) {
+        if(create) {
+            db.collection(process.env.REACT_APP_ROOM_COLLECTION).doc(roomId).set(roomDatas).then(() => {
+                initRoomAsync(roomDatas, currentUser);
+            });
+        } else {
+            initRoomAsync(roomDatas, currentUser)
+        }
+    }
+
+    async function updateFirebaseRoom(newRoomDatas, merge = true) {
+        roomRef.set(newRoomDatas, { merge: merge });
+    }
+
+    async function guestAutoUpdate() {
+        if(guestSynchroOrNot) {
+            roomRef.onSnapshot(querySnapshot => {
+                var roomDataInFb = querySnapshot.data();
+
+                if(Math.abs(roomDataInFb.mediaActuallyPlayingAlreadyPlayedData.playedSeconds - room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds) > 5) {
+                    playerRef.current.seekTo(roomDataInFb.mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds');
+                } 
+                if(roomDataInFb.playing !== room.playing) {
+                    changeMediaActuallyPlayingGuest(roomDataInFb.playing);
+                } 
+                if(roomDataInFb.actuallyPlaying !== room.actuallyPlaying) {
+                    setRoomIsPlaying(roomDataInFb.actuallyPlaying);
+                }
+            });
+        }
     }
 
     const [isActuallyAdmin, setIsActuallyAdmin] = useState(false);
     
-        const getRoomData = (roomId) => {
-            roomRef.get().then((doc) => {
-                if (doc.exists) {
-                    setRoom(doc.data());
-                } else {
-                    var docData = createDefaultRoomObject(roomId.toLowerCase(), currentUser);
-                    db.collection(process.env.REACT_APP_ROOM_COLLECTION).doc(roomId).set(docData).then(() => {});
-                    setRoom(docData);
-                }
-
-                if(isTutorialShown) {
-                    setTimeout(() => {
-                        hideTuto('-35vh');
-                        setTimeout(() => {
-                            setIsTutorialShown(false);                
-                        }, 2000);               
-                    }, 8000);
-                }
-                setLoaded(true);
-            });
+    const getRoomData = (roomId, currentUser) => {
+        roomRef.get().then((doc) => {
+            var roomDatas = doc.exists ? doc.data() : createDefaultRoomObject(roomId.toLowerCase(), currentUser);
+            
+            initRoom(roomDatas, roomId.toLowerCase(), !doc.exists, currentUser);
+        });
 	};
+
+	useEffect(() => {
+		getRoomData(roomId, currentUser); 
+        setPageTitle('Playlist ' + roomId + ' - Play-It');
+	}, [roomId]);
+
+	useEffect(() => {
+        if(loaded && !isActuallyAdmin) {
+            if(guestSynchroOrNot) {
+                guestAutoUpdate();
+            } else {
+                setRoomIsPlaying(false);
+            }
+        }
+	}, [guestSynchroOrNot]);
+
+	useEffect(() => {
+        if(loaded) {
+            changeMediaActuallyPlayingGuest(room.playing);
+            setIsActuallyAdmin(currentUser.displayName === room.admin);
+            if(!isActuallyAdmin && guestSynchroOrNot) {
+                guestAutoUpdate();
+            }
+            setRoomIsPlaying(room.actuallyPlaying);
+
+            if(isVarExist(room.localeYoutubeTrends)) {
+                if(room.localeYoutubeTrends.length < 1) {
+                    if(!isProdEnv()) {
+                        roomRef.set({
+                            localeYoutubeTrends: mockYoutubeTrendResult,
+                            localeYoutubeMusicTrends: mockYoutubeMusicResult},{merge:true});
+                        return
+                    } else {
+                        axios.get(process.env.REACT_APP_YOUTUBE_VIDEOS_URL, { 
+                            params: youtubeApiVideosParams('0', 6, 'snippet,contentDetails') 
+                        })
+                        .then(function (response) {
+                            roomRef.set({localeYoutubeTrends: response.data.items},{merge:true});
+                            
+                            axios.get(process.env.REACT_APP_YOUTUBE_VIDEOS_URL, { 
+                                params: youtubeApiVideosParams('10', 6, 'snippet,contentDetails')
+                                })
+                            .then(function (musicResponse) {
+                                roomRef.set({localeYoutubeMusicTrends: musicResponse.data.items},{merge:true});
+                            })
+                            .catch(function (error) {
+                            });
+                        })
+                        .catch(function (error) {
+                        });
+                    }
+                }
+            }
+        }
+	}, [loaded]);
+    async function setIsPlaying(PlayingOrNot) {
+        setRoomIsPlaying(PlayingOrNot);
+        if(isActuallyAdmin) {
+           updateFirebaseRoom({actuallyPlaying: PlayingOrNot})
+        }
+    }
+    
+    async function setIdPlaying(idPlaying) {
+        playerRef.current.seekTo(0, 'seconds'); 
+        changeMediaActuallyPlayingGuest(idPlaying);
+        if(isActuallyAdmin) {
+           updateFirebaseRoom({
+            playing: idPlaying,
+            mediaActuallyPlayingAlreadyPlayedData:{
+                playedSeconds:0
+            }
+        })
+        }
+    }
+
+    async function handleProgress(event) {
+        if(isActuallyAdmin) {
+            updateFirebaseRoom({
+                mediaActuallyPlayingAlreadyPlayedData:{
+                    playedSeconds:event.playedSeconds,
+                    playedPercentage:event.played*100,
+                    played:event.played
+                }
+            })
+        }
+    }
+
+    async function goToSecond(seconds) {
+        var secSeekTo = seconds === 0 ? 0 : Math.floor(playerRef.current.getCurrentTime()) + seconds;
+        playerRef.current.seekTo(secSeekTo, 'seconds'); 
+    }
+
+
+
 
     useKeypress([' '], () => {
         if(room && !OpenAddToPlaylistModal) {
@@ -206,80 +337,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         }
     });
 
-	useEffect(() => {
-        
-		getRoomData(roomId); 
-        localStorage.setItem("Play-It_RoomId", roomId)
-        if(null === localStorage.getItem("Play-It_UserInfoVotes")) {
-            localStorage.setItem("Play-It_UserInfoVotes", JSON.stringify({up:[], down:[]}));
-        } else {
-            localData.currentUserVotes = JSON.parse(localStorage.getItem("Play-It_UserInfoVotes"));
-        }
-
-        document.title = 'Playlist ' + roomId + ' - Play-It';
-	}, [roomId]);
-
-	useEffect(() => {
-        if( typeof playerRef.current.seekTo === 'function') {
-            if(guestSynchroOrNot) {
-                roomRef.get().then((doc) => {
-                    playerRef.current.seekTo(doc.data().mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds');  
-                });
-            } else if(!guestSynchroOrNot && !isActuallyAdmin) {
-                playerRef.current.seekTo(0, 'seconds');
-            }
-
-            room.notifsArray.push({type: guestSynchroOrNot ? 'userSync' : 'userUnSync', timestamp: Date.now(), createdBy: currentUser.displayName});
-            roomRef.set({notifsArray: room.notifsArray},{merge:true});   
-            CreateGoogleAnalyticsEvent('Actions', guestSynchroOrNot ? 'Playlist synchro' : 'Playlist désynchro','Playlist '+roomId);  
-        }
-	}, [guestSynchroOrNot]);
-
-    useEffect(() => {
-        if(loaded && room) {
-            room.notifsArray.push({type: 'userArrived', timestamp: Date.now(), createdBy: currentUser.displayName});
-            roomRef.set({notifsArray: room.notifsArray},{merge:true});
-            changeMediaActuallyPlayingGuest(room.playing);
-            setRoomIsPlaying(room.actuallyPlaying);
-        } 
-    }, [loaded, guestSynchroOrNot]);
-
-    useEffect(() => {
-        if(guestSynchroOrNot) {
-            setRoomIsPlaying(room.actuallyPlaying);
-            changeMediaActuallyPlayingGuest(room.playing);
-        } 
-    }, [room.actuallyPlaying, room.playing]);
-
-	useEffect(() => {
-        if(currentUser.displayName === room.admin || currentUser.displayName === room.admin) {
-            setIsActuallyAdmin(true);
-        } else {
-            setIsActuallyAdmin(false);
-        }
-
-        if(roomIsPlaying) {
-            document.title = t('GeneralPlaying')+' - Playlist ' + roomId + ' - Play-It';
-        } else {
-            document.title = 'Playlist ' + roomId + ' - Play-It';
-        }
-        
-		getRoomData(roomId); 
-    }, [loaded, localData,room]);
-
-	useEffect(() => {
-        if(room.interactionsArray && room.interactionsArray.length > 0) {
-            room.interactionsArray.forEach(function (item, index, object) {
-                if((Date.now() - item.timestamp) < 1000) { 
-                    createInteractionAnimation(item.type, layoutDisplay);
-                }
-            });
-        }
-        
-    }, [room.interactionsArray]);
-    
     async function handlePlay(playStatus) {
-        if(isTokenInvalid(room.roomParams.spotify.TokenTimestamp, 3600000)) {   
+        console.log(playStatus);
+      /*  if(isTokenInvalid(room.roomParams.spotify.TokenTimestamp, 3600000)) {   
             disconnectSpotify();
         }
         if(isTokenInvalid(room.roomParams.deezer.TokenTimestamp, 3600000)) {
@@ -296,11 +356,13 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 }, { merge: true });
         } else {
             setRoomIsPlaying(playStatus);
-        }
+        }*/
     }
     
-    useEffect(() => {
+    
+   /* useEffect(() => {
         if(isVarExist(room.localeYoutubeTrends)) {
+            console.log();
             if(room.localeYoutubeTrends.length < 1) {
                 if(!isProdEnv()) {
                     roomRef.set({
@@ -328,7 +390,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 }
             }
         }
-    }, [room]);
+    }, [room]);*/
 
     async function disconnectSpotify() {
         roomRef.set({roomParams:{spotify:emptyToken}}, { merge: true });
@@ -393,18 +455,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         return false;
     }
   
-    async function setSecondsPlayed(secondsPlayed) {
-        roomRef.set({mediaActuallyPlayingAlreadyPlayedData:{
-            playedSeconds:secondsPlayed
-        }}, { merge: true });
-        playerRef.current.seekTo(secondsPlayed, 'seconds');
-    }
-
-    async function handleChangeSecondsPlayed(room, number) {
-        setSecondsPlayed(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds+number);
-    }
-
-    function handleProgress(event) {
+ /*   function handleProgress(event) {
         if(room.actuallyPlaying) {
             if(isActuallyAdmin) {
                 roomRef.set({
@@ -414,12 +465,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         played:event.played
                     } }, { merge: true });
             } else if(!isActuallyAdmin && guestSynchroOrNot) {
-                if(Math.abs(event.playedSeconds - room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds) > 4) {
+               /* if(Math.abs(event.playedSeconds - room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds) > 4) {
                     playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds');
-                }
+                } 
             }
         }
-    }
+    } */
     
     function handleQuitRoomInComp() {
         room.notifsArray.push({type: 'userLeaved', timestamp: Date.now(), createdBy: currentUser.displayName});
@@ -589,7 +640,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     isShowSticky={isShowSticky}
                     handlePlay={handlePlay}
                     isSpotifyAndIsNotPlayableBySpotify={isSpotifyAndIsNotPlayableBySpotify}
-                    handleChangeIdActuallyPlaying={handleChangeIdActuallyPlaying}
+                    handleChangeIdActuallyPlaying={setIdPlaying}
                     handleOpenRoomParamModal={handleOpenRoomParamModal}
                     handleOpenShareModal={handleOpenShareModal}
                     handleOpenChangeAdminModal={handleOpenChangeAdminModal}
@@ -669,13 +720,11 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                         progressInterval = {1000}
                                                         //onStart={e => handlePlay(true)}
                                                         onReady={e => handleReady()}
-                                                        onPlay={e => isActuallyAdmin ? handlePlay(true) : ''}
-                                                        onPause={e => handlePlay(false)}
                                                         onBuffer={e => setPlayerBuffering(true)}
                                                         onBufferEnd={e => setPlayerBuffering(false)}
                                                         onEnded={e => handleMediaEnd()}
-                                                        url={isActuallyAdmin ? room.playlistUrls[room.playing].url : room.playlistUrls[roomIdPlayed].url}
-                                                        playing={isActuallyAdmin ? room.actuallyPlaying : roomIsPlaying} // is player actually playing
+                                                        url={room.playlistUrls[roomIdPlayed].url}
+                                                        playing={roomIsPlaying} // is player actually playing
                                                         controls={false}
                                                         light={false}
                                                         config={{
@@ -715,25 +764,25 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                                 sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:0, mb: 1.5, color:'red' }}>
                                                                     {isActuallyAdmin && 
                                                                         <>
-                                                                            <IconButton onClick={e => (playingFirstInList(roomIdPlayed) && isSpotifyAndIsNotPlayableBySpotify(roomIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? changeMediaActuallyPlaying(roomIdPlayed - 1, 'prev', isActuallyAdmin, room, roomRef) : ''}>
+                                                                            <IconButton onClick={e => (playingFirstInList(roomIdPlayed) && isSpotifyAndIsNotPlayableBySpotify(roomIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? setIdPlaying(roomIdPlayed-1) : ''}>
                                                                                 <SkipPrevious fontSize="large" sx={{color:(playingFirstInList(roomIdPlayed) && isSpotifyAndIsNotPlayableBySpotify(roomIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? '#f0f1f0': '#303134'}} />
                                                                             </IconButton>
 
-                                                                            <IconButton onClick={e => handleChangeSecondsPlayed(room, -10)}>
+                                                                            <IconButton onClick={e => (room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds > 10) ? goToSecond( - 10) : ''}>
                                                                                 <Replay10 fontSize="large" sx={{ color : room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds > 10 ? '#f0f1f0': '#303134'}} />
                                                                             </IconButton>
 
-                                                                            <IconButton variant="contained" onClick={e => handlePlay(!room.actuallyPlaying)} sx={{ color:'#f0f1f0', position:'sticky', top:0, zIndex:2500}} >
-                                                                                { room.actuallyPlaying && <PauseCircleOutlineIcon fontSize="large" />}
-                                                                                { !room.actuallyPlaying && <PlayCircleOutlineIcon fontSize="large" />}
+                                                                            <IconButton variant="contained" onClick={e => setIsPlaying(!roomIsPlaying)} sx={{ color:'#f0f1f0', position:'sticky', top:0, zIndex:2500}} >
+                                                                                { roomIsPlaying && <PauseCircleOutlineIcon fontSize="large" />}
+                                                                                { !roomIsPlaying && <PlayCircleOutlineIcon fontSize="large" />}
                                                                             </IconButton>
                                                                             
-                                                                            <IconButton onClick={e => handleChangeSecondsPlayed(room, +10)}>
+                                                                            <IconButton onClick={e => goToSecond(+ 10)}>
                                                                                 <Forward10 fontSize="large" sx={{color:'#f0f1f0'}} />
                                                                             </IconButton>
 
-                                                                            <IconButton onClick={e => !playingLastInList(room.playlistUrls.length,room.playing) ? changeMediaActuallyPlaying(roomIdPlayed + 1, 'next', isActuallyAdmin, room, roomRef) : ''}>
-                                                                                <SkipNextIcon fontSize="large" sx={{color: !playingLastInList(room.playlistUrls.length,room.playing) ? '#f0f1f0' : '#303134'}} />
+                                                                            <IconButton onClick={e => !playingLastInList(room.playlistUrls.length,roomIdPlayed) ? setIdPlaying(roomIdPlayed+1) : ''}>
+                                                                                <SkipNextIcon fontSize="large" sx={{color: !playingLastInList(room.playlistUrls.length,roomIdPlayed) ? '#f0f1f0' : '#303134'}} />
                                                                             </IconButton>
                                                                         </>
                                                                     }
@@ -757,12 +806,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                                                 </IconButton>
                                                                             </>
                                                                         }
-                                                                        </>
+                                                                        </> 
                                                                     } 
-                                                                    {!isFromSpotify(room.playlistUrls[room.playing]) && 
+                                                                    {!isFromSpotify(room.playlistUrls[roomIdPlayed]) && 
                                                                         <>
                                                                             {isActuallyAdmin && 
-                                                                                <IconButton onClick={e => setSecondsPlayed(0)} >
+                                                                                <IconButton onClick={e => goToSecond(0)} >
                                                                                     <Icon icon="icon-park-outline:replay-music" width="30" style={{color:'#f0f1f0'}} />
                                                                                 </IconButton>
                                                                             }
@@ -823,7 +872,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                     roomIsActuallyPlaying={roomIsPlaying}
                                     roomIdActuallyDisplaying={mediaDataShowInDrawer}
                                     roomIdActuallyPlaying={roomIdPlayed}
-                                    changeIdPlaying={handleChangeIdActuallyPlaying}
+                                    changeIdPlaying={setIdPlaying}
                                     changeIsPlaying={handlePlay}
                                     handleVoteChange={handleVoteChange} 
                                     handleRemoveMediaFromPlaylist={handleRemoveMediaFromPlaylist}
