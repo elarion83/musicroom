@@ -214,7 +214,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                                 platformId={media.id}
                                 duration={YTV3APIDurationToReadable(media.contentDetails.duration)}
                                 addedBy={addingObject.addedBy}
-                                url={'https://www.youtube.com/watch?v=' + media.id.videoId}
+                                url={'https://www.youtube.com/watch?v=' + media.id}
                                 date={dateFormat(media.snippet.publishedAt, 'd mmm yyyy')}
                                 channelOrArtist={media.snippet.channelTitle}
                                 addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject}

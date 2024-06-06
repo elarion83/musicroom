@@ -36,6 +36,10 @@
     flex-direction: column;
 }
 
+.searchResultItem.new {
+    max-width: 260px;
+}
+
 .searchResultItem.new>div {
     flex-direction: column;
 }

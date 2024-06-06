@@ -17,12 +17,11 @@ const SearchResultItemNew = ({ duration,image, title, source, platformId, album 
 
                 <Typography gutterBottom component="div" fontSize='12px'  className="resulttitle varelaFontTitle">
                 {title}
-                </Typography>
-                <Box sx={{position:'relative'}}>
-                    {duration != null && <Typography sx={{ ml:0, mb: 0, fontSize: '10px' }}><b>{formatNumberToMinAndSec(duration)} </b></Typography>}
-                </Box>                                
+                </Typography>                           
 
             </CardContent>
+            {duration != null && <Typography sx={{ padding:'0px 5px', fontSize: '10px',background:'var(--white)', position:'absolute', top:'5px', left:'5px' }}><b>{formatNumberToMinAndSec(duration)} </b></Typography>}
+
             <Typography sx={{ padding:'0px 5px', fontSize: '10px', textTransform:'uppercase',background:'var(--white)', position:'absolute', top:'5px', right:'5px' }}><b>{date} </b></Typography>
         </Card>
     </Grid>

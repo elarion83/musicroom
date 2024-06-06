@@ -122,7 +122,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
             };
             axios.get('https://www.googleapis.com/youtube/v3/videos', { params: params })
             .then(function (response) {
-                console.log(response.data.items);
                setYoutubeLocaleTrends(response.data.items);
             })
             .catch(function (error) {
