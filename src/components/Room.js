@@ -15,7 +15,7 @@ import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
 import { v4 as uuid } from 'uuid';
-import {cleanMediaTitle,isFromSpotify,isFromDeezer,isUndefined,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, getYoutubeLocaleTrendsMusic, getLocale} from '../services/utils';
+import {cleanMediaTitle,isFromSpotify,isFromDeezer,isUndefined,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, getYoutubeLocaleTrendsMusic, getLocale, isVarExist, isProdEnv} from '../services/utils';
 import RoomPlaylistDrawer from "./rooms/playlistSection/drawer/RoomPlaylistDrawer";
 
 import FirstPageIcon from '@mui/icons-material/FirstPage';
@@ -47,10 +47,11 @@ import VolumeButton from "./rooms/playerSection/VolumeButton";
 import EmptyPlaylist from "./rooms/playlistSection/EmptyPlaylist";
 import { Icon } from "@iconify/react";
 import { Forward10, Replay10 } from "@mui/icons-material";
-import { emptyToken, playerRefObject, youtubeApiSearchObject } from "../services/utilsArray";
+import { emptyToken, playerRefObject, youtubeApiSearchObject, youtubeApiVideosParams } from "../services/utilsArray";
 import { changeMediaActuallyPlaying } from "../services/utilsRoom";
 import ModalChangeRoomAdmin from "./rooms/modalsOrDialogs/ModalChangeRoomAdmin";
 import RoomTutorial from "./rooms/RoomTutorial";
+import { mockYoutubeMusicResult, mockYoutubeTrendResult } from "../services/mockedArray";
 
 const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
@@ -108,28 +109,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     const [layoutDisplay, setLayoutdisplay] = useState('default');
     const [layoutDisplayClass, setLayoutDisplayClass] = useState('defaultLayout');
 
-    
-    const [youtubeLocaleTrends, setYoutubeLocaleTrends] = useState(null);
-    // init youtube trends when opening for the first time the modal
-    useEffect(() => {
-        if(OpenAddToPlaylistModal && !addMediaModalAlreadyOpened) {
-            var params = {
-                part: 'snippet,contentDetails',
-                key: process.env.REACT_APP_YOUTUBE_API_KEY,
-                chart: 'mostPopular',
-                maxResults: 2,
-                regionCode: getLocale(),
-            };
-            axios.get('https://www.googleapis.com/youtube/v3/videos', { params: params })
-            .then(function (response) {
-               setYoutubeLocaleTrends(response.data.items);
-            })
-            .catch(function (error) {
-            });
-            setAddMediaModalAlreadyOpened(true);
-        }
-    }, [OpenAddToPlaylistModal]);
-
     useEffect(() => {
         switch (layoutDisplay) {
             case 'compact':
@@ -185,6 +164,11 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     const playerRef = useRef(playerRefObject);
 
+    async function createEmptyRoom(emptyRoomObject, roomId) {
+        db.collection(process.env.REACT_APP_ROOM_COLLECTION).doc(roomId).set(emptyRoomObject).then(() => {});
+        setRoom(emptyRoomObject);
+    }
+
     const [isActuallyAdmin, setIsActuallyAdmin] = useState(false);
     const getRoomData = (roomId) => {
             roomRef.get().then((doc) => {
@@ -192,10 +176,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     setRoom(doc.data());
                 } else {
                     var docData = createDefaultRoomObject(roomId.toLowerCase(), currentUser);
-                    db.collection(process.env.REACT_APP_ROOM_COLLECTION).doc(roomId).set(docData).then(() => {});
-                    setRoom(docData);
+                    createEmptyRoom(docData, roomId);
                 }
-
                 if(isTutorialShown) {
                     setTimeout(() => {
                         hideTuto('-35vh');
@@ -204,8 +186,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         }, 2000);               
                     }, 8000);
                 }
+                    
                 setLoaded(true);
-            });
+            })
 	};
 
     useKeypress([' '], () => {
@@ -259,27 +242,69 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }, [loaded, guestSynchroOrNot]);
 
     useEffect(() => {
-        if(guestSynchroOrNot) {
-            setRoomIsPlaying(room.actuallyPlaying);
-            changeMediaActuallyPlayingGuest(room.playing);
-        } 
-    }, [room.actuallyPlaying, room.playing]);
-
-	useEffect(() => {
         if(currentUser.displayName === room.admin || currentUser.displayName === room.admin) {
             setIsActuallyAdmin(true);
         } else {
             setIsActuallyAdmin(false);
         }
+    }, [room.admin]);
 
-        if(roomIsPlaying) {
+    useEffect(() => {
+        if(guestSynchroOrNot) {
+            setRoomIsPlaying(room.actuallyPlaying);
+        } 
+        
+        if(room.actuallyPlaying) {
             document.title = t('GeneralPlaying')+' - Playlist ' + roomId + ' - Play-It';
         } else {
             document.title = 'Playlist ' + roomId + ' - Play-It';
         }
-        
-		getRoomData(roomId); 
-    }, [loaded, localData,room]);
+    }, [room.actuallyPlaying]);
+
+    useEffect(() => {
+        if(guestSynchroOrNot) {
+            changeMediaActuallyPlayingGuest(room.playing);
+        } 
+    }, [room.playing]);
+
+	useEffect(() => {
+        if(loaded && room) {
+        setTimeout(() => {
+		    getRoomData(roomId);                
+        }, 300);
+        }
+    }, [loaded,room]);
+
+    useEffect(() => {
+        if(isVarExist(room.localeYoutubeTrends)) {
+            if(room.localeYoutubeTrends.length < 1) {
+                if(!isProdEnv()) {
+                    roomRef.set({
+                        localeYoutubeTrends: mockYoutubeTrendResult,
+                        localeYoutubeMusicTrends: mockYoutubeMusicResult},{merge:true});
+                    return
+                } else {
+                    axios.get(process.env.REACT_APP_YOUTUBE_VIDEOS_URL, { 
+                        params: youtubeApiVideosParams('0', 6, 'snippet,contentDetails') 
+                    })
+                    .then(function (response) {
+                        roomRef.set({localeYoutubeTrends: response.data.items},{merge:true});
+                        
+                        axios.get(process.env.REACT_APP_YOUTUBE_VIDEOS_URL, { 
+                            params: youtubeApiVideosParams('10', 6, 'snippet,contentDetails')
+                            })
+                        .then(function (musicResponse) {
+                            roomRef.set({localeYoutubeMusicTrends: musicResponse.data.items},{merge:true});
+                        })
+                        .catch(function (error) {
+                        });
+                    })
+                    .catch(function (error) {
+                    });
+                }
+            }
+        }
+    }, [room]);
 
 	useEffect(() => {
         if(room.interactionsArray && room.interactionsArray.length > 0) {
@@ -289,7 +314,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 }
             });
         }
-        
     }, [room.interactionsArray]);
     
     async function handlePlay(playStatus) {
@@ -830,7 +854,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         open={OpenAddToPlaylistModal} 
                         changeOpen={setOpenAddToPlaylistModal}
                         currentUser={currentUser} 
-                        youtubeLocaleTrends={youtubeLocaleTrends}
+                        youtubeLocaleTrends={room.youtubeLocaleTrends}
                         DeezerTokenProps={room.roomParams.deezer.Token} 
                         spotifyTokenProps={room.roomParams.spotify.Token} 
                         validatedObjectToAdd={handleAddValidatedObjectToPlaylist} 

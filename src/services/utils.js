@@ -1,9 +1,14 @@
 import React from 'react';
 import i18n from "i18next";
+import dateFormat from "dateformat";
 
 import { v4 as uuid } from 'uuid';
 import axios from 'axios';
+import SearchResultItemNew from '../components/rooms/searchResultItemNew';
 
+export function isProdEnv() {
+    return process.env.NODE_ENV === "production";
+}
 
 export function createDefaultRoomObject(roomId, roomOwner) {
     return {
@@ -48,7 +53,9 @@ export function createDefaultRoomObject(roomId, roomOwner) {
                 TokenTimestamp:0,
                 UserConnected:''
             }
-            },
+        },
+        localeYoutubeTrends : [],
+        localeYoutubeMusicTrends : [],
         interactionsArray:[],
         creationTimeStamp	: Date.now()
     };
@@ -81,6 +88,10 @@ export function isFromSpotify(media) {
 
 export function isFromDeezer(media) {
     return media.source === 'deezer';
+}
+
+export function isVarExist(varTested) {
+    return typeof(varTested) !== 'undefined' && varTested;
 }
 
 export function isPlaylistExistNotEmpty(playlist) {
@@ -188,4 +199,31 @@ export function YTV3APIDurationToReadable(duration) {
   var seconds = (parseInt(match[2]) || 0);
   return hours * 3600 + minutes * 60 + seconds;
 
+}
+
+export function getCarouselItemsArray(youtubeResults,addingObject, addItemToPlaylist) {
+    var carouselItems = [];
+    youtubeResults.forEach(media => {
+        carouselItems.push({
+                id: media.id.videoId,
+                renderItem: 
+                <SearchResultItemNew
+                    key={media.id}
+                    image={media.snippet.thumbnails.high.url}
+                    title={media.snippet.title}
+                    source='youtube'
+                    uid={uuid().slice(0, 10).toLowerCase()}
+                    platformId={media.id}
+                    duration={media.contentDetails.duration ? YTV3APIDurationToReadable(media.contentDetails.duration) : null}
+                    addedBy={addingObject.addedBy}
+                    url={'https://www.youtube.com/watch?v=' + media.id}
+                    date={dateFormat(media.snippet.publishedAt, 'd mmm yyyy')}
+                    channelOrArtist={media.snippet.channelTitle}
+                    addItemToPlaylist={addItemToPlaylist}
+                />,
+        })
+    });
+
+    return carouselItems;
+    
 }

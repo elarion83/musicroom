@@ -5,7 +5,7 @@ import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, InstapaperIcon, InstapaperShareButton, RedditIcon, RedditShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
 import { Box, Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
-import { formatNumberToMinAndSec } from './utils';
+import { formatNumberToMinAndSec, getLocale } from './utils';
 import SearchResultItemNew from '../components/rooms/searchResultItemNew';
 
 export const notifsTextArray = {
@@ -107,6 +107,17 @@ export function youtubeApiSearchObject(search, maxResults) {
     }
 }
 
+export function youtubeApiVideosParams(categoryId = '0', number, parts) {
+    return  {
+        part: parts,
+        key: process.env.REACT_APP_YOUTUBE_API_KEY,
+        chart: 'mostPopular',
+        maxResults: number,
+        videoCategoryId:categoryId, // music
+        regionCode: getLocale(),
+    }
+}
+
 export const emptyToken = {
     IsLinked:false,
     AlreadyHaveBeenLinked:true,
@@ -126,43 +137,3 @@ export const timestampToHoursAndMinOptions = {
   minute: '2-digit', 
   hour12: false
 };
-
-export const mockYoutubeTrendResult = [
-            {
-                id: '0',
-                renderItem: 
-                <SearchResultItemNew />,
-            },
-            {
-                id: '0',
-                renderItem: 
-                <SearchResultItemNew />,
-            },
-            {
-                id: '0',
-                renderItem: 
-                <SearchResultItemNew />,
-            },
-            {
-                id: '0',
-                renderItem: 
-                <SearchResultItemNew />,
-            },
-            {
-                id: '0',
-                renderItem: 
-                <SearchResultItemNew />,
-            },
-            {
-                id: '0',
-                renderItem: 
-                <SearchResultItemNew />,
-            },
-            {
-                id: '0',
-                renderItem: 
-                <SearchResultItemNew />,
-            },
-            
-           
-        ];

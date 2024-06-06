@@ -111,7 +111,7 @@ const Contentslider = () => {
     });
 
     return(
-        <Box className='homeSlider'>
+        <Box className='contentSlider'>
             {carouselFragment}
         </Box>
     )

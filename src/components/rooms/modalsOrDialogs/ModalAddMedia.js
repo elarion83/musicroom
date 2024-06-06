@@ -14,23 +14,23 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import validator from 'validator';
 import SearchResultItem from '../searchResultItem';
-import { YTV3APIDurationToReadable, cleanMediaTitle, getDisplayTitle, getLocale } from '../../../services/utils';
+import { YTV3APIDurationToReadable, cleanMediaTitle, getDisplayTitle, getLocale, isProdEnv } from '../../../services/utils';
 import { withTranslation } from 'react-i18next';
 import { Button, Dialog, SwipeableDrawer, Typography } from '@mui/material';
 import SoundWave from "../../../services/SoundWave";
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { mockYoutubeTrendResult, searchTextArray, youtubeApiSearchObject } from '../../../services/utilsArray';
+import { searchTextArray, youtubeApiSearchObject } from '../../../services/utilsArray';
 import { KeyboardArrowDown } from '@mui/icons-material';
-import { useTable } from '../../../services/youtubeResults';
-import  NewContentslider  from '../../../services/SpringCarousel';
+import  NewContentslider  from '../../../services/YoutubeVideoSlider';
 import SearchResultItemNew from '../searchResultItemNew';
+import { mockYoutubeTrendResult } from '../../../services/mockedArray';
+import YoutubeVideoSlider from '../../../services/YoutubeVideoSlider';
 const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, roomIsPlaying, currentUser, validatedObjectToAdd, spotifyTokenProps, DeezerTokenProps }) => {
     const [mediaSearchResultYoutube, setMediaSearchResultYoutube] = useState([]);
-    const [mediaSearchResultDailyMotion, setMediaSearchResultDailyMotion] = useState([]);
-    const [mediaSearchResultDeezer, setMediaSearchResultDeezer] = useState([]);
     const [mediaSearchResultSpotify, setMediaSearchResultSpotify] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [searchedTerm, setSearchedTerm] = useState('');
     const [recentlyAdded, setRecentlyAdded] = useState(false);
     const [recentlyAddedTitle, setRecentlyAddedTitle] = useState('');
     const [showYoutubeTrends, setShowYoutubeTrends] = useState(true);
@@ -76,7 +76,6 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
             });
     }
 
-
     async function handleSearchForMedia() {
         setIsSearching(true);
         if (searchTerm !== '') {
@@ -108,43 +107,34 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                 setSearchTerm('');
             } else {
 
-                axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, {
-                    params: youtubeApiSearchObject(searchTerm,12)
-                })
+                if(isProdEnv()) {
+                    axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, {
+                        params: youtubeApiSearchObject(searchTerm,1)
+                    })
                     .then(function (response) {
                         setMediaSearchResultYoutube(response.data.items);
                         setShowYoutubeTrends(false);
                         setIsSearching(false);
-                    })
-                    .catch(function (error) {
-                        console.error(error);
                     });
 
-              /*  fetch('https://api.dailymotion.com/videos?fields=id,thumbnail_url,views_total,owner,owner.screenname,duration%2Ctitle&country=fr&search=' + searchTerm + '&limit=18')
-                    .then((response) => response.json())
-                    .then((responseJson) => {
-                        setMediaSearchResultDailyMotion(responseJson.list);
-                    });
-
-                if (DeezerTokenProps.length !== 0) {
-                    await axios.get(process.env.REACT_APP_BACK_FOLDER_URL + '/deezer/search?search=' + searchTerm + '&token=' + DeezerTokenProps)
-                    .then(function (response) {
-                        setMediaSearchResultDeezer(response.data.data);
-                    });
-                }*/
-
-                if (spotifyTokenProps.length !== 0) {
-                    await axios.get("https://api.spotify.com/v1/search", {
-                        headers: { Authorization: `Bearer ${spotifyTokenProps}` },
-                        params: {
-                            q: searchTerm,
-                            type: "track"
-                        }
-                    }).then(function (response) {
-                        setMediaSearchResultSpotify(response.data.tracks.items);
-                    });
+                    if (spotifyTokenProps.length !== 0) {
+                        await axios.get("https://api.spotify.com/v1/search", {
+                            headers: { Authorization: `Bearer ${spotifyTokenProps}` },
+                            params: {
+                                q: searchTerm,
+                                type: "track"
+                            }
+                        }).then(function (response) {
+                            setMediaSearchResultSpotify(response.data.tracks.items);
+                        });
+                    }
+                } else {
+                    setMediaSearchResultYoutube(mockYoutubeTrendResult);
+                    setShowYoutubeTrends(false);
+                    setIsSearching(false);
                 }
             }
+            setSearchedTerm(searchTerm);
         } else {
             setIsSearching(false);
         }
@@ -163,7 +153,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                 onOpen={(e) => changeOpen(true)}
                 open={open}
             >
-            <Container sx={{ padding: '3em', pt: 0, height: '100vh', zIndex: 3 }} className="full_width_modal_content_container">
+            <Container sx={{ padding: '3em', pt: 0, height: '100vh', zIndex: 3 }} maxWidth={false} className="full_width_modal_content_container">
 
                 <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'row' }} className="autowriter_container">
                     <Typed
@@ -197,45 +187,35 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                     </LoadingButton>
                 </Grid>
 
-                {youtubeLocaleTrends && showYoutubeTrends && youtubeLocaleTrends.length > 0 && <Container sx={{padding:'0 !important'}}>
-                    <Typography variant="h6" sx={{mt:1}} gutterBottom>
-                        En tendance
-                    </Typography>
+                {room.localeYoutubeTrends.length > 0 && room.localeYoutubeMusicTrends.length > 0 && showYoutubeTrends &&
+                <Container sx={{padding:'0 !important'}} maxWidth={false}>
                     
-                    <Container sx={{display:'flex', flexWrap:'wrap', gap:'10px'}}>
-                    {youtubeLocaleTrends.map(function (media, idyt) {
-                        return (
-                            <SearchResultItemNew
-                                key={idyt}
-                                image={media.snippet.thumbnails.high.url}
-                                title={media.snippet.title}
-                                source='youtube'
-                                uid={uuid().slice(0, 10).toLowerCase()}
-                                platformId={media.id}
-                                duration={YTV3APIDurationToReadable(media.contentDetails.duration)}
-                                addedBy={addingObject.addedBy}
-                                url={'https://www.youtube.com/watch?v=' + media.id}
-                                date={dateFormat(media.snippet.publishedAt, 'd mmm yyyy')}
-                                channelOrArtist={media.snippet.channelTitle}
-                                addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject}
-                            />)
-                    })}
-                    </Container>
+                    <Typography variant="h6" sx={{mt:1, ml:1}} gutterBottom>
+                        Vidéos en tendances
+                    </Typography>
+                    <YoutubeVideoSlider itemsArray={room.localeYoutubeTrends} addingObject={addingObject} addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject} />
+
+                    <Typography variant="h6" sx={{mt:4, ml:1}} gutterBottom>
+                        Musiques en tendances
+                    </Typography>
+                    <YoutubeVideoSlider itemsArray={room.localeYoutubeMusicTrends} addingObject={addingObject} addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject} />
+
                 </Container>}
 
-
-
-                {mediaSearchResultYoutube.length > 1 && <Grid item xs={12}>
-                    <Tabs value={tabIndex} onChange={handleTabChange} sx={{ bgcolor: '#202124' }}>
+                {mediaSearchResultYoutube.length > 0 && <Grid item xs={12}>
+                    <Typography variant="h6" sx={{mt:2}} gutterBottom>
+                        Résultats de recherche pour <b>{searchedTerm}</b>
+                    </Typography>
+                   {/* <Tabs value={tabIndex} onChange={handleTabChange} sx={{ bgcolor: '#202124' }}>
                         <Tab sx={{ color: 'var(--white)' }} label="Youtube" disabled={mediaSearchResultYoutube.length > 1 ? false : true} />
                         <Tab sx={{ color: 'var(--white)' }} label="Spotify" disabled={mediaSearchResultSpotify && mediaSearchResultSpotify.length > 1 ? false : true} />
                        {/* <Tab sx={{ color: 'var(--white)' }} label="Deezer" disabled={mediaSearchResultDeezer && mediaSearchResultDeezer.length > 1 ? false : true} />
-                        <Tab sx={{ color: 'var(--white)' }} label="Dailymotion" disabled={mediaSearchResultDailyMotion.length > 1 ? false : true} /> */}
-                    </Tabs>
+                        <Tab sx={{ color: 'var(--white)' }} label="Dailymotion" disabled={mediaSearchResultDailyMotion.length > 1 ? false : true} /> 
+                    </Tabs> */}
                     <Box sx={{ lineHeight: "15px", p: 0, pt: 0, mb: 0 }}>
                         {tabIndex === 0 && (
                             <Box>
-                                {mediaSearchResultYoutube.length > 1 &&
+                                {mediaSearchResultYoutube.length > 0 &&
                                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ mt: 0 }}>
                                         {mediaSearchResultYoutube.map(function (media, idyt) {
                                             return (
@@ -245,9 +225,9 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                                                     title={cleanMediaTitle(media.snippet.title)}
                                                     source='youtube'
                                                     uid={uuid().slice(0, 10).toLowerCase()}
-                                                    platformId={media.id.videoId}
+                                                    platformId={media.id.videoId ?? media.id}
                                                     addedBy={addingObject.addedBy}
-                                                    url={'https://www.youtube.com/watch?v=' + media.id.videoId}
+                                                    url={'https://www.youtube.com/watch?v=' + media.id.videoId ?? media.id}
                                                     date={dateFormat(media.snippet.publishedAt, 'd mmm yyyy')}
                                                     channelOrArtist={media.snippet.channelTitle}
                                                     addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject}
@@ -337,7 +317,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                 />
             </Container>
 
-            <Grid sx={{ bgcolor: '#202124', pb: 0, cursor:'pointer', flexFlow: 'nowrap', position:'fixed', bottom:0, zIndex:100 }} container 
+            <Grid className="" sx={{ bgcolor: '#202124', pb: 0, cursor:'pointer', flexFlow: 'nowrap', position:'fixed', bottom:0, zIndex:100 }} container 
                     onClick={(e) => changeOpen(false)} >
                 <Button
                     className='modal_full_screen_close_left'
