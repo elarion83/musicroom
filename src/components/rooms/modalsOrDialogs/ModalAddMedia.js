@@ -14,7 +14,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import validator from 'validator';
 import SearchResultItem from '../searchResultItem';
-import { YTV3APIDurationToReadable, cleanMediaTitle, getDisplayTitle, getLocale, isProdEnv } from '../../../services/utils';
+import { YTV3APIDurationToReadable, cleanMediaTitle, getDisplayTitle, getLocale, getYTVidId, isProdEnv } from '../../../services/utils';
 import { withTranslation } from 'react-i18next';
 import { Button, Dialog, SwipeableDrawer, Typography } from '@mui/material';
 import SoundWave from "../../../services/SoundWave";
@@ -225,9 +225,9 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                                                     title={cleanMediaTitle(media.snippet.title)}
                                                     source='youtube'
                                                     uid={uuid().slice(0, 10).toLowerCase()}
-                                                    platformId={media.id.videoId ?? media.id}
+                                                    platformId={getYTVidId(media)}
                                                     addedBy={addingObject.addedBy}
-                                                    url={'https://www.youtube.com/watch?v=' + media.id.videoId ?? media.id}
+                                                    url={'https://www.youtube.com/watch?v=' + getYTVidId(media)}
                                                     date={dateFormat(media.snippet.publishedAt, 'd mmm yyyy')}
                                                     channelOrArtist={media.snippet.channelTitle}
                                                     addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject}
