@@ -29,6 +29,7 @@ import { GFontIcon, getRandomHexColor, randomInt } from "./services/utils";
 import {replaceCurrentUrlWithHomeUrl, replaceCurrentUrlWithRoomUrl, replaceCurrentUrlWithRoomUrlForDeezer, replaceCurrentUrlWithRoomUrlForSpotify} from './services/redirects';
 
 import { withTranslation } from 'react-i18next';
+import { createUserDataObject } from "./services/utilsArray";
 function App( {t} ) {
   
 
@@ -154,12 +155,7 @@ function App( {t} ) {
     await delay(500);
     setIsLoginLoading(false);
     var avatarId = randomInt(1,9);
-    setUserInfo({
-      displayName:PseudoGenerated,
-      loginType:'anon',
-      color: getRandomHexColor(),
-      avatarId:avatarId,
-    });
+    setUserInfo(createUserDataObject(null, 'anon', PseudoGenerated, true));
 
     localStorage.setItem("Play-It_AnonymouslyPseudo",  PseudoGenerated);
     localStorage.setItem("Play-It_AnonymouslyColor",  getRandomHexColor());
@@ -182,17 +178,7 @@ function App( {t} ) {
   }
 
   async function newUserRegisterAfterFirebaseAuth(userUid, registerType) {
-      var userData={
-        displayName:PseudoGenerated, 
-        creationTime:Date.now(),
-        color: getRandomHexColor(),
-        avatarId:randomInt(1,9),
-        uid:userUid,
-        loginType:registerType,
-        userParams:{
-          NotifsActivated:true
-        }
-      }
+      var userData = createUserDataObject(userUid, registerType, PseudoGenerated)
       setUserInfo(userData);
       db.collection(process.env.REACT_APP_USERS_COLLECTION).doc(userUid).set(userData).then((doc) => {
         setIsLoginLoading(false);
@@ -278,10 +264,10 @@ function App( {t} ) {
   }
 
   function handleQuitRoomMain() {
+    replaceCurrentUrlWithHomeUrl();
     setRoomId();
     localStorage.removeItem("Play-It_RoomId");
     localStorage.removeItem("Play-It_SpotifyToken");
-    replaceCurrentUrlWithHomeUrl();
     
     CreateGoogleAnalyticsEvent('Actions','Quit playlist','Quit playlist');
   }
@@ -308,7 +294,7 @@ function App( {t} ) {
               <Container maxWidth="sm" sx={{pt:3}}>
                 <Contentslider />
                 
-                <Button variant="filled" className='main_bg_color varelaFontTitle buttonBorder texturaBgButton' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em'}} 
+                <Button variant="filled" className='main_bg_color  varelaFontTitle buttonBorder texturaBgButton' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em'}} 
                   onClick={(e) => isSignedIn ? createNewRoom() : handleLoginAndRoom('createRoom')}>
                     <Icon icon="carbon:intent-request-create" width="30" style={{marginRight:'20px'}}/> 
                     <Typography variant="button" sx={{pt:'3px'}}>{t('HomePageButtonsCreateRoom')} </Typography>
@@ -318,7 +304,7 @@ function App( {t} ) {
                     <Icon icon="icon-park-outline:connect"  width="30" style={{marginRight:'20px'}}/>
                     <Typography variant="button" sx={{pt:'3px'}}>{t('HomePageButtonsJoinRoom')} </Typography>
                 </Button> 
-                <Button variant="outlined" size="small" target="_blank" href="http://dev.play-it.fr/back/play-it-android.apk" className='varelaFontTitle buttonBorder' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em', mb:'2em'}} 
+                <Button variant="outlined" size="small" target="_blank" href="http://dev.play-it.fr/back/play-it-android.apk" className='varelaFontTitle buttonBorder' sx={{width:'100%',transform:'scale(0.8)',color:'var(--white)',bgcolor:'var(--grey-dark)', height:'50px', mt:'2em', mb:'2em'}} 
                 > 
                   {<GFontIcon icon="install_mobile"/>}
                   <Typography variant="button" sx={{pl:2}}> TELECHARGER L'APPLICATION </Typography>

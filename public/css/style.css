@@ -1,10 +1,10 @@
 @import 'var.css';
 @import 'font.css';
+@import 'animations.css';
 @import 'globalStyle.css';
 @import 'home.css';
 
 @import 'mainTopBar.css';
-@import 'animations.css';
 
 @import 'playlist.css';
 @import 'soundWave.css';
@@ -16,6 +16,7 @@
 @import 'modalShareRoom.css';
 @import 'modalJoinRoom.css';
 @import 'modalAddMedia.css';
+@import 'modalUserProfile.css';
 
 @import 'layout.css';
 

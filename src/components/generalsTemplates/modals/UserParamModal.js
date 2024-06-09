@@ -37,9 +37,7 @@ const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
 
             <DialogContent dividers sx={{pt:2}}>
                 
-                <ReactSVG src={"./img/avatars/botts"+user.avatarId+".svg"} 
-                    style={{'width': '110px','height': '110px','outline': 'rgba(147, 147, 147, 0.53) solid 7px', 'margin':'1em auto 1em auto', 'background': '#cecece',  'borderRadius': '50%',  'padding': '4px'}}
-                />
+                <ReactSVG src={"./img/avatars/botts"+user.avatarId+".svg"}  className="userAvatarBig"/>
                 <Box sx={{textAlign:'center', mb:2, fontWeight:'bold'}}>
                     {isEditingPseudo && 
                     <Grid>

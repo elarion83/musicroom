@@ -20,7 +20,7 @@ import { Button, Dialog, SwipeableDrawer, Typography } from '@mui/material';
 import SoundWave from "../../../services/SoundWave";
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { searchTextArray, youtubeApiSearchObject } from '../../../services/utilsArray';
+import { searchTextArray, spotifyApiSearchObject, youtubeApiSearchObject, youtubeApiVideoInfoParams } from '../../../services/utilsArray';
 import { KeyboardArrowDown } from '@mui/icons-material';
 import  NewContentslider  from '../../../services/YoutubeVideoSlider';
 import SearchResultItemNew from '../searchResultItemNew';
@@ -62,17 +62,9 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
     }
 
     async function getYoutubeVideoInfosFromId(videoId, addingObject) {
-        var params = {
-            part: 'snippet',
-            key: process.env.REACT_APP_YOUTUBE_API_KEY,
-            id: videoId,
-        };
-
-        await axios.get('https://www.googleapis.com/youtube/v3/videos', { params: params })
+        await axios.get('https://www.googleapis.com/youtube/v3/videos', { params: youtubeApiVideoInfoParams(videoId) })
             .then(function (response) {
                 addingObject.title = cleanMediaTitle(response.data.items[0].snippet.title);
-            })
-            .catch(function (error) {
             });
     }
 
@@ -109,7 +101,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
 
                 if(isProdEnv()) {
                     axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, {
-                        params: youtubeApiSearchObject(searchTerm,1)
+                        params: youtubeApiSearchObject(searchTerm,12)
                     })
                     .then(function (response) {
                         setMediaSearchResultYoutube(response.data.items);
@@ -120,10 +112,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                     if (spotifyTokenProps.length !== 0) {
                         await axios.get("https://api.spotify.com/v1/search", {
                             headers: { Authorization: `Bearer ${spotifyTokenProps}` },
-                            params: {
-                                q: searchTerm,
-                                type: "track"
-                            }
+                            params: spotifyApiSearchObject(searchTerm)
                         }).then(function (response) {
                             setMediaSearchResultSpotify(response.data.tracks.items);
                         });

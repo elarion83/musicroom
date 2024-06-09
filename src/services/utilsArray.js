@@ -5,7 +5,7 @@ import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, InstapaperIcon, InstapaperShareButton, RedditIcon, RedditShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
 import { Box, Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
-import { formatNumberToMinAndSec, getLocale } from './utils';
+import { formatNumberToMinAndSec, getLocale, getRandomHexColor, randomInt } from './utils';
 import SearchResultItemNew from '../components/rooms/searchResultItemNew';
 
 export const notifsTextArray = {
@@ -93,13 +93,17 @@ export const playerRefObject = {
     loop: false
 }
 
+
+/*
+ API YOUTUBE
+***************/
 export function youtubeApiSearchObject(search, maxResults) {
     return {
         part: 'snippet',
         key: process.env.REACT_APP_YOUTUBE_API_KEY,
         q: search,
-        relevanceLanguage:'fr',
-        regionCode:'fr',
+        relevanceLanguage:getLocale(),
+        regionCode:getLocale(),
         order:'viewCount',
         maxResults: maxResults,
         videoEmbeddable:true,
@@ -115,6 +119,24 @@ export function youtubeApiVideosParams(categoryId = '0', number, parts) {
         maxResults: number,
         videoCategoryId:categoryId, // music
         regionCode: getLocale(),
+    }
+}
+
+export function youtubeApiVideoInfoParams(videoId) {
+    return {
+        part: 'snippet',
+        key: process.env.REACT_APP_YOUTUBE_API_KEY,
+        id: videoId,
+    };
+}
+
+/*
+ API SPOTFY
+***************/
+export function spotifyApiSearchObject(search) {
+    return {
+        q: search,
+        type: "track"
     }
 }
 
@@ -137,3 +159,26 @@ export const timestampToHoursAndMinOptions = {
   minute: '2-digit', 
   hour12: false
 };
+
+export function createUserDataObject(userUid = 0, registerType, pseudo, anonLogin = false) {
+    if(anonLogin) {
+        return {
+            displayName:pseudo,
+            loginType:'anon',
+            color: getRandomHexColor(),
+            avatarId:randomInt(1,9),
+        }
+    } else {
+        return {
+            displayName:pseudo, 
+            creationTime:Date.now(),
+            color: getRandomHexColor(),
+            avatarId:randomInt(1,9),
+            uid:userUid,
+            loginType:registerType,
+            userParams:{
+            NotifsActivated:true
+            }
+        }
+    }
+}
