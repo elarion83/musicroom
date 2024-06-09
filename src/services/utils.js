@@ -61,6 +61,10 @@ export function createDefaultRoomObject(roomId, roomOwner) {
     };
 }
 
+export function setPageTitle(title) {
+    document.title = title;
+}
+
 export function cleanMediaTitle(mediaTitle) {
     mediaTitle = mediaTitle.replace('&amp;', '&');
     mediaTitle = mediaTitle.replace('&quot;', '"');
@@ -205,7 +209,7 @@ export function getCarouselItemsArray(youtubeResults,addingObject, addItemToPlay
     var carouselItems = [];
     youtubeResults.forEach(media => {
         carouselItems.push({
-                id: media.id.videoId,
+                id: media.id,
                 renderItem: 
                 <SearchResultItemNew
                     key={media.id}
@@ -226,4 +230,23 @@ export function getCarouselItemsArray(youtubeResults,addingObject, addItemToPlay
 
     return carouselItems;
     
+}
+
+export async function getPlayerSec(playerRef) {
+    var playerSec = 0;
+    if(typeof playerRef.current.getCurrentTime !== "undefined") {
+        playerSec = Math.floor(playerRef.current.getCurrentTime());
+    } 
+    return playerSec;
+}
+
+export async function getLocStorVotes() {
+    if(null === localStorage.getItem("Play-It_UserInfoVotes")) {
+        localStorage.setItem("Play-It_UserInfoVotes", JSON.stringify({up:[], down:[]}));
+    }
+    return JSON.parse(localStorage.getItem("Play-It_UserInfoVotes"));
+}
+
+export function getYTVidId(media) {
+    return media.id.videoId ? media.id.videoId : media.id;
 }

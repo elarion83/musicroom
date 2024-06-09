@@ -1,7 +1,8 @@
-import firebase from "firebase";
-import "firebase/auth";
-import "firebase/firestore";
-import "firebase/storage"
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
+import "firebase/compat/storage";
+import {getDatabase} from "firebase/database";
 
 // Firebase Configs
 const firebaseConfig = {
@@ -21,7 +22,11 @@ const app = !firebase.apps.length
 
 const db = app.firestore();
 const auth = firebase.auth();
+
+const database = getDatabase();
+//const newAuth = getAuth(firebase);
+
 const mailAndPassProvider = new firebase.auth.EmailAuthProvider();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 const storage = firebase.storage();
-export { db, auth,mailAndPassProvider, googleProvider, storage };
+export { db, auth,mailAndPassProvider, googleProvider, storage, database };

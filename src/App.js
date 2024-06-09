@@ -61,7 +61,9 @@ function App( {t} ) {
 
   // tools
   const delay = ms => new Promise(res => setTimeout(res, ms));
-  
+
+
+
   useEffect(() => {
     const unregisterAuthObserver = auth.onAuthStateChanged(user => {
 
@@ -126,8 +128,9 @@ function App( {t} ) {
 
   function joinRoomByRoomId(idRoom) {
     setRoomId(idRoom.toLowerCase().trim());
-    replaceCurrentUrlWithRoomUrl(idRoom.toLowerCase().trim());
+    
     setJoinRoomModalOpen(false);
+    replaceCurrentUrlWithRoomUrl(idRoom.toLowerCase().trim());
     CreateGoogleAnalyticsEvent('Actions','Rejoin. playlist','Playlist id :'+idRoom);
   }
   

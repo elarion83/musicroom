@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { db } from "../services/firebase";
+import { getDatabase, onValue, ref, set } from "firebase/database";
 import { useIdleTimer } from 'react-idle-timer'
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
@@ -126,6 +127,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 setLayoutDisplayClass('defaultLayout');
         }
     }, [layoutDisplay]);
+
     // inactivity on fullscreen
     const [remaining, setRemaining] = useState(0)
     const [layoutIdle, setLayoutIdle] = useState(false);
@@ -146,7 +148,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         onActive,
         timeout: 5_000,
         throttle: 1000
-    })
+    });
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -211,12 +213,16 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 if(Math.abs(roomDataInFb.mediaActuallyPlayingAlreadyPlayedData.playedSeconds - room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds) > 5) {
                     playerRef.current.seekTo(roomDataInFb.mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds');
                 } 
+
+                setRoom(roomDataInFb);
+
                 if(roomDataInFb.playing !== room.playing) {
                     changeMediaActuallyPlayingGuest(roomDataInFb.playing);
                 } 
                 if(roomDataInFb.actuallyPlaying !== room.actuallyPlaying) {
                     setRoomIsPlaying(roomDataInFb.actuallyPlaying);
                 }
+                setIsActuallyAdmin(roomDataInFb.admin == currentUser.displayName);
             });
         }
     }
@@ -285,6 +291,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
             }
         }
 	}, [loaded]);
+
     async function setIsPlaying(PlayingOrNot) {
         setRoomIsPlaying(PlayingOrNot);
         if(isActuallyAdmin) {
@@ -338,60 +345,14 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     });
 
     async function handlePlay(playStatus) {
-        console.log(playStatus);
-      /*  if(isTokenInvalid(room.roomParams.spotify.TokenTimestamp, 3600000)) {   
+        if(isTokenInvalid(room.roomParams.spotify.TokenTimestamp, 3600000)) {   
             disconnectSpotify();
         }
         if(isTokenInvalid(room.roomParams.deezer.TokenTimestamp, 3600000)) {
             disconnectDeezer();
         }
-        if(isActuallyAdmin) {
-            roomRef.set({
-                actuallyPlaying: playStatus,
-                mediaActuallyPlayingAlreadyPlayedData:{
-                    playedSeconds:room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds,
-                    playedPercentage:room.mediaActuallyPlayingAlreadyPlayedData.played*100,
-                    played:room.mediaActuallyPlayingAlreadyPlayedData.played
-                }
-                }, { merge: true });
-        } else {
-            setRoomIsPlaying(playStatus);
-        }*/
     }
     
-    
-   /* useEffect(() => {
-        if(isVarExist(room.localeYoutubeTrends)) {
-            console.log();
-            if(room.localeYoutubeTrends.length < 1) {
-                if(!isProdEnv()) {
-                    roomRef.set({
-                        localeYoutubeTrends: mockYoutubeTrendResult,
-                        localeYoutubeMusicTrends: mockYoutubeMusicResult},{merge:true});
-                    return
-                } else {
-                    axios.get(process.env.REACT_APP_YOUTUBE_VIDEOS_URL, { 
-                        params: youtubeApiVideosParams('0', 6, 'snippet,contentDetails') 
-                    })
-                    .then(function (response) {
-                        roomRef.set({localeYoutubeTrends: response.data.items},{merge:true});
-                        
-                        axios.get(process.env.REACT_APP_YOUTUBE_VIDEOS_URL, { 
-                            params: youtubeApiVideosParams('10', 6, 'snippet,contentDetails')
-                            })
-                        .then(function (musicResponse) {
-                            roomRef.set({localeYoutubeMusicTrends: musicResponse.data.items},{merge:true});
-                        })
-                        .catch(function (error) {
-                        });
-                    })
-                    .catch(function (error) {
-                    });
-                }
-            }
-        }
-    }, [room]);*/
-
     async function disconnectSpotify() {
         roomRef.set({roomParams:{spotify:emptyToken}}, { merge: true });
         setOpenForceDisconnectSpotifyModal(false);
