@@ -113,7 +113,7 @@ export function interactionObject(user,type) {
         type:type, 
         createdBy: user.displayName, 
         key:uuid().slice(0,10),
-        left: Math.floor(Math.random() * 100),
+        left: Math.floor(Math.random() * 95),
         speed:Math.random() * 5 + 3 + "s ",
     }
 }
