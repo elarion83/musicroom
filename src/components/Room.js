@@ -300,8 +300,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }
     
     async function setIdPlaying(idPlaying) {
-        await setPlayerIdPlayed(idPlaying);
-        await goToSecond(0);
+        setPlayerIdPlayed(idPlaying);
+        goToSecond(0);
         if(isActuallyAdmin) {
            updateFirebaseRoom({
                 playing: idPlaying,
@@ -386,8 +386,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 await setIdPlaying(0);
             }
             else if(room.roomParams.isAutoPlayActivated && isActuallyAdmin) {
-                await addMediaForAutoPlayByYoutubeId(room.playlistUrls[playerIdPlayed].title);
-                setIdPlaying(playerIdPlayed+1);
+                addMediaForAutoPlayByYoutubeId(room.playlistUrls[playerIdPlayed].title);
             }
         } else {
             setIdPlaying(playerIdPlayed+1);
@@ -409,7 +408,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }
 
 // NEW FUNCTIONS FROM CHILD COMP
-    function handleAddValidatedObjectToPlaylist(validatedObjectToAdd) {
+    async function handleAddValidatedObjectToPlaylist(validatedObjectToAdd) {
         validatedObjectToAdd.timestamp = Date.now();
         room.playlistUrls.push(validatedObjectToAdd);
         room.playlistEmpty = false;
@@ -530,7 +529,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         var params = youtubeApiSearchObject(lastMediaTitle,4);
 
         await axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, { params: params })
-            .then(function(response) {
+            .then(async function(response) {
 
                 var responseItemLength = response.data.items.length-1;
                 var suggestMedia = {
@@ -543,7 +542,10 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     url:'https://www.youtube.com/watch?v='+response.data.items[responseItemLength].id.videoId, 
                     vote: {'up':0,'down':0}
                 }
-                handleAddValidatedObjectToPlaylist(suggestMedia);
+                await handleAddValidatedObjectToPlaylist(suggestMedia);
+                await delay(500);
+                
+                setIdPlaying(playerIdPlayed+1);
                 CreateGoogleAnalyticsEvent('Actions','Autoplay add', 'Autoplay add');
             })
         .catch(function(error) {

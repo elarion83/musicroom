@@ -145,7 +145,7 @@ export function createInteractionAnimation(interaction, layoutDisplay = 'unknown
     interactionDisplay.src = "img/"+interaction.type+".png";
     interactionDisplay.classList.add("interactionImageContainer");
     if(layoutDisplay === 'interactive') {
-        interactionDisplay.style.zIndex = 1999;
+        interactionDisplay.style.zIndex = 100;
     }
     interactionDisplay.style.left = interaction.left+'vw';
     interactionDisplay.style.animationDuration = interaction.speed;
