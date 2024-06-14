@@ -25,7 +25,7 @@ import { Snackbar, Typography } from "@mui/material";
 import { PseudoGenerated } from './services/pseudoGenerator';
 
 import { CreateGoogleAnalyticsEvent } from './services/googleAnalytics';
-import { GFontIcon, getRandomHexColor, randomInt } from "./services/utils";
+import { GFontIcon, getRandomHexColor, randomInt, setPageTitle } from "./services/utils";
 import {replaceCurrentUrlWithHomeUrl, replaceCurrentUrlWithRoomUrl, replaceCurrentUrlWithRoomUrlForDeezer, replaceCurrentUrlWithRoomUrlForSpotify} from './services/redirects';
 
 import { withTranslation } from 'react-i18next';
@@ -128,6 +128,7 @@ function App( {t} ) {
   function joinRoomByRoomId(idRoom) {
     setRoomId(idRoom.toLowerCase().trim());
     replaceCurrentUrlWithRoomUrl(idRoom.toLowerCase().trim());
+    setPageTitle('Playlist ' + idRoom + ' - Play-It');
     setJoinRoomModalOpen(false);
     CreateGoogleAnalyticsEvent('Actions','Rejoin. playlist','Playlist id :'+idRoom);
   }
@@ -154,12 +155,12 @@ function App( {t} ) {
     setIsLoginLoading(true);
     await delay(500);
     setIsLoginLoading(false);
-    var avatarId = randomInt(1,9);
-    setUserInfo(createUserDataObject(null, 'anon', PseudoGenerated, true));
+    var userInfosTemp = createUserDataObject(null, 'anon', PseudoGenerated, true);
+    setUserInfo(userInfosTemp);
 
     localStorage.setItem("Play-It_AnonymouslyPseudo",  PseudoGenerated);
     localStorage.setItem("Play-It_AnonymouslyColor",  getRandomHexColor());
-    localStorage.setItem("Play-It_AnonymouslyAvatarId",avatarId);
+    localStorage.setItem("Play-It_AnonymouslyAvatarId",userInfosTemp.avatarId);
     
     localStorage.setItem("Play-It_AnonymouslyLoggedIn",  true);
 
