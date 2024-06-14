@@ -93,7 +93,18 @@ export const playerRefObject = {
     loop: false
 }
 
-
+/*
+ CHAT DEFAULT MESSAGE OBJECT 
+********** */
+export function createMessageObject(user, roomId, text) {
+    return {
+        author: user.displayName,
+        authorColor: user.color ?? 'var(--main-color)',
+        roomId: roomId,
+        text:text,
+        timestamp: Date.now(),
+    };
+}
 /*
  API YOUTUBE
 ***************/
