@@ -210,13 +210,13 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     
     // GET DOCUMENT ON INIT
 	useEffect(() => {
-        const fetchDocument = async () => {
-            const docSnap = await getDoc(roomRef);
-            var roomDatas = docSnap.exists() ? docSnap.data() : createDefaultRoomObject(roomId.toLowerCase(), currentUser);
-            initRoom(roomDatas, roomId.toLowerCase(), !docSnap.exists(), currentUser, roomRef);
+        const initRoomFetchFirebase = async () => {
+            const firebaseRoom = await getDoc(roomRef);
+            var roomDatas = firebaseRoom.exists() ? firebaseRoom.data() : createDefaultRoomObject(roomId.toLowerCase(), currentUser);
+            initRoom(roomDatas, roomId.toLowerCase(), !firebaseRoom.exists(), currentUser, roomRef);
         };
 
-        fetchDocument();
+        initRoomFetchFirebase();
 	}, [roomId]);
 
 
@@ -228,7 +228,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 setPlayerControlsShown(isActuallyAdmin);
                 unsubscribe = onSnapshot(roomRef, (doc) => {
                     var roomDataInFb = doc.data();
-                    if(playerRef.current && !isActuallyAdmin && playerNotSync(roomDataInFb, playerRef)) {
+                    if(playerRef.current && playerRef.current.getCurrentTime && !isActuallyAdmin && playerNotSync(roomDataInFb, playerRef)) {
                         goToSecond(Math.floor(roomDataInFb.mediaActuallyPlayingAlreadyPlayedData.playedSeconds));
                     } 
 
@@ -817,6 +817,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     <BottomInteractions 
                         currentUser={currentUser}
                         roomId={roomId}
+                        roomRef={roomRef}
                         roomParams={room.roomParams}
                         roomNotifs={room.notifsArray ?? ''}
                         userCanMakeInteraction={userCanMakeInteraction}

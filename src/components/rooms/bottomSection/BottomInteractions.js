@@ -17,7 +17,7 @@ import {CreateGoogleAnalyticsEvent} from '../../../services/googleAnalytics';
 import { withTranslation } from 'react-i18next';
 import { getLastNotif } from '../../../services/utilsRoom';
 
-const BottomInteractions = ({ t, layoutDisplay, setLayoutdisplay, paramDrawerIsOpen, handleOpenDrawerParam, currentUser, roomId, roomParams, roomNotifs, userCanMakeInteraction, createNewRoomInteraction, setOpenAddToPlaylistModal,handleOpenShareModal,handleOpenLeaveRoomModal, OpenAddToPlaylistModal, checkRoomExist, checkInterractionLength,checkNotificationsLength }) => {
+const BottomInteractions = ({ t,roomRef, layoutDisplay, setLayoutdisplay, paramDrawerIsOpen, handleOpenDrawerParam, currentUser, roomId, roomParams, roomNotifs, userCanMakeInteraction, createNewRoomInteraction, setOpenAddToPlaylistModal,handleOpenShareModal,handleOpenLeaveRoomModal, OpenAddToPlaylistModal, checkRoomExist, checkInterractionLength,checkNotificationsLength }) => {
 
     const [isChatExpanded, setIsChatExpanded] = useState(false);
     const animatedElementsRef = [];
@@ -91,7 +91,7 @@ const BottomInteractions = ({ t, layoutDisplay, setLayoutdisplay, paramDrawerIsO
 
             </div>}
             {(isChatExpanded || layoutDisplay === 'interactive') && 
-                <Chat currentUser={currentUser} layoutDisplay={layoutDisplay} setLayoutdisplay={setLayoutdisplay} roomId={roomId} createNewRoomInteraction={createNewRoomInteraction} userCanMakeInteraction={userCanMakeInteraction} roomParams={roomParams} className='chatBox' hideTchat={e => setIsChatExpanded(false)} />
+                <Chat roomRef={roomRef} currentUser={currentUser} layoutDisplay={layoutDisplay} setLayoutdisplay={setLayoutdisplay} roomId={roomId} createNewRoomInteraction={createNewRoomInteraction} userCanMakeInteraction={userCanMakeInteraction} roomParams={roomParams} className='chatBox' hideTchat={e => setIsChatExpanded(false)} />
             }
             
             {checkNotificationsLength && (getLastNotif(roomNotifs).createdBy !== currentUser.displayName) && notifsTextArray[getLastNotif(roomNotifs).type] &&

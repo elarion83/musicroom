@@ -62,6 +62,7 @@ export function createDefaultRoomObject(roomId, roomOwner) {
         localeYoutubeTrends : [],
         localeYoutubeMusicTrends : [],
         interactionsArray:[],
+        messagesArray:[],
         creationTimeStamp	: Date.now()
     };
 }

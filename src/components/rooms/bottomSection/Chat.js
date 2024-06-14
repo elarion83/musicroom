@@ -3,7 +3,7 @@ import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { Box, Fab, Grid, TextField, Tooltip, Typography } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { Icon } from '@iconify/react';
 
@@ -14,9 +14,11 @@ import { db } from '../../../services/firebase';
 import { returnAnimateReplace } from '../../../services/animateReplace';
 import { waitingTextReaction, waitingTextChat } from '../../../services/utils';
 import { withTranslation } from 'react-i18next';
+import { arrayUnion, onSnapshot, updateDoc } from 'firebase/firestore';
+import { createMessageObject } from '../../../services/utilsArray';
 
 
-const Chat = ({t, layoutDisplay, setLayoutdisplay, roomParams, currentUser, roomId, userCanMakeInteraction,createNewRoomInteraction, hideTchat}) => {
+const Chat = ({t, layoutDisplay, roomRef, setLayoutdisplay, roomParams, currentUser, roomId, userCanMakeInteraction,createNewRoomInteraction, hideTchat}) => {
 
     const [isChatUltraExpanded, setIsChatUltraExpanded] = useState(false);
     const chatBoxRef = useRef([]);
@@ -26,60 +28,56 @@ const Chat = ({t, layoutDisplay, setLayoutdisplay, roomParams, currentUser, room
         lastChildElement?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    const [alreadyScrolledOnInit, setAlreadyScrolledOnInit] = useState(false);
-
     const [messagesToDisplay, setMessagesToDisplay] = useState({});
-    db.collection(process.env.REACT_APP_MESSAGE_COLLECTION).where('roomId', '==', roomId).orderBy("timestamp", "asc").get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-            if(messagesToDisplay[doc.id]) {}
-            else {
-                messagesToDisplay[doc.id] = doc.data();
-                setMessagesToDisplay(messagesToDisplay);
-            }
+
+	useEffect(() => {
+        onSnapshot(roomRef, (doc) => {
+            setMessagesToDisplay(doc.data().messagesArray);
+            scrollToLastMessage();
         });
-        if(!alreadyScrolledOnInit) { scrollToLastMessage(); setAlreadyScrolledOnInit(true); }
-    });
-        
+	}, [roomRef]); 
+
     const [messageToSend, setMessageToSend] = useState('');
     const [isSendingMessage, setIsSendingMessage] = useState(false);
     const [isMessageSentOk, setIsMessageSentOk] = useState(false);
     const [canSendMessage, setCanSendMessage] = useState(true);
     var sendMessageTimeToWait = 10;
     const [cantSendMessageReason, setCantSendMessageReason] = useState('');
+        
+    async function resetChatAfterMessage() {
+        scrollToLastMessage();
+        setMessageToSend('');
+        setIsSendingMessage(false);
+        setCanSendMessage(false);
+        setIsMessageSentOk(true);
+        setTimeout(() => {
+            setIsMessageSentOk(false);
+        }, 500);
 
-    async function sendMessage() {
+        var waitingLoop = setInterval(function() {
+            sendMessageTimeToWait--;
+            setCantSendMessageReason(waitingTextChat(sendMessageTimeToWait));
+            if (sendMessageTimeToWait === 0) {
+                setCanSendMessage(true);
+                sendMessageTimeToWait = 10;
+                clearInterval(waitingLoop);
+            }
+        }, 1000);
+    }
+
+    const sendMessage = async () => {
         if(messageToSend.length > 0) {
             setIsSendingMessage(true);
             setCantSendMessageReason(waitingTextChat(sendMessageTimeToWait));
-            db.collection(process.env.REACT_APP_MESSAGE_COLLECTION).add({
-                author: currentUser.displayName,
-                authorColor: currentUser.color ?? 'var(--main-color)',
-                roomId: roomId,
-                text:messageToSend,
-                timestamp: Date.now(),
+            var messageObject = createMessageObject(currentUser, roomId, messageToSend);
+            updateDoc(roomRef, {
+                messagesArray: arrayUnion(messageObject)
             }).then(() => {
-                scrollToLastMessage();
-                setMessageToSend('');
-                setIsSendingMessage(false);
-                setCanSendMessage(false);
-                setIsMessageSentOk(true);
-                setTimeout(() => {
-                    setIsMessageSentOk(false);
-                }, 500);
-
-                var waitingLoop = setInterval(function() {
-                    sendMessageTimeToWait--;
-                    setCantSendMessageReason(waitingTextChat(sendMessageTimeToWait));
-                    if (sendMessageTimeToWait === 0) {
-                        setCanSendMessage(true);
-                        sendMessageTimeToWait = 10;
-                        clearInterval(waitingLoop);
-                    }
-                }, 1000);
+                resetChatAfterMessage();
             });
+              
         } 
     }
-
     async function hideTchatInComp() {
         returnAnimateReplace(animatedElementsRef, {In:"Out", Up:"Down", animate__delay:''}, /In|Up|animate__delay/gi);
 
@@ -87,6 +85,11 @@ const Chat = ({t, layoutDisplay, setLayoutdisplay, roomParams, currentUser, room
             hideTchat();
         }, 500);
     }
+
+	useEffect(() => {
+        scrollToLastMessage();
+	}, [isChatUltraExpanded]); 
+
 
     return(
         <Box sx={{ flexGrow: 1 , pl:1, pr:1, mb:1}}>
