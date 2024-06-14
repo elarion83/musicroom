@@ -1,7 +1,13 @@
-import firebase from "firebase";
-import "firebase/auth";
-import "firebase/firestore";
-import "firebase/storage"
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
+import "firebase/compat/storage";
+
+import { initializeApp } from 'firebase/app';
+import { getDatabase } from 'firebase/database';
+import  { EmailAuthProvider, getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { getStorage } from 'firebase/storage';
+import { getFirestore } from "firebase/firestore";
 
 // Firebase Configs
 const firebaseConfig = {
@@ -15,13 +21,12 @@ const firebaseConfig = {
 };
 
 // Checking if app already initialize then don't initialize again
-const app = !firebase.apps.length
-  ? firebase.initializeApp(firebaseConfig)
-  : firebase.app();
+const app = initializeApp(firebaseConfig);
+export const storage = getStorage(app);
+export const database = getDatabase(app);
+export const auth = getAuth(app);
 
-const db = app.firestore();
-const auth = firebase.auth();
-const mailAndPassProvider = new firebase.auth.EmailAuthProvider();
-const googleProvider = new firebase.auth.GoogleAuthProvider();
-const storage = firebase.storage();
-export { db, auth,mailAndPassProvider, googleProvider, storage };
+export const mailAndPassProvider = new EmailAuthProvider();
+export const googleProvider = new GoogleAuthProvider();
+export const db = getFirestore(app);
+

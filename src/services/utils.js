@@ -5,9 +5,14 @@ import dateFormat from "dateformat";
 import { v4 as uuid } from 'uuid';
 import axios from 'axios';
 import SearchResultItemNew from '../components/rooms/searchResultItemNew';
+import { playedSeconds } from './utilsRoom';
 
 export function isProdEnv() {
     return process.env.NODE_ENV === "production";
+}
+
+export function isDevEnv() {
+    return process.env.NODE_ENV === "development";
 }
 
 export function createDefaultRoomObject(roomId, roomOwner) {
@@ -33,7 +38,7 @@ export function createDefaultRoomObject(roomId, roomOwner) {
             isOnInvitation:false,
             isPasswordNeeded:false,
             password:'',
-            isPlayingLooping:true,
+            isPlayingLooping:false,
             isAutoPlayActivated:true,
             syncPeopleByDefault:true,
             allowEverybodyToAddMedia:true,
@@ -59,10 +64,6 @@ export function createDefaultRoomObject(roomId, roomOwner) {
         interactionsArray:[],
         creationTimeStamp	: Date.now()
     };
-}
-
-export function setPageTitle(title) {
-    document.title = title;
 }
 
 export function cleanMediaTitle(mediaTitle) {
@@ -249,4 +250,8 @@ export async function getLocStorVotes() {
 
 export function getYTVidId(media) {
     return media.id.videoId ? media.id.videoId : media.id;
+}
+
+export function setPageTitle(title) {
+    document.title = title;
 }

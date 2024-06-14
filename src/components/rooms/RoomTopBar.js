@@ -21,21 +21,21 @@ import Groups3Icon from '@mui/icons-material/Groups3';
 
 import { withTranslation } from 'react-i18next';
 import VolumeButton from "./playerSection/VolumeButton";
-import { GFontIcon } from '../../services/utils';
+import { GFontIcon, playingFirstInList, playingLastInList } from '../../services/utils';
 import { changeMediaActuallyPlaying } from '../../services/utilsRoom';
 const RoomTopBar = ({
                 t,
                 room,roomRef,
                 isShowSticky,
-                handlePlay,
+                setIsPlaying,
                 roomIsPlaying,
-                setRoomIsPlaying,
-                roomIdPlayed,
+                playerIdPlayed,
                 handleOpenChangeAdminModal,
-                changeMediaActuallyPlayingGuest,
+                setPlayerIdPlayed,
                 isAdminView,
                 isSpotifyAndIsNotPlayableBySpotify,
                 guestSynchroOrNot,
+                playerControlsShown,
                 setGuestSynchroOrNot,
                 volume,
                 setVolume,
@@ -50,7 +50,7 @@ const RoomTopBar = ({
                 sx={{zIndex:1300}}
                 anchor='left'
                 hysteresis={0.2}
-                swipeAreaWidth={50}
+                swipeAreaWidth={20}
                 onClose={(e) => handleOpenDrawerParam(false)}
                 onOpen={(e) => handleOpenDrawerParam(true)}
                 open={paramDrawerIsOpen}
@@ -184,39 +184,23 @@ const RoomTopBar = ({
                 Playlist <b style={{textTransform:'uppercase'}}><span>{ room.id }</span> </b> 
             </Typography>
             
-            {isShowSticky &&
+            {isShowSticky && 
                 <Grid className="animate__animated animate__fadeInDown stickyButtons"> 
-                    {isAdminView && 
+                    {playerControlsShown && 
                         <>
-                            <IconButton onClick={e => ((room.playing > 0) && isSpotifyAndIsNotPlayableBySpotify(room.playing-1, room.roomParams.isLinkedToSpotify)) ? changeMediaActuallyPlaying(room.playing - 1, 'prev', isAdminView, room, roomRef) : ''}>
-                                <SkipPrevious fontSize="large" sx={{color:((room.playing > 0) && isSpotifyAndIsNotPlayableBySpotify(room.playing-1, room.roomParams.isLinkedToSpotify)) ? '#f0f1f0': '#303134'}} />
+                            <IconButton onClick={e => (playingFirstInList(playerIdPlayed) && isSpotifyAndIsNotPlayableBySpotify(playerIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? setPlayerIdPlayed(playerIdPlayed - 1) : ''}>
+                                <SkipPrevious fontSize="large" sx={{color:(playingFirstInList(playerIdPlayed) && isSpotifyAndIsNotPlayableBySpotify(playerIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? '#f0f1f0': '#303134'}} />
                             </IconButton>
 
-                            <IconButton variant="contained" onClick={e => handlePlay(!roomIsPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
+                            <IconButton variant="contained" onClick={e => setIsPlaying(!roomIsPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
                                 { room.actuallyPlaying && <PauseCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
                                 { !room.actuallyPlaying && <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
                             </IconButton>
 
-                            <IconButton onClick={e => (room.playlistUrls.length -1) !== room.playing ? changeMediaActuallyPlaying(room.playing + 1, 'next', isAdminView, room, roomRef) : ''}>
-                                <SkipNextIcon fontSize="large" sx={{color: (room.playlistUrls.length -1) !== room.playing ? '#f0f1f0' : '#303134'}} />
+                            <IconButton onClick={e => !playingLastInList(room.playlistUrls.length,playerIdPlayed) ? setPlayerIdPlayed(playerIdPlayed + 1) : ''}>
+                                <SkipNextIcon fontSize="large" sx={{color: !playingLastInList(room.playlistUrls.length,playerIdPlayed) ? '#f0f1f0' : '#303134'}} />
                             </IconButton>
-                        </>
-                    }
-
-                    {!isAdminView && !guestSynchroOrNot && 
-                        <>
-                            <IconButton onClick={e => ((roomIdPlayed > 0) && isSpotifyAndIsNotPlayableBySpotify(roomIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? changeMediaActuallyPlayingGuest(roomIdPlayed - 1) : ''}>
-                                <SkipPrevious fontSize="large" sx={{color:((roomIdPlayed > 0) && isSpotifyAndIsNotPlayableBySpotify(roomIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? '#f0f1f0': '#303134'}} />
-                            </IconButton>
-                            <IconButton variant="contained" onClick={e => setRoomIsPlaying(!roomIsPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
-                                { roomIsPlaying && <PauseCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
-                                { !roomIsPlaying && <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
-                            </IconButton>
-                            <IconButton onClick={e => (room.playlistUrls.length -1) !== roomIdPlayed ? changeMediaActuallyPlayingGuest(roomIdPlayed + 1) : ''}>
-                                <SkipNextIcon fontSize="large" sx={{color: (room.playlistUrls.length -1) !== roomIdPlayed ? '#f0f1f0' : '#303134'}} />
-                            </IconButton>
-                        </>
-                    }
+                        </>}
                     <VolumeButton volume={volume} setVolume={setVolume}/>
                 </Grid>
             }

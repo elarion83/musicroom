@@ -10,7 +10,7 @@ import { Box } from "@mui/system";
 import { withTranslation } from 'react-i18next';
 import DrawerPlayPauseButton from './DrawerPlayPauseButton';
 
-const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, room,roomRef,open, changeOpen, isAdminView, userVoteArray, roomPlaylist, changeIsPlaying, handleVoteChange,handleRemoveMediaFromPlaylist, changeIdPlaying,  data, roomIsActuallyPlaying, roomIdActuallyPlaying, roomIdActuallyDisplaying }) => {
+const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, room,roomRef,open, changeOpen, isAdminView, userVoteArray, roomPlaylist, setIdPlaying, handleVoteChange,handleRemoveMediaFromPlaylist, setIsPlaying,  data, roomIsActuallyPlaying, roomIdActuallyPlaying, roomIdActuallyDisplaying }) => {
     
     const delay = ms => new Promise(res => setTimeout(res, ms));
     function handleVoteChangeInComp(idMedia, mediaHashId, type) {
@@ -48,9 +48,9 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, room
                             isAdminView={isAdminView}
                             isPlayable={(isFromSpotify(data) && !isSpotifyAvailable) ? false : true}
                             isPlaying={roomIsActuallyPlaying}
-                            changeIsPlaying={changeIsPlaying}
+                            setIsPlaying={setIsPlaying}
                             mediaDisplayingData={roomPlaylist[roomIdActuallyDisplaying]}
-                            changeIdPlaying={changeIdPlaying}
+                            setIdPlaying={setIdPlaying}
                             idActuallyPlaying={roomIdActuallyPlaying}
                             idActuallyDisplaying={roomIdActuallyDisplaying} />
                         <ListItemText 
@@ -86,14 +86,14 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, room
                             onClick={e => userVoteArray.up.includes(data.hashId) ? '' : handleVoteChangeInComp(roomIdActuallyDisplaying, data.hashId, 'up')}
                             sx={{zIndex:5, ml:0, fontSize:'0.8em', color: userVoteArray.up.includes(data.hashId) ? '#66BB6A' : 'var(--grey-dark)'}}>
                             <ThumbUpIcon  fontSize="small" sx={{mr:1, color: userVoteArray.up.includes(data.hashId) ? '#66BB6A' : 'var(--grey-dark)'}}/>
-                            {data.vote.up }
+                            <Typography>{data.vote.up }</Typography>
                         </Button>
 
                         <Button size="small" variant="text" 
                             onClick={e => userVoteArray.down.includes(data.hashId) ? '' : handleVoteChangeInComp(roomIdActuallyDisplaying, data.hashId, 'down')}
                             sx={{zIndex:5, ml:0, fontSize:'0.8em', color: userVoteArray.down.includes(data.hashId) ? '#E91E63' : 'var(--grey-dark)'}}>
                             <ThumbDownAltIcon  fontSize="small" sx={{mr:1, color: userVoteArray.down.includes(data.hashId) ? '#E91E63' : 'var(--grey-dark)'}}/>
-                            {data.vote.down }
+                            <Typography>{data.vote.down }</Typography>
                         </Button>
 
                         {isAdminView && (roomIdActuallyDisplaying > roomIdActuallyPlaying) &&
