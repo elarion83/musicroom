@@ -31,10 +31,11 @@ const Chat = ({t, layoutDisplay, roomRef, setLayoutdisplay, roomParams, currentU
     const [messagesToDisplay, setMessagesToDisplay] = useState({});
 
 	useEffect(() => {
-        onSnapshot(roomRef, (doc) => {
+        const chatUpdate = onSnapshot(roomRef, (doc) => {
             setMessagesToDisplay(doc.data().messagesArray);
             scrollToLastMessage();
         });
+        return () => chatUpdate();
 	}, [roomRef]); 
 
     const [messageToSend, setMessageToSend] = useState('');

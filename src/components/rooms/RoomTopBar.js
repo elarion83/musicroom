@@ -22,7 +22,7 @@ import Groups3Icon from '@mui/icons-material/Groups3';
 import { withTranslation } from 'react-i18next';
 import VolumeButton from "./playerSection/VolumeButton";
 import { GFontIcon, playingFirstInList, playingLastInList } from '../../services/utils';
-import { changeMediaActuallyPlaying } from '../../services/utilsRoom';
+
 const RoomTopBar = ({
                 t,
                 room,roomRef,

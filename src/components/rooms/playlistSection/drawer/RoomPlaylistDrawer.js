@@ -10,7 +10,7 @@ import { Box } from "@mui/system";
 import { withTranslation } from 'react-i18next';
 import DrawerPlayPauseButton from './DrawerPlayPauseButton';
 
-const RoomPlaylistDrawer = ({t,isSpotifyAvailable,roomPlayedActuallyPlayed, room,roomRef,open, changeOpen, isAdminView, userVoteArray, roomPlaylist, setIdPlaying, handleVoteChange,handleRemoveMediaFromPlaylist, setIsPlaying,  data, roomIsActuallyPlaying, roomIdActuallyPlaying, roomIdActuallyDisplaying }) => {
+const RoomPlaylistDrawer = ({t,isSpotifyAvailable, room,roomRef,open, changeOpen, isAdminView, userVoteArray, roomPlaylist, setIdPlaying, handleVoteChange,handleRemoveMediaFromPlaylist, setIsPlaying,  data, roomIsActuallyPlaying, roomIdActuallyPlaying, roomIdActuallyDisplaying }) => {
     
     const delay = ms => new Promise(res => setTimeout(res, ms));
     function handleVoteChangeInComp(idMedia, mediaHashId, type) {

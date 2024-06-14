@@ -17,7 +17,7 @@ import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
 import { v4 as uuid } from 'uuid';
-import {cleanMediaTitle,isFromSpotify,isFromDeezer,isUndefined,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, getYoutubeLocaleTrendsMusic, getLocale, isVarExist, isProdEnv, getLocStorVotes, setPageTitle, getPlayerSec, isDevEnv} from '../services/utils';
+import {cleanMediaTitle,isFromSpotify,isFromDeezer,isUndefined,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, getYoutubeLocaleTrendsMusic, getLocale, isVarExist, isProdEnv, getLocStorVotes, setPageTitle, getPlayerSec, isDevEnv, secondsSinceEventFromNow} from '../services/utils';
 import RoomPlaylistDrawer from "./rooms/playlistSection/drawer/RoomPlaylistDrawer";
 
 import FirstPageIcon from '@mui/icons-material/FirstPage';
@@ -49,8 +49,8 @@ import VolumeButton from "./rooms/playerSection/VolumeButton";
 import EmptyPlaylist from "./rooms/playlistSection/EmptyPlaylist";
 import { Icon } from "@iconify/react";
 import { Forward10, Replay10 } from "@mui/icons-material";
-import { emptyToken, playerRefObject, youtubeApiSearchObject, youtubeApiVideosParams } from "../services/utilsArray";
-import { changeMediaActuallyPlaying, playedSeconds, playerNotSync } from "../services/utilsRoom";
+import { emptyToken, interactionObject, playerRefObject, youtubeApiSearchObject, youtubeApiVideosParams } from "../services/utilsArray";
+import { playedSeconds, playerNotSync } from "../services/utilsRoom";
 import ModalChangeRoomAdmin from "./rooms/modalsOrDialogs/ModalChangeRoomAdmin";
 import RoomTutorial from "./rooms/RoomTutorial";
 import { mockYoutubeMusicResult, mockYoutubeTrendResult } from "../services/mockedArray";
@@ -236,6 +236,10 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         setPlayerIdPlayed(roomDataInFb.playing); 
                         setRoomIsPlaying(roomDataInFb.actuallyPlaying); 
                     }
+                    if(room.interactionsArray && roomDataInFb.interactionsArray && (secondsSinceEventFromNow(roomDataInFb.interactionsArray[roomDataInFb.interactionsArray.length-1].timestamp) < 600) && roomDataInFb.interactionsArray[roomDataInFb.interactionsArray.length-1].key != room.interactionsArray[room.interactionsArray.length-1].key) {
+                        createInteractionAnimation(roomDataInFb.interactionsArray[roomDataInFb.interactionsArray.length-1], layoutDisplay);
+                    }
+
                     setIsActuallyAdmin(roomDataInFb.admin == currentUser.displayName);
                     setRoom(roomDataInFb);
                 });
@@ -359,7 +363,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     async function createNewRoomInteraction(type) {
         
         CreateGoogleAnalyticsEvent('Actions','Playlist Interaction','Playlist '+roomId+' - '+type);
-        room.interactionsArray.push({timestamp:Date.now(), type:type, createdBy: currentUser.displayName});
+        room.interactionsArray.push(interactionObject(currentUser, type));
         updateFirebaseRoom({interactionsArray: room.interactionsArray});
 
         setUserCanMakeInteraction(false);
@@ -782,7 +786,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                     userVoteArray={localData.currentUserVotes} 
                                     roomPlaylist={room.playlistUrls} 
                                     isSpotifyAvailable={room.roomParams.spotify.IsLinked} 
-                                    roomPlayedActuallyPlayed={room.mediaActuallyPlayingAlreadyPlayedData.playedPercentage} 
                                     room={room}
                                     roomRef={roomRef}
                                 />

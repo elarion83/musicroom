@@ -15,6 +15,10 @@ export function isDevEnv() {
     return process.env.NODE_ENV === "development";
 }
 
+export function secondsSinceEventFromNow(event) {
+    return Date.now() - event;
+}
+
 export function createDefaultRoomObject(roomId, roomOwner) {
     return {
         id: roomId,
@@ -136,15 +140,15 @@ export function isLayoutCompact(actualLayout) {
     return actualLayout === 'compact';
 }
 
-export async function createInteractionAnimation(type, layoutDisplay = 'unknown') {
+export function createInteractionAnimation(interaction, layoutDisplay = 'unknown') {
     const interactionDisplay = document.createElement("img");
-    interactionDisplay.src = "img/"+type+".png";
+    interactionDisplay.src = "img/"+interaction.type+".png";
     interactionDisplay.classList.add("interactionImageContainer");
-    interactionDisplay.style.left = Math.random() * 100 + "vw";
     if(layoutDisplay === 'interactive') {
-        interactionDisplay.style.zIndex = 2100;
+        interactionDisplay.style.zIndex = 1999;
     }
-    interactionDisplay.style.animationDuration = Math.random() * 5 + 3 + "s ";
+    interactionDisplay.style.left = interaction.left+'vw';
+    interactionDisplay.style.animationDuration = interaction.speed;
     document.body.appendChild(interactionDisplay);
     setTimeout(() => {
         interactionDisplay.remove();

@@ -4,9 +4,8 @@ import CelebrationIcon from '@mui/icons-material/Celebration';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, InstapaperIcon, InstapaperShareButton, RedditIcon, RedditShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
-import { Box, Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
 import { formatNumberToMinAndSec, getLocale, getRandomHexColor, randomInt } from './utils';
-import SearchResultItemNew from '../components/rooms/searchResultItemNew';
+import { v4 as uuid } from 'uuid';
 
 export const notifsTextArray = {
     userArrived:'//AUTHOR// a rejoins la playlist !',
@@ -105,6 +104,20 @@ export function createMessageObject(user, roomId, text) {
         timestamp: Date.now(),
     };
 }
+
+/* INTERACTION DEFAULT OBJECT
+******* */
+export function interactionObject(user,type) {
+    return {
+        timestamp:Date.now(), 
+        type:type, 
+        createdBy: user.displayName, 
+        key:uuid().slice(0,10),
+        left: Math.floor(Math.random() * 100),
+        speed:Math.random() * 5 + 3 + "s ",
+    }
+}
+
 /*
  API YOUTUBE
 ***************/
