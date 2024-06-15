@@ -30,7 +30,12 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable, room,roomRef,open, changeOpen
             anchor='bottom'
             onClose={(e) => changeOpen(false)}
             open={open}
-            sx={{zIndex:2000}}
+            PaperProps={{
+                sx: {
+                    height: '30vh',
+                },
+            }}
+            sx={{zIndex:2000 }}
         >
             <Box className="DrawerBackButton" onClick={(e) => changeOpen(false)} ></Box>
             <Divider />                        
