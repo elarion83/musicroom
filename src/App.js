@@ -30,6 +30,7 @@ import {replaceCurrentUrlWithHomeUrl, replaceCurrentUrlWithRoomUrl, replaceCurre
 
 import { withTranslation } from 'react-i18next';
 import { createUserDataObject } from "./services/utilsArray";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 function App( {t} ) {
   
 
@@ -210,7 +211,7 @@ function App( {t} ) {
 
   async function handlePasswordAndMailLogin(email,password) {
     setIsLoginLoading(true);
-    await auth.createUserWithEmailAndPassword(email, password)
+    await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
           newUserRegisterAfterFirebaseAuth(userCredential.user.uid, 'Mail');
       })

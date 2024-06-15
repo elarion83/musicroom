@@ -64,6 +64,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 	const [room, setRoom] = useState({});
     const [isActuallyAdmin, setIsActuallyAdmin] = useState(false);
     const [userCanMakeInteraction, setUserCanMakeInteraction]= useState(true);	
+    const [roomInteractionsArray, setRoomInteractionsArray] = useState([]);
     const [loaded, setLoaded] = useState(false);
 
     // datas locales pour les anonymes (etc : savoir si il a déjà voté ou pas)
@@ -236,10 +237,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         setPlayerIdPlayed(roomDataInFb.playing); 
                         setRoomIsPlaying(roomDataInFb.actuallyPlaying); 
                     }
-                    if(room.interactionsArray && roomDataInFb.interactionsArray && (secondsSinceEventFromNow(roomDataInFb.interactionsArray[roomDataInFb.interactionsArray.length-1].timestamp) < 600) && roomDataInFb.interactionsArray[roomDataInFb.interactionsArray.length-1].key != room.interactionsArray[room.interactionsArray.length-1].key) {
-                        createInteractionAnimation(roomDataInFb.interactionsArray[roomDataInFb.interactionsArray.length-1], layoutDisplay);
-                    }
 
+                    setRoomInteractionsArray(roomDataInFb.interactionsArray);
+                   
                     setIsActuallyAdmin(roomDataInFb.admin == currentUser.displayName);
                     setRoom(roomDataInFb);
                 });
@@ -257,6 +257,15 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         } 
 	}, [guestSynchroOrNot, loaded, roomId]); 
 
+	useEffect(() => {
+        if(loaded) {
+            var lastAnimationInteraction = roomInteractionsArray.slice(-1)[0];
+            if(isVarExist(lastAnimationInteraction) && secondsSinceEventFromNow(lastAnimationInteraction.timestamp) < 600) {
+                createInteractionAnimation(lastAnimationInteraction, layoutDisplay);
+            }
+        }
+
+	}, [loaded,roomInteractionsArray]); 
 	useEffect(() => {
         if(loaded) {
             if(room.localeYoutubeTrends.length < 1) {
@@ -363,7 +372,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     async function createNewRoomInteraction(type) {
         
         CreateGoogleAnalyticsEvent('Actions','Playlist Interaction','Playlist '+roomId+' - '+type);
-        room.interactionsArray.push(interactionObject(currentUser, type));
+        roomInteractionsArray.push(interactionObject(currentUser, type));
         updateFirebaseRoom({interactionsArray: room.interactionsArray});
 
         setUserCanMakeInteraction(false);
@@ -544,7 +553,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 }
                 await handleAddValidatedObjectToPlaylist(suggestMedia);
                 await delay(500);
-                
+
                 setIdPlaying(playerIdPlayed+1);
                 CreateGoogleAnalyticsEvent('Actions','Autoplay add', 'Autoplay add');
             })
