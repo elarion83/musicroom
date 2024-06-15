@@ -39,7 +39,7 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
             <DialogContent dividers sx={{pt:2}}>
                 {loginErrorMessage && <Alert severity="error" sx={{mb:2}}>{loginErrorMessage}</Alert>}     
                     <Grid container direction="column" >
-                        <Box sx={{display:'flex', flexDirection:'column'}}>     
+                       {/* <Box sx={{display:'flex', flexDirection:'column'}}>     
                             <TextField
                                 id="loginMailAndPass_EmailField"
                                 label={t('ModalLoginFormPlaceholderEmailAdress')}
@@ -69,7 +69,7 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
                         
                         <Divider sx={{mt:3,mb:2}}>
                             {t('GeneralOr')} 
-                        </Divider>  
+                        </Divider>   */}
                             <LoadingButton 
                                     loading={loginLoading}
                                     loadingPosition='start'

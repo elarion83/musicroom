@@ -310,6 +310,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     
     async function setIdPlaying(idPlaying) {
         goToSecond(0);
+        setPlayedPercents(0);
         await delay(250);
         setPlayerIdPlayed(idPlaying);
         if(isActuallyAdmin) {
@@ -335,6 +336,10 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     played:event.played
                 }
             })
+        } else {
+            if(guestSynchroOrNot && playerNotSync(room, playerRef)) {
+                goToSecond(Math.floor(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds));
+            } 
         }
     }
 
@@ -353,15 +358,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
             setLayoutdisplay('default');
         }
     });
-
-    async function handlePlay(playStatus) {
-        if(isTokenInvalid(room.roomParams.spotify.TokenTimestamp, 3600000)) {   
-            disconnectSpotify();
-        }
-        if(isTokenInvalid(room.roomParams.deezer.TokenTimestamp, 3600000)) {
-            disconnectDeezer();
-        }
-    }
     
     async function disconnectSpotify() {
         updateFirebaseRoom({roomParams:{spotify:emptyToken}});
@@ -389,7 +385,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         setPlayerReady(true);
         playerRef.current.seekTo(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds, 'seconds'); 
         if(isActuallyAdmin || guestSynchroOrNot) {  
-            setRoomIsPlaying(roomIsPlaying);
+            setRoomIsPlaying(room.actuallyPlaying);
         }
     }
 
