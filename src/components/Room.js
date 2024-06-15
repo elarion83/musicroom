@@ -17,7 +17,7 @@ import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
 import { v4 as uuid } from 'uuid';
-import {cleanMediaTitle,isFromSpotify,isFromDeezer,isUndefined,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, getYoutubeLocaleTrendsMusic, getLocale, isVarExist, isProdEnv, getLocStorVotes, setPageTitle, getPlayerSec, isDevEnv, secondsSinceEventFromNow, autoAddYTObject} from '../services/utils';
+import {cleanMediaTitle,isFromSpotify,isFromDeezer,isUndefined,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, getYoutubeLocaleTrendsMusic, getLocale, isVarExist, isProdEnv, getLocStorVotes, setPageTitle, getPlayerSec, isDevEnv, secondsSinceEventFromNow, autoAddYTObject, randomInt} from '../services/utils';
 import RoomPlaylistDrawer from "./rooms/playlistSection/drawer/RoomPlaylistDrawer";
 
 import FirstPageIcon from '@mui/icons-material/FirstPage';
@@ -257,15 +257,18 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         } 
 	}, [guestSynchroOrNot, loaded, roomId]); 
 
+
+    // INTERACTION ANIMATION (HEART / PARTY / SMILE)
 	useEffect(() => {
         if(loaded) {
-            var lastAnimationInteraction = roomInteractionsArray.slice(-1)[0];
-            if(isVarExist(lastAnimationInteraction) && secondsSinceEventFromNow(lastAnimationInteraction.timestamp) < 600) {
+            var lastAnimationInteraction = roomInteractionsArray[roomInteractionsArray.length-1];
+            if(isVarExist(lastAnimationInteraction) && true !== lastAnimationInteraction.displayed && (secondsSinceEventFromNow(lastAnimationInteraction.timestamp) < 1000)) {
+                roomInteractionsArray.slice(-1)[0].displayed = true;
                 createInteractionAnimation(lastAnimationInteraction, layoutDisplay);
-            }
+            } 
         }
-
 	}, [loaded,roomInteractionsArray]); 
+
 	useEffect(() => {
         if(loaded) {
             if(room.localeYoutubeTrends.length < 1) {
@@ -526,7 +529,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         await axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, { params: params })
             .then(async function(response) {
 
-                var responseItemLength = response.data.items.length-1;
+                var responseItemLength = randomInt(0,response.data.items.length-1);
                 var suggestMedia = autoAddYTObject(response.data.items[responseItemLength]);
                 await handleAddValidatedObjectToPlaylist(suggestMedia);
                 CreateGoogleAnalyticsEvent('Actions','Autoplay add', 'Autoplay add');

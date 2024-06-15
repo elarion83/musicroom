@@ -111,6 +111,7 @@ export function interactionObject(user,type) {
     return {
         timestamp:Date.now(), 
         type:type, 
+        displayed:false,
         createdBy: user.displayName, 
         key:uuid().slice(0,10),
         left: Math.floor(Math.random() * 95),
