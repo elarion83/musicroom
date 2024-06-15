@@ -103,10 +103,10 @@ const DisplayMenu = ({t, layoutDisplay, setLayoutdisplay}) => {
           <DvrIcon />
           Compact
         </MenuItem>
-        <MenuItem selected={isLayoutInteractive(layoutDisplay)} onClick={(e) => setLayoutdisplay('interactive')} disableRipple>
+       {/* <MenuItem selected={isLayoutInteractive(layoutDisplay)} onClick={(e) => setLayoutdisplay('interactive')} disableRipple>
           <ChatIcon />
           {t('RoomBottomDisplayInteractive')}
-        </MenuItem>
+        </MenuItem> */}
         <Divider />
         <MenuItem selected={isLayoutDefault(layoutDisplay)} sx={{mt:'-8px', mb:'-3px'}} onClick={(e) => setLayoutdisplay('default')} disableRipple>
           <AirplayIcon />

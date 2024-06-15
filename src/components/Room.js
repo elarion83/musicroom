@@ -261,10 +261,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     // INTERACTION ANIMATION (HEART / PARTY / SMILE)
 	useEffect(() => {
         if(loaded) {
-            var lastAnimationInteraction = roomInteractionsArray[roomInteractionsArray.length-1];
-            if(isVarExist(lastAnimationInteraction) && true !== lastAnimationInteraction.displayed && (secondsSinceEventFromNow(lastAnimationInteraction.timestamp) < 1000)) {
+            if(isVarExist(roomInteractionsArray[roomInteractionsArray.length-1]) && true !== roomInteractionsArray[roomInteractionsArray.length-1].displayed && (secondsSinceEventFromNow(roomInteractionsArray[roomInteractionsArray.length-1].timestamp) < 5000)) {
                 roomInteractionsArray.slice(-1)[0].displayed = true;
-                createInteractionAnimation(lastAnimationInteraction, layoutDisplay);
+                createInteractionAnimation(roomInteractionsArray[roomInteractionsArray.length-1], layoutDisplay);
             } 
         }
 	}, [loaded,roomInteractionsArray]); 
