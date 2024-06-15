@@ -145,7 +145,7 @@ export function createInteractionAnimation(interaction, layoutDisplay = 'unknown
     interactionDisplay.src = "img/"+interaction.type+".png";
     interactionDisplay.classList.add("interactionImageContainer");
     if(layoutDisplay === 'interactive') {
-        interactionDisplay.style.zIndex = 100;
+        interactionDisplay.style.zIndex = 1000;
     }
     interactionDisplay.style.left = interaction.left+'vw';
     interactionDisplay.style.animationDuration = interaction.speed;
@@ -259,4 +259,17 @@ export function getYTVidId(media) {
 
 export function setPageTitle(title) {
     document.title = title;
+}
+
+export function autoAddYTObject(item) {
+    return {
+        addedBy : 'App_AutoPlay',
+        visuel: item.snippet.thumbnails.high.url,
+        hashId: uuid().slice(0,10).toLowerCase(),
+        source: 'youtube',
+        platformId:item.id.videoId,
+        title:cleanMediaTitle(item.snippet.title),
+        url:'https://www.youtube.com/watch?v='+item.id.videoId, 
+        vote: {'up':0,'down':0}
+    }
 }

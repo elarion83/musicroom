@@ -17,7 +17,7 @@ import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
 import { v4 as uuid } from 'uuid';
-import {cleanMediaTitle,isFromSpotify,isFromDeezer,isUndefined,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, getYoutubeLocaleTrendsMusic, getLocale, isVarExist, isProdEnv, getLocStorVotes, setPageTitle, getPlayerSec, isDevEnv, secondsSinceEventFromNow} from '../services/utils';
+import {cleanMediaTitle,isFromSpotify,isFromDeezer,isUndefined,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, getYoutubeLocaleTrendsMusic, getLocale, isVarExist, isProdEnv, getLocStorVotes, setPageTitle, getPlayerSec, isDevEnv, secondsSinceEventFromNow, autoAddYTObject} from '../services/utils';
 import RoomPlaylistDrawer from "./rooms/playlistSection/drawer/RoomPlaylistDrawer";
 
 import FirstPageIcon from '@mui/icons-material/FirstPage';
@@ -309,8 +309,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }
     
     async function setIdPlaying(idPlaying) {
-        setPlayerIdPlayed(idPlaying);
         goToSecond(0);
+        await delay(250);
+        setPlayerIdPlayed(idPlaying);
         if(isActuallyAdmin) {
            updateFirebaseRoom({
                 playing: idPlaying,
@@ -324,6 +325,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     async function handleProgress(event) {
         setPlayedPercents(Math.floor(event.played*100));
         if(isActuallyAdmin) {
+            if(Math.floor(event.played*100) > 90 && room.roomParams.isAutoPlayActivated && !mediaIndexExist(room.playlistUrls,playerIdPlayed+1)) {
+                addMediaForAutoPlayByYoutubeId(room.playlistUrls[playerIdPlayed].title);
+            }
             updateFirebaseRoom({
                 mediaActuallyPlayingAlreadyPlayedData:{
                     playedSeconds:event.playedSeconds,
@@ -394,10 +398,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
             if(room.roomParams.isPlayingLooping) {
                 await setIdPlaying(0);
             }
-            else if(room.roomParams.isAutoPlayActivated && isActuallyAdmin) {
-                addMediaForAutoPlayByYoutubeId(room.playlistUrls[playerIdPlayed].title);
-            }
         } else {
+            await goToSecond(0);
             setIdPlaying(playerIdPlayed+1);
         }
     }
@@ -422,18 +424,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         room.playlistUrls.push(validatedObjectToAdd);
         room.playlistEmpty = false;
         updateFirebaseRoom({playlistUrls: room.playlistUrls, playlistEmpty: false});
-    }
-
-    function handleChangeIdActuallyPlaying(newIdToPlay) {
-        if(isActuallyAdmin) {
-            updateFirebaseRoom({
-                playing: newIdToPlay, 
-                mediaActuallyPlayingAlreadyPlayedData:{
-                    playedSeconds:0,
-                    playedPercentage:0,
-                    played:0
-                }});
-        }
     }
 
     function handleChangeIdShownInDrawer(idToShow) {
@@ -535,26 +525,14 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     async function addMediaForAutoPlayByYoutubeId(lastMediaTitle) {
         
-        var params = youtubeApiSearchObject(lastMediaTitle,4);
+        var params = youtubeApiSearchObject(lastMediaTitle.split('-')[0],5);
 
         await axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, { params: params })
             .then(async function(response) {
 
                 var responseItemLength = response.data.items.length-1;
-                var suggestMedia = {
-                    addedBy : 'App_AutoPlay',
-                    visuel: response.data.items[responseItemLength].snippet.thumbnails.high.url,
-                    hashId: uuid().slice(0,10).toLowerCase(),
-                    source: 'youtube',
-                    platformId:response.data.items[responseItemLength].id.videoId,
-                    title:cleanMediaTitle(response.data.items[responseItemLength].snippet.title),
-                    url:'https://www.youtube.com/watch?v='+response.data.items[responseItemLength].id.videoId, 
-                    vote: {'up':0,'down':0}
-                }
+                var suggestMedia = autoAddYTObject(response.data.items[responseItemLength]);
                 await handleAddValidatedObjectToPlaylist(suggestMedia);
-                await delay(500);
-
-                setIdPlaying(playerIdPlayed+1);
                 CreateGoogleAnalyticsEvent('Actions','Autoplay add', 'Autoplay add');
             })
         .catch(function(error) {
