@@ -54,6 +54,7 @@ import { playedSeconds, playerNotSync } from "../services/utilsRoom";
 import ModalChangeRoomAdmin from "./rooms/modalsOrDialogs/ModalChangeRoomAdmin";
 import RoomTutorial from "./rooms/RoomTutorial";
 import { mockYoutubeMusicResult, mockYoutubeTrendResult } from "../services/mockedArray";
+import SoundWave from "../services/SoundWave";
 
 const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
@@ -526,14 +527,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         var params = youtubeApiSearchObject(lastMediaTitle.split('-')[0],5);
 
         await axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, { params: params })
-            .then(async function(response) {
+        .then(async function(response) {
 
-                var responseItemLength = randomInt(0,response.data.items.length-1);
-                var suggestMedia = autoAddYTObject(response.data.items[responseItemLength]);
-                await handleAddValidatedObjectToPlaylist(suggestMedia);
-                CreateGoogleAnalyticsEvent('Actions','Autoplay add', 'Autoplay add');
-            })
-        .catch(function(error) {
+            var responseItemLength = randomInt(0,response.data.items.length-1);
+            var suggestMedia = autoAddYTObject(response.data.items[responseItemLength]);
+            await handleAddValidatedObjectToPlaylist(suggestMedia);
+            CreateGoogleAnalyticsEvent('Actions','Autoplay add', 'Autoplay add');
         });
     }
 
@@ -543,8 +542,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         setOpenRoomDrawer(false);
     }
     return (
-        <div className="flex flex-col w-full gap-0 relative " style={{height:'auto'}} > 
-            {loaded && room.roomParams !== undefined && room.roomParams.spotify !== undefined && room.roomParams.deezer !== undefined && 
+        <div className="flex flex-col w-full gap-0 relative " style={{height:'auto'}}> 
+            {loaded && <>
                 <RoomTopBar     
                     room={room}
                     roomRef={roomRef}
@@ -571,9 +570,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     isLinkedToSpotify={room.roomParams.spotify.IsLinked}
                     isLinkedToDeezer={room.roomParams.deezer.IsLinked}
                 />
-            }
-            <Container maxWidth={false} sx={{ padding: '0 !important'}} className={layoutDisplayClass} >
-                {loaded && room.playlistUrls && 
+            
+                <Container maxWidth={false} sx={{ padding: '0 !important'}} className={layoutDisplayClass} >
                     <>
                         {!room.playlistEmpty && 
                             <>
@@ -779,10 +777,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                             </Box>
                         }
                     </>
-                } 
-            </Container>
-        
-            {loaded && room.roomParams && 
+                </Container>
+            
                 <>
                     <RoomModalAddMedia 
                         room={room}
@@ -842,7 +838,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         layout={isPlaylistExistNotEmpty(room.playlistUrls) ? room.playlistUrls.length > 6 ? 'small': 'classic' : 'classic'}
                     />
                 }
-            </>} 
+                </> 
+            </>}
+            {!loaded && <Box className="loadingRoomInfo"> <SoundWave waveNumber={150} isPlayingOrNo={true} /><Typography  className="fontFamilyNunito"> Loading ..</Typography></Box>}
         </div>
     );
 };

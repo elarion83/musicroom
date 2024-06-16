@@ -1,12 +1,23 @@
 
 import React from "react";
+import { randomInt } from "./utils";
 
 const SoundWave = ({ waveNumber, isPlayingOrNo }) => {
 
-    var animations = ['boxNormal', 'boxQuiet', 'boxLoud', 'boxNormal', 'boxQuiet', 'boxLoud','boxNormal', 'boxQuiet', 'boxLoud'];
+    var animations = ['boxNormal', 'boxQuiet', 'boxLoud'];
+    var selectedAnimation = 0;
     return(
         <span className={isPlayingOrNo ? 'animated soundWaveContainer' : 'waiting soundWaveContainer'}>
-            {[...Array(waveNumber)].map((object, i) => <div key={i} className={`box ${(animations[i])}`} ></div>)}
+            {[...Array(waveNumber)].map((object, i) => {
+                selectedAnimation++;
+                if(selectedAnimation > animations.length-1) {
+                    selectedAnimation = 0;
+                }
+                return(
+                <div key={i} className={`box ${(animations[selectedAnimation])}`} ></div>
+                );
+            })
+            }
         </span>
     )
 };
