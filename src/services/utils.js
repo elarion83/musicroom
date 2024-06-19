@@ -3,9 +3,7 @@ import i18n from "i18next";
 import dateFormat from "dateformat";
 
 import { v4 as uuid } from 'uuid';
-import axios from 'axios';
 import SearchResultItemNew from '../components/rooms/searchResultItemNew';
-import { playedSeconds } from './utilsRoom';
 
 export function isProdEnv() {
     return process.env.NODE_ENV === "production";

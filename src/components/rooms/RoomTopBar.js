@@ -64,7 +64,7 @@ const RoomTopBar = ({
                         </ListItemButton>
                     </ListItem> 
                     <Divider />
-                    <ListItem key='roomDrawHostedBy' disablePadding>
+                    <ListItem key='roomDrawHostedBy' disablePadding  onClick={e => handleOpenChangeAdminModal(true)}>
                         <ListItemButton>
                             <ListItemIcon>
                                 <InfoIcon />
