@@ -1,7 +1,7 @@
 import React from "react";
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { Alert, AlertTitle, Box, Dialog, DialogContent, FormGroup, Grid, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
+import { Alert, AlertTitle, Box, Dialog, DialogContent, FormGroup, Grid, IconButton, InputAdornment, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import { LoadingButton } from "@mui/lab";
@@ -10,9 +10,9 @@ import { timestampToDateoptions, timestampToHoursAndMinOptions } from "../../../
 import { withTranslation } from 'react-i18next';
 import ModalsHeader from "./ModalsHeader";
 import { ReactSVG } from "react-svg";
-import { AccountCircle, CancelOutlined, Save } from "@mui/icons-material";
+import { AccountCircle, CancelOutlined , Save } from "@mui/icons-material";
 import { cleanPseudoEntered, isPseudoEnteredValid } from "../../../services/utils";
-
+import CachedIcon from '@mui/icons-material/Cached';
 const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
 
   const delay = ms => new Promise(res => setTimeout(res, ms));
@@ -29,7 +29,6 @@ const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
         await delay(500);
         setIsEditingUserLoading(false);
         setIsEditingPseudo(false);
-        changeOpen(false);
     }
     return(
         <Dialog open={open} onClose={(e) => changeOpen(false)}>
@@ -37,7 +36,6 @@ const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
             <ModalsHeader icon={() => <AccountCircleIcon />} title={t('ModalUserSettingsTitle')} />
 
             <DialogContent dividers sx={{pt:2}}>
-                
                 <ReactSVG src={"./img/avatars/botts"+user.customDatas.avatarId+".svg"}  className="userAvatarBig"/>
                 <Box sx={{textAlign:'center', mb:2, fontWeight:'bold'}}>
                     {isEditingPseudo && 
@@ -48,7 +46,7 @@ const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
                                     endAdornment: (
                                         <InputAdornment sx={{ maxHeight:0, cursor:'pointer' }} position="end"  
                                             onClick={(e) => isPseudoEnteredValid(pseudo) ? updateUser() : setIsEditingPseudo(false)} >
-                                            {isPseudoEnteredValid(pseudo) ? <Save /> : <CancelOutlined />}
+                                            {isPseudoEnteredValid(pseudo) ? isEditingUserLoading ?  <ReactSVG src={"../img/loading.svg"} className="inputLoadingSvg" /> : <Save /> : <CancelOutlined />}
                                         </InputAdornment>
                                     ),
                                 }}
@@ -71,12 +69,19 @@ const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
                     
                     {!user.isAnonymous && 
                         <>
-                            <Typography className="fontFamilyNunito" fontSize="small" sx={{display:'block'}}>
-                                {t('UserMemberSince')} {new Date(user.metadata.creationTime).toLocaleDateString('fr-FR', timestampToDateoptions)}
-                            </Typography>
-                            <Typography className="fontFamilyNunito" fontSize="small" sx={{display:'block'}}>
-                                {t('UserMemberLastLogin')} {new Date(user.metadata.lastSignInTime).toLocaleDateString('fr-FR', timestampToHoursAndMinOptions)}
-                            </Typography>
+                            <List dense={true} className="userInfosList">
+                                
+                                <ListItem disablePadding>
+                                    <ListItemText primary={user.email} />
+                                </ListItem>
+                                <ListItem disablePadding className="small">
+                                    <ListItemText primary={t('UserMemberSince')+' '+new Date(user.metadata.creationTime).toLocaleDateString('fr-FR', timestampToDateoptions)} />
+                                </ListItem>
+                                <ListItem disablePadding className="small">
+                                    <ListItemText primary={t('UserMemberLastLogin')+' '+new Date(user.metadata.lastSignInTime).toLocaleDateString('fr-FR', timestampToHoursAndMinOptions)} />
+                                </ListItem>
+                            </List>
+                        
                         </>
                     }
                 </Box>

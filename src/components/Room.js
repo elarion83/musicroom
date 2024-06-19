@@ -827,7 +827,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     /> 
             
                 <ModalChangeRoomAdmin open={openRoomChangeAdminModal} changeAdmin={changeAdmin} playlistAdminPass={room.adminPass} changeOpen={setOpenRoomChangeAdminModal} adminView={isActuallyAdmin} />
-                <ModalShareRoom open={openInvitePeopleToRoomModal} changeOpen={setOpenInvitePeopleToRoomModal} roomUrl={ localData.domain +'/?rid='+roomId} />
+                <ModalShareRoom open={openInvitePeopleToRoomModal} changeOpen={setOpenInvitePeopleToRoomModal} />
                 <ModalLeaveRoom open={openLeaveRoomModal} changeOpen={setOpenLeaveRoomModal} handleQuitRoom={handleQuitRoomInComp} />
                 <ModalForceSpotifyDisconnect open={openForceDisconnectSpotifyModal} changeOpen={setOpenForceDisconnectSpotifyModal} handleDisconnectSpotify={disconnectSpotify} />
                 <ModalForceDeezerDisconnect open={openForceDisconnectDeezerModal} changeOpen={setOpenForceDisconnectDeezerModal} handleDisconnectDeezer={disconnectDeezer} />

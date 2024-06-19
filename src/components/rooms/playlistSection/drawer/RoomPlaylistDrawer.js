@@ -62,14 +62,14 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable, room,roomRef,open, changeOpen
                              
                             primary={
                                 <React.Fragment>
-                                    <Typography className="varelaFontTitle"sx={{textShadow:'1px 1px 1px #423d3d'}}  >
+                                    <Typography  component="span" className="varelaFontTitle"sx={{textShadow:'1px 1px 1px #423d3d'}}  >
                                         {data.title} 
                                     </Typography>
                                 </React.Fragment>
                             }
                             secondary={
                                 <React.Fragment>
-                                    <Typography>
+                                    <Typography component="span" >
                                         {t('GeneralVia')} <b>{data.source}</b> {t('GeneralBy')} <b>{data.addedBy}</b>
                                     </Typography>
                                 </React.Fragment>

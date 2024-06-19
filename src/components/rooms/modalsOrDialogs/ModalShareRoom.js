@@ -12,8 +12,9 @@ import { withTranslation } from 'react-i18next';
 import { SlideUp } from '../../../services/materialSlideTransition/Slide';
 import ModalsHeader from '../../generalsTemplates/modals/ModalsHeader';
 
-const ModalShareRoom = ({ t, roomUrl, open, changeOpen }) => {
+const ModalShareRoom = ({ t, open, changeOpen }) => {
 
+    const roomUrl = window.location.href;
     const [copiedToClipboard, setCopiedToClipboard] = useState(false);
 
     const delay = ms => new Promise(res => setTimeout(res, ms));

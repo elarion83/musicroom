@@ -14,3 +14,7 @@
     width: 85%;
     margin: auto;
 }
+
+.userInfosList .small span {
+    font-size: 0.8em;
+}

@@ -21,6 +21,12 @@
     padding: 4px;
 }
 
+.inputLoadingSvg svg{
+    height: 40px;
+    width: 40px;
+    margin: -10px;
+}
+
 .topBarIsInRoom .userAvatar {
     height: 30px;
     width: 30px;
