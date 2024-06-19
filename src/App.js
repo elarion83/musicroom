@@ -25,12 +25,13 @@ import { Snackbar, Typography } from "@mui/material";
 import { PseudoGenerated } from './services/pseudoGenerator';
 
 import { CreateGoogleAnalyticsEvent } from './services/googleAnalytics';
-import { GFontIcon, getRandomHexColor, randomInt, setPageTitle } from "./services/utils";
+import { GFontIcon, delay, getRandomHexColor, isEmpty, randomInt, setPageTitle } from "./services/utils";
 import {replaceCurrentUrlWithHomeUrl, replaceCurrentUrlWithRoomUrl, replaceCurrentUrlWithRoomUrlForDeezer, replaceCurrentUrlWithRoomUrlForSpotify} from './services/redirects';
 
 import { withTranslation } from 'react-i18next';
 import { createUserDataObject } from "./services/utilsArray";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { browserLocalPersistence, createUserWithEmailAndPassword, getAdditionalUserInfo, onAuthStateChanged, setPersistence, signInAnonymously, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
+import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 function App( {t} ) {
   
 
@@ -61,32 +62,6 @@ function App( {t} ) {
   const [loginOkSnackBarOpen, setLoginOkSnackBarOpen] = useState(false);
   const [logoutOkSnackBarOpen, setLogoutOkSnackBarOpen] = useState(false);
 
-  // tools
-  const delay = ms => new Promise(res => setTimeout(res, ms));
-  
-  useEffect(() => {
-    const unregisterAuthObserver = auth.onAuthStateChanged(user => {
-
-      if (user) {
-        db.collection(process.env.REACT_APP_USERS_COLLECTION).doc(user.uid).get().then((userDB) => {
-          setUserInfo(userDB.data());
-          setIsSignedIn(true);
-        });
-      }
-      else if(localStorage.getItem("Play-It_AnonymouslyLoggedIn")) {
-        setUserInfo({displayName:localStorage.getItem("Play-It_AnonymouslyPseudo"),avatarId:localStorage.getItem("Play-It_AnonymouslyAvatarId"), loginType:'anon',color: localStorage.getItem("Play-It_AnonymouslyColor")});
-        setIsSignedIn(true);
-      }
-      else {
-        setIsSignedIn(false);
-      }
-
-      setIsAppLoading(false);
-    })
-    return () => unregisterAuthObserver()
-  }, [])
-  
-
   useEffect(() => {
       const hash = window.location.hash
       if (hash) {
@@ -96,28 +71,7 @@ function App( {t} ) {
             replaceCurrentUrlWithRoomUrlForSpotify(localStorage.getItem("Play-It_RoomId"), token_spotify);
           }
       }
-      
-      if(queryParameters.get("code")) {
-        var token_deezer = queryParameters.get("code");
-        getDeezerAccessToken(token_deezer);
-      }
   })
-
-
-  async function getDeezerAccessToken(token) {
-      await axios.get(process.env.REACT_APP_BACK_FOLDER_URL+'/deezer/accessToken.php?appID='+process.env.REACT_APP_ROOM_DEEZER_APP_ID+'&appSecret='+process.env.REACT_APP_ROOM_DEEZER_APP_SECRET_KEY+'&code='+token)
-        .then(function(response) {
-          var deezerResult = response.data;
-          var firstSplit = deezerResult.split('=');
-          var tokenSplit = firstSplit[1].split('&');
-          if(tokenSplit[0]) {
-            joinRoomByRoomId(localStorage.getItem("Play-It_RoomId"));
-            replaceCurrentUrlWithRoomUrlForDeezer(localStorage.getItem("Play-It_RoomId"), tokenSplit[0]);
-          }
-        })
-        .catch(function(error) {
-        });          
-  }
 
   function createNewRoom() {
     var newRoomId = uuid().slice(0,5).toLowerCase()
@@ -134,97 +88,146 @@ function App( {t} ) {
     CreateGoogleAnalyticsEvent('Actions','Rejoin. playlist','Playlist id :'+idRoom);
   }
   
-  // when join room or create room button pressed, if not logged in we need to do the right action after login
-  function handleLoginAndRoom(action) {
-    setFuncAfterLogin(action);
+    useEffect(() => {
+      const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+        if (currentUser && !isLoginLoading) {
+          const userDocRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, currentUser.uid);
+          const userDocSnap = await getDoc(userDocRef);
+          if (userDocSnap.exists()) {
+            finishAuthProcess(currentUser, userDocSnap.data(), 'persistentAuth')
+          } 
+        } else {
+          console.log('loug ?')
+        }
+    });
+
+    return () => unsubscribe();
+    }, []);
+
+  /***********
+   * AUTH // LOGIN HANDLER FUNCTION IN ORDER THEY'RE USED
+   * 
+   * OPEN AUTH MODAL : handleLoginAndRoom()
+   * PRE-LOGIN-FUNCTION : preLoginFunc()
+   * GOOGLE LOGIN HANDLER : handleGoogleLogin()
+   * ANONYMOUS LOGIN HANDLER : anonymousLogin()
+   * POST-LOGIN-FUNCTION doActionAfterAuth()
+   * END-LOGIN-FUNCTION finishAuthProcess()
+   * CALLBACK AFTER LOGIN : doActionAfterLogin()
+   * 
+   * LOGIN HELPERS
+   * LOGIN-FAILED-HELPER setLoginFailed()
+  */
+
+  /* OPEN AUTH MODAL */
+  function handleLoginAndRoom(callback) { // can handle a callback function
+    setFuncAfterLogin(callback);
     setLoginModalOpen(true);
   }
 
+  /* PRE-LOGIN-FUNCTION */
+  async function preLoginFunc() {
+    setIsLoginLoading(true);
+    await setPersistence(auth, browserLocalPersistence);
+  }
+
+  /* GOOGLE LOGIN HANDLER */
+  async function handleGoogleLogin() {
+    preLoginFunc();
+    signInWithPopup(auth, googleProvider)
+        .then((result) => { 
+          doActionAfterAuth(result, 'userInUser');
+        })
+        .catch((err) => {
+            setLoginFailed('Une erreur est survenue');
+        });
+  }
+
+  /* ANONYMOUS LOGIN HANDLER */
+  async function anonymousLogin() {
+    preLoginFunc();
+    signInAnonymously(auth).then((result) => { 
+        doActionAfterAuth(result, 'userInUser');
+      })
+      .catch((err) => {
+          setLoginFailed('Une erreur est survenue');
+      });
+  }
+
+  /* POST-LOGIN-FUNCTION */
+  async function doActionAfterAuth(user, objectType = 'simple') {
+
+    var entireUserDatas = (objectType == 'simple') ? user : user.user;
+
+    let userRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, entireUserDatas.uid);
+    if(getAdditionalUserInfo(user).isNewUser) {
+      var userInfosTemp = createUserDataObject(null, entireUserDatas.providerId ?? 'anon', PseudoGenerated, entireUserDatas.isAnonymous);
+      await setDoc(userRef, userInfosTemp);
+    } 
+    await getDoc(userRef).then((userFirebaseData) => {
+      finishAuthProcess(entireUserDatas, userFirebaseData.data(), 'newAuth');
+    });
+  }
+
+  /* END-LOGIN-FUNCTION */
+  function finishAuthProcess(globalDatas, customDatas, actionType) {
+    globalDatas.displayName = customDatas.displayName;
+    globalDatas.customDatas = customDatas;
+    setUserInfo(globalDatas);
+    setIsSignedIn(true);
+
+    if('newAuth' === actionType) {
+      handleLoginSnack(true);
+      CreateGoogleAnalyticsEvent('Actions',globalDatas.providerId+' login',globalDatas.providerId+' login');
+    }
+
+    setIsAppLoading(false);
+    doActionAfterLogin();
+  }
+
+  /* CALLBACK AFTER LOGIN */
   function doActionAfterLogin() {
-    if(funcAfterLogin === 'createRoom') {
-      createNewRoom();
+    switch(funcAfterLogin) {
+      case 'createRoom':
+        createNewRoom();
+        break;
+      case 'joinRoom':
+        setJoinRoomModalOpen(true);
+        break;
+      default:
     }
-
-    if(funcAfterLogin === 'joinRoom') {
-      setJoinRoomModalOpen(true);
-    }
-
     setFuncAfterLogin('');
   }
 
-  async function anonymousLogin() {
-    setIsLoginLoading(true);
-    await delay(500);
-    setIsLoginLoading(false);
-    var userInfosTemp = createUserDataObject(null, 'anon', PseudoGenerated, true);
-    setUserInfo(userInfosTemp);
-
-    localStorage.setItem("Play-It_AnonymouslyPseudo",  PseudoGenerated);
-    localStorage.setItem("Play-It_AnonymouslyColor",  getRandomHexColor());
-    localStorage.setItem("Play-It_AnonymouslyAvatarId",userInfosTemp.avatarId);
-    
-    localStorage.setItem("Play-It_AnonymouslyLoggedIn",  true);
-
-    setIsSignedIn(true);
-    handleLoginOkSnackNewUser();
-    window.scrollTo(0, 0);
-
-    doActionAfterLogin();
-
-    CreateGoogleAnalyticsEvent('Actions','Anonym. login','Anonym. login');
-  }
-
+  /* LOGIN-FAILED-HELPER */
   async function setLoginFailed(error) {
     setLoginErrorMessage(error);
     setIsLoginLoading(false);
   }
 
-  async function newUserRegisterAfterFirebaseAuth(userUid, registerType) {
-      var userData = createUserDataObject(userUid, registerType, PseudoGenerated)
-      setUserInfo(userData);
-      db.collection(process.env.REACT_APP_USERS_COLLECTION).doc(userUid).set(userData).then((doc) => {
-        setIsLoginLoading(false);
-        handleLoginOkSnackNewUser();
-        doActionAfterLogin();
-        CreateGoogleAnalyticsEvent('Actions',registerType+' register',registerType+' register');
-      });
-  }
-
-  async function handleGoogleLogin() {
-    setIsLoginLoading(true);
-    await auth.signInWithPopup(googleProvider)
-        .then((result) => { 
-          if(result.additionalUserInfo.isNewUser) {
-            newUserRegisterAfterFirebaseAuth(result.user.uid, 'Google');
-          } else {
-            setIsLoginLoading(false);
-            handleLoginOkSnack();
-            doActionAfterLogin();
-            CreateGoogleAnalyticsEvent('Actions','Google login','Google login');
-          }
-        })
-        .catch((err) => {
-            setLoginFailed('Une erreur est survenue');
-        });
-
+  /* LOGOUT FUNCTION */
+  function logOut() {
+    setIsSignedIn(false);
+    setUserInfo({});
+    signOut(auth).then(() => {
+      replaceCurrentUrlWithHomeUrl(); 
+      setRoomId();
+      setLogoutOkSnackBarOpen(true);   
+      CreateGoogleAnalyticsEvent('Actions','Logout','Logout');
+    });
   }
 
   async function handlePasswordAndMailLogin(email,password) {
     setIsLoginLoading(true);
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-          newUserRegisterAfterFirebaseAuth(userCredential.user.uid, 'Mail');
+          doActionAfterAuth(userCredential);
       })
       .catch((error) => {
         if(error.code === "auth/email-already-in-use") {
-            auth.signInWithEmailAndPassword(email, password)
+            signInWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
-                    // Signed in
-                    handleLoginOkSnack();
-                    setIsLoginLoading(false);
-                    doActionAfterLogin();
-                    CreateGoogleAnalyticsEvent('Actions','Mail login','Mail login');
-                    return userCredential.user;
+                    doActionAfterAuth(userCredential);
                 })
                 .catch((error) => {
                   setLoginFailed(error.message);
@@ -235,48 +238,25 @@ function App( {t} ) {
       })
   }
 
-  function handleLoginOkSnack() {
-    setLoginOkSnackBarOpen(true);
-    resetLoginModalAfterSuccessfullLogin();
-  }
-
-  function handleLoginOkSnackNewUser() {
-    setLoginNewUserOkSnackBarOpen(true);
-    resetLoginModalAfterSuccessfullLogin();
-  }
-
-  function resetLoginModalAfterSuccessfullLogin() {
+  function handleLoginSnack(newUser = false) {
     setLoginErrorMessage();
     setIsLoginLoading(false);
-  }
-
-  function logOut() {
-    setRoomId();
-    setUserInfo({});
-    setIsSignedIn(false);
-    localStorage.removeItem("Play-It_RoomId");
-    localStorage.removeItem("Play-It_SpotifyToken");
-    localStorage.removeItem("Play-It_AnonymouslyLoggedIn");
-    localStorage.removeItem("Play-It_AnonymouslyPseudo");
-    auth.signOut();
-    setLogoutOkSnackBarOpen(true);
-    replaceCurrentUrlWithHomeUrl();    
-
-    CreateGoogleAnalyticsEvent('Actions','Logout','Logout');
+    newUser ? setLoginNewUserOkSnackBarOpen(true) : setLoginOkSnackBarOpen(true);
   }
 
   function handleQuitRoomMain() {
-    replaceCurrentUrlWithHomeUrl();
     setRoomId();
+    replaceCurrentUrlWithHomeUrl();
     localStorage.removeItem("Play-It_RoomId");
     localStorage.removeItem("Play-It_SpotifyToken");
     
     CreateGoogleAnalyticsEvent('Actions','Quit playlist','Quit playlist');
   }
 
-  function setUserInfoEdit(user) {
-      db.collection(process.env.REACT_APP_USERS_COLLECTION).doc(user.uid).set(user).then();
+  async function setUserInfoEdit(user) {
       setUserInfo(user);
+      let userRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, user.uid);
+      await updateDoc(userRef, user.customDatas);
   }
 
   return (
@@ -286,9 +266,7 @@ function App( {t} ) {
          <AppBar className={roomId ? stickyDisplay ? 'topBarIsInRoomSticky' : 'topBarIsInRoom' : 'topBarClassic'} position="static" sx={{bgcolor: '#202124'}}>
             <Toolbar>
               <img src="img/logo_py1.png" style={{ width: 'auto', maxWidth:'50%', maxHeight:'30px'}} alt="Play-It logo"/>
-              {!isAppLoading && (
-                <UserTopBar user={userInfos} setUserInfo={setUserInfoEdit} joinRoomByRoomId={joinRoomByRoomId} handleOpenLoginModal={setLoginModalOpen} handleLogout={logOut} />
-              )}
+                <UserTopBar loggedIn={isSignedIn} user={userInfos} setUserInfo={setUserInfoEdit} joinRoomByRoomId={joinRoomByRoomId} handleOpenLoginModal={setLoginModalOpen} handleLogout={logOut} />
             </Toolbar>
           </AppBar>
           {!roomId && 
@@ -318,7 +296,7 @@ function App( {t} ) {
           }
         {roomId && isSignedIn && <Room currentUser={userInfos} className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain} setStickyDisplay={setStickyDisplay}></Room>}
 
-        {!isSignedIn && !isAppLoading && (roomId || loginModalOpen) && 
+        {!isSignedIn && (roomId || loginModalOpen) && 
         <LoginModal 
           open={true} 
           changeOpen={(e) => setLoginModalOpen(false)}

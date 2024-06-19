@@ -17,7 +17,7 @@ import UserParamModal from './modals/UserParamModal';
 import UserRoomListModal from './modals/UserRoomListModal';
 import { ReactSVG } from "react-svg";
 import { withTranslation } from 'react-i18next';
-const UserTopBar = ({ t, user, setUserInfo, handleLogout, handleOpenLoginModal, joinRoomByRoomId }) => {
+const UserTopBar = ({ t, user, loggedIn, setUserInfo, handleLogout, handleOpenLoginModal, joinRoomByRoomId }) => {
 
   // menu
     function handleClickMenu(event) {
@@ -37,61 +37,65 @@ const UserTopBar = ({ t, user, setUserInfo, handleLogout, handleOpenLoginModal, 
     return(
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', textAlign: 'center', width:'100%' }}>
           
-          {user.displayName && <Tooltip title={t('ModalUserSettingsTitle')} sx={{ bgColor:'#30363c'}}>
-            <IconButton
-              onClick={e => handleClickMenu(e)}
-              size="small"
-              sx={{  color:'white', }}
-              aria-controls={open ? 'account-menu' : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? 'true' : undefined}
-            >
-              <ReactSVG src={"./img/avatars/botts"+user.avatarId+".svg"} className='userAvatar' />
-            </IconButton>
-          </Tooltip>}
-              
-          {!user.displayName && 
+          {!loggedIn && 
             <Button 
               variant="outlined" 
               sx={{color:'var(--white)', borderColor:'var(--white)'}}
               startIcon={<LoginIcon sx={{color:'var(--white)'}}/>}
               onClick={(e) => {handleOpenLoginModal(true)}} > {t('GeneralLogin')} </Button>
             }
-          <Menu
-            anchorEl={anchorEl}
-            id="account-menu"
-            open={open}
-            onClose={handleClose}
-            onClick={handleClose}
-            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-            >
-            <MenuItem onClick={e => setUserParamModalOpen(true)}>
-                <ListItemIcon>
-                  <TuneIcon fontSize="small" />
-                </ListItemIcon>
-                <Typography>
-                  {t('UserMenuMyProfile')} 
-                </Typography>
-            </MenuItem>
-            {!localStorage.getItem("Play-It_AnonymouslyLoggedIn") && <MenuItem onClick={e => setUserRoomListModalOpen(true)}>
-                <ListItemIcon>
-                  <AppsIcon fontSize="small" />
-                </ListItemIcon>
-                <Typography>        
-                  {t('UserMenuMyRooms')} 
-                </Typography>
-            </MenuItem>}
-            <Divider />
-            <MenuItem onClick={e => handleLogout()}>
-                <ListItemIcon>
-                <Logout fontSize="small" />
-                  </ListItemIcon>
-                {t('GeneralLogout')}
-            </MenuItem>
-          </Menu>
-          <UserParamModal open={userParamModalOpen} changeOpen={setUserParamModalOpen} user={user} setUserInfo={setUserInfo} />
-          <UserRoomListModal open={userRoomListModalOpen} changeOpen={setUserRoomListModalOpen} user={user} joinRoomByRoomId={joinRoomByRoomId} />
+
+          {loggedIn && 
+            <>
+              <Tooltip title={t('ModalUserSettingsTitle')} sx={{ bgColor:'#30363c'}}>
+                <IconButton
+                  onClick={e => handleClickMenu(e)}
+                  size="small"  
+                  sx={{  color:'white', }}
+                  aria-controls={open ? 'account-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}
+                >
+                  <ReactSVG src={"./img/avatars/botts"+user.customDatas.avatarId+".svg"} className='userAvatar' />
+                </IconButton>
+              </Tooltip>
+                
+              <Menu
+                anchorEl={anchorEl}
+                id="account-menu"
+                open={open}
+                onClose={handleClose}
+                onClick={handleClose}
+                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                >
+                <MenuItem onClick={e => setUserParamModalOpen(true)}>
+                    <ListItemIcon>
+                      <TuneIcon fontSize="small" />
+                    </ListItemIcon>
+                    <Typography>
+                      {t('UserMenuMyProfile')} 
+                    </Typography>
+                </MenuItem>
+                <MenuItem onClick={e => setUserRoomListModalOpen(true)}>
+                    <ListItemIcon>
+                      <AppsIcon fontSize="small" />
+                    </ListItemIcon>
+                    <Typography>        
+                      {t('UserMenuMyRooms')} 
+                    </Typography>
+                </MenuItem>
+                <Divider />
+                <MenuItem onClick={e => handleLogout()}>
+                    <ListItemIcon>
+                    <Logout fontSize="small" />
+                      </ListItemIcon>
+                    {t('GeneralLogout')}
+                </MenuItem>
+              </Menu>
+              <UserParamModal open={userParamModalOpen} changeOpen={setUserParamModalOpen} user={user} setUserInfo={setUserInfo} />
+              <UserRoomListModal open={userRoomListModalOpen} changeOpen={setUserRoomListModalOpen} user={user} joinRoomByRoomId={joinRoomByRoomId} />
+            </>}
         </Box>
             
     )

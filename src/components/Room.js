@@ -17,7 +17,7 @@ import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
 import { v4 as uuid } from 'uuid';
-import {cleanMediaTitle,isFromSpotify,isFromDeezer,isUndefined,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, getYoutubeLocaleTrendsMusic, getLocale, isVarExist, isProdEnv, getLocStorVotes, setPageTitle, getPlayerSec, isDevEnv, secondsSinceEventFromNow, autoAddYTObject, randomInt} from '../services/utils';
+import {cleanMediaTitle,isFromSpotify,isFromDeezer,isUndefined,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, getYoutubeLocaleTrendsMusic, getLocale, isVarExist, isProdEnv, getLocStorVotes, setPageTitle, getPlayerSec, isDevEnv, secondsSinceEventFromNow, autoAddYTObject, randomInt, isVarExistNotEmpty} from '../services/utils';
 import RoomPlaylistDrawer from "./rooms/playlistSection/drawer/RoomPlaylistDrawer";
 
 import FirstPageIcon from '@mui/icons-material/FirstPage';
@@ -193,8 +193,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         setIsActuallyAdmin(currentUser.displayName === roomDatas.admin);
         setPlayerControlsShown(currentUser.displayName === roomDatas.admin);
         setRoomIsPlaying(roomDatas.actuallyPlaying);
-        initTutorial();
         setLoaded(true);
+        await initTutorial();
     }
 
     async function initRoom(roomDatas, roomId = '', create = true, currentUser, docRef = null) {
@@ -212,13 +212,14 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     
     // GET DOCUMENT ON INIT
 	useEffect(() => {
-        const initRoomFetchFirebase = async () => {
-            const firebaseRoom = await getDoc(roomRef);
-            var roomDatas = firebaseRoom.exists() ? firebaseRoom.data() : createDefaultRoomObject(roomId.toLowerCase(), currentUser);
-            initRoom(roomDatas, roomId.toLowerCase(), !firebaseRoom.exists(), currentUser, roomRef);
-        };
-
-        initRoomFetchFirebase();
+        if(isVarExistNotEmpty(roomId)) {
+            const initRoomFetchFirebase = async () => {
+                const firebaseRoom = await getDoc(roomRef);
+                var roomDatas = firebaseRoom.exists() ? firebaseRoom.data() : createDefaultRoomObject(roomId.toLowerCase(), currentUser);
+                initRoom(roomDatas, roomId.toLowerCase(), !firebaseRoom.exists(), currentUser, roomRef);
+            };
+            initRoomFetchFirebase();
+        }
 	}, [roomId]);
 
 
@@ -840,7 +841,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 }
                 </> 
             </>}
-            {!loaded && <Box className="loadingRoomInfo"> <SoundWave waveNumber={150} isPlayingOrNo={true} /><Typography  className="fontFamilyNunito"> Loading ..</Typography></Box>}
+            {!loaded && <Box className="loadingRoomInfo"> <SoundWave waveNumber={450} isPlayingOrNo={true} /><Typography  className="fontFamilyNunito"> Loading ..</Typography></Box>}
         </div>
     );
 };
