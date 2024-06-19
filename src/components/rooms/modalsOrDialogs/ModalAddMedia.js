@@ -151,7 +151,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                         showCursor={true}
                         backSpeed={15}
                         attr="placeholder"
-                        loop >
+                         >
                         <input
                             id="addMediaSearchInput"
                             className="input_big typed"
@@ -180,12 +180,12 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                 <Container sx={{padding:'0 !important'}} maxWidth={false}>
                     
                     <Typography variant="h6" sx={{mt:1, ml:1}} gutterBottom>
-                        Vidéos en tendances
+                        {t('GeneralSmthTrendings', {what:'Videos'})}
                     </Typography>
                     <YoutubeVideoSlider itemsArray={room.localeYoutubeTrends} addingObject={addingObject} addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject} />
 
                     <Typography variant="h6" sx={{mt:4, ml:1}} gutterBottom>
-                        Musiques en tendances
+                        {t('GeneralSmthTrendings', {what:t('GeneralMusic')})}
                     </Typography>
                     <YoutubeVideoSlider itemsArray={room.localeYoutubeMusicTrends} addingObject={addingObject} addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject} />
 

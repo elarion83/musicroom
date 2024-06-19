@@ -1,8 +1,7 @@
 import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
-
-import { Icon } from '@iconify/react';
+import i18n from "i18next";
 
 import { useSpringCarousel } from 'react-spring-carousel';
 
@@ -35,13 +34,13 @@ const Contentslider = () => {
                     <img alt="" src="../../../../img/icons_animated/menheandbanging.gif" className="mainIcon altIcon middle left small"/>
                     <img alt="" src="../../../../img/icons_animated/playlistadd.gif" className="mainIcon altIcon middle right small"/>
                     <Typography sx={{pl:2,pr:2,mb:3}} variant="h5" gutterBottom className='varelaFontTitle'>
-                        Une playlist en temps réel a plusieurs !
+                        {i18n.t('HomePageSlide1Title')}
                     </Typography>
                     <Typography sx={{pl:2,pr:2,mb:2,mt:3, color:'var(--white)'}} className='fontFamilyOpenSans'>
-                        Ajoutez des médias depuis <b>Spotify et Youtube</b> à une playlist collective lue en temps réel.
+                        {i18n.t('HomePageSlide1Text1')}
                     </Typography>
                     <Typography sx={{pl:2,pr:2,mt:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
-                        Votez, tchatez, réagissez et vibrez ensemble au rythme de votre playlist. <b>Entre potes, en soirée, en voiture, en voyage, ou au sport, Play-it est l'outil indispensable !</b>
+                        {i18n.t('HomePageSlide1Text2')}
                     </Typography>
                 </Box>,
             },
@@ -55,10 +54,10 @@ const Contentslider = () => {
                     <img alt="" src="../../../../img/icons_animated/bluetooth.gif" className="mainIcon altIcon middle right small"/>
 
                     <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
-                        En étant tous au même endroit ..
+                        {i18n.t('HomePageSlide2Title')}
                     </Typography>
                     <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
-                        <b>Idéal pour les soirées</b>, Play-it permet a chaque convive d'ajouter sa musique ou sa vidéo à la suite de la playlist, <b>plus besoin d'utiliser le téléphone de l'hôte de la soirée !</b>
+                        {i18n.t('HomePageSlide2Text')}
                     </Typography>
                 </Box>,
             },
@@ -72,13 +71,13 @@ const Contentslider = () => {
                     <img alt="" src="../../../../img/icons_animated/pin2.gif" className="mainIcon altIcon left small"/>
                     <img alt="" src="../../../../img/icons_animated/pin3.gif" className="mainIcon altIcon right small"/>
                     <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
-                        .. ou en étant chacun chez soi
+                        {i18n.t('HomePageSlide3Title')}
                     </Typography>
                     <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
-                        Vibre au même rythme que tes potes <b>à des endroits différents</b> de la planète ! 
+                        {i18n.t('HomePageSlide3Text1')}
                     </Typography>
                     <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
-                        <b>En voyage, chacun dans sa voiture, chacun chez soi</b> en révisant ou en mattant les dernières vidéos youtube sous la couette !
+                        {i18n.t('HomePageSlide3Text2')}
                     </Typography>
                 </Box>,
             },
@@ -90,13 +89,13 @@ const Contentslider = () => {
                     <img alt="" src="../../../../img/icons_animated/music_note.gif" className="mainIcon altIcon left small"/>
                     <img alt="" src="../../../../img/icons_animated/speakers.gif" className="mainIcon altIcon right small"/>
                     <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
-                        Une playlist.. et bien plus !
+                        {i18n.t('HomePageSlide4Title')}
                     </Typography>
                     <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
-                        Grâce au <b>chat, aux émoticones et aux votes</b>, les membres de la playlist font partie intégrante de l'ambiance !
+                        {i18n.t('HomePageSlide4Text1')}
                     </Typography>
                     <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
-                        Retrouvez et relisez les playlist qui vous on plu grâce à la <b>lecture désynchronisée</b> !
+                        {i18n.t('HomePageSlide4Text2')}
                     </Typography>
                 </Box>,
             },

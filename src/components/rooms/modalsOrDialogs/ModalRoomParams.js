@@ -134,7 +134,7 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
                         </Alert>
                     */}
 
-                    {!roomParams.spotify.IsLinked &&
+                    {roomParams.spotify.IsLinked &&
                         <Button
                             sx={{ bgcolor: '#1ed760', mb:3 }}
                             startIcon={<Icon style={{ display: 'inline', color: 'white', marginRight: '0.5em' }} icon="mdi:spotify" />}

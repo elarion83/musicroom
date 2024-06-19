@@ -24,12 +24,12 @@ import { PseudoGenerated } from './services/pseudoGenerator';
 
 import { CreateGoogleAnalyticsEvent } from './services/googleAnalytics';
 import { GFontIcon } from "./services/utils";
-import {replaceCurrentUrlWithHomeUrl, replaceCurrentUrlWithRoomUrl, replaceCurrentUrlWithRoomUrlForDeezer, replaceCurrentUrlWithRoomUrlForSpotify} from './services/redirects';
+import {replaceCurrentUrlWithHomeUrl, replaceCurrentUrlWithRoomUrl } from './services/redirects';
 
 import { withTranslation } from 'react-i18next';
 import { createUserDataObject } from "./services/utilsArray";
 import { browserLocalPersistence, createUserWithEmailAndPassword, getAdditionalUserInfo, onAuthStateChanged, setPersistence, signInAnonymously, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
-import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import {  doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { getCleanRoomId } from "./services/utilsRoom";
 function App( {t} ) {
   
@@ -44,8 +44,8 @@ function App( {t} ) {
   const [funcAfterLogin, setFuncAfterLogin] = useState('');
 
   // room infos
-	const queryParameters = new URLSearchParams(window.location.search);
   const [roomId, setRoomId] = useState(window.location.pathname.substring(1).length === 5 ? window.location.pathname.substring(1) : replaceCurrentUrlWithHomeUrl());
+
   // user infos
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [userInfos, setUserInfo] = useState({});
@@ -59,19 +59,12 @@ function App( {t} ) {
   const [loginOkSnackBarOpen, setLoginOkSnackBarOpen] = useState(false);
   const [logoutOkSnackBarOpen, setLogoutOkSnackBarOpen] = useState(false);
 
-
-/*
   useEffect(() => {
-      const hash = window.location.hash
-      if (hash) {
-          var token_spotify = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
-          if(localStorage.getItem("Play-It_RoomId")) {
-            joinRoomByRoomId(localStorage.getItem("Play-It_RoomId"));
-            replaceCurrentUrlWithRoomUrlForSpotify(localStorage.getItem("Play-It_RoomId"), token_spotify);
-          }
+      if(localStorage.getItem("Play-It_RoomId")) {
+        joinRoomByRoomId(localStorage.getItem("Play-It_RoomId"));
       }
   })
-*/
+
   function createNewRoom() {
     var newRoomId = getCleanRoomId();
     joinRoomByRoomId(newRoomId, true);
@@ -118,7 +111,7 @@ function App( {t} ) {
    * END-LOGIN-FUNCTION finishAuthProcess()
    * CALLBACK AFTER LOGIN : doActionAfterLogin()
    * 
-   * LOGIN HELPERS
+   * LOGIN HELPERS //
    * LOGIN-FAILED-HELPER setLoginFailed()
   */
 
@@ -269,7 +262,7 @@ function App( {t} ) {
       <Container maxWidth={false} className={roomId ? 'main_container' : 'main_container homecontainer'} sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
          <AppBar className={roomId ? stickyDisplay ? 'topBarIsInRoomSticky' : 'topBarIsInRoom' : 'topBarClassic'} position="static" sx={{bgcolor: '#202124'}}>
             <Toolbar>
-              <img src="img/logo_py1.png" style={{ width: 'auto', maxWidth:'50%', maxHeight:'30px'}} alt="Play-It logo"/>
+               <img src="img/logo_py1.png" style={{ width: 'auto', maxWidth:'50%', maxHeight:'30px'}} alt="Play-It logo"/>
                 <UserTopBar loggedIn={isSignedIn} user={userInfos} setUserInfo={setUserInfoEdit} joinRoomByRoomId={joinRoomByRoomId} handleOpenLoginModal={setLoginModalOpen} handleLogout={logOut} />
             </Toolbar>
           </AppBar>
@@ -331,7 +324,7 @@ function App( {t} ) {
           autoHideDuration={3000}
           onClose={() => setLoginNewUserOkSnackBarOpen(false)}
           sx={{borderRadius:'2px'}}
-          message={t('GeneralSnackWelcome') +' '+ userInfos.displayName+", 1e connexion !"}
+          message={t('GeneralSnackWelcome') +' '+ userInfos.displayName+", 1e "+ t('GeneralLogin').toLowerCase()}
         />
         <Snackbar
           open={logoutOkSnackBarOpen}

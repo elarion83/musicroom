@@ -104,6 +104,15 @@
     .interactiveLayout+.room_bottom_interactions {
         width: 60%;
     }
+    
+    .defaultLayout .player_button_container,
+    .defaultLayout .player_button_container .adminButtons ,
+    .defaultLayout .player_button_container button{
+        padding-top: 0;
+    }
+    .defaultLayout .player_button_container .adminButtons .volumeButton {
+        margin-top: 0;
+    }
 }
 @media (max-width: 500px) { 
 

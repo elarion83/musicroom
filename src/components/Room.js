@@ -1,9 +1,8 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from "react";
-import { database, db } from "../services/firebase";
+import {  db } from "../services/firebase";
 import { doc, getDoc, onSnapshot, setDoc, updateDoc } from 'firebase/firestore';
-import { getDatabase, onValue, ref, set } from "firebase/database";
 import { useIdleTimer } from 'react-idle-timer'
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
@@ -16,12 +15,8 @@ import axios from "axios";
 import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
-import { v4 as uuid } from 'uuid';
-import {cleanMediaTitle,isFromSpotify,isFromDeezer,isUndefined,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, getYoutubeLocaleTrendsMusic, getLocale, isVarExist, isProdEnv, getLocStorVotes, setPageTitle, getPlayerSec, isDevEnv, secondsSinceEventFromNow, autoAddYTObject, randomInt, isVarExistNotEmpty} from '../services/utils';
+import {isFromSpotify,isFromDeezer,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, isVarExist,  isDevEnv, secondsSinceEventFromNow, autoAddYTObject, randomInt, isVarExistNotEmpty} from '../services/utils';
 import RoomPlaylistDrawer from "./rooms/playlistSection/drawer/RoomPlaylistDrawer";
-
-import FirstPageIcon from '@mui/icons-material/FirstPage';
-import LastPageIcon from '@mui/icons-material/LastPage';
 
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
@@ -72,7 +67,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     const [localData] = useState({domain:window.location.hostname, currentUserVotes:{up:[], down:[]} });
 
     // sticky toolbar
-    const [scrollFromTopTrigger] = useState(window.screen.height/6);
+    const [scrollFromTopTrigger] = useState(window.screen.height/4);
     const [isShowSticky, setIsShowSticky] = useState(false);
 
     useEffect(() => {
@@ -288,10 +283,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         .then(function (musicResponse) {
                             updateFirebaseRoom( roomRef , {localeYoutubeMusicTrends: musicResponse.data.items});
                         })
-                        .catch(function (error) {
-                        });
-                    })
-                    .catch(function (error) {
                     });
                 }
             }

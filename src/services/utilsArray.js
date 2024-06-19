@@ -69,12 +69,7 @@ export const shareArray = {
 }
 
 export function searchTextArray() {
-    return [i18n.t('GeneralSearchOn') + ' YOUTUBE, SPOTIFY',
-    'CHERCHE UNE MUSIQUE, UN CLIP, UN TUTO',
-    'UNE VIDEO DE DOMINGO, SQUEEZIE, AMINEMATUE',
-    'UN LIEN SOUNCLOUND OU YOUTUBE',
-    'HTTPS://WWW.YOUTUBE.COM/WATCH?V=MAVIDEO',
-    'HTTPS://SOUNDCLOUD.COM/THOMS-12/EBRIUS'];
+    return [i18n.t('GeneralSearchOn') + ' YOUTUBE'];
 }
 
 export const playerRefObject = {
