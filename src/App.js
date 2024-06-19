@@ -32,6 +32,7 @@ import { withTranslation } from 'react-i18next';
 import { createUserDataObject } from "./services/utilsArray";
 import { browserLocalPersistence, createUserWithEmailAndPassword, getAdditionalUserInfo, onAuthStateChanged, setPersistence, signInAnonymously, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { getCleanRoomId } from "./services/utilsRoom";
 function App( {t} ) {
   
 
@@ -45,14 +46,12 @@ function App( {t} ) {
   const [funcAfterLogin, setFuncAfterLogin] = useState('');
 
   // room infos
-	const queryParameters = new URLSearchParams(window.location.search)
-  const [roomId, setRoomId] = useState(queryParameters.get("rid") ? queryParameters.get("rid") : '');
-
+	const queryParameters = new URLSearchParams(window.location.search);
+  const [roomId, setRoomId] = useState(window.location.pathname.substring(1).length === 5 ? window.location.pathname.substring(1) : '');
   // user infos
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [userInfos, setUserInfo] = useState({});
-  
-  
+    
   // modal statuts
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [joinRoomModalOpen, setJoinRoomModalOpen] = useState(false);
@@ -62,6 +61,8 @@ function App( {t} ) {
   const [loginOkSnackBarOpen, setLoginOkSnackBarOpen] = useState(false);
   const [logoutOkSnackBarOpen, setLogoutOkSnackBarOpen] = useState(false);
 
+
+/*
   useEffect(() => {
       const hash = window.location.hash
       if (hash) {
@@ -72,20 +73,24 @@ function App( {t} ) {
           }
       }
   })
-
+*/
   function createNewRoom() {
-    var newRoomId = uuid().slice(0,5).toLowerCase()
-    joinRoomByRoomId(newRoomId);
+    var newRoomId = getCleanRoomId();
+    joinRoomByRoomId(newRoomId, true);
 
     CreateGoogleAnalyticsEvent('Actions','Création playlist','Playlist id :'+newRoomId);
   }
 
-  function joinRoomByRoomId(idRoom) {
-    setRoomId(idRoom.toLowerCase().trim());
-    replaceCurrentUrlWithRoomUrl(idRoom.toLowerCase().trim());
-    setPageTitle('Playlist ' + idRoom + ' - Play-It');
-    setJoinRoomModalOpen(false);
-    CreateGoogleAnalyticsEvent('Actions','Rejoin. playlist','Playlist id :'+idRoom);
+  function joinRoomByRoomId(idRoom, isAfterCreation = false) {
+    setRoomId(idRoom);
+    
+    replaceCurrentUrlWithRoomUrl(idRoom);
+    localStorage.setItem("Play-It_RoomId", idRoom);
+
+    if(!isAfterCreation) {
+      setJoinRoomModalOpen(false);
+      CreateGoogleAnalyticsEvent('Actions','Rejoin. playlist','Playlist id :'+idRoom);
+    }
   }
   
     useEffect(() => {
@@ -287,15 +292,21 @@ function App( {t} ) {
                 <Button variant="outlined" size="small" target="_blank" href="http://dev.play-it.fr/back/play-it-android.apk" className='varelaFontTitle buttonBorder' sx={{width:'100%',transform:'scale(0.8)',color:'var(--white)',bgcolor:'var(--grey-dark)', height:'50px', mt:'2em', mb:'2em'}} 
                 > 
                   {<GFontIcon icon="install_mobile"/>}
-                  <Typography variant="button" sx={{pl:2}}> TELECHARGER L'APPLICATION </Typography>
+                  <Typography variant="button" sx={{pl:2, textTransform:'uppercase'}}> {t('GeneralDownloadAPK')} </Typography>
                 </Button> 
                     <JoinRoomModal open={joinRoomModalOpen} changeOpen={setJoinRoomModalOpen} handleJoinRoom={joinRoomByRoomId} />
               
                 </Container>
             </Box>
           }
-        {roomId && isSignedIn && <Room currentUser={userInfos} className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain} setStickyDisplay={setStickyDisplay}></Room>}
-
+        {roomId && 
+          <>
+            {isSignedIn && 
+                <Room currentUser={userInfos} className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain} setStickyDisplay={setStickyDisplay}></Room>
+           
+            }
+          </>
+        }
         {!isSignedIn && (roomId || loginModalOpen) && 
         <LoginModal 
           open={true} 

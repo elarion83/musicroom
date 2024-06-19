@@ -50,11 +50,12 @@ import EmptyPlaylist from "./rooms/playlistSection/EmptyPlaylist";
 import { Icon } from "@iconify/react";
 import { Forward10, Replay10 } from "@mui/icons-material";
 import { emptyToken, interactionObject, playerRefObject, youtubeApiSearchObject, youtubeApiVideosParams } from "../services/utilsArray";
-import { playedSeconds, playerNotSync } from "../services/utilsRoom";
+import { playedSeconds, playerNotSync, updateFirebaseRoom } from "../services/utilsRoom";
 import ModalChangeRoomAdmin from "./rooms/modalsOrDialogs/ModalChangeRoomAdmin";
 import RoomTutorial from "./rooms/RoomTutorial";
 import { mockYoutubeMusicResult, mockYoutubeTrendResult } from "../services/mockedArray";
 import SoundWave from "../services/SoundWave";
+import { useParams } from "react-router-dom";
 
 const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
@@ -187,15 +188,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         }
     }
 
-    async function initRoomAsync(roomDatas, currentUser) {
-        setRoom(roomDatas);
-        setPlayerIdPlayed(roomDatas.playing);
-        setIsActuallyAdmin(currentUser.displayName === roomDatas.admin);
-        setPlayerControlsShown(currentUser.displayName === roomDatas.admin);
-        setRoomIsPlaying(roomDatas.actuallyPlaying);
-        setLoaded(true);
-        await initTutorial();
-    }
 
     async function initRoom(roomDatas, roomId = '', create = true, currentUser, docRef = null) {
         if(create) {
@@ -206,8 +198,14 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         }
     }
 
-    async function updateFirebaseRoom(newRoomDatas, merge = true) {
-        await updateDoc(roomRef, newRoomDatas);
+    async function initRoomAsync(roomDatas, currentUser) {
+        setRoom(roomDatas);
+        setPlayerIdPlayed(roomDatas.playing);
+        setIsActuallyAdmin(currentUser.uid === roomDatas.adminUid);
+        setPlayerControlsShown(currentUser.uid === roomDatas.adminUid);
+        setRoomIsPlaying(roomDatas.actuallyPlaying);
+        setLoaded(true);
+        await initTutorial();
     }
     
     // GET DOCUMENT ON INIT
@@ -242,7 +240,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
                     setRoomInteractionsArray(roomDataInFb.interactionsArray);
                    
-                    setIsActuallyAdmin(roomDataInFb.admin == currentUser.displayName);
+                    setIsActuallyAdmin(roomDataInFb.adminUid == currentUser.uid);
                     setRoom(roomDataInFb);
                 });
             } else {
@@ -274,7 +272,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         if(loaded) {
             if(room.localeYoutubeTrends.length < 1) {
                 if(isDevEnv()) {
-                    updateFirebaseRoom({
+                    updateFirebaseRoom( roomRef , {
                         localeYoutubeTrends: mockYoutubeTrendResult,
                         localeYoutubeMusicTrends: mockYoutubeMusicResult});
                     return
@@ -283,13 +281,13 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         params: youtubeApiVideosParams('0', 6, 'snippet,contentDetails') 
                     })
                     .then(function (response) {
-                        updateFirebaseRoom({localeYoutubeTrends: response.data.items});
+                        updateFirebaseRoom( roomRef , {localeYoutubeTrends: response.data.items});
                         
                         axios.get(process.env.REACT_APP_YOUTUBE_VIDEOS_URL, { 
                             params: youtubeApiVideosParams('10', 6, 'snippet,contentDetails')
                             })
                         .then(function (musicResponse) {
-                            updateFirebaseRoom({localeYoutubeMusicTrends: musicResponse.data.items});
+                            updateFirebaseRoom( roomRef , {localeYoutubeMusicTrends: musicResponse.data.items});
                         })
                         .catch(function (error) {
                         });
@@ -308,7 +306,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     async function setIsPlaying(PlayingOrNot) {
         setRoomIsPlaying(PlayingOrNot);
         if(isActuallyAdmin) {
-           updateFirebaseRoom({actuallyPlaying: PlayingOrNot})
+           updateFirebaseRoom( roomRef , {actuallyPlaying: PlayingOrNot})
         }
     }
     
@@ -318,7 +316,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         await delay(250);
         setPlayerIdPlayed(idPlaying);
         if(isActuallyAdmin) {
-           updateFirebaseRoom({
+           updateFirebaseRoom( roomRef , {
                 playing: idPlaying,
                 mediaActuallyPlayingAlreadyPlayedData:{
                     playedSeconds:0
@@ -333,7 +331,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
             if(Math.floor(event.played*100) > 90 && room.roomParams.isAutoPlayActivated && !mediaIndexExist(room.playlistUrls,playerIdPlayed+1)) {
                 addMediaForAutoPlayByYoutubeId(room.playlistUrls[playerIdPlayed].title);
             }
-            updateFirebaseRoom({
+            updateFirebaseRoom( roomRef , {
                 mediaActuallyPlayingAlreadyPlayedData:{
                     playedSeconds:event.playedSeconds,
                     playedPercentage:event.played*100,
@@ -364,12 +362,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     });
     
     async function disconnectSpotify() {
-        updateFirebaseRoom({roomParams:{spotify:emptyToken}});
+        updateFirebaseRoom( roomRef , {roomParams:{spotify:emptyToken}});
         setOpenForceDisconnectSpotifyModal(false);
     }
 
     async function disconnectDeezer() {
-        updateFirebaseRoom({roomParams:{deezer:emptyToken}});
+        updateFirebaseRoom( roomRef , {roomParams:{deezer:emptyToken}});
         setOpenForceDisconnectDeezerModal(false);
     }
 
@@ -377,7 +375,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         
         CreateGoogleAnalyticsEvent('Actions','Playlist Interaction','Playlist '+roomId+' - '+type);
         roomInteractionsArray.push(interactionObject(currentUser, type));
-        updateFirebaseRoom({interactionsArray: room.interactionsArray});
+        updateFirebaseRoom( roomRef , {interactionsArray: room.interactionsArray});
 
         setUserCanMakeInteraction(false);
         await delay(room.roomParams.interactionFrequence);
@@ -414,7 +412,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     function handleQuitRoomInComp() {
         room.notifsArray.push({type: 'userLeaved', timestamp: Date.now(), createdBy: currentUser.displayName});
-        updateFirebaseRoom({notifsArray: room.notifsArray});
+        updateFirebaseRoom( roomRef , {notifsArray: room.notifsArray});
         handleQuitRoom();
     }
 
@@ -423,7 +421,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         validatedObjectToAdd.timestamp = Date.now();
         room.playlistUrls.push(validatedObjectToAdd);
         room.playlistEmpty = false;
-        updateFirebaseRoom({playlistUrls: room.playlistUrls, playlistEmpty: false});
+        updateFirebaseRoom( roomRef , {playlistUrls: room.playlistUrls, playlistEmpty: false});
     }
 
     function handleChangeIdShownInDrawer(idToShow) {
@@ -437,18 +435,18 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
         if(!localData.currentUserVotes[voteType].includes(mediaHashId)) {
             localData.currentUserVotes[voteType].push(mediaHashId);
-            updateFirebaseRoom({playlistUrls: room.playlistUrls});
+            updateFirebaseRoom( roomRef , {playlistUrls: room.playlistUrls});
             localStorage.setItem("Play-It_UserInfoVotes",  JSON.stringify(localData.currentUserVotes));
         }
     }
 
     function handleRemoveMediaFromPlaylist(indexToRemove) {
         room.playlistUrls.splice(indexToRemove, 1);
-        updateFirebaseRoom({playlistUrls: room.playlistUrls});
+        updateFirebaseRoom( roomRef , {playlistUrls: room.playlistUrls});
     }
 
     function handleChangeRoomParams(newParams) {
-        updateFirebaseRoom({roomParams: newParams});
+        updateFirebaseRoom( roomRef , {roomParams: newParams});
     }
 
     useEffect(() => {
@@ -474,7 +472,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 UserConnected:currentUser.displayName
             }
         };
-        updateFirebaseRoom({roomParams:obj});
+        updateFirebaseRoom( roomRef , {roomParams:obj});
         window.history.replaceState('string','', window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '')+'?rid='+roomId.replace(/\s/g,''));
     }
 
@@ -505,7 +503,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     async function SpotifyPlayerCallBack(e){
         if(e.errorType === 'account_error') {
             room.notifsArray.push({type: 'AccNotPremium', timestamp: Date.now(), createdBy: currentUser.displayName});
-            updateFirebaseRoom({notifsArray: room.notifsArray}); 
+            updateFirebaseRoom( roomRef , {notifsArray: room.notifsArray}); 
             disconnectSpotify();
         }
 
@@ -539,7 +537,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     async function changeAdmin() {
         room.notifsArray.push({type: 'changeAdmin', timestamp: Date.now(), createdBy: currentUser.displayName});
-        updateFirebaseRoom({notifsArray: room.notifsArray, admin: currentUser.displayName}); 
+        updateFirebaseRoom( roomRef , {notifsArray: room.notifsArray, admin: currentUser.displayName, adminUid: currentUser.uid}); 
         setOpenRoomDrawer(false);
     }
     return (

@@ -11,6 +11,7 @@ import { withTranslation } from 'react-i18next';
 import ModalsHeader from "./ModalsHeader";
 import { timestampToDateoptions } from "../../../services/utilsArray";
 import { collection, query, where, getDocs } from "firebase/firestore";
+import { getCleanRoomId } from "../../../services/utilsRoom";
 
 const UserRoomListModal = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
 
@@ -64,7 +65,7 @@ const UserRoomListModal = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
 
                         var createdDate = new Date(room.creationTimeStamp).toLocaleDateString('fr-FR', timestampToDateoptions);
                         return(
-                        <Box title={t('ModalUserRoomListJoinRoomText')} onClick={(e) => joinRoomByRoomIdInComp(room.id)} key={key} 
+                        <Box title={t('ModalUserRoomListJoinRoomText')} onClick={(e) => joinRoomByRoomIdInComp(getCleanRoomId(room.id))} key={key} 
                         sx={{mb:1, p:1,justifyContent:'start',position:'relative', overflow:'hidden',boxShadow: 2,minWidth:'350px', cursor:'pointer',bgcolor:'var(--main-color)',border:'1px solid var(--grey-light)', borderRadius:'4px'}}>
                             <QueueMusicIcon className="iconPlaylistList" fontSize="small" sx={{mr:1}} />
                             <Typography fontSize='medium' sx={{textTransform: 'uppercase',color:'var(--white)'}}> 

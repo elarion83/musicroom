@@ -41,6 +41,7 @@ const resources = {
         "GeneralSnackWelcome" : "Welcome",
         "GeneralSnackSeeYouSoon" : "See you soon !",
         "GeneralNickname" : "Nickname",
+        "GeneralDownloadAPK" : "Get Android APP",
         
         "UserMenuMyProfile" : "My profile",
         "UserMenuMyRooms" : "My playlists",
@@ -173,6 +174,7 @@ const resources = {
         "GeneralSnackWelcome" : "Bienvenue",
         "GeneralSnackSeeYouSoon" : "A bientôt !",
         "GeneralNickname" : "Pseudo",
+        "GeneralDownloadAPK" : "Télécharger l'app Android",
         
         
         "UserMenuMyProfile" : "Mon profil",

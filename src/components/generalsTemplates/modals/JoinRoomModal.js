@@ -8,6 +8,7 @@ import { LoadingButton } from '@mui/lab';
 import { withTranslation } from 'react-i18next';
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 import ModalsHeader from './ModalsHeader';
+import { getCleanRoomId } from '../../../services/utilsRoom';
 
 const JoinRoomModal = ({ t, open, handleJoinRoom, changeOpen}) => {
     const [value, onChange] = React.useState('');
@@ -23,7 +24,7 @@ const JoinRoomModal = ({ t, open, handleJoinRoom, changeOpen}) => {
     React.useEffect(() => {   
         if(digits[0].value !== '' && digits[1].value !== '' && digits[2].value !== '' && digits[3].value !== '' && digits[4].value !== '') {
             setIsJoining(true);
-            handleJoinRoom(value.toLowerCase());
+            handleJoinRoom(getCleanRoomId(value));
         }
     }, [value]);
     
