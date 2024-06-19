@@ -168,7 +168,6 @@ export function isUndefined(val) {
 }
 
 export function isEmpty(val) {
-    console.log(val.length);
     return val.length == 0;
 }
 
