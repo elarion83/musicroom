@@ -67,7 +67,7 @@ const BottomInteractions = ({ t,roomRef, layoutDisplay, setLayoutdisplay, paramD
                 </Tooltip>
 
                 <Tooltip ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUp animate__delay-1s' title={t('RoomLeftMenuRoomParams')}>  
-                    <Badge invisible={roomParams.spotify.IsLinked} variant="dot" sx={{'& .MuiBadge-badge': {
+                    <Badge invisible={!roomParams.spotify.IsLinked} variant="dot" sx={{'& .MuiBadge-badge': {
                             right:'10px',
                             bgcolor:'var(--red-2)',
                             zIndex:10000

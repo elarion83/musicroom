@@ -3,6 +3,10 @@ body,html {
   padding: 0 !important;
 }
 
+.colorBlue {
+  color: var(--blue-light) !important;
+}
+
 #root > div {
     overflow-x: hidden;
     max-width: 100vw;

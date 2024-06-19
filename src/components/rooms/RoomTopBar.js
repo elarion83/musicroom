@@ -73,7 +73,7 @@ const RoomTopBar = ({
                         </ListItemButton>
                     </ListItem>
                     
-                    <ListItem key='roomDrawSpotifyStatus' disablePadding>
+                   {/* <ListItem key='roomDrawSpotifyStatus' disablePadding>
                         <ListItemButton onClick={e => handleOpenRoomParamModal(true)}>
                             <ListItemIcon>
                                 <Badge invisible={isLinkedToSpotify} variant="dot" 
@@ -87,7 +87,7 @@ const RoomTopBar = ({
                             <Typography>Spotify {isLinkedToSpotify ? t('GeneralLinked') : t('GeneralNotLinked')}</Typography>
                         </ListItemButton>
                     </ListItem>
-
+                    */}
                     
                     {!isAdminView && <ListItem key='roomDrawSync' disablePadding onClick={(e) => setGuestSynchroOrNot(!guestSynchroOrNot)}>
                         <ListItemButton>
@@ -163,14 +163,14 @@ const RoomTopBar = ({
                 <ListItem key='playlistDrawAPK' disablePadding>
                     <ListItemButton href={process.env.REACT_APP_FRONT_HOME_URL+"/play-it.apk"}>
                         <ListItemIcon>
-                            {<GFontIcon icon="install_mobile"/>}
+                            {<GFontIcon icon="install_mobile" customClass='colorBlue'/>}
                         </ListItemIcon> 
-                        <Typography>Télécharger l'APK</Typography>
+                        <Typography>{t('GeneralDownloadAPK')}</Typography>
                     </ListItemButton>
                 </ListItem>
             </SwipeableDrawer>
             <Tooltip  className='animate__animated animate__fadeInLeft animate__delay-1s animate__fast' title={t('RoomLeftMenuRoomParams')} sx={{ bgColor:'#30363c'}}>
-                <Badge invisible={isLinkedToSpotify && isLinkedToDeezer} variant="dot" sx={{zIndex:'1200','& .MuiBadge-badge': {
+                <Badge invisible={!isLinkedToSpotify && !isLinkedToDeezer} variant="dot" sx={{zIndex:'1200','& .MuiBadge-badge': {
                     right:'10px',
                     bgcolor:'var(--red-2)'
                 }}} >
