@@ -7,8 +7,6 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
-import axios from "axios";
-import { v4 as uuid } from 'uuid';
 
 import { Icon } from '@iconify/react';
 import LoginModal from './components/generalsTemplates/modals/LoginModal';
@@ -25,7 +23,7 @@ import { Snackbar, Typography } from "@mui/material";
 import { PseudoGenerated } from './services/pseudoGenerator';
 
 import { CreateGoogleAnalyticsEvent } from './services/googleAnalytics';
-import { GFontIcon, delay, getRandomHexColor, isEmpty, randomInt, setPageTitle } from "./services/utils";
+import { GFontIcon } from "./services/utils";
 import {replaceCurrentUrlWithHomeUrl, replaceCurrentUrlWithRoomUrl, replaceCurrentUrlWithRoomUrlForDeezer, replaceCurrentUrlWithRoomUrlForSpotify} from './services/redirects';
 
 import { withTranslation } from 'react-i18next';
@@ -47,7 +45,7 @@ function App( {t} ) {
 
   // room infos
 	const queryParameters = new URLSearchParams(window.location.search);
-  const [roomId, setRoomId] = useState(window.location.pathname.substring(1).length === 5 ? window.location.pathname.substring(1) : '');
+  const [roomId, setRoomId] = useState(window.location.pathname.substring(1).length === 5 ? window.location.pathname.substring(1) : replaceCurrentUrlWithHomeUrl());
   // user infos
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [userInfos, setUserInfo] = useState({});
@@ -82,9 +80,9 @@ function App( {t} ) {
   }
 
   function joinRoomByRoomId(idRoom, isAfterCreation = false) {
-    setRoomId(idRoom);
+    setRoomId(getCleanRoomId(idRoom));
     
-    replaceCurrentUrlWithRoomUrl(idRoom);
+    replaceCurrentUrlWithRoomUrl(getCleanRoomId(idRoom));
     localStorage.setItem("Play-It_RoomId", idRoom);
 
     if(!isAfterCreation) {
@@ -195,13 +193,14 @@ function App( {t} ) {
     switch(funcAfterLogin) {
       case 'createRoom':
         createNewRoom();
+        setFuncAfterLogin('');
         break;
       case 'joinRoom':
         setJoinRoomModalOpen(true);
+        setFuncAfterLogin('');
         break;
       default:
     }
-    setFuncAfterLogin('');
   }
 
   /* LOGIN-FAILED-HELPER */
@@ -289,7 +288,7 @@ function App( {t} ) {
                     <Icon icon="icon-park-outline:connect"  width="30" style={{marginRight:'20px'}}/>
                     <Typography variant="button" sx={{pt:'3px'}}>{t('HomePageButtonsJoinRoom')} </Typography>
                 </Button> 
-                <Button variant="outlined" size="small" target="_blank" href="http://dev.play-it.fr/back/play-it-android.apk" className='varelaFontTitle buttonBorder' sx={{width:'100%',transform:'scale(0.8)',color:'var(--white)',bgcolor:'var(--grey-dark)', height:'50px', mt:'2em', mb:'2em'}} 
+                <Button variant="outlined" size="small" target="_blank" href={process.env.REACT_APP_FRONT_HOME_URL+"/play-it.apk"} className='varelaFontTitle buttonBorder' sx={{width:'100%',transform:'scale(0.8)',color:'var(--white)',bgcolor:'var(--grey-dark)', height:'50px', mt:'2em', mb:'2em'}} 
                 > 
                   {<GFontIcon icon="install_mobile"/>}
                   <Typography variant="button" sx={{pl:2, textTransform:'uppercase'}}> {t('GeneralDownloadAPK')} </Typography>

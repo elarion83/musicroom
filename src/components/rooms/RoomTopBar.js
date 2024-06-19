@@ -161,7 +161,7 @@ const RoomTopBar = ({
 
                 <Divider  sx={{mt:5, mb:1}}/>
                 <ListItem key='playlistDrawAPK' disablePadding>
-                    <ListItemButton href="http://dev.play-it.fr/back/play-it-android.apk">
+                    <ListItemButton href={process.env.REACT_APP_FRONT_HOME_URL+"/play-it.apk"}>
                         <ListItemIcon>
                             {<GFontIcon icon="install_mobile"/>}
                         </ListItemIcon> 
