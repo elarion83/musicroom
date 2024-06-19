@@ -1,4 +1,3 @@
-import { redirect, useNavigate } from "react-router-dom";
 import { getCleanRoomId } from "./utilsRoom";
 
 export const homeUrl = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
