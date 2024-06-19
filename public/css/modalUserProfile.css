@@ -4,7 +4,7 @@
     width: 110px;
     height: 110px;
     display: flex;
-    margin: 1em auto 2em auto;
+    margin: 1em auto 1em auto;
     border-radius: 50%;
 	-webkit-animation: rotate-scale-up 1s ease-in-out both;
 	        animation: rotate-scale-up 1s ease-in-out both;

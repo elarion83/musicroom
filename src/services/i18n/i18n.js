@@ -30,6 +30,7 @@ const resources = {
         "GeneralStatus":'Status',
         "GeneralPlaying":'Playing',
         "GeneralPause":'Paused',
+        "GeneralLoading":'Loading..',
         "GeneralAddedBy":'Added by',
         "GeneralNotLinked" : " not linked",
         "GeneralLinked" : " linked",
@@ -43,6 +44,8 @@ const resources = {
         
         "UserMenuMyProfile" : "My profile",
         "UserMenuMyRooms" : "My playlists",
+        "UserMemberSince" : "Member since",
+        "UserMemberLastLogin" : "Last login on",
 
         "HomePageButtonsCreateRoom" : "Create a playlist",
         "HomePageButtonsJoinRoom" : "Join a playlist",
@@ -157,6 +160,7 @@ const resources = {
         "GeneralStatus":'Statut',
         "GeneralPlaying":'En lecture',
         "GeneralPause":'En Pause',
+        "GeneralLoading":'Chargement..',
         "GeneralAddedBy":'Ajouté par',
         "GeneralNotLinked" : " non relié",
         "GeneralLinked" : " relié",
@@ -173,6 +177,8 @@ const resources = {
         
         "UserMenuMyProfile" : "Mon profil",
         "UserMenuMyRooms" : "Mes playlists",
+        "UserMemberSince" : "Membre depuis le",
+        "UserMemberLastLogin" : "Dernière connexion le",
 
         "HomePageButtonsCreateRoom" : "Créer une playlist",
         "HomePageButtonsJoinRoom" : "Rejoindre une playlist",

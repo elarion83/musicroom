@@ -15,13 +15,10 @@ const ModalLeaveRoom = ({ t, open, changeOpen, handleQuitRoom }) => {
             <ModalsHeader icon={() => <ExitToAppIcon />} title={t('ModalLeaveRoomTitle')} />
 
             <DialogContent dividers>
-                <DialogContentText className='fontFamilyNunito'>
-
-                    <Alert severity="info">
-                        <AlertTitle sx={{fontWeight:"bold"}}>{t('ModalLeaveRoomTitle')} ?</AlertTitle>
-                        {t('ModalLeaveRoomText')}
-                    </Alert>
-                </DialogContentText>
+                <Alert severity="info">
+                    <AlertTitle sx={{fontWeight:"bold"}}>{t('ModalLeaveRoomTitle')} ?</AlertTitle>
+                    {t('ModalLeaveRoomText')}
+                </Alert>
             </DialogContent>
             <DialogActions>
                 <Button variant="outlined" onClick={(e) => handleQuitRoom()}>

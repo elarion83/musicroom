@@ -118,5 +118,5 @@ background-color:rgba(255, 255, 255, 0.1) !important;
 }
 
 .loadingRoomInfo .soundWaveContainer .box {
-    background: linear-gradient(to top, rgba(0, 123, 255, 0) 10%,rgb(0, 123, 255) 50%,rgb(0, 123, 255) 70%, rgba(0, 123, 255, 0));
+    background: linear-gradient(to top, rgba(0, 123, 255, 0.5) 10%,rgb(0, 123, 255) 50%,rgb(0, 123, 255) 70%, rgba(0, 123, 255, 0.5));
 }

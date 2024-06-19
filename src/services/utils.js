@@ -103,6 +103,9 @@ export function isFromDeezer(media) {
 export function isVarExist(varTested) {
     return typeof(varTested) !== 'undefined' && varTested;
 }
+export function isVarExistNotEmpty(varTested) {
+    return typeof(varTested) !== 'undefined' && varTested && (varTested.length > 0);
+}
 
 export function isPlaylistExistNotEmpty(playlist) {
     return typeof(playlist) !== 'undefined' && playlist && (playlist.length > 0);
@@ -164,6 +167,11 @@ export function waitingTextChat(delay) {
 
 export function isUndefined(val) {
     return typeof(val) === 'undefined';
+}
+
+export function isEmpty(val) {
+    console.log(val.length);
+    return val.length == 0;
 }
 
 export function getRandomHexColor() {
@@ -236,6 +244,14 @@ export function getCarouselItemsArray(youtubeResults,addingObject, addItemToPlay
 
     return carouselItems;
     
+}
+
+export function isPseudoEnteredValid(pseudo) {
+    return (pseudo.trim().length >= 5 && pseudo.trim().length <= 15);
+}
+
+export function cleanPseudoEntered(pseudo) {
+    return pseudo.charAt(0).toUpperCase() + pseudo.slice(1);
 }
 
 export async function getPlayerSec(playerRef) {
