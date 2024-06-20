@@ -61,6 +61,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     const [isActuallyAdmin, setIsActuallyAdmin] = useState(false);
     const [userCanMakeInteraction, setUserCanMakeInteraction]= useState(true);	
     const [roomInteractionsArray, setRoomInteractionsArray] = useState([]);
+    const [interactionsDisplayedIdArray, setInteractionsDisplayedIdArray] = useState([]);
     const [loaded, setLoaded] = useState(false);
 
     // datas locales pour les anonymes (etc : savoir si il a déjà voté ou pas)
@@ -256,9 +257,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     // INTERACTION ANIMATION (HEART / PARTY / SMILE)
 	useEffect(() => {
         if(loaded) {
-            if(isVarExist(roomInteractionsArray[roomInteractionsArray.length-1]) && true !== roomInteractionsArray[roomInteractionsArray.length-1].displayed && (secondsSinceEventFromNow(roomInteractionsArray[roomInteractionsArray.length-1].timestamp) < 5000)) {
-                roomInteractionsArray.slice(-1)[0].displayed = true;
-                createInteractionAnimation(roomInteractionsArray[roomInteractionsArray.length-1], layoutDisplay);
+            if(isVarExist(roomInteractionsArray[roomInteractionsArray.length-1]) && (secondsSinceEventFromNow(roomInteractionsArray[roomInteractionsArray.length-1].timestamp) < 5000)) {
+                if(!interactionsDisplayedIdArray.includes(roomInteractionsArray[roomInteractionsArray.length-1].key)) {
+                    var lastInterKey = roomInteractionsArray[roomInteractionsArray.length-1].key;
+                    interactionsDisplayedIdArray.push(lastInterKey);
+                    createInteractionAnimation(roomInteractionsArray[roomInteractionsArray.length-1], layoutDisplay);
+                }
             } 
         }
 	}, [loaded,roomInteractionsArray]); 
