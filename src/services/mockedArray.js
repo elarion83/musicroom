@@ -1433,3 +1433,414 @@ export const mockYoutubeTrendResult = [
     }
   }
 ];
+
+export const mockYoutubeSearchResultForVald = [
+  {
+    "kind": "youtube#searchResult",
+    "etag": "GaD07zoJ8s89bC8FCWNiYCn9VRo",
+    "id": {
+      "kind": "youtube#video",
+      "videoId": "kutk2XHEZNU"
+    },
+    "snippet": {
+      "publishedAt": "2018-01-25T15:00:04Z",
+      "channelId": "UCMrzRb3_Mf0lnspxUgBLdPA",
+      "title": "Vald - Désaccordé",
+      "description": "Vald - Désaccordé // Extrait de \"XEU\" disponible sur iTunes & toutes les plateformes de streaming: https://Vald.lnk.to/XEU ...",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/kutk2XHEZNU/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/kutk2XHEZNU/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/kutk2XHEZNU/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        }
+      },
+      "channelTitle": "VALDVEVO",
+      "liveBroadcastContent": "none",
+      "publishTime": "2018-01-25T15:00:04Z"
+    }
+  },
+  {
+    "kind": "youtube#searchResult",
+    "etag": "bJNMpMiVhaiDthZUoJi6Tznh2yM",
+    "id": {
+      "kind": "youtube#video",
+      "videoId": "VfzhSbFPSRg"
+    },
+    "snippet": {
+      "publishedAt": "2018-07-04T15:58:45Z",
+      "channelId": "UCrQjCrWOS63rBxO15TA5CfQ",
+      "title": "Lorenzo ft. Vald - Bizarre (Clip Officiel)",
+      "description": "Mon tout dernier concert : https://lorenzo.tix.to/DernierZenithYC Mon dernier album est dispo partout ...",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/VfzhSbFPSRg/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/VfzhSbFPSRg/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/VfzhSbFPSRg/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        }
+      },
+      "channelTitle": "Lorenzo",
+      "liveBroadcastContent": "none",
+      "publishTime": "2018-07-04T15:58:45Z"
+    }
+  },
+  {
+    "kind": "youtube#searchResult",
+    "etag": "wzhNidpoNJkzt2WhGeEZORHd7iQ",
+    "id": {
+      "kind": "youtube#video",
+      "videoId": "QHyy5vV1uP0"
+    },
+    "snippet": {
+      "publishedAt": "2018-08-03T14:00:01Z",
+      "channelId": "UCxPvv5fdCJ8rj8FHorCIJdw",
+      "title": "93 Empire - Woah (Sofiane, Vald, Soolking, Sadek, Mac Tyer, Heuss L’enfoiré, Kalash Criminel)",
+      "description": "93 Empire - Woah (Sofiane, Vald, Soolking, Sadek, Mac Tyer, Heuss L'enfoiré, Kalash Criminel) extrait de l'album disponible ...",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/QHyy5vV1uP0/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/QHyy5vV1uP0/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/QHyy5vV1uP0/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        }
+      },
+      "channelTitle": "Affranchis Music",
+      "liveBroadcastContent": "none",
+      "publishTime": "2018-08-03T14:00:01Z"
+    }
+  },
+  {
+    "kind": "youtube#searchResult",
+    "etag": "7BXT92YAuY_q2eoO0gPEayc9OZ0",
+    "id": {
+      "kind": "youtube#video",
+      "videoId": "M3iGcTxw5d4"
+    },
+    "snippet": {
+      "publishedAt": "2019-07-10T16:00:06Z",
+      "channelId": "UC9YFlwUanLrqoSHw5DQ2Ifg",
+      "title": "Lefa - Bitch (Clip officiel) ft. Vald",
+      "description": "FAME nouvel album maintenant disponible: https://Lefa.lnk.to/FameAlbumID 'Bitch' feat. VALD 2ème extrait du nouvel album de ...",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/M3iGcTxw5d4/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/M3iGcTxw5d4/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/M3iGcTxw5d4/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        }
+      },
+      "channelTitle": "LefaAuthentiqueVEVO",
+      "liveBroadcastContent": "none",
+      "publishTime": "2019-07-10T16:00:06Z"
+    }
+  },
+  {
+    "kind": "youtube#searchResult",
+    "etag": "vJ1QO4BDtbj1uMZ_oOtZBMTIFio",
+    "id": {
+      "kind": "youtube#video",
+      "videoId": "bmCbMQ0QaZg"
+    },
+    "snippet": {
+      "publishedAt": "2017-02-09T15:00:03Z",
+      "channelId": "UCMrzRb3_Mf0lnspxUgBLdPA",
+      "title": "Vald - Ma meilleure amie",
+      "description": "Vald - Ma meilleure amie // le nouveau clip de son 1er album \"Agartha\" disponible sur iTunes & toutes les plateformes de ...",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/bmCbMQ0QaZg/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/bmCbMQ0QaZg/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/bmCbMQ0QaZg/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        }
+      },
+      "channelTitle": "VALDVEVO",
+      "liveBroadcastContent": "none",
+      "publishTime": "2017-02-09T15:00:03Z"
+    }
+  },
+  {
+    "kind": "youtube#searchResult",
+    "etag": "-PC9PF0N2ThBu2bhFiuHx0xj4P0",
+    "id": {
+      "kind": "youtube#video",
+      "videoId": "XzIROfnP8wg"
+    },
+    "snippet": {
+      "publishedAt": "2018-03-18T09:09:05Z",
+      "channelId": "UChGhSbkm9jS_u1thVCeGpiw",
+      "title": "VALD -  Désaccordé (Parodie Fortnite)",
+      "description": "VALD - Désaccordé en mode FORTNITE !!! Version Original : https://youtu.be/kutk2XHEZNU Lâche un commentaire!! Abonne - toi ...",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/XzIROfnP8wg/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/XzIROfnP8wg/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/XzIROfnP8wg/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        }
+      },
+      "channelTitle": "Kebou",
+      "liveBroadcastContent": "none",
+      "publishTime": "2018-03-18T09:09:05Z"
+    }
+  },
+  {
+    "kind": "youtube#searchResult",
+    "etag": "-Bfuw73JGys3BHAN1aIR2FDYQwY",
+    "id": {
+      "kind": "youtube#video",
+      "videoId": "lB8uQ_zO-o8"
+    },
+    "snippet": {
+      "publishedAt": "2020-06-19T14:01:03Z",
+      "channelId": "UCUNv0EUZYhuelHXWoFLTqwg",
+      "title": "Vald - Rappel (Clip officiel)",
+      "description": "Vald - Rappel // Extrait de \"Ce monde est cruel\" dispo sur toutes les plateformes: https://vald.lnk.to/Cemondeestcruel Abonne toi à ...",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/lB8uQ_zO-o8/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/lB8uQ_zO-o8/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/lB8uQ_zO-o8/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        }
+      },
+      "channelTitle": "V5LD",
+      "liveBroadcastContent": "none",
+      "publishTime": "2020-06-19T14:01:03Z"
+    }
+  },
+  {
+    "kind": "youtube#searchResult",
+    "etag": "4gRoTi9mnccT8GOlbjoigq9a9js",
+    "id": {
+      "kind": "youtube#video",
+      "videoId": "TUEhJmjfC28"
+    },
+    "snippet": {
+      "publishedAt": "2019-09-27T14:51:36Z",
+      "channelId": "UCUNv0EUZYhuelHXWoFLTqwg",
+      "title": "Vald - Journal Perso 2 (clip officiel)",
+      "description": "JOURNAL PERSO 2 premier extrait de mon nouvel Album \"CE MONDE EST CRUEL\" https://vald.lnk.to/Cemondeestcruel Nouvel ...",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/TUEhJmjfC28/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/TUEhJmjfC28/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/TUEhJmjfC28/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        }
+      },
+      "channelTitle": "V5LD",
+      "liveBroadcastContent": "none",
+      "publishTime": "2019-09-27T14:51:36Z"
+    }
+  },
+  {
+    "kind": "youtube#searchResult",
+    "etag": "hg1byo5QCb1tEeosDNXhJGO5N68",
+    "id": {
+      "kind": "youtube#video",
+      "videoId": "vfUFTHAQKeg"
+    },
+    "snippet": {
+      "publishedAt": "2017-04-03T14:00:07Z",
+      "channelId": "UCMrzRb3_Mf0lnspxUgBLdPA",
+      "title": "Vald - Vitrine ft. Damso",
+      "description": "\"Playlist Best of Vald: https://goo.gl/u6jZLn Subscribe for more: https://goo.gl/6fuAG9 Vald \"\"Vitrine\"\" feat Damso // Nouvel extrait de ...",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/vfUFTHAQKeg/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/vfUFTHAQKeg/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/vfUFTHAQKeg/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        }
+      },
+      "channelTitle": "VALDVEVO",
+      "liveBroadcastContent": "none",
+      "publishTime": "2017-04-03T14:00:07Z"
+    }
+  },
+  {
+    "kind": "youtube#searchResult",
+    "etag": "VLsUodWqPCBwtdQPkWG7_b2nylU",
+    "id": {
+      "kind": "youtube#video",
+      "videoId": "x-VYdBKwSLc"
+    },
+    "snippet": {
+      "publishedAt": "2015-06-03T07:00:02Z",
+      "channelId": "UCMrzRb3_Mf0lnspxUgBLdPA",
+      "title": "Vald - Bonjour",
+      "description": "Playlist Best of Vald: https://goo.gl/u6jZLn Subscribe for more: https://goo.gl/6fuAG9 Bonjour, 1er extrait de NQNT 2 (sortie le 25 ...",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/x-VYdBKwSLc/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/x-VYdBKwSLc/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/x-VYdBKwSLc/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        }
+      },
+      "channelTitle": "VALDVEVO",
+      "liveBroadcastContent": "none",
+      "publishTime": "2015-06-03T07:00:02Z"
+    }
+  },
+  {
+    "kind": "youtube#searchResult",
+    "etag": "rFsNmfLpNLh_2jxuneNK1jp-lGM",
+    "id": {
+      "kind": "youtube#video",
+      "videoId": "507d9xto6Og"
+    },
+    "snippet": {
+      "publishedAt": "2018-11-02T12:10:04Z",
+      "channelId": "UCcbG0C6CZuPiQkkHxo_Prgw",
+      "title": "Gringe - Qui dit mieux (feat. OrelSan, Vald, Suikon Blaz AD) [ENFANT LUNE]",
+      "description": "ENFANT LUNE 1er album disponible http://Gringe.lnk.to/EnfantLune Gringe en tournée 2024/2025 ...",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/507d9xto6Og/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/507d9xto6Og/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/507d9xto6Og/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        }
+      },
+      "channelTitle": "Gringe Officiel",
+      "liveBroadcastContent": "none",
+      "publishTime": "2018-11-02T12:10:04Z"
+    }
+  },
+  {
+    "kind": "youtube#searchResult",
+    "etag": "67Va7bv2lj_nuy6A6lrzNtcb4OE",
+    "id": {
+      "kind": "youtube#video",
+      "videoId": "AjQbtKvi_Jw"
+    },
+    "snippet": {
+      "publishedAt": "2016-10-21T14:00:01Z",
+      "channelId": "UCMrzRb3_Mf0lnspxUgBLdPA",
+      "title": "Vald - Eurotrap",
+      "description": "Playlist Best of Vald: https://goo.gl/u6jZLn Subscribe for more: https://goo.gl/6fuAG9 Vald - Eurotrap, 1er extrait de \"Agartha\" ...",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/AjQbtKvi_Jw/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/AjQbtKvi_Jw/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/AjQbtKvi_Jw/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        }
+      },
+      "channelTitle": "VALDVEVO",
+      "liveBroadcastContent": "none",
+      "publishTime": "2016-10-21T14:00:01Z"
+    }
+  }
+];

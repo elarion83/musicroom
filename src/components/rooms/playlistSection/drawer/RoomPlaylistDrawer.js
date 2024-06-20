@@ -1,6 +1,9 @@
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import { Divider, Drawer, List, ListItem, ListItemText, Typography } from "@mui/material";
-import React from "react";
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+
+import { Accordion, AccordionDetails, AccordionSummary, Divider, Drawer, List, ListItem, ListItemText, Typography } from "@mui/material";
+import React, { useState } from "react";
 import {isFromSpotify} from '../../../../services/utils';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
@@ -13,6 +16,14 @@ import DrawerPlayPauseButton from './DrawerPlayPauseButton';
 const RoomPlaylistDrawer = ({t,isSpotifyAvailable, room,roomRef,open, changeOpen, isAdminView, userVoteArray, roomPlaylist, setIdPlaying, handleVoteChange,handleRemoveMediaFromPlaylist, setIsPlaying,  data, roomIsActuallyPlaying, roomIdActuallyPlaying, roomIdActuallyDisplaying }) => {
     
     const delay = ms => new Promise(res => setTimeout(res, ms));
+
+    const [descriptionOpen, setDescriptionOpen] = useState(false);
+    
+    const handleOpenDescription =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setDescriptionOpen(descriptionOpen ? false : true);
+    };
+
     function handleVoteChangeInComp(idMedia, mediaHashId, type) {
         roomPlaylist[idMedia].vote[type]++;
         handleVoteChange(idMedia, roomPlaylist[idMedia].vote, mediaHashId, type);
@@ -32,7 +43,7 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable, room,roomRef,open, changeOpen
             open={open}
             PaperProps={{
                 sx: {
-                    height: '30vh',
+                    height: descriptionOpen ? 'auto':'35vh',
                 },
             }}
             sx={{zIndex:2000 }}
@@ -62,21 +73,22 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable, room,roomRef,open, changeOpen
                              
                             primary={
                                 <React.Fragment>
-                                    <Typography  component="span" className="varelaFontTitle"sx={{textShadow:'1px 1px 1px #423d3d'}}  >
+                                    <Typography component="h6" className="varelaFontTitle" fontWeight='bold' sx={{color:'var(--grey-dark)', textShadow:'1px 1px 1px var(--white)'}}  >
                                         {data.title} 
                                     </Typography>
                                 </React.Fragment>
                             }
                             secondary={
                                 <React.Fragment>
-                                    <Typography component="span" >
-                                        {t('GeneralVia')} <b>{data.source}</b> {t('GeneralBy')} <b>{data.addedBy}</b>
+                                    <Typography component="span" fontSize='small' className="fontFamilyNunito">
+                                        {t('GeneralOn')} <b>{data.source}</b> {t('GeneralBy')} <b>{data.addedBy}</b>
                                     </Typography>
                                 </React.Fragment>
                             }
                         />
                        
                     </ListItem>
+                     
                     {isFromSpotify(data) && !isSpotifyAvailable && 
                         <>
                             <Divider />
@@ -107,7 +119,22 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable, room,roomRef,open, changeOpen
                             </Button>
                         }
                     </ListItemText>
-            </List></>}
+                    <Box sx={{pl:2,pr:2,pb:1}}>
+                        <Accordion  expanded={descriptionOpen} onChange={handleOpenDescription('panel1')} className='mediaDescriptionAccordion'>
+                            <AccordionSummary
+                            aria-controls="panel1-content"
+                            id="panel1-header"
+                            >
+                            {descriptionOpen ? <ExpandLessIcon sx={{mr:1}} /> : <ExpandMoreIcon sx={{mr:1}} />} 
+                            <Typography  className="varelaFontTitle">Description</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails onClick={handleOpenDescription(false)} className="fontFamilyNunito">
+                                <Typography fontSize="smaller">{data.description}</Typography>
+                            </AccordionDetails>
+                        </Accordion>
+                    </Box>
+                </List>
+            </>}
     </Drawer>
     )
 };

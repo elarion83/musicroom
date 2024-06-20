@@ -14,6 +14,7 @@ const resources = {
         "GeneralSearchOn":'Search on',
         "GeneralSearchFor":'Search for',
         "GeneralOr":'Or',
+        "GeneralOn":'On',
         "GeneralAnd":'And',
         "GeneralYes":'Yes',
         "GeneralNo":'No',
@@ -29,6 +30,7 @@ const resources = {
         "GeneralEmpty":'empty',
         "GeneralMusics":'Musics',
         "GeneralVideos":'Videos',
+        "GeneralMovieTrailers":"Movie trailers",
         "GeneralEvery":'Every',
         "GeneralTrendings" : "Trendings",
         "GeneralSmthTrendings" : "{{what}} trendings",
@@ -83,6 +85,8 @@ const resources = {
 
         "RoomChatWelcomeMessage": "Welcome on the chat !",
         "RoomChatPlaceholder" : "Send a message",
+
+        "ModalAddMediaSearchResultTitle": "Results for {{searchTerm}}",
 
         "ModalUserSettingsTitle" : "Account settings",
         "ModalUserSettingsEditNotAllowedTitle" : "Edition impossible",
@@ -164,8 +168,9 @@ const resources = {
         "GeneralLogin":'Connexion',
         "GeneralLogout":'Déconnexion',
         "GeneralSearchOn":'Chercher sur',
-        "GeneralSearchFor":'Chercher un(e)',
+        "GeneralSearchFor":'Chercher des ',
         "GeneralOr":'Ou',
+        "GeneralOn":'Sur',
         "GeneralAnd":'Et',
         "GeneralYes":'Oui',
         "GeneralNo":'Non',
@@ -187,8 +192,9 @@ const resources = {
         "GeneralLinked" : " relié",
         "GeneralMediasInPlaylist":'Média(s) en playlist',
         "GeneralEmpty":'vide',
-        "GeneralMusic":'Musiques',
+        "GeneralMusics":'Musiques',
         "GeneralVideos":'Vidéos',
+        "GeneralMovieTrailers":"Bande annonces",
         "GeneralEvery":'Toutes les',
         "GeneralSmthTrendings" : "{{what}} en tendances",
         "GeneralHome":'Accueil',
@@ -234,6 +240,8 @@ const resources = {
 
         "RoomChatWelcomeMessage": "Bienvenue sur le chat !",
         "RoomChatPlaceholder" : "Envoyer un message",
+
+        "ModalAddMediaSearchResultTitle": "Résultats pour {{searchTerm}}",
 
         "ModalUserSettingsTitle" : "Paramètres du compte",
         "ModalUserSettingsEditNotAllowedTitle" : "Edition impossible",

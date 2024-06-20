@@ -69,7 +69,10 @@ export const shareArray = {
 }
 
 export function searchTextArray() {
-    return [i18n.t('GeneralSearchOn') + ' YOUTUBE'];
+    return [i18n.t('GeneralSearchFor') + i18n.t('GeneralMusics') + ' '+i18n.t('GeneralOn') + ' YOUTUBE',
+        i18n.t('GeneralSearchFor') + i18n.t('GeneralSmthTrendings', {what:i18n.t('GeneralVideos')}) + ' '+i18n.t('GeneralOn') + ' YOUTUBE',
+        i18n.t('GeneralSearchFor') + i18n.t('GeneralMovieTrailers') + ' '+i18n.t('GeneralOn') + ' YOUTUBE',
+    ];
 }
 
 export const playerRefObject = {
@@ -181,26 +184,15 @@ export const timestampToHoursAndMinOptions = {
 };
 
 export function createUserDataObject(userUid = 0, registerType, pseudo, anonLogin = false) {
-    if(anonLogin) {
-        return {
-            displayName:pseudo,
-            loginType:'anon',
-            uid:userUid,
-            creationTime:Date.now(),
-            color: getRandomHexColor(),
-            avatarId:randomInt(1,9),
-        }
-    } else {
-        return {
-            displayName:pseudo, 
-            creationTime:Date.now(),
-            color: getRandomHexColor(),
-            avatarId:randomInt(1,9),
-            uid:userUid,
-            loginType:registerType,
-            userParams:{
+    return {
+        displayName:pseudo, 
+        creationTime:Date.now(),
+        color: getRandomHexColor(),
+        avatarId:randomInt(1,9),
+        uid:userUid,
+        loginType: anonLogin ? 'anona' : registerType,
+        userParams:{
             NotifsActivated:true
-            }
         }
     }
 }

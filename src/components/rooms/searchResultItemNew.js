@@ -1,12 +1,12 @@
 import { Box, Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
 import { formatNumberToMinAndSec } from "../../services/utils";
 
-const SearchResultItemNew = ({ duration = null,image, title, source, platformId, album = null, addedBy, uid, url, date = null, channelOrArtist = null, addItemToPlaylist }) => {
+const SearchResultItemNew = ({ duration = null,image, title,description = '', source, platformId, album = null, addedBy, uid, url, date = null, channelOrArtist = null, addItemToPlaylist }) => {
    
     return (
        <Grid className="searchResultItem new" item xs={6} sm={4} md={3} xl={2}>
         <Card sx={{ cursor:'pointer', position:'relative' }} title={title}
-         onClick={(e) => addItemToPlaylist({title:title,deleted:false, source:source,duration: duration ? formatNumberToMinAndSec(duration): null, platformId:platformId, url:url, visuel:image, addedBy: addedBy, vote: {'up':0,'down':0}, hashId: uid})}>
+         onClick={(e) => addItemToPlaylist({title:title,deleted:false, source:source,description:description,duration: duration ? formatNumberToMinAndSec(duration): null, platformId:platformId, url:url, visuel:image, addedBy: addedBy, vote: {'up':0,'down':0}, hashId: uid})}>
             <CardMedia
                 sx={{ width:'auto',height:'110px' }}
                 image={image}

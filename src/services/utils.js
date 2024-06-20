@@ -226,6 +226,7 @@ export function getCarouselItemsArray(youtubeResults,addingObject, addItemToPlay
                     key={media.id}
                     image={media.snippet.thumbnails.high.url}
                     title={media.snippet.title}
+                    description={media.snippet.description}
                     source='youtube'
                     uid={uuid().slice(0, 10).toLowerCase()}
                     platformId={media.id}
@@ -280,6 +281,7 @@ export function autoAddYTObject(item) {
         visuel: item.snippet.thumbnails.high.url,
         hashId: uuid().slice(0,10).toLowerCase(),
         source: 'youtube',
+        description:item.snippet.description,
         platformId:item.id.videoId,
         title:cleanMediaTitle(item.snippet.title),
         url:'https://www.youtube.com/watch?v='+item.id.videoId, 

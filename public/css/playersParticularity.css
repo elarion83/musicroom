@@ -99,6 +99,10 @@ display: block;
     margin-top: 0;
 }
 
+.mediaTitle {
+    color: var(--white) !important;
+}
+
 @media (max-width: 600px) { 
     .musicOnlyPlayer_header {
         text-align: center;

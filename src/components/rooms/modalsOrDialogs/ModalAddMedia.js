@@ -24,7 +24,7 @@ import { searchTextArray, spotifyApiSearchObject, youtubeApiSearchObject, youtub
 import { KeyboardArrowDown } from '@mui/icons-material';
 import  NewContentslider  from '../../../services/YoutubeVideoSlider';
 import SearchResultItemNew from '../searchResultItemNew';
-import { mockYoutubeTrendResult } from '../../../services/mockedArray';
+import { mockYoutubeSearchResoltForVald, mockYoutubeSearchResultForVald, mockYoutubeTrendResult } from '../../../services/mockedArray';
 import YoutubeVideoSlider from '../../../services/YoutubeVideoSlider';
 const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, roomIsPlaying, currentUser, validatedObjectToAdd, spotifyTokenProps, DeezerTokenProps }) => {
     const [mediaSearchResultYoutube, setMediaSearchResultYoutube] = useState([]);
@@ -118,7 +118,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                         });
                     }
                 } else {
-                    setMediaSearchResultYoutube(mockYoutubeTrendResult);
+                    setMediaSearchResultYoutube(mockYoutubeSearchResultForVald);
                     setShowYoutubeTrends(false);
                     setIsSearching(false);
                 }
@@ -151,6 +151,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                         showCursor={true}
                         backSpeed={15}
                         attr="placeholder"
+                        loop
                          >
                         <input
                             id="addMediaSearchInput"
@@ -185,7 +186,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                     <YoutubeVideoSlider itemsArray={room.localeYoutubeTrends} addingObject={addingObject} addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject} />
 
                     <Typography variant="h6" sx={{mt:4, ml:1}} gutterBottom>
-                        {t('GeneralSmthTrendings', {what:t('GeneralMusic')})}
+                        {t('GeneralSmthTrendings', {what:t('GeneralMusics')})}
                     </Typography>
                     <YoutubeVideoSlider itemsArray={room.localeYoutubeMusicTrends} addingObject={addingObject} addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject} />
 
@@ -193,7 +194,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
 
                 {mediaSearchResultYoutube.length > 0 && <Grid item xs={12}>
                     <Typography variant="h6" sx={{mt:2}} gutterBottom>
-                        Résultats de recherche pour <b>{searchedTerm}</b>
+                        {t('ModalAddMediaSearchResultTitle', {searchTerm:searchedTerm})}
                     </Typography>
                    {/* <Tabs value={tabIndex} onChange={handleTabChange} sx={{ bgcolor: '#202124' }}>
                         <Tab sx={{ color: 'var(--white)' }} label="Youtube" disabled={mediaSearchResultYoutube.length > 1 ? false : true} />
@@ -216,6 +217,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                                                     uid={uuid().slice(0, 10).toLowerCase()}
                                                     platformId={getYTVidId(media)}
                                                     addedBy={addingObject.addedBy}
+                                                    description={media.snippet.description}
                                                     url={'https://www.youtube.com/watch?v=' + getYTVidId(media)}
                                                     date={dateFormat(media.snippet.publishedAt, 'd mmm yyyy')}
                                                     channelOrArtist={media.snippet.channelTitle}

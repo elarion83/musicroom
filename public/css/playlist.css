@@ -37,6 +37,13 @@
     overflow: hidden;
 }
 
+#mediaInfoDrawer .MuiAccordionSummary-content {
+    margin:5px 0 !important;
+}
+#mediaInfoDrawer .Mui-expanded{
+    min-height: 20px !important;
+}
+
 .DrawerBackButton {
     background: var(--grey-lighter);
     cursor: pointer;
@@ -92,4 +99,16 @@
     .DrawerGradient {    
         background-position: 0px -42px;
     }
+}
+
+.mediaDescriptionAccordion {
+    box-shadow: none !important;
+    background: rgba(255,255,255,0.4) !important;
+    border-left: 2px solid var(--blue-light);
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+.mediaDescriptionAccordion>div {
+    padding-left: 5px !important;
 }

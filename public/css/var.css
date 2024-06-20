@@ -2,9 +2,9 @@
 :root{
   --main-bg-color: #4f4f4f;
   --main-bg-color-hexa: 79, 79, 79;
-  --main-color: #b39f74;
-  --main-color-darker: #75684b;
   --border-color: #3e464d;
+  --main-color: rgba(0, 123, 255);
+  --main-color-darker: rgb(3, 104, 212);
   --red:#c63b3b;
   --red-2:#ff5722;
   --green:#2e7d32;
@@ -16,6 +16,7 @@
   --grey-inspired: rgb(167, 167, 167);
   --grey-dark:#262626;
   --grey-dark-rgb:38, 38, 38;
+  --grey-darker:#141414;
   --transition-fast-easeIn:all 0.1s ease-in;
   --transition-smooth-all:all 0.3s ease-out;
   --main-typo-family:'Lato', sans-serif;

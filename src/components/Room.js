@@ -726,9 +726,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                         </Grid>
                                     </Box>
                                 }
-                                <Toolbar xs={12} sx={{ bgcolor: 'var(--grey-dark)',borderBottom: '2px solid var(--border-color)', minHeight: '45px !important', fontFamily: 'Monospace', pl:'15px', pr:'25 px' }}>
-                                    <Typography component="span" sx={{ flexGrow: 1, textTransform:'uppercase', fontSize:'12px', color:'white' }}>
-                                            { room.playlistUrls && room.playlistUrls.length } {t('GeneralMediasInPlaylist')}
+                                <Toolbar xs={12} sx={{ bgcolor: 'var(--grey-darker)', minHeight: '35px !important', pl:'0px', pr:'25 px' }}>
+                                    <Typography component="h6" className="fontFamilyNunito" sx={{ flexGrow: 1, textTransform:'uppercase', fontSize:'12px', color:'white' }}>
+                                            { room.playlistUrls && room.playlistUrls.length } {t('GeneralMediasInPlaylist')} :
                                     </Typography>
                                 </Toolbar>
                             </>
