@@ -185,6 +185,8 @@ export function createUserDataObject(userUid = 0, registerType, pseudo, anonLogi
         return {
             displayName:pseudo,
             loginType:'anon',
+            uid:userUid,
+            creationTime:Date.now(),
             color: getRandomHexColor(),
             avatarId:randomInt(1,9),
         }

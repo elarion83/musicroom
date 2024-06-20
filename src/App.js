@@ -157,12 +157,17 @@ function App( {t} ) {
 
     let userRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, entireUserDatas.uid);
     if(getAdditionalUserInfo(user).isNewUser) {
-      var userInfosTemp = createUserDataObject(null, entireUserDatas.providerId ?? 'anon', PseudoGenerated, entireUserDatas.isAnonymous);
-      await setDoc(userRef, userInfosTemp);
-    } 
-    await getDoc(userRef).then((userFirebaseData) => {
-      finishAuthProcess(entireUserDatas, userFirebaseData.data(), 'newAuth');
-    });
+      var userInfosTemp = createUserDataObject(entireUserDatas.uid, !entireUserDatas.providerData[0] ? 'anon' : entireUserDatas.providerData[0].providerId, PseudoGenerated, entireUserDatas.isAnonymous);
+      await setDoc(userRef, userInfosTemp).then(() => {
+        getDoc(userRef).then((userFirebaseData) => {
+          finishAuthProcess(entireUserDatas, userFirebaseData.data(), 'newAuth');
+        });
+      });
+    }  else {
+      await getDoc(userRef).then((userFirebaseData) => {
+        finishAuthProcess(entireUserDatas, userFirebaseData.data(), 'newAuth');
+      });
+    }
   }
 
   /* END-LOGIN-FUNCTION */
@@ -206,6 +211,7 @@ function App( {t} ) {
   function logOut() {
     setIsSignedIn(false);
     setUserInfo({});
+    localStorage.removeItem("Play-It_RoomId");
     signOut(auth).then(() => {
       replaceCurrentUrlWithHomeUrl(); 
       setRoomId();

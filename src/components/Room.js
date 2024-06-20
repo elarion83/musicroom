@@ -15,7 +15,7 @@ import axios from "axios";
 import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
-import {isFromSpotify,isFromDeezer,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, isVarExist,  isDevEnv, secondsSinceEventFromNow, autoAddYTObject, randomInt, isVarExistNotEmpty} from '../services/utils';
+import {isFromSpotify,isFromDeezer,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, isVarExist,  isDevEnv, secondsSinceEventFromNow, autoAddYTObject, randomInt, isVarExistNotEmpty, setPageTitle} from '../services/utils';
 import RoomPlaylistDrawer from "./rooms/playlistSection/drawer/RoomPlaylistDrawer";
 
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
@@ -211,6 +211,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 initRoom(roomDatas, roomId.toLowerCase(), !firebaseRoom.exists(), currentUser, roomRef);
             };
             initRoomFetchFirebase();
+            setPageTitle('Playlist '+roomId+ 'Play-it.fr');
         }
 	}, [roomId]);
 
@@ -338,6 +339,13 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     async function goToSecond(seconds) {
         playerRef.current.seekTo(seconds, 'seconds'); 
     }
+
+    
+    useEffect(() => {
+        let pageTitle = (roomIsPlaying && isVarExistNotEmpty(room.playlistUrls)) ? room.playlistUrls[playerIdPlayed].title : 'Playlist '+roomId;
+        setPageTitle(pageTitle+' - Play-it.fr');
+    }, [roomIsPlaying]);
+            
 
     useKeypress([' '], () => {
         if(room && !OpenAddToPlaylistModal) {

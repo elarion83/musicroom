@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import { Dialog, DialogContent, Typography } from "@mui/material";
+import { Alert, Button, Dialog, DialogActions, DialogContent, Typography } from "@mui/material";
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import { db } from '../../../services/firebase'; 
 import { useState } from "react";
@@ -48,7 +48,7 @@ const UserRoomListModal = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
 
             <ModalsHeader icon={() => <AppsIcon fontSize="small" sx={{mr:1}} />} title={t('UserMenuMyRooms')} />
 
-            <DialogContent dividers sx={{pt:2, pl:1, pr:1}}>
+            <DialogContent dividers sx={{pt:1, pl:1, pr:1, pb:1}}>
                 {!loaded && 
                     <Typography fontSize='small'> 
                         {t('GeneralLoading')}
@@ -57,9 +57,7 @@ const UserRoomListModal = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
                 {loaded &&
                 <>
                     {Object.keys(roomList).length === 0 &&
-                        <Typography fontSize='small'> 
-                            {t('ModalUserRoomListEmpty')}.
-                        </Typography>
+                        <Alert severity="warning">{t('ModalUserRoomListEmpty')}.</Alert>
                     }
                     {Object.entries(roomList).map(([key, room]) => {
 
@@ -83,6 +81,11 @@ const UserRoomListModal = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
                     )}
                 </>}
             </DialogContent>
+            <DialogActions>
+                <Button variant="outlined" onClick={(e) => changeOpen(false)} autoFocus>
+                    {t('GeneralClose')}
+                </Button>
+            </DialogActions>
         </Dialog>
     )
 };

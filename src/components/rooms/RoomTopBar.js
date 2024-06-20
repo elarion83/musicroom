@@ -64,7 +64,7 @@ const RoomTopBar = ({
                         </ListItemButton>
                     </ListItem> 
                     <Divider />
-                    <ListItem key='roomDrawHostedBy' disablePadding  onClick={e => handleOpenChangeAdminModal(true)}>
+                    <ListItem key='roomDrawHostedBy' disablePadding sx={{mt:1}} onClick={e => handleOpenChangeAdminModal(true)}>
                         <ListItemButton>
                             <ListItemIcon>
                                 <InfoIcon />
@@ -149,18 +149,18 @@ const RoomTopBar = ({
                         </ListItemButton>
                     </ListItem>
 
-                    <ListItem key='roomDrawRoomLeave' disablePadding>
-                        <ListItemButton onClick={e => handleOpenLeaveRoomModal(true)}>
-                            <ListItemIcon>
-                                <ExitToAppIcon />
-                            </ListItemIcon>
-                            <Typography>{t('RoomLeftMenuRoomLeave')}</Typography>
-                        </ListItemButton>
-                    </ListItem>
                 </List>
 
                 <Divider  sx={{mt:5, mb:1}}/>
-                <ListItem key='playlistDrawAPK' disablePadding>
+                <ListItem key='roomDrawRoomLeave' disablePadding>
+                    <ListItemButton onClick={e => handleOpenLeaveRoomModal(true)}>
+                        <ListItemIcon>
+                            <ExitToAppIcon />
+                        </ListItemIcon>
+                        <Typography>{t('RoomLeftMenuRoomLeave')}</Typography>
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key='playlistDrawAPK' sx={{position:'absolute', bottom:0}} disablePadding>
                     <ListItemButton href={process.env.REACT_APP_FRONT_HOME_URL+"/play-it.apk"}>
                         <ListItemIcon>
                             {<GFontIcon icon="install_mobile" customClass='colorBlue'/>}
