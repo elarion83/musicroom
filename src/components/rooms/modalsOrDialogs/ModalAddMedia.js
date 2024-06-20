@@ -320,8 +320,8 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                 </Button >
                 {room.playlistEmpty &&
                     <Box sx={{ display: 'flex', flexDirection: 'column', padding: '1em' }}>
-                        <Typography component="span"> Playlist {t('GeneralEmpty')} </Typography>
-                        <Typography sx={{ color: 'var(--white)', display: 'block', width: '100%', ml: 0, fontSize: '12px', textTransform: 'uppercase' }} > Playlist <b>{room.id}</b></Typography>
+                        <Typography  sx={{color: 'var(--main-color-lighter)', textTransform: 'uppercase'}}> Playlist <b>{room.id}</b></Typography>
+                        <Typography sx={{ color: 'var(--white)', display: 'block', width: '100%', ml: 0, fontSize: '12px' }} > Playlist {t('GeneralEmpty')} </Typography>
                     </Box>}
                 {typeof (room.playlistUrls) !== 'undefined' && !room.playlistEmpty &&
                     <Box sx={{ display: 'flex', flexDirection: 'column', p: '8px' }}>

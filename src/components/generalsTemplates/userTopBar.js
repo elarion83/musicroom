@@ -73,7 +73,7 @@ const UserTopBar = ({ t, user, loggedIn, setUserInfo, handleLogout, handleOpenLo
                     <ListItemIcon>
                       <TuneIcon fontSize="small" />
                     </ListItemIcon>
-                    <Typography>
+                    <Typography className='varelaFontTitle'>
                       {t('UserMenuMyProfile')} 
                     </Typography>
                 </MenuItem>
@@ -81,12 +81,12 @@ const UserTopBar = ({ t, user, loggedIn, setUserInfo, handleLogout, handleOpenLo
                     <ListItemIcon>
                       <AppsIcon fontSize="small" />
                     </ListItemIcon>
-                    <Typography>        
+                    <Typography className='varelaFontTitle'>        
                       {t('UserMenuMyRooms')} 
                     </Typography>
                 </MenuItem>
                 <Divider />
-                <MenuItem onClick={e => handleLogout()}>
+                <MenuItem onClick={e => handleLogout()} className='varelaFontTitle'>
                     <ListItemIcon>
                     <Logout fontSize="small" />
                       </ListItemIcon>

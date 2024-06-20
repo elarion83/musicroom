@@ -11,12 +11,12 @@ const Contentslider = () => {
 
     useEffect(() => {
       const timer = setInterval(() => {
-        if(getCurrentActiveItem().index < 3) {
+        if(getCurrentActiveItem().index < 12) {
             slideToNextItem();
         } else {
             slideToItem(0);
         }
-      }, 8000);
+      }, 12000);
       return () => {
         window.clearInterval(timer);
       };
@@ -36,10 +36,10 @@ const Contentslider = () => {
                     <Typography sx={{pl:2,pr:2,mb:3}} variant="h5" gutterBottom className='varelaFontTitle'>
                         {i18n.t('HomePageSlide1Title')}
                     </Typography>
-                    <Typography sx={{pl:2,pr:2,mb:2,mt:3, color:'var(--white)'}} className='fontFamilyOpenSans'>
+                    <Typography sx={{pl:2,pr:2,mb:2,mt:3, color:'var(--white)'}} className='fontFamilyNunito'>
                         {i18n.t('HomePageSlide1Text1')}
-                    </Typography>
-                    <Typography sx={{pl:2,pr:2,mt:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
+                    </Typography >
+                    <Typography sx={{pl:2,pr:2,mt:2, color:'var(--white)'}} className='fontFamilyNunito'>
                         {i18n.t('HomePageSlide1Text2')}
                     </Typography>
                 </Box>,
@@ -56,7 +56,7 @@ const Contentslider = () => {
                     <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
                         {i18n.t('HomePageSlide2Title')}
                     </Typography>
-                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
+                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyNunito'>
                         {i18n.t('HomePageSlide2Text')}
                     </Typography>
                 </Box>,
@@ -73,10 +73,10 @@ const Contentslider = () => {
                     <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
                         {i18n.t('HomePageSlide3Title')}
                     </Typography>
-                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
+                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyNunito'>
                         {i18n.t('HomePageSlide3Text1')}
                     </Typography>
-                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
+                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyNunito'>
                         {i18n.t('HomePageSlide3Text2')}
                     </Typography>
                 </Box>,
@@ -91,10 +91,10 @@ const Contentslider = () => {
                     <Typography sx={{pl:2,pr:2}} variant="h5" gutterBottom>
                         {i18n.t('HomePageSlide4Title')}
                     </Typography>
-                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
+                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyNunito'>
                         {i18n.t('HomePageSlide4Text1')}
                     </Typography>
-                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyOpenSans'>
+                    <Typography sx={{pl:2,pr:2, color:'var(--white)'}} className='fontFamilyNunito'>
                         {i18n.t('HomePageSlide4Text2')}
                     </Typography>
                 </Box>,

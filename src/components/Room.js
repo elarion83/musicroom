@@ -273,13 +273,13 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     return
                 } else {
                     axios.get(process.env.REACT_APP_YOUTUBE_VIDEOS_URL, { 
-                        params: youtubeApiVideosParams('0', 6, 'snippet,contentDetails') 
+                        params: youtubeApiVideosParams('0', 12, 'snippet,contentDetails') 
                     })
                     .then(function (response) {
                         updateFirebaseRoom( roomRef , {localeYoutubeTrends: response.data.items});
                         
                         axios.get(process.env.REACT_APP_YOUTUBE_VIDEOS_URL, { 
-                            params: youtubeApiVideosParams('10', 6, 'snippet,contentDetails')
+                            params: youtubeApiVideosParams('10', 12, 'snippet,contentDetails')
                             })
                         .then(function (musicResponse) {
                             updateFirebaseRoom( roomRef , {localeYoutubeMusicTrends: musicResponse.data.items});
@@ -304,7 +304,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     async function setIdPlaying(idPlaying) {
         goToSecond(0);
         setPlayedPercents(0);
-        await delay(250);
+        await delay(250);        
+        let pageTitle = (roomIsPlaying && isVarExistNotEmpty(room.playlistUrls)) ? room.playlistUrls[idPlaying].title : 'Playlist '+roomId;
+        setPageTitle(pageTitle+ ' - Play-it.fr');
         setPlayerIdPlayed(idPlaying);
         if(isActuallyAdmin) {
            updateFirebaseRoom( roomRef , {

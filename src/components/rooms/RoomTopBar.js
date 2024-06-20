@@ -69,7 +69,7 @@ const RoomTopBar = ({
                             <ListItemIcon>
                                 <InfoIcon />
                             </ListItemIcon>
-                            <Typography>{isAdminView ? t('RoomLeftMenuHost') : t('RoomLeftMenuHostedBy')} {!isAdminView ? <b>{room.admin}</b> : '' }</Typography>
+                            <Typography className='varelaFontTitle'>{isAdminView ? t('RoomLeftMenuHost') : t('RoomLeftMenuHostedBy')} {!isAdminView ? <b>{room.admin}</b> : '' }</Typography>
                         </ListItemButton>
                     </ListItem>
                     
@@ -100,7 +100,7 @@ const RoomTopBar = ({
                                     inputProps={{ 'aria-label': 'controlled' }}
                                 />
                             </ListItemIcon>
-                            <Typography>{guestSynchroOrNot ? t('RoomLeftMenuSync') : t('RoomLeftMenuNotSync')}</Typography>
+                            <Typography className='varelaFontTitle'>{guestSynchroOrNot ? t('RoomLeftMenuSync') : t('RoomLeftMenuNotSync')}</Typography>
                         </ListItemButton>
                     </ListItem>}
                {/*     <ListItem key='roomDrawDeezerStatus' disablePadding>
@@ -125,7 +125,7 @@ const RoomTopBar = ({
                             <ListItemIcon>
                                 <TuneIcon />    
                             </ListItemIcon>
-                            <Typography>{t('RoomLeftMenuRoomParams')}</Typography>
+                            <Typography className='varelaFontTitle'>{t('RoomLeftMenuRoomParams')}</Typography>
                         </ListItemButton>
                     </ListItem>
                     {guestSynchroOrNot && <ListItem key='roomDrawRoomSharee' disablePadding>
@@ -133,7 +133,7 @@ const RoomTopBar = ({
                             <ListItemIcon>
                                 <Groups3Icon />
                             </ListItemIcon>
-                            <Typography>
+                            <Typography className='varelaFontTitle'>
                                 {isAdminView ? t('ModalChangePlaylistAdmin') : t('ModalChangePlaylistAdmin2') }</Typography>
                         </ListItemButton>
                     </ListItem>}
@@ -145,7 +145,7 @@ const RoomTopBar = ({
                             <ListItemIcon>
                                 <ShareIcon />
                             </ListItemIcon>
-                            <Typography>{t('RoomLeftMenuRoomShare')}</Typography>
+                            <Typography className='varelaFontTitle'>{t('RoomLeftMenuRoomShare')}</Typography>
                         </ListItemButton>
                     </ListItem>
 
@@ -157,7 +157,7 @@ const RoomTopBar = ({
                         <ListItemIcon>
                             <ExitToAppIcon />
                         </ListItemIcon>
-                        <Typography>{t('RoomLeftMenuRoomLeave')}</Typography>
+                        <Typography className='varelaFontTitle'>{t('RoomLeftMenuRoomLeave')}</Typography>
                     </ListItemButton>
                 </ListItem>
                 <ListItem key='playlistDrawAPK' sx={{position:'absolute', bottom:0}} disablePadding>
@@ -165,7 +165,7 @@ const RoomTopBar = ({
                         <ListItemIcon>
                             {<GFontIcon icon="install_mobile" customClass='colorBlue'/>}
                         </ListItemIcon> 
-                        <Typography>{t('GeneralDownloadAPK')}</Typography>
+                        <Typography className='varelaFontTitle'>{t('GeneralDownloadAPK')}</Typography>
                     </ListItemButton>
                 </ListItem>
             </SwipeableDrawer>
