@@ -24,48 +24,52 @@
 @use 'tutorial.scss';
 
 .votebuttons > button {
-padding: 2px !important;
-min-width: 50px;
+    padding: 2px !important;
+    min-width: 50px;
 }
 
 .roomPlaylistbloc  .MuiLinearProgress-root {
-background-color: #786b4d !important;
+    background-color: #786b4d !important;
 }
 .MuiListItemButton-root.Mui-selected:hover {
-background-color: var(--main-bg-color) !important;
+    background-color: var(--main-bg-color) !important;
 }
 
 
 .black_style_dialog .MuiPaper-root {
-background:var(--main-bg-color);
-background-image:url('../img/textura.png');
-background-size: cover;
-background-position: 50% 50%;
+    background:var(--main-bg-color);
+    background-image:url('../img/textura.png');
+    background-size: cover;
+    background-position: 50% 50%;
+}
+
+.full_width_modal_content_container {
+    overflow-x: hidden !important;
 }
 
 @media (max-width: 500px) { 
 
-.spotify_header .player_button_container>div {
-    margin: 0 auto !important;
-    max-width: 80%;
-}
+    .spotify_header .player_button_container>div {
+        margin: 0 auto !important;
+        max-width: 80%;
+    }
 
-.full_width_modal_content_container {
-    padding: 0 !important;
-}
+    .full_width_modal_content_container {
+        padding: 0 !important;  
+    }
 
-.input_big input, .input_big.typed,.input_big.typed:focus {
-    font-size: 1em;
-    background-color:rgba(255, 255, 255, 0.1);
-}
+    .input_big input, .input_big.typed,.input_big.typed:focus {
+        font-size: 1em;
+        background-color:rgba(255, 255, 255, 0.1);
+    }
 
 
-.video_title_list span {
-    font-size: 0.8em;
-}
-.hidden-xs {
-    display: none !important;
-}
+    .video_title_list span {
+        font-size: 0.8em;
+    }
+    .hidden-xs {
+        display: none !important;
+    }
 }
 
 .interactionImageContainer {

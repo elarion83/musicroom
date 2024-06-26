@@ -7,6 +7,12 @@ body,html {
   color: var(--blue-light) !important;
 }
 
+.colorWhite, 
+.colorWhite svg {
+  color:var(--white) !important;
+  fill:var(--white) !important;
+}
+
 .scroll  {
   scrollbar-width:thin !important;
   scroll-behavior: smooth;

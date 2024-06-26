@@ -69,7 +69,7 @@ export const shareArray = {
 }
 
 export function searchTextArray() {
-    return [i18n.t('GeneralSearchFor') + i18n.t('GeneralMusics') + ' '+i18n.t('GeneralOn') + ' YOUTUBE',
+    return [i18n.t('GeneralSearchFor') + i18n.t('GeneralMusics'),
         i18n.t('GeneralSearchFor') + i18n.t('GeneralSmthTrendings', {what:i18n.t('GeneralVideos')}) + ' '+i18n.t('GeneralOn') + ' YOUTUBE',
         i18n.t('GeneralSearchFor') + i18n.t('GeneralMovieTrailers') + ' '+i18n.t('GeneralOn') + ' YOUTUBE',
     ];

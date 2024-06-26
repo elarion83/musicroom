@@ -160,12 +160,12 @@ const RoomTopBar = ({
                         <Typography className='varelaFontTitle'>{t('RoomLeftMenuRoomLeave')}</Typography>
                     </ListItemButton>
                 </ListItem>
-                <ListItem key='playlistDrawAPK' sx={{position:'absolute', bottom:'5px', borderTop:'1px solid var(--main-color-lighter)'}} disablePadding>
+                <ListItem key='playlistDrawAPK' className='texturaBgButton' sx={{position:'absolute', bottom:0,pb:0.5, pt:0.5, bgcolor:'var(--main-color-lighter)'}} disablePadding>
                     <ListItemButton href={appApkFileUrl}>
                         <ListItemIcon>
-                            {<GFontIcon icon="install_mobile" customClass='colorBlue'/>}
+                            {<GFontIcon icon="install_mobile" customClass='colorWhite'/>}
                         </ListItemIcon> 
-                        <Typography className='varelaFontTitle'>{t('GeneralDownloadAPK')}</Typography>
+                        <Typography className='varelaFontTitle colorWhite '>{t('GeneralDownloadAPK')}</Typography>
                     </ListItemButton>
                 </ListItem>
             </SwipeableDrawer>

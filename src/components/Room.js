@@ -15,7 +15,7 @@ import axios from "axios";
 import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
-import {isFromSpotify,isFromDeezer,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, isVarExist,  isDevEnv, secondsSinceEventFromNow, autoAddYTObject, randomInt, isVarExistNotEmpty, setPageTitle, envAppNameUrl} from '../services/utils';
+import {isFromSpotify,isFromDeezer,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, isVarExist,  isDevEnv, secondsSinceEventFromNow, autoAddYTObject, randomInt, isVarExistNotEmpty, setPageTitle, envAppNameUrl, isEmpty} from '../services/utils';
 import RoomPlaylistDrawer from "./rooms/playlistSection/drawer/RoomPlaylistDrawer";
 
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
@@ -531,11 +531,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
         await axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, { params: params })
         .then(async function(response) {
-
-            var responseItemLength = randomInt(0,response.data.items.length-1);
-            var suggestMedia = autoAddYTObject(response.data.items[responseItemLength]);
-            await handleAddValidatedObjectToPlaylist(suggestMedia);
-            CreateGoogleAnalyticsEvent('Actions','Autoplay add', 'Autoplay add');
+            if(!isEmpty(response.data.items)) {
+                var responseItemLength = randomInt(0,response.data.items.length-1);
+                var suggestMedia = autoAddYTObject(response.data.items[responseItemLength]);
+                await handleAddValidatedObjectToPlaylist(suggestMedia);
+                CreateGoogleAnalyticsEvent('Actions','Autoplay add', 'Autoplay add');
+            }
         });
     }
 
@@ -657,13 +658,17 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                 { /* pip ? 'Disable PiP' : 'Enable PiP' */ }
                                                 <Grid item sm={12} sx={{ padding:0,pl:1.5,ml:0, mb: 0 , mt:1, fill:'#f0f1f0'}}>
                                                     <Grid item 
-                                                    sx={[{pb:1}, isFromSpotify(room.playlistUrls[playerIdPlayed]) &&  { justifyContent: 'center' } ]} 
+                                                    sx={[isFromSpotify(room.playlistUrls[playerIdPlayed]) &&  { justifyContent: 'center' } ]} 
                                                     className="flexRowCenterH">
                                                         <Typography component={'span'} className='mediaTitle varelaFontTitle'>
                                                             {getDisplayTitle(room.playlistUrls[playerIdPlayed], 50)}
                                                         </Typography>
                                                     </Grid>
-                                                    
+
+                                                    <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1, fontSize: '12px', textTransform:'uppercase', color:'var(--grey-lighter)' }} className='fontFamilyNunito'>
+                                                        {room.playlistUrls[playerIdPlayed].channelOrArtist}
+                                                    </Typography> 
+
                                                     <Grid item sm={12} md={12} >
                                                         <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase', color:'var(--grey-inspired)' }} className='fontFamilyNunito'>
                                                             {roomIsPlaying ? t('GeneralPlaying') : t('GeneralPause')}

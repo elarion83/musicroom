@@ -3,7 +3,7 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import axios from "axios";
 import dateFormat from "dateformat";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Typed from "react-typed";
 import { v4 as uuid } from 'uuid';
 
@@ -14,7 +14,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import validator from 'validator';
 import SearchResultItem from '../searchResultItem';
-import { YTV3APIDurationToReadable, cleanMediaTitle, getDisplayTitle, getLocale, getYTVidId, isProdEnv } from '../../../services/utils';
+import { YTV3APIDurationToReadable, cleanMediaTitle, getDisplayTitle, getLocale, getYTVidId, isEmpty, isProdEnv } from '../../../services/utils';
 import { withTranslation } from 'react-i18next';
 import { Button, Dialog, SwipeableDrawer, Typography } from '@mui/material';
 import SoundWave from "../../../services/SoundWave";
@@ -26,6 +26,7 @@ import  NewContentslider  from '../../../services/YoutubeVideoSlider';
 import SearchResultItemNew from '../searchResultItemNew';
 import { mockYoutubeSearchResoltForVald, mockYoutubeSearchResultForVald, mockYoutubeTrendResult } from '../../../services/mockedArray';
 import YoutubeVideoSlider from '../../../services/YoutubeVideoSlider';
+import { returnAnimateReplace } from '../../../services/animateReplace';
 const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, roomIsPlaying, currentUser, validatedObjectToAdd, spotifyTokenProps, DeezerTokenProps }) => {
     const [mediaSearchResultYoutube, setMediaSearchResultYoutube] = useState([]);
     const [mediaSearchResultSpotify, setMediaSearchResultSpotify] = useState([]);
@@ -35,6 +36,8 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
     const [recentlyAddedTitle, setRecentlyAddedTitle] = useState('');
     const [showYoutubeTrends, setShowYoutubeTrends] = useState(true);
     const [isSearching, setIsSearching] = useState(false);
+    const animatedElementsRef = [];
+    const [needAnimationReplace, setNeedAnimationReplace] = useState(false);
 
     const [tabIndex, setTabIndex] = useState(0);
     const handleTabChange = (event, newTabIndex) => {
@@ -45,6 +48,19 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
 
     const addingObject = { title: '', deleted: false, source: '', url: '', addedBy: currentUser.displayName };
 
+    async function changeOpenInComp(openOrNot) {
+        returnAnimateReplace(animatedElementsRef, {In:"Out", Up:"Down", animate__delay:'animate__delay-2s'}, /In|Up|animate__delay/gi);
+        await delay(200);
+        setNeedAnimationReplace(true);
+        changeOpen(openOrNot);
+    }
+
+
+	useEffect(() => {
+        if(open && needAnimationReplace) {
+            returnAnimateReplace(animatedElementsRef, {Out:"In", Down:"Up", animate__delay:'animate__delay-2s'}, /Out|Down|animate__delay/gi);
+        }
+	}, [open]); 
 
     async function handleCheckAndAddObjectToPlaylistFromObject(objectFormatted) {
         validatedObjectToAdd(objectFormatted);
@@ -144,7 +160,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
             >
             <Container sx={{ padding: '3em', pt: 0, height: '100vh', zIndex: 3 }} maxWidth={false} className="full_width_modal_content_container">
 
-                <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'row' }} className="autowriter_container">
+                <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'row', position:'relative', mt:1 }} className="autowriter_container">
                     <Typed
                         strings={searchTextArray()}
                         typeSpeed={5}
@@ -161,9 +177,9 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                             onKeyPress={(ev) => { if (ev.key === 'Enter') { handleSearchForMedia() } }}
                             onChange={e => setSearchTerm(e.target.value)}
                             value={searchTerm}
-                            style={{ width: '100%', height: '100%', flexGrow: 1, paddingRight: '0', bgcolor: 'rgba(255, 255, 255, 0.1)', pl: 2 }}
                         />
                     </Typed>
+                    {isEmpty(searchTerm) && <div id="typed-cursor"></div>}
                     <LoadingButton
                         loading={isSearching}
                         sx={{
@@ -178,7 +194,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                 </Grid>
 
                 {room.localeYoutubeTrends.length > 0 && room.localeYoutubeMusicTrends.length > 0 && showYoutubeTrends &&
-                <Container sx={{padding:'0 !important', paddingBottom:'65px !important'}} maxWidth={false}>
+                <Container sx={{padding:'0 !important'}} maxWidth={false}>
                     
                     <Typography variant="h6" sx={{mt:1, ml:1, color:'var(--white)'}} gutterBottom>
                         {t('GeneralSmthTrendings', {what:'Videos'})}
@@ -202,7 +218,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                        {/* <Tab sx={{ color: 'var(--white)' }} label="Deezer" disabled={mediaSearchResultDeezer && mediaSearchResultDeezer.length > 1 ? false : true} />
                         <Tab sx={{ color: 'var(--white)' }} label="Dailymotion" disabled={mediaSearchResultDailyMotion.length > 1 ? false : true} /> 
                     </Tabs> */}
-                    <Box sx={{ lineHeight: "15px", p: 0, pt: 0, mb: 0 }}>
+                    <Box sx={{ lineHeight: "15px", p: 0, pt: 0, mb: 0, paddingBottom:'80px !important' }}>
                         {tabIndex === 0 && (
                             <Box>
                                 {mediaSearchResultYoutube.length > 0 &&
@@ -308,33 +324,32 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                 />
             </Container>
 
-            <Grid className="" sx={{ bgcolor: '#202124', pb: 0, cursor:'pointer', flexFlow: 'nowrap', position:'fixed', bottom:0, zIndex:100 }} container 
-                    onClick={(e) => changeOpen(false)} >
-                <Button
-                    className='modal_full_screen_close_left'
-                    aria-label="close"
-                    sx={{ bgcolor: '#131416', mr: 1, borderRadius: 0 }}
-                    xs={12}
-                >
-                    <KeyboardArrowDown sx={{ fontSize: '3.5em', color: 'var(--main-color)', fill: 'var(--main-color)' }} className='animate__animated animate__fadeInLeft animate__fast' />
-                </Button >
-                {room.playlistEmpty &&
-                    <Box sx={{ display: 'flex', flexDirection: 'column', padding: '1em' }}>
-                        <Typography  sx={{color: 'var(--main-color-lighter)', textTransform: 'uppercase'}}> Playlist <b>{room.id}</b></Typography>
-                        <Typography sx={{ color: 'var(--white)', display: 'block', width: '100%', ml: 0, fontSize: '12px' }} > Playlist {t('GeneralEmpty')} </Typography>
-                    </Box>}
-                {typeof (room.playlistUrls) !== 'undefined' && !room.playlistEmpty &&
-                    <Box sx={{ display: 'flex', flexDirection: 'column', p: '8px' }}>
-                        <Typography sx={{ color: 'var(--white)', display: 'block', width: '100%', ml: 0, pl: 0, fontSize: '12px', textTransform: 'uppercase' }} > Playlist <b>{room.id}</b></Typography>
+                <Grid  sx={{ bgcolor: '#202124', pb: 0, cursor:'pointer', flexFlow: 'nowrap', position:'fixed', bottom:0, zIndex:100 }} container 
+                        onClick={(e) => changeOpenInComp(false)} ref={el => animatedElementsRef.push(el)}  className='animate__animated animate__fadeInUpBig animate__delay-2s animate__fast' >
+                    <Button
+                        className='modal_full_screen_close_left'
+                        aria-label="close"
+                        xs={12}
+                    >
+                        <KeyboardArrowDown sx={{ fontSize: '3.5em', color: 'var(--white)', fill: 'var(--white)' }} />
+                    </Button >
+                    {room.playlistEmpty &&
+                        <Box sx={{ display: 'flex', flexDirection: 'column', padding: '1em' }}>
+                            <Typography  sx={{color: 'var(--main-color-lighter)', textTransform: 'uppercase'}}> Playlist <b>{room.id}</b></Typography>
+                            <Typography sx={{ color: 'var(--white)', display: 'block', width: '100%', ml: 0, fontSize: '12px' }} > Playlist {t('GeneralEmpty')} </Typography>
+                        </Box>}
+                    {typeof (room.playlistUrls) !== 'undefined' && !room.playlistEmpty &&
+                        <Box sx={{ display: 'flex', flexDirection: 'column', p: '8px' }}>
+                            <Typography sx={{ color: 'var(--white)', display: 'block', width: '100%', ml: 0, pl: 0, fontSize: '12px', textTransform: 'uppercase' }} > Playlist <b>{room.id}</b></Typography>
 
-                        <Box sx={{ color: 'var(--white)', display: 'flex', gap: '10px', flexDirection: 'row', alignItems: 'center', width: '100%', ml: 1, mt: 1, fontSize: '10px', textTransform: 'uppercase' }} >
-                            <SoundWave waveNumber={7} isPlayingOrNo={roomIsPlaying} />
-                            <Typography fontSize="small" component={'span'} className='varelaFontTitle' >
-                                {getDisplayTitle(room.playlistUrls[room.playing])}
-                            </Typography>
-                        </Box>
-                    </Box>}
-            </Grid>
+                            <Box sx={{ color: 'var(--white)', display: 'flex', gap: '10px', flexDirection: 'row', alignItems: 'center', width: '100%', ml: 1, mt: 1, fontSize: '10px', textTransform: 'uppercase' }} >
+                                <SoundWave waveNumber={7} isPlayingOrNo={roomIsPlaying} />
+                                <Typography fontSize="small" component={'span'} className='varelaFontTitle' >
+                                    {getDisplayTitle(room.playlistUrls[room.playing])}
+                                </Typography>
+                            </Box>
+                        </Box>}
+                </Grid>
         </SwipeableDrawer>
     )
 };
