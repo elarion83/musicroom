@@ -3,10 +3,11 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import './services/i18n/i18n';
+import AppRoutes from "./AppRoute";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <AppRoutes />
   </React.StrictMode>,
   document.getElementById("root")
 );
