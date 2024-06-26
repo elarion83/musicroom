@@ -91,7 +91,7 @@ const BottomInteractions = ({ t,roomRef, layoutDisplay, setLayoutdisplay, paramD
 
             </div>}
             {(isChatExpanded || layoutDisplay === 'interactive') && 
-                <Chat roomRef={roomRef} currentUser={currentUser} layoutDisplay={layoutDisplay} setLayoutdisplay={setLayoutdisplay} roomId={roomId} createNewRoomInteraction={createNewRoomInteraction} userCanMakeInteraction={userCanMakeInteraction} roomParams={roomParams} className='chatBox' hideTchat={e => setIsChatExpanded(false)} />
+                <Chat openAddToPlaylistModal={setOpenAddToPlaylistModal} roomRef={roomRef} currentUser={currentUser} layoutDisplay={layoutDisplay} setLayoutdisplay={setLayoutdisplay} roomId={roomId} createNewRoomInteraction={createNewRoomInteraction} userCanMakeInteraction={userCanMakeInteraction} roomParams={roomParams} className='chatBox' hideTchat={e => setIsChatExpanded(false)} />
             }
             
             {checkNotificationsLength && (getLastNotif(roomNotifs).createdBy !== currentUser.displayName) && notifsTextArray[getLastNotif(roomNotifs).type] &&

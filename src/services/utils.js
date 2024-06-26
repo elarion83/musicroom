@@ -5,6 +5,9 @@ import dateFormat from "dateformat";
 import { v4 as uuid } from 'uuid';
 import SearchResultItemNew from '../components/rooms/searchResultItemNew';
 
+export const envAppNameUrl = process.env.REACT_APP_NAME_URL;
+export const envAppNameHum = process.env.REACT_APP_NAME;
+
 export function isProdEnv() {
     return process.env.NODE_ENV === "production";
 }
@@ -139,6 +142,14 @@ export function isLayoutInteractive(actualLayout) {
 
 export function isLayoutCompact(actualLayout) {
     return actualLayout === 'compact';
+}
+
+export function userIsFromWeb() {
+    return typeof document !== 'undefined';
+}
+
+export function userIsFromApp() {
+    return typeof navigator !== 'undefined' && navigator.product === 'ReactNative';
 }
 
 export function createInteractionAnimation(interaction, layoutDisplay = 'unknown') {
@@ -288,5 +299,31 @@ export function autoAddYTObject(item) {
         vote: {'up':0,'down':0}
     }
 }
+
+export function hexColorToRgb(hex) {
+    // Supprime le "#" du début si présent
+    hex = hex.replace('#', '');
+
+    // Décompose la couleur hexadécimale en composantes RGB
+    let r, g, b;
+    if (hex.length === 3) {
+        // Gestion du format raccourci "#RGB"
+        r = parseInt(hex.charAt(0) + hex.charAt(0), 16);
+        g = parseInt(hex.charAt(1) + hex.charAt(1), 16);
+        b = parseInt(hex.charAt(2) + hex.charAt(2), 16);
+    } else if (hex.length === 6) {
+        // Gestion du format complet "#RRGGBB"
+        r = parseInt(hex.substring(0, 2), 16);
+        g = parseInt(hex.substring(2, 4), 16);
+        b = parseInt(hex.substring(4, 6), 16);
+    } else {
+        // Format incorrect de la couleur hexadécimale
+        throw new Error('Format de couleur hexadécimale incorrect.');
+    }
+
+    // Retourne les composantes RGB sous forme d'objet
+    return +r+', '+g+','+ b ;
+}
+
 
 export const appApkFileUrl = process.env.REACT_APP_FRONT_HOME_URL+"/play-it.apk";

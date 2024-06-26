@@ -23,7 +23,7 @@ import { Snackbar, Typography } from "@mui/material";
 import { PseudoGenerated } from './services/pseudoGenerator';
 
 import { CreateGoogleAnalyticsEvent } from './services/googleAnalytics';
-import { GFontIcon, appApkFileUrl, isVarExist } from "./services/utils";
+import { GFontIcon, appApkFileUrl, envAppNameHum, isEmpty, isVarExist, setPageTitle } from "./services/utils";
 import {replaceCurrentUrlWithHomeUrl, replaceCurrentUrlWithRoomUrl } from './services/redirects';
 
 import { withTranslation } from 'react-i18next';
@@ -31,7 +31,7 @@ import { createUserDataObject } from "./services/utilsArray";
 import { browserLocalPersistence, createUserWithEmailAndPassword, getAdditionalUserInfo, onAuthStateChanged, setPersistence, signInAnonymously, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 import {  doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { getCleanRoomId } from "./services/utilsRoom";
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 function App( {t} ) {
   
   // general app statuts
@@ -39,13 +39,14 @@ function App( {t} ) {
   const [isLoginLoading, setIsLoginLoading] = useState(false);
   const [loginErrorMessage, setLoginErrorMessage] = useState();
   const [stickyDisplay, setStickyDisplay] = useState(false);
-
+  const navigate = useNavigate();
   // for login + action
   const [funcAfterLogin, setFuncAfterLogin] = useState('');
 
   // room infos
   const routeParams = useParams();
-  const [roomId, setRoomId] = useState(isVarExist(routeParams.roomId) && routeParams.roomId.length === 5 ? routeParams.roomId : replaceCurrentUrlWithHomeUrl());
+  var testRoomIdGetter = isVarExist(routeParams.roomId) ? routeParams.roomId : (window.location.pathname.substring(1).length === 5) ? window.location.pathname.substring(1) : '';
+  const [roomId, setRoomId] = useState(testRoomIdGetter);
 
   // user infos
   const [isSignedIn, setIsSignedIn] = useState(false);
@@ -61,8 +62,11 @@ function App( {t} ) {
   const [logoutOkSnackBarOpen, setLogoutOkSnackBarOpen] = useState(false);
 
   useEffect(() => {
-      if(localStorage.getItem("Play-It_RoomId")) {
+      if(localStorage.getItem("Play-It_RoomId") && isEmpty(roomId)) {
         joinRoomByRoomId(localStorage.getItem("Play-It_RoomId"));
+      }
+      if(localStorage.getItem("Play-It_RoomId") && !isEmpty(roomId)) {
+        localStorage.setItem("Play-It_RoomId", getCleanRoomId(roomId));
       }
   })
 
@@ -74,32 +78,19 @@ function App( {t} ) {
   }
 
   function joinRoomByRoomId(idRoom, isAfterCreation = false) {
-    setRoomId(getCleanRoomId(idRoom));
+    var cleanRoomId = getCleanRoomId(idRoom);
+    setRoomId(cleanRoomId);
     
-    replaceCurrentUrlWithRoomUrl(getCleanRoomId(idRoom));
+   // replaceCurrentUrlWithRoomUrl(getCleanRoomId(idRoom));
     localStorage.setItem("Play-It_RoomId", idRoom);
 
     if(!isAfterCreation) {
       setJoinRoomModalOpen(false);
       CreateGoogleAnalyticsEvent('Actions','Rejoin. playlist','Playlist id :'+idRoom);
     }
+    navigate("/"+cleanRoomId);
   }
   
-    useEffect(() => {
-      const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-        if (currentUser && !isLoginLoading) {
-          const userDocRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, currentUser.uid);
-          const userDocSnap = await getDoc(userDocRef);
-          if (userDocSnap.exists()) {
-            finishAuthProcess(currentUser, userDocSnap.data(), 'persistentAuth')
-          } 
-        } else {
-          console.log('loug ?')
-        }
-    });
-
-    return () => unsubscribe();
-    }, []);
 
   /***********
    * AUTH // LOGIN HANDLER FUNCTION IN ORDER THEY'RE USED
@@ -108,12 +99,14 @@ function App( {t} ) {
    * PRE-LOGIN-FUNCTION : preLoginFunc()
    * GOOGLE LOGIN HANDLER : handleGoogleLogin()
    * ANONYMOUS LOGIN HANDLER : anonymousLogin()
-   * POST-LOGIN-FUNCTION doActionAfterAuth()
-   * END-LOGIN-FUNCTION finishAuthProcess()
+   * POST-LOGIN-FUNCTION : doActionAfterAuth()
+   * END-LOGIN-FUNCTION : finishAuthProcess()
    * CALLBACK AFTER LOGIN : doActionAfterLogin()
    * 
    * LOGIN HELPERS //
-   * LOGIN-FAILED-HELPER setLoginFailed()
+   * LOGIN-FAILED-HELPER : setLoginFailed()
+   * LOGIN-KEEP-ALIVE : UseEffect() -> regular snapshot of user
+   * LOGOUT FUNCTION
   */
 
   /* OPEN AUTH MODAL */
@@ -158,13 +151,9 @@ function App( {t} ) {
     var newUser = getAdditionalUserInfo(user).isNewUser;
     let userRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, entireUserDatas.uid);
     if(newUser) {
-      console.log('new user');
       var userInfosTemp = createUserDataObject(entireUserDatas.uid, !entireUserDatas.providerData[0] ? 'anon' : entireUserDatas.providerData[0].providerId, PseudoGenerated, entireUserDatas.isAnonymous);
       await setDoc(userRef, userInfosTemp).then(async () => {
         await getDoc(userRef).then(async (userFirebaseData) => {
-          console.log('get doc');
-          console.log(userFirebaseData);
-          console.log(userFirebaseData.data());
           await finishAuthProcess(entireUserDatas, userFirebaseData.data(), 'newAuth', newUser);
         });
       });
@@ -212,14 +201,30 @@ function App( {t} ) {
     setIsLoginLoading(false);
   }
 
+  /* LOGIN-KEEP-ALIVE */
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser && !isLoginLoading) {
+        const userDocRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, currentUser.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        if (userDocSnap.exists()) {
+          finishAuthProcess(currentUser, userDocSnap.data(), 'persistentAuth')
+        } 
+      } else {
+        console.log('loug ?')
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   /* LOGOUT FUNCTION */
   function logOut() {
     setIsSignedIn(false);
     setUserInfo({});
     localStorage.removeItem("Play-It_RoomId");
     signOut(auth).then(() => {
-      replaceCurrentUrlWithHomeUrl(); 
-      setRoomId();
+      goFromPlaylistToHome();
       setLogoutOkSnackBarOpen(true);   
       CreateGoogleAnalyticsEvent('Actions','Logout','Logout');
     });
@@ -253,8 +258,7 @@ function App( {t} ) {
   }
 
   function handleQuitRoomMain() {
-    setRoomId();
-    replaceCurrentUrlWithHomeUrl();
+    goFromPlaylistToHome();
     localStorage.removeItem("Play-It_RoomId");
     localStorage.removeItem("Play-It_SpotifyToken");
     
@@ -267,13 +271,20 @@ function App( {t} ) {
       await updateDoc(userRef, user.customDatas);
   }
 
+  function goFromPlaylistToHome() {
+      setRoomId();
+      navigate("/");
+      /* replaceCurrentUrlWithHomeUrl(); */
+      setPageTitle(envAppNameHum+' - Playlists collaborative en temps réel');
+  }
+
   return (
     <>
       <CssBaseline />
       <Container maxWidth={false} className={roomId ? 'main_container' : 'main_container homecontainer'} sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
-         <AppBar className={roomId ? stickyDisplay ? 'topBarIsInRoomSticky' : 'topBarIsInRoom' : 'topBarClassic'} position="static" sx={{bgcolor: '#202124'}}>
+         <AppBar className={(roomId && isSignedIn) ? stickyDisplay ? 'topBarIsInRoomSticky' : 'topBarIsInRoom' : 'topBarClassic'} position="static" sx={{bgcolor: '#202124'}}>
             <Toolbar>
-               <img src="img/logo_py1.png" style={{ width: 'auto', maxWidth:'50%', maxHeight:'30px'}} alt="Play-It logo"/>
+               <img src="img/logo_py1.png" style={{ width: 'auto', maxWidth:'50%', maxHeight:'30px'}} alt={envAppNameHum+" logo"} />
                 <UserTopBar loggedIn={isSignedIn} user={userInfos} setUserInfo={setUserInfoEdit} joinRoomByRoomId={joinRoomByRoomId} handleOpenLoginModal={setLoginModalOpen} handleLogout={logOut} />
             </Toolbar>
           </AppBar>

@@ -15,7 +15,7 @@ import axios from "axios";
 import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
-import {isFromSpotify,isFromDeezer,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, isVarExist,  isDevEnv, secondsSinceEventFromNow, autoAddYTObject, randomInt, isVarExistNotEmpty, setPageTitle} from '../services/utils';
+import {isFromSpotify,isFromDeezer,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, isVarExist,  isDevEnv, secondsSinceEventFromNow, autoAddYTObject, randomInt, isVarExistNotEmpty, setPageTitle, envAppNameUrl} from '../services/utils';
 import RoomPlaylistDrawer from "./rooms/playlistSection/drawer/RoomPlaylistDrawer";
 
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
@@ -165,6 +165,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     // TUTORIAL
     const [isTutorialShown, setIsTutorialShown] = useState(true);
     const [tutoTranslateY, hideTuto] = useState('0');
+
     useEffect(() => {
         if(OpenAddToPlaylistModal && isTutorialShown) {
             setIsTutorialShown(false);
@@ -174,16 +175,27 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     async function initTutorial() {
         if(isTutorialShown) {
-            setTimeout(() => {
-                hideTuto('-35vh');
-                setTimeout(() => {
-                    setIsTutorialShown(false);                
-                }, 2000);               
-            }, 8000);
+            await delay(8000); 
+            hideTuto('-35vh'); 
+            await delay(2000);   
+            setIsTutorialShown(false);    
         }
     }
 
+    // GET DOCUMENT ON INIT (get firebase room datas)
+	useEffect(() => {
+        if(isVarExistNotEmpty(roomId)) {
+            const initRoomFetchFirebase = async () => {
+                const firebaseRoom = await getDoc(roomRef);
+                var roomDatas = firebaseRoom.exists() ? firebaseRoom.data() : createDefaultRoomObject(roomId.toLowerCase(), currentUser);
+                initRoom(roomDatas, roomId.toLowerCase(), !firebaseRoom.exists(), currentUser, roomRef);
+            };
+            initRoomFetchFirebase();
+            setPageTitle('Playlist '+roomId+ ' - '+envAppNameUrl);
+        }
+	}, [roomId]);
 
+    /* Init room : if new room, create it then next function */
     async function initRoom(roomDatas, roomId = '', create = true, currentUser, docRef = null) {
         if(create) {
             await setDoc(docRef, roomDatas);
@@ -193,6 +205,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         }
     }
 
+    /* create local room object, set player, admin, controls, ... then loaded */
     async function initRoomAsync(roomDatas, currentUser) {
         setRoom(roomDatas);
         setPlayerIdPlayed(roomDatas.playing);
@@ -200,27 +213,13 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         setPlayerControlsShown(currentUser.uid === roomDatas.adminUid);
         setRoomIsPlaying(roomDatas.actuallyPlaying);
         setLoaded(true);
-        await initTutorial();
     }
-    
-    // GET DOCUMENT ON INIT
-	useEffect(() => {
-        if(isVarExistNotEmpty(roomId)) {
-            const initRoomFetchFirebase = async () => {
-                const firebaseRoom = await getDoc(roomRef);
-                var roomDatas = firebaseRoom.exists() ? firebaseRoom.data() : createDefaultRoomObject(roomId.toLowerCase(), currentUser);
-                initRoom(roomDatas, roomId.toLowerCase(), !firebaseRoom.exists(), currentUser, roomRef);
-            };
-            initRoomFetchFirebase();
-            setPageTitle('Playlist '+roomId+ 'Play-it.fr');
-        }
-	}, [roomId]);
-
 
     // AUTO UPDATE DOCUMENT ON USER IS SYNC
 	useEffect(() => {
         let unsubscribe = () => {};
         if(loaded) {
+            initTutorial();
             if(guestSynchroOrNot) {
                 setPlayerControlsShown(isActuallyAdmin);
                 unsubscribe = onSnapshot(roomRef, (doc) => {
@@ -298,6 +297,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         setPlayerControlsShown(isActuallyAdmin);
 	}, [isActuallyAdmin]);
     
+
     async function setIsPlaying(PlayingOrNot) {
         setRoomIsPlaying(PlayingOrNot);
         if(isActuallyAdmin) {
@@ -310,7 +310,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         setPlayedPercents(0);
         await delay(250);        
         let pageTitle = (roomIsPlaying && isVarExistNotEmpty(room.playlistUrls)) ? room.playlistUrls[idPlaying].title : 'Playlist '+roomId;
-        setPageTitle(pageTitle+ ' - Play-it.fr');
+        setPageTitle(pageTitle+ ' - '+envAppNameUrl);
         setPlayerIdPlayed(idPlaying);
         if(isActuallyAdmin) {
            updateFirebaseRoom( roomRef , {
@@ -349,7 +349,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     
     useEffect(() => {
         let pageTitle = (roomIsPlaying && isVarExistNotEmpty(room.playlistUrls)) ? room.playlistUrls[playerIdPlayed].title : 'Playlist '+roomId;
-        setPageTitle(pageTitle+' - Play-it.fr');
+        setPageTitle(pageTitle+' - '+envAppNameUrl);
     }, [roomIsPlaying]);
             
 
@@ -424,8 +424,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     async function handleAddValidatedObjectToPlaylist(validatedObjectToAdd) {
         validatedObjectToAdd.timestamp = Date.now();
         room.playlistUrls.push(validatedObjectToAdd);
+        updateFirebaseRoom( roomRef , {playlistUrls: room.playlistUrls, playlistEmpty: false});        
         room.playlistEmpty = false;
-        updateFirebaseRoom( roomRef , {playlistUrls: room.playlistUrls, playlistEmpty: false});
     }
 
     function handleChangeIdShownInDrawer(idToShow) {
@@ -578,7 +578,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     <>
                         {!room.playlistEmpty && 
                             <>
-                                {room.playlistUrls.length > 0 && 
+                                {isVarExistNotEmpty(room.playlistUrls) && 
                                     <Box sx={{bgcolor:'#303030',borderBottom: '2px solid var(--border-color)', padding:"0px 0em"}} className={room.playlistUrls[playerIdPlayed].source+'Display'}> 
                                         <Grid container spacing={0} sx={{ bgcolor:'var(--grey-dark)'}} className={ isLayoutCompact(layoutDisplay) ? 'playerHide' : 'playerShow'}>
 

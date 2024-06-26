@@ -12,13 +12,13 @@ import { LoadingButton } from "@mui/lab";
 import { db } from '../../../services/firebase';
 
 import { returnAnimateReplace } from '../../../services/animateReplace';
-import { waitingTextReaction, waitingTextChat } from '../../../services/utils';
+import { waitingTextReaction, waitingTextChat, GFontIcon } from '../../../services/utils';
 import { withTranslation } from 'react-i18next';
 import { arrayUnion, onSnapshot, updateDoc } from 'firebase/firestore';
 import { createMessageObject } from '../../../services/utilsArray';
 
 
-const Chat = ({t, layoutDisplay, roomRef, setLayoutdisplay, roomParams, currentUser, roomId, userCanMakeInteraction,createNewRoomInteraction, hideTchat}) => {
+const Chat = ({t, layoutDisplay, roomRef, setLayoutdisplay, roomParams, currentUser, roomId, userCanMakeInteraction,createNewRoomInteraction, hideTchat, openAddToPlaylistModal}) => {
 
     const [isChatUltraExpanded, setIsChatUltraExpanded] = useState(false);
     const chatBoxRef = useRef([]);
@@ -95,21 +95,13 @@ const Chat = ({t, layoutDisplay, roomRef, setLayoutdisplay, roomParams, currentU
     return(
         <Box sx={{ flexGrow: 1 , pl:1, pr:1, mb:1}}>
             <Grid container spacing={2} sx={{alignItems:'end'}}>
-                <Grid item xs={2} md={1} 
-                sx={{display:'flex', flexDirection:'column', 
-                justifyContent:'space-between', alignItems:'center'}}>
-                    {layoutDisplay !== 'interactive' && <Tooltip  ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInLeft animate__faster' title={t('RoomBottomButtonChatHide')}>  
-                        <Fab size="small" variant="extended" className='room_small_button_interactions'  
-                            sx={{justifyContent: 'center', ml:0}} onClick={e => hideTchatInComp()} >
-                            <Icon icon="tabler:messages-off" width='20' />
-                        </Fab>
-                    </Tooltip>}
-                    {layoutDisplay === 'interactive' && <Tooltip  ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInLeft animate__faster' title={t('RoomBottomButtonChatHide')}>  
-                        <Fab size="small" variant="extended" className='room_small_button_interactions'  
-                            sx={{justifyContent: 'center', ml:0}} onClick={e => setLayoutdisplay('default')} >
-                            <ViewModuleIcon sx={{color:'rgb(25, 118, 210)'}} />
-                        </Fab>
-                    </Tooltip>}
+                <Grid item xs={2} md={1} sx={{display:'flex', flexDirection:'column',justifyContent:'space-between',gap:'5px', paddingTop:'0px !important',alignItems:'center'}}>
+
+                    <Fab ref={el => animatedElementsRef.push(el)} size="small" variant="extended" className='animate__animated animate__fadeInLeft animate__faster room_small_button_interactions main_bg_color'  
+                        sx={{justifyContent: 'center', ml:0, mb:0.5}} onClick={e => openAddToPlaylistModal(true)} >
+                        <GFontIcon icon='format_list_bulleted_add' width='20'/>
+                    </Fab>
+                                        
                     <Tooltip  ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInLeft animate__fast'}
                         title={!userCanMakeInteraction ? waitingTextReaction(roomParams.interactionFrequence): ''}>  
                         <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mt:1,mr:0, ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('laugh') : ''}>
@@ -130,7 +122,20 @@ const Chat = ({t, layoutDisplay, roomRef, setLayoutdisplay, roomParams, currentU
                             <FavoriteIcon fontSize="small" sx={{color:'var(--white)'}} />
                             {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
                         </Fab>
-                    </Tooltip>  
+                    </Tooltip> 
+                    
+                    {layoutDisplay !== 'interactive' && <Tooltip  ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInLeft animate__faster' title={t('RoomBottomButtonChatHide')}>  
+                        <Fab size="small" variant="extended" className='room_small_button_interactions'  
+                            sx={{justifyContent: 'center', ml:0, mt:1}} onClick={e => hideTchatInComp()} >
+                            <Icon icon="tabler:messages-off" width='20' />
+                        </Fab>
+                    </Tooltip>}
+                    {layoutDisplay === 'interactive' && <Tooltip  ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInLeft animate__faster' title={t('RoomBottomButtonChatHide')}>  
+                        <Fab size="small" variant="extended" className='room_small_button_interactions'  
+                            sx={{justifyContent: 'center', ml:0, mt:1}} onClick={e => setLayoutdisplay('default')} >
+                            <ViewModuleIcon sx={{color:'rgb(25, 118, 210)'}} />
+                        </Fab>
+                    </Tooltip>} 
                 </Grid>
                 <Grid item xs={10} md={11} sx={{pr:'4vw'}} 
                 className="chatBoxGrid" >
@@ -143,7 +148,7 @@ const Chat = ({t, layoutDisplay, roomRef, setLayoutdisplay, roomParams, currentU
                         borderTop:'4px solid var(--grey-dark-rgb)', 
                         boxShadow:20
                         }} >
-                        <Box sx={{height:isChatUltraExpanded ? '70vh': '150px',p:0,m:0, overflowY:'scroll', transition:'var(--transition-smooth-all)'}} ref={chatBoxRef}>
+                        <Box sx={{height:isChatUltraExpanded ? '70vh': '180px',p:0,m:0, overflowY:'scroll', transition:'var(--transition-smooth-all)'}} ref={chatBoxRef}>
                             <Box key='welCome' sx={{display:'flex',mb:1, justifyContent:'start'}}>
                                 <Typography fontSize='small' sx={{color:'var(--grey-light)', fontWeight:'bold'}}> 
                                     {t('RoomChatWelcomeMessage')}
