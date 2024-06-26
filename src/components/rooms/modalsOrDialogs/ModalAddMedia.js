@@ -148,7 +148,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                     <Typed
                         strings={searchTextArray()}
                         typeSpeed={5}
-                        showCursor={true}
+                        showCursor
                         backSpeed={15}
                         attr="placeholder"
                         loop
@@ -178,14 +178,14 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                 </Grid>
 
                 {room.localeYoutubeTrends.length > 0 && room.localeYoutubeMusicTrends.length > 0 && showYoutubeTrends &&
-                <Container sx={{padding:'0 !important'}} maxWidth={false}>
+                <Container sx={{padding:'0 !important', paddingBottom:'65px !important'}} maxWidth={false}>
                     
-                    <Typography variant="h6" sx={{mt:1, ml:1}} gutterBottom>
+                    <Typography variant="h6" sx={{mt:1, ml:1, color:'var(--white)'}} gutterBottom>
                         {t('GeneralSmthTrendings', {what:'Videos'})}
                     </Typography>
                     <YoutubeVideoSlider itemsArray={room.localeYoutubeTrends} addingObject={addingObject} addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject} />
 
-                    <Typography variant="h6" sx={{mt:4, ml:1}} gutterBottom>
+                    <Typography variant="h6" sx={{mt:4, ml:1, color:'var(--white)'}} gutterBottom>
                         {t('GeneralSmthTrendings', {what:t('GeneralMusics')})}
                     </Typography>
                     <YoutubeVideoSlider itemsArray={room.localeYoutubeMusicTrends} addingObject={addingObject} addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject} />

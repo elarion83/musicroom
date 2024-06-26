@@ -13,7 +13,7 @@ const SearchResultItemNew = ({ duration = null,image, title,description = '', so
                 title={title}
             />
             <CardContent className='resultBoxContent' sx={{bgcolor:'var(--white)',position:'relative',mt:'-42px', padding:'2px 5px 0px 5px !important',flexGrow:1}}>
-                <Typography className="fontFamilyNunito" sx={{ ml:0, mb: 0, fontSize: '9px', fontWeight:'lighter', mb:1}}><b>{channelOrArtist} </b></Typography>
+                <Typography className="fontFamilyNunito" sx={{ ml:0, mb: 0, fontSize: '9px', fontWeight:'lighter'}}><b>{channelOrArtist} </b></Typography>
 
                 <Typography gutterBottom component="div" fontSize='12px' sx={{p:0}} className="resulttitle varelaFontTitle">
                 {title}

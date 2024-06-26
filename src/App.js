@@ -23,7 +23,7 @@ import { Snackbar, Typography } from "@mui/material";
 import { PseudoGenerated } from './services/pseudoGenerator';
 
 import { CreateGoogleAnalyticsEvent } from './services/googleAnalytics';
-import { GFontIcon, appApkFileUrl } from "./services/utils";
+import { GFontIcon, appApkFileUrl, isVarExist } from "./services/utils";
 import {replaceCurrentUrlWithHomeUrl, replaceCurrentUrlWithRoomUrl } from './services/redirects';
 
 import { withTranslation } from 'react-i18next';
@@ -44,7 +44,8 @@ function App( {t} ) {
   const [funcAfterLogin, setFuncAfterLogin] = useState('');
 
   // room infos
-  const [roomId, setRoomId] = useState(window.location.pathname.substring(1).length === 5 ? window.location.pathname.substring(1) : replaceCurrentUrlWithHomeUrl());
+  const routeParams = useParams();
+  const [roomId, setRoomId] = useState(isVarExist(routeParams.roomId) && routeParams.roomId.length === 5 ? routeParams.roomId : replaceCurrentUrlWithHomeUrl());
 
   // user infos
   const [isSignedIn, setIsSignedIn] = useState(false);
