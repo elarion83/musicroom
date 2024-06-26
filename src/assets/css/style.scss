@@ -1,27 +1,27 @@
-@import 'var.css';
-@import 'font.css';
-@import 'animations.css';
-@import 'globalStyle.css';
-@import 'home.css';
+@import 'var.scss';
+@import 'font.scss';
+@import 'animations.scss';
+@import 'globalStyle.scss';
+@import 'home.scss';
 
-@import 'mainTopBar.css';
+@import 'mainTopBar.scss';
 
-@import 'playlist.css';
-@import 'soundWave.css';
+@import 'playlist.scss';
+@import 'soundWave.scss';
 
-@import 'player.css';
-@import 'playersParticularity.css';
+@import 'player.scss';
+@import 'playersParticularity.scss';
 
-@import 'roomBottomSection.css';
-@import 'modalShareRoom.css';
-@import 'modalJoinRoom.css';
-@import 'modalAddMedia.css';
-@import 'modalUserProfile.css';
+@import 'roomBottomSection.scss';
+@import 'modalShareRoom.scss';
+@import 'modalJoinRoom.scss';
+@import 'modalAddMedia.scss';
+@import 'modalUserProfile.scss';
 
-@import 'layout.css';
+@import 'layout.scss';
 
-@import 'playlistList.css';
-@import 'tutorial.css';
+@import 'playlistList.scss';
+@import 'tutorial.scss';
 
 .votebuttons > button {
 padding: 2px !important;
@@ -96,20 +96,21 @@ background-position: 50% 50%;
     top: 46%;
     width: 100%;
     padding: 2em;
-}
-.loadingRoomInfo p {
-    z-index: 2;
-    top: 12px;
-    position: relative;
-    text-shadow: 2px 2px 6px rgba(0,0,0,1), 0px -5px 35px rgba(0,0,0,1);
-}
-.loadingRoomInfo .soundWaveContainer {
-    z-index: 1;  
-    position: absolute;
-    transform: scale(2);  
-    height: 55px;
-}
-
-.loadingRoomInfo .soundWaveContainer .box {
-    background: linear-gradient(to top, rgba(0, 123, 255, 0.5) 10%,rgb(0, 123, 255) 50%,rgb(0, 123, 255) 70%, rgba(0, 123, 255, 0.5));
+    
+    p {
+        z-index: 2;
+        top: 12px;
+        position: relative;
+        text-shadow: 2px 2px 6px rgba(0,0,0,1), 0px -5px 35px rgba(0,0,0,1);
+    }
+    .soundWaveContainer {
+        z-index: 1;  
+        position: absolute;
+        transform: scale(2);  
+        height: 55px;
+        
+        .box {
+            background: linear-gradient(to top, rgba(0, 123, 255, 0.5) 10%,rgb(0, 123, 255) 50%,rgb(0, 123, 255) 70%, rgba(0, 123, 255, 0.5));
+        }
+    }
 }
