@@ -8,6 +8,7 @@ import { getLocale } from "../utils";
 const resources = {
   en: {
     translation: {
+        "GeneralSlogan" : 'Real-time collaborative playlists',
         "GeneralContinue":'Continue',
         "GeneralLogin" : "Login",
         "GeneralLogout":'Logout',
@@ -19,7 +20,8 @@ const resources = {
         "GeneralYes":'Yes',
         "GeneralNo":'No',
         "GeneralBy":'By',
-        "GeneralVia":'From',
+        "GeneralVia":'From',        
+        "GeneralErrorHappened":'An error has occurred',
         "GeneralClose":'Close',
         "GeneralLeave":'Leave',
         "GeneralStay":'Stay',
@@ -45,7 +47,7 @@ const resources = {
         "GeneralHome":'Homepage',
         "GeneralAnon" : "Anonymous",
         "GeneralLength":"Length",
-        "GeneralSnackWelcome" : "Welcome",
+        "GeneralSnackWelcome" : "Welcome {{who}} !",
         "GeneralSnackSeeYouSoon" : "See you soon !",
         "GeneralNickname" : "Nickname",
         "GeneralDownloadAPK" : "Get Android APP",
@@ -164,6 +166,7 @@ const resources = {
   },
   fr: {
     translation: {
+        "GeneralSlogan" : 'Playlists collaborative en temps réel',
         "GeneralContinue":'Continuer',
         "GeneralLogin":'Connexion',
         "GeneralLogout":'Déconnexion',
@@ -176,6 +179,7 @@ const resources = {
         "GeneralNo":'Non',
         "GeneralBy":'Par',
         "GeneralVia":'Via',
+        "GeneralErrorHappened":'Une erreur est survenue',
         "GeneralClose":'Fermer',
         "GeneralLeave":'Quitter',
         "GeneralStay":'Rester',
@@ -200,7 +204,7 @@ const resources = {
         "GeneralHome":'Accueil',
         "GeneralAnon" : "Anonyme",
         "GeneralLength":"Longueur",
-        "GeneralSnackWelcome" : "Bienvenue",
+        "GeneralSnackWelcome" : "Bienvenue {{who}} !",
         "GeneralSnackSeeYouSoon" : "A bientôt !",
         "GeneralNickname" : "Pseudo",
         "GeneralDownloadAPK" : "Télécharger l'APP",

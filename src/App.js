@@ -23,7 +23,7 @@ import { Snackbar, Typography } from "@mui/material";
 import { PseudoGenerated } from './services/pseudoGenerator';
 
 import { CreateGoogleAnalyticsEvent } from './services/googleAnalytics';
-import { GFontIcon, appApkFileUrl, envAppNameHum, isEmpty, isVarExist, setPageTitle } from "./services/utils";
+import { GFontIcon, appApkFileUrl, envAppNameHum, isEmpty, isVarExist, isVarExistNotEmpty, setPageTitle } from "./services/utils";
 import {replaceCurrentUrlWithHomeUrl, replaceCurrentUrlWithRoomUrl } from './services/redirects';
 
 import { withTranslation } from 'react-i18next';
@@ -129,7 +129,7 @@ function App( {t} ) {
           doActionAfterAuth(result, 'userInUser');
         })
         .catch((err) => {
-            setLoginFailed('Une erreur est survenue');
+            setLoginFailed(t('GeneralErrorHappened'));
         });
   }
 
@@ -140,7 +140,7 @@ function App( {t} ) {
         doActionAfterAuth(result, 'userInUser');
       })
       .catch((err) => {
-          setLoginFailed('Une erreur est survenue');
+          setLoginFailed(t('GeneralErrorHappened'));
       });
   }
 
@@ -275,7 +275,7 @@ function App( {t} ) {
       setRoomId();
       navigate("/");
       /* replaceCurrentUrlWithHomeUrl(); */
-      setPageTitle(envAppNameHum+' - Playlists collaborative en temps réel');
+      setPageTitle(envAppNameHum+' - '+t('GeneralSlogan'));
   }
 
   return (
@@ -328,7 +328,7 @@ function App( {t} ) {
           handleGoogleLogin={handleGoogleLogin}
           handlePasswordAndMailLogin={handlePasswordAndMailLogin}
           loginErrorMessage={loginErrorMessage}
-          loginLoading={isLoginLoading}
+          loginLoading={(isVarExistNotEmpty(roomId) && isSignedIn) ? isAppLoading : isLoginLoading}
           redirectToHome={handleQuitRoomMain}
           roomId={roomId}
         />}
@@ -338,14 +338,14 @@ function App( {t} ) {
           autoHideDuration={3000}
           onClose={() => setLoginOkSnackBarOpen(false)}
           sx={{borderRadius:'2px'}}
-          message={t('GeneralSnackWelcome') +' '+ userInfos.displayName+" !"}
+          message={t('GeneralSnackWelcome', {who:userInfos.displayName})}
         />
         <Snackbar
           open={loginNewUserOkSnackBarOpen}
           autoHideDuration={3000}
           onClose={() => setLoginNewUserOkSnackBarOpen(false)}
           sx={{borderRadius:'2px'}}
-          message={t('GeneralSnackWelcome') +' '+ userInfos.displayName+", 1e "+ t('GeneralLogin').toLowerCase()}
+          message={t('GeneralSnackWelcome', {who:userInfos.displayName})+" 1e "+ t('GeneralLogin').toLowerCase()}
         />
         <Snackbar
           open={logoutOkSnackBarOpen}

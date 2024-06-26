@@ -78,7 +78,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
     }
 
     async function getYoutubeVideoInfosFromId(videoId, addingObject) {
-        await axios.get('https://www.googleapis.com/youtube/v3/videos', { params: youtubeApiVideoInfoParams(videoId) })
+        await axios.get(process.env.REACT_APP_YOUTUBE_VIDEOS_URL, { params: youtubeApiVideoInfoParams(videoId) })
             .then(function (response) {
                 addingObject.title = cleanMediaTitle(response.data.items[0].snippet.title);
             });
