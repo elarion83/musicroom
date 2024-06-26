@@ -21,7 +21,7 @@ import Groups3Icon from '@mui/icons-material/Groups3';
 
 import { withTranslation } from 'react-i18next';
 import VolumeButton from "./playerSection/VolumeButton";
-import { GFontIcon, playingFirstInList, playingLastInList } from '../../services/utils';
+import { GFontIcon, appApkFileUrl, playingFirstInList, playingLastInList } from '../../services/utils';
 
 const RoomTopBar = ({
                 t,
@@ -161,7 +161,7 @@ const RoomTopBar = ({
                     </ListItemButton>
                 </ListItem>
                 <ListItem key='playlistDrawAPK' sx={{position:'absolute', bottom:0}} disablePadding>
-                    <ListItemButton href={process.env.REACT_APP_FRONT_HOME_URL+"/play-it.apk"}>
+                    <ListItemButton href={appApkFileUrl}>
                         <ListItemIcon>
                             {<GFontIcon icon="install_mobile" customClass='colorBlue'/>}
                         </ListItemIcon> 

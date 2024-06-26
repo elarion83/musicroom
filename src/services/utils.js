@@ -288,3 +288,5 @@ export function autoAddYTObject(item) {
         vote: {'up':0,'down':0}
     }
 }
+
+export const appApkFileUrl = process.env.REACT_APP_FRONT_HOME_URL+"/play-it.apk";

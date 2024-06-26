@@ -23,7 +23,7 @@ import { Snackbar, Typography } from "@mui/material";
 import { PseudoGenerated } from './services/pseudoGenerator';
 
 import { CreateGoogleAnalyticsEvent } from './services/googleAnalytics';
-import { GFontIcon } from "./services/utils";
+import { GFontIcon, appApkFileUrl } from "./services/utils";
 import {replaceCurrentUrlWithHomeUrl, replaceCurrentUrlWithRoomUrl } from './services/redirects';
 
 import { withTranslation } from 'react-i18next';
@@ -31,9 +31,9 @@ import { createUserDataObject } from "./services/utilsArray";
 import { browserLocalPersistence, createUserWithEmailAndPassword, getAdditionalUserInfo, onAuthStateChanged, setPersistence, signInAnonymously, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
 import {  doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { getCleanRoomId } from "./services/utilsRoom";
+import { useParams } from 'react-router-dom';
 function App( {t} ) {
   
-
   // general app statuts
   const [isAppLoading, setIsAppLoading] = useState(true);
   const [isLoginLoading, setIsLoginLoading] = useState(false);
@@ -287,7 +287,7 @@ function App( {t} ) {
                     <Icon icon="icon-park-outline:connect"  width="30" style={{marginRight:'20px'}}/>
                     <Typography variant="button" sx={{pt:'3px'}}>{t('HomePageButtonsJoinRoom')} </Typography>
                 </Button> 
-                <Button variant="outlined" size="small" target="_blank" href={process.env.REACT_APP_FRONT_HOME_URL+"/play-it.apk"} className='varelaFontTitle buttonBorder' sx={{width:'100%',transform:'scale(0.8)',color:'var(--white)',bgcolor:'var(--grey-dark)', height:'50px', mt:'2em', mb:'2em'}} 
+                <Button variant="outlined" size="small" target="_blank" href={appApkFileUrl} className='varelaFontTitle buttonBorder' sx={{width:'100%',transform:'scale(0.8)',color:'var(--white)',bgcolor:'var(--grey-dark)', height:'50px', mt:'2em', mb:'2em'}} 
                 > 
                   {<GFontIcon icon="install_mobile"/>}
                   <Typography variant="button" sx={{pl:2, textTransform:'uppercase'}}> {t('GeneralDownloadAPK')} </Typography>
