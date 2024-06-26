@@ -192,7 +192,7 @@ export function createUserDataObject(userUid = 0, registerType, pseudo, anonLogi
         colorRgb:hexColorToRgb(userColor),
         avatarId:randomInt(1,9),
         uid:userUid,
-        loginType: anonLogin ? 'anona' : registerType,
+        loginType: anonLogin ? 'anon' : registerType,
         userParams:{
             NotifsActivated:true
         }

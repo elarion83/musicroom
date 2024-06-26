@@ -1,54 +1,53 @@
 .joinRoomForm {
     display: flex;
     gap: 10px;
-}
+    .input {
+        position: relative;
+        width: 50px;
+        height: auto;
+        background-color: var(--main-color);
+        border: 2px solid #ccc;
+        border-radius: 6px;
+        transition: border-color 0.3s ease;  
+        color: var(--white) !important;
 
-.joinRoomForm .input {
-    position: relative;
-    width: 50px;
-    height: auto;
-    background-color: var(--main-color);
-    border: 2px solid #ccc;
-    border-radius: 6px;
-    transition: border-color 0.3s ease;  
-    color: var(--white) !important;
-}
-.joinRoomForm .input input{
-    border-radius: 3px;
-    border: none !important;
-    text-transform: uppercase;
-    background-color: transparent;
-    font-family: var(--main-typo-family);
-    font-size: 3em;
-    font-weight: bold;
-    font-style: normal;
-    font-stretch: normal;
-    line-height: normal;
-    letter-spacing: 1px;
-    color: var(--white) !important;
-    flex-grow: 0;
-    width: 100%;
-    text-align: center;
-    background-image: url('../img/textura.png');
-    background-size: 50px 250px;
-    background-repeat: round;
-}
-
-.joinRoomForm .input::after {
-    position: absolute;
-    content: '';
-    bottom: 3px;
-    width: 84%;
-    height: 2px;
-    background-color: var(--white);
-    left: 4px;
-}
+        input{
+            border-radius: 3px;
+            border: none !important;
+            text-transform: uppercase;
+            background-color: transparent;
+            font-family: var(--main-typo-family);
+            font-size: 3em;
+            font-weight: bold;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: normal;
+            letter-spacing: 1px;
+            color: var(--white) !important;
+            flex-grow: 0;
+            width: 100%;
+            text-align: center;
+            background-image: url('../img/textura.png');
+            background-size: 50px 250px;
+            background-repeat: round;
+        }
+        &::after {
+            position: absolute;
+            content: '';
+            bottom: 3px;
+            width: 84%;
+            height: 2px;
+            background-color: var(--white);
+            left: 4px;
+        }
+    }
 
 /* Join room submit form is also used in the change host modal */
-.joinRoomForm.adminForm {
-    display: flex;
-    gap: 10px;
-    justify-content: space-evenly;
-    max-width: 250px;  
-    margin: 1em auto;
+    &.adminForm {
+        display: flex;
+        gap: 10px;
+        justify-content: space-evenly;
+        max-width: 250px;  
+        margin: 1em auto;
+    }
 }
