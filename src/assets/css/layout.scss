@@ -7,6 +7,13 @@
     max-width: 100vw !important;
     height: 100%;
     z-index: 8000;
+    .PlayerRSWP{     
+        padding: 0;
+        width: 80%;
+        margin: auto;
+        margin-top: auto;
+        margin-top: 1em;
+    }
 }
 
 .fullscreen+div .player_button_container {
@@ -15,14 +22,6 @@
     z-index: 20000;
     width: 100%;
     height: 59px;
-}
-
-.fullscreen .PlayerRSWP{     
-    padding: 0;
-    width: 80%;
-    margin: auto;
-    margin-top: auto;
-    margin-top: 1em;
 }
 
 .fullscreenLayout .spotifyDisplay .musicOnlyPlayer_header {
@@ -45,30 +44,30 @@
 }
 
 
-.interactiveLayout .playerShow {
-    position: fixed;
-    top:0;
-    z-index: 2000;
-    width: 100%;
-    height: 100vh;
-    display: block;
-}
+.interactiveLayout {
+    .playerShow {
+        position: fixed;
+        top:0;
+        z-index: 2000;
+        width: 100%;
+        height: 100vh;
+        display: block;
+        >div {
+            width: 100%;
+            max-width: 100%;
+        }
+    }
+    .playerContainer  {
+        height: 75%;
+    }
 
-.interactiveLayout .playerContainer  {
-    height: 75%;
-}
-
-.interactiveLayout .playerShow>div {
-    width: 100%;
-    max-width: 100%;
-}
-
-.interactiveLayout+.room_bottom_interactions  {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    width: 50%;
-    z-index: 2500;
+    +.room_bottom_interactions  {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        width: 50%;
+        z-index: 2500;
+    }
 }
 
 .interactiveLayout .player_button_container, 
@@ -105,27 +104,35 @@
         width: 60%;
     }
     
-    .defaultLayout .player_button_container,
-    .defaultLayout .player_button_container .adminButtons ,
-    .defaultLayout .player_button_container button{
+    .defaultLayout .player_button_container {
         padding-top: 0;
-    }
-    .defaultLayout .player_button_container .adminButtons .volumeButton {
-        margin-top: 0;
+
+        .adminButtons {
+            padding-top: 0;
+            .volumeButton {
+                margin-top: 0;
+            }
+        }
+        button{
+            padding-top: 0;
+        }
     }
 }
+
 @media (max-width: 500px) { 
 
-    .interactiveLayout .playerContainer  {
-        height: 50%;
-    }
-    
-    .interactiveLayout+.room_bottom_interactions {
-        width: 100%;
-    }
-    
-    .fullscreenLayout .MuiButtonBase-root  {
-        padding-left: 0;
-        padding-right: 0;
+    .interactiveLayout {
+        .playerContainer  {
+            height: 50%;
+        }
+        
+        +.room_bottom_interactions {
+            width: 100%;
+        }
+        
+        .MuiButtonBase-root  {
+            padding-left: 0;
+            padding-right: 0;
+        }
     }
 }

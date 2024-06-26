@@ -1,27 +1,27 @@
-@import 'var.scss';
-@import 'font.scss';
-@import 'animations.scss';
-@import 'globalStyle.scss';
-@import 'home.scss';
+@use 'var.scss';
+@use 'font.scss';
+@use 'animations.scss';
+@use 'globalStyle.scss';
+@use 'home.scss';
 
-@import 'mainTopBar.scss';
+@use 'mainTopBar.scss';
 
-@import 'playlist.scss';
-@import 'soundWave.scss';
+@use 'playlist.scss';
+@use 'soundWave.scss';
 
-@import 'player.scss';
-@import 'playersParticularity.scss';
+@use 'player.scss';
+@use 'playersParticularity.scss';
 
-@import 'roomBottomSection.scss';
-@import 'modalShareRoom.scss';
-@import 'modalJoinRoom.scss';
-@import 'modalAddMedia.scss';
-@import 'modalUserProfile.scss';
+@use 'roomBottomSection.scss';
+@use 'modalShareRoom.scss';
+@use 'modalJoinRoom.scss';
+@use 'modalAddMedia.scss';
+@use 'modalUserProfile.scss';
 
-@import 'layout.scss';
+@use 'layout.scss';
 
-@import 'playlistList.scss';
-@import 'tutorial.scss';
+@use 'playlistList.scss';
+@use 'tutorial.scss';
 
 .votebuttons > button {
 padding: 2px !important;
