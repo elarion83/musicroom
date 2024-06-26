@@ -1,18 +1,18 @@
-.userAvatarBig>div {
-    outline:rgba(147, 147, 147, 0.53) solid 7px;
+.userAvatarBig {
     background: #cecece;
     width: 110px;
+    padding: 12px;
     height: 110px;
+    outline-style: dashed;
+    outline-width: 7px;
     display: flex;
     margin: 1em auto 1em auto;
     border-radius: 50%;
-	-webkit-animation: rotate-scale-up 1s ease-in-out both;
-	        animation: rotate-scale-up 1s ease-in-out both;
-}
-
-.userAvatarBig>div svg{
-    width: 85%;
-    margin: auto;
+    -webkit-animation: rotate-scale-up 1s ease-in-out both;
+            animation: rotate-scale-up 1s ease-in-out both;
+    svg{
+        width: 100%;
+    }
 }
 
 .userInfosList .small span {

@@ -17,6 +17,7 @@ import UserParamModal from './modals/UserParamModal';
 import UserRoomListModal from './modals/UserRoomListModal';
 import { ReactSVG } from "react-svg";
 import { withTranslation } from 'react-i18next';
+import UserAvatarComponent from '../../services/utilsComponents';
 const UserTopBar = ({ t, user, loggedIn, setUserInfo, handleLogout, handleOpenLoginModal, joinRoomByRoomId }) => {
 
   // menu
@@ -56,7 +57,7 @@ const UserTopBar = ({ t, user, loggedIn, setUserInfo, handleLogout, handleOpenLo
                   aria-haspopup="true"
                   aria-expanded={open ? 'true' : undefined}
                 >
-                  <ReactSVG src={"./img/avatars/botts"+user.customDatas.avatarId+".svg"} className='userAvatar' />
+                  <UserAvatarComponent user={user} cssClass='userAvatar' />
                 </IconButton>
               </Tooltip>
                 

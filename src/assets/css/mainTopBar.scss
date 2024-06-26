@@ -6,16 +6,26 @@
     z-index: 500;
     right: 0;
     box-shadow: none !important;
-}
 
-.topBarIsInRoom img {
-    display: none;
+    img {
+        display: none;
+    }
+    
+    .MuiIconButton-sizeSmall {
+        padding: 0;
+    }
+
+    .MuiToolbar-root {
+        height: 45px;
+        min-height: 0;
+    }
 }
 
 .userAvatar {
-    width: 35px;
-    height: 35px;
-    outline: rgba(255, 255, 255, 0.53) solid 2px;
+    height: 30px;  
+    outline-style: dashed;
+    width: 30px;
+    outline-width: 2px;
     background: rgb(117, 107, 107);
     border-radius: 50%;
     padding: 4px;
@@ -27,33 +37,11 @@
     margin: -10px;
 }
 
-.topBarIsInRoom .userAvatar {
-    height: 30px;
-    width: 30px;
-}
-
-.topBarIsInRoom .MuiIconButton-sizeSmall {
-    padding: 0;
-}
-
-.topBarIsInRoom .MuiToolbar-root {
-    height: 45px;
-    min-height: 0;
-}
-
-.topBarIsInRoom .MuiAvatar-root {
-    height: 30px;
-    width: 30px;
-}
-
 .stickyRoomTopBar {
     padding-right: 10px !important;
-}
-
-.stickyRoomTopBar .MuiFormControlLabel-root {
-    margin-right: 0;
-}
-
-.stickyRoomTopBar {
-      box-shadow: 0px 5px 10px -1px rgba(0, 0, 0, 0.8),0px 10px 50px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12);
+    box-shadow: 0px 5px 10px -1px rgba(0, 0, 0, 0.8),0px 10px 50px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12);
+    
+    .MuiFormControlLabel-root {
+        margin-right: 0;
+    }
 }

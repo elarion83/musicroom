@@ -13,6 +13,7 @@ import { ReactSVG } from "react-svg";
 import { AccountCircle, CancelOutlined , Save } from "@mui/icons-material";
 import { cleanPseudoEntered, isPseudoEnteredValid } from "../../../services/utils";
 import CachedIcon from '@mui/icons-material/Cached';
+import UserAvatarComponent from "../../../services/utilsComponents";
 const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
 
   const delay = ms => new Promise(res => setTimeout(res, ms));
@@ -36,7 +37,7 @@ const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
             <ModalsHeader icon={() => <AccountCircleIcon />} title={t('ModalUserSettingsTitle')} />
 
             <DialogContent dividers sx={{pt:2}}>
-                <ReactSVG src={"./img/avatars/botts"+user.customDatas.avatarId+".svg"}  className="userAvatarBig"/>
+                <UserAvatarComponent user={user} cssClass='userAvatarBig' />
                 <Box sx={{textAlign:'center', mb:2, fontWeight:'bold'}}>
                     {isEditingPseudo && 
                         <Grid item md={12}>
