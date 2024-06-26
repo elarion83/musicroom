@@ -152,33 +152,37 @@ function App( {t} ) {
 
   /* POST-LOGIN-FUNCTION */
   async function doActionAfterAuth(user, objectType = 'simple') {
-
+    console.log('doActionAfterAuth');
     var entireUserDatas = (objectType == 'simple') ? user : user.user;
-
+    var newUser = getAdditionalUserInfo(user).isNewUser;
     let userRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, entireUserDatas.uid);
-    if(getAdditionalUserInfo(user).isNewUser) {
+    if(newUser) {
+      console.log('new user');
       var userInfosTemp = createUserDataObject(entireUserDatas.uid, !entireUserDatas.providerData[0] ? 'anon' : entireUserDatas.providerData[0].providerId, PseudoGenerated, entireUserDatas.isAnonymous);
-      await setDoc(userRef, userInfosTemp).then(() => {
-        getDoc(userRef).then((userFirebaseData) => {
-          finishAuthProcess(entireUserDatas, userFirebaseData.data(), 'newAuth');
+      await setDoc(userRef, userInfosTemp).then(async () => {
+        await getDoc(userRef).then(async (userFirebaseData) => {
+          console.log('get doc');
+          console.log(userFirebaseData);
+          console.log(userFirebaseData.data());
+          await finishAuthProcess(entireUserDatas, userFirebaseData.data(), 'newAuth', newUser);
         });
       });
     }  else {
-      await getDoc(userRef).then((userFirebaseData) => {
-        finishAuthProcess(entireUserDatas, userFirebaseData.data(), 'newAuth');
+      await getDoc(userRef).then(async (userFirebaseData) => {
+        await finishAuthProcess(entireUserDatas, userFirebaseData.data(), 'newAuth', newUser);
       });
     }
   }
 
   /* END-LOGIN-FUNCTION */
-  function finishAuthProcess(globalDatas, customDatas, actionType) {
+  async function finishAuthProcess(globalDatas, customDatas, actionType, newUser=false) {
     globalDatas.displayName = customDatas.displayName;
     globalDatas.customDatas = customDatas;
     setUserInfo(globalDatas);
     setIsSignedIn(true);
 
     if('newAuth' === actionType) {
-      handleLoginSnack(true);
+      handleLoginSnack(newUser);
       CreateGoogleAnalyticsEvent('Actions',globalDatas.providerId+' login',globalDatas.providerId+' login');
     }
 
@@ -300,8 +304,7 @@ function App( {t} ) {
         {roomId && 
           <>
             {isSignedIn && 
-                <Room currentUser={userInfos} className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain} setStickyDisplay={setStickyDisplay}></Room>
-           
+                <Room currentUser={userInfos} className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain} setStickyDisplay={setStickyDisplay}></Room>     
             }
           </>
         }
