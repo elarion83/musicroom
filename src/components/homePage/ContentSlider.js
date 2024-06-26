@@ -11,12 +11,12 @@ const Contentslider = () => {
 
     useEffect(() => {
       const timer = setInterval(() => {
-        if(getCurrentActiveItem().index < 12) {
+        if(getCurrentActiveItem().index < 3) {
             slideToNextItem();
         } else {
             slideToItem(0);
         }
-      }, 12000);
+      }, 8000);
       return () => {
         window.clearInterval(timer);
       };

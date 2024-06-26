@@ -17,7 +17,7 @@ const YoutubeVideoSlider = ({itemsArray,addingObject=null,addItemToPlaylist}) =>
         } else {
             slideToItem(0);
         }
-      }, 2000);
+      }, 12000);
       return () => {
         window.clearInterval(timer);
       };

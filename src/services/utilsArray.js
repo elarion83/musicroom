@@ -96,7 +96,7 @@ export const playerRefObject = {
 export function createMessageObject(user, roomId, text) {
     return {
         author: user.displayName,
-        authorColor: user.color ?? 'var(--main-color)',
+        authorColor: user.customDatas.color ?? 'var(--main-color)',
         roomId: roomId,
         text:text,
         timestamp: Date.now(),
