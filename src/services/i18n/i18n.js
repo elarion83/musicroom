@@ -103,7 +103,7 @@ const resources = {
         "ModalJoinRoomIDOfTheRoom": "ID of the playlist you want to join",
         "ModalJoinRoomButtonJoin": "Join",
         
-        "ModalLoginTitle": "Login / Register",
+        "ModalLoginTitle": "Authentication",
         "ModalLoginFormPlaceholderEmailAdress": "Mail adress",
         "ModalLoginFormPlaceholderPassword":"Password",
         "ModalLoginButtonAnon": "Continue as anonym",
@@ -259,7 +259,7 @@ const resources = {
         "ModalJoinRoomIDOfTheRoom": "ID de la playlist a rejoindre",
         "ModalJoinRoomButtonJoin": "Rejoindre",
         
-        "ModalLoginTitle": "Connexion / Inscription",
+        "ModalLoginTitle": "Authentification",
         "ModalLoginFormPlaceholderEmailAdress": "Adresse E-mail",
         "ModalLoginFormPlaceholderPassword":"Mot de passe",
         "ModalLoginButtonAnon": "Continuer en anonyme",
