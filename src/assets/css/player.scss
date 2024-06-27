@@ -1,3 +1,20 @@
+/* trick to hide youtube video title */
+.react-player {
+    >div {
+            overflow: hidden;
+            width: 100%;
+            /* Keep it the right aspect-ratio */
+            aspect-ratio: 16/9;
+            /* No clicking/hover effects */
+            pointer-events: none;
+        iframe {
+            width: 300%;
+            height: 100%;
+            margin-left: -100%;
+        }
+    }
+}
+
 .player_button_container {
     position: sticky;
 }
