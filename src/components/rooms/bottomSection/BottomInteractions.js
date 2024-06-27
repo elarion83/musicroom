@@ -117,6 +117,7 @@ const BottomInteractions = ({ t,roomRef, layoutDisplay, setLayoutdisplay, paramD
                 sx={{ borderRadius:'2px'}}
                 message={roomParams.deezer.IsLinked ? roomParams.deezer.UserConnected + " a ajouté Deezer a la playlist !" : "La connexion Deezer a expirée"}
             />
+            
         </Grid>
     )
 };

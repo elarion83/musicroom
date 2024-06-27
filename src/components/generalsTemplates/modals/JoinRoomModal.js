@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Icon } from "@iconify/react";
-import { Dialog, DialogActions, DialogContent, DialogContentText, Typography } from "@mui/material";
+import { Alert, AlertTitle, Dialog, DialogActions, DialogContent, DialogContentText, Typography } from "@mui/material";
 import useDigitInput from 'react-digit-input';
 import { Box } from '@mui/system';
 import { LoadingButton } from '@mui/lab';
@@ -33,7 +33,10 @@ const JoinRoomModal = ({ t, open, handleJoinRoom, changeOpen}) => {
             <ModalsHeader icon={() => <Icon icon='icon-park-outline:connect' style={{marginRight:'10px'}} />} title={t('HomePageButtonsJoinRoom')} />
 
             <DialogContent dividers>
-                <Typography sx={{mb:1}}> {t('ModalJoinRoomIDOfTheRoom')}</Typography>
+                <Alert severity="info" sx={{mb:1, maxWidth:'350px'}}>
+                    <AlertTitle sx={{fontWeight:"bold"}}>{t('ModalJoinRoomIDOfTheRoom')}</AlertTitle>
+                    <Typography fontSize="small" component="p">Entrez ci-dessous l'ID de la playlist que vous souhaitez rejoindre. (Ex : 5454S, E45FR).</Typography>
+                </Alert>
                 <Box className='joinRoomForm'>
                     <div className='input'>
                         <input {...digits[0]} />
@@ -51,7 +54,7 @@ const JoinRoomModal = ({ t, open, handleJoinRoom, changeOpen}) => {
                         <input {...digits[4]} />
                     </div>
                 </Box>
-                <Typography component="span" fontSize="small"> Ex : 5454S, E45FR</Typography>
+                
             </DialogContent>
             <DialogActions>
                 <LoadingButton loading={isJoining}  variant="outlined" position="end">

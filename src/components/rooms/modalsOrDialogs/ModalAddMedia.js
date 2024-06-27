@@ -13,7 +13,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import validator from 'validator';
-import { YTV3APIDurationToReadable, cleanMediaTitle, getDisplayTitle, getLocale, getYTVidId, isEmpty, isProdEnv } from '../../../services/utils';
+import { YTV3APIDurationToReadable, cleanMediaTitle, delay, getDisplayTitle, getLocale, getYTVidId, isEmpty, isProdEnv, isVarExist } from '../../../services/utils';
 import { withTranslation } from 'react-i18next';
 import { Button, Dialog, SwipeableDrawer, Typography } from '@mui/material';
 import SoundWave from "../../../services/SoundWave";
@@ -45,13 +45,11 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
         setTabIndex(newTabIndex);
     };
 
-    const delay = ms => new Promise(res => setTimeout(res, ms));
-
     const addingObject = { title: '', deleted: false, source: '', url: '', addedBy: currentUser.displayName };
 
     async function changeOpenInComp(openOrNot) {
         returnAnimateReplace(animatedElementsRef, {In:"Out", Up:"Down", animate__delay:'animate__delay-1s'}, /In|Up|animate__delay/gi);
-            returnAnimateReplace(animatedDownElementsRef, {Out:"In", Down:"Up", animate__delay:'animate__delay-1s'}, /Out|Down|animate__delay/gi);
+        returnAnimateReplace(animatedDownElementsRef, {Out:"In", Down:"Up", animate__delay:'animate__delay-1s'}, /Out|Down|animate__delay/gi);
         await delay(200);
         setNeedAnimationReplace(true);
         changeOpen(openOrNot);
@@ -199,12 +197,12 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                 {room.localeYoutubeTrends.length > 0 && room.localeYoutubeMusicTrends.length > 0 && showYoutubeTrends &&
                 <Container sx={{padding:'0 !important', paddingBottom:'90px !important' }} maxWidth={false}>
                     
-                    <Typography variant="h6" sx={{mt:1, ml:1, color:'var(--white)'}} gutterBottom>
+                    <Typography variant="h6" sx={{mt:1, ml:1}} className='colorWhite 'gutterBottom>
                         {t('GeneralSmthTrendings', {what:'Videos'})}
                     </Typography>
                     <YoutubeVideoSlider itemsArray={room.localeYoutubeTrends} addingObject={addingObject} addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject} />
 
-                    <Typography variant="h6" sx={{mt:4, ml:1, color:'var(--white)'}} gutterBottom>
+                    <Typography variant="h6" sx={{mt:4, ml:1}} className='colorWhite 'gutterBottom>
                         {t('GeneralSmthTrendings', {what:t('GeneralMusics')})}
                     </Typography>
                     <YoutubeVideoSlider itemsArray={room.localeYoutubeMusicTrends} addingObject={addingObject} addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject} />
@@ -337,19 +335,19 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                     </Button >
                     {room.playlistEmpty &&
                         <Box sx={{ display: 'flex', flexDirection: 'column', padding: '1em' }} >
-                            <Typography  sx={{color: 'var(--main-color-lighter)'}}  ref={el => animatedDownElementsRef.push(el)} className='animate__animated animate__fadeInDownBig animate__delay-1s animate__slow textUppercase'> Playlist <b>{room.id}</b></Typography>
+                            <Typography  sx={{color: 'var(--main-color-lighter)'}}  ref={el => animatedDownElementsRef.push(el)} className='animate__animated animate__fadeInDownBig animate__delay-1s animate__slow textCapitalize'> Playlist <b>{room.id}</b></Typography>
                             <Typography sx={{ display: 'block', width: '100%', ml: 0, fontSize: '12px' }}  ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUpBig animate__delay-1s animate__slow colorWhite'> Playlist {t('GeneralEmpty')} </Typography>
                         </Box>
                     }
-                    {typeof (room.playlistUrls) !== 'undefined' && !room.playlistEmpty &&
+                    {isVarExist(room.playlistUrls) && !room.playlistEmpty &&
                         <Box sx={{ display: 'flex', flexDirection: 'column', p: '8px' }}>
-                            <Typography sx={{ display: 'block', width: '100%', ml: 0, pl: 0, fontSize: '12px' }}  ref={el => animatedDownElementsRef.push(el)} className='animate__animated animate__fadeInDownBig animate__delay-1s animate__slow colorWhite textUppercase'> Playlist <b>{room.id}</b></Typography>
+                            <Typography sx={{ display: 'block', width: '100%', ml: 0, pl: 0, fontSize: '12px' }}  ref={el => animatedDownElementsRef.push(el)} className='animate__animated animate__fadeInDownBig animate__delay-1s animate__slow colorWhite textCapitalize'> Playlist <b>{room.id}</b></Typography>
 
                             <Box 
                              ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUpBig animate__delay-1s animate__slow colorWhite'
                                 sx={{display: 'flex', gap: '10px', flexDirection: 'row', alignItems: 'center', width: '100%', ml: 1, mt: 1, fontSize: '10px' }} >
                                     <SoundWave waveNumber={7} isPlayingOrNo={roomIsPlaying} />
-                                    <Typography fontSize="small" component={'span'} className='varelaFontTitle max-lined max-line-2 firstLetterUppercase' >
+                                    <Typography fontSize="small" component={'span'} className='varelaFontTitle max-lined max-line-2 firstLetterCapitalize' >
                                         {getDisplayTitle(room.playlistUrls[room.playing])}
                                     </Typography>
                             </Box>

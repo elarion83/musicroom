@@ -101,6 +101,10 @@ export function isFromDeezer(media) {
     return media.source === 'deezer';
 }
 
+export function isVarNull(varTested) {
+    return varTested === null;
+}
+
 export function isVarExist(varTested) {
     return typeof(varTested) !== 'undefined' && varTested;
 }

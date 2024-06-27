@@ -73,7 +73,7 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
                             <LoadingButton 
                                     loading={loginLoading}
                                     loadingPosition='start'
-                                    className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton' 
+                                    className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
                                     variant="contained"
                                     startIcon={<Icon icon="mdi:anonymous" />}
                                     onClick={e => handleAnonymousLogin()}>
@@ -85,7 +85,7 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
                             <LoadingButton
                                     loadingPosition='start'
                                     loading={loginLoading}
-                                    className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton' 
+                                    className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
                                     startIcon={<Icon icon="ri:google-fill" />}
                                     variant="contained"
                                     onClick={handleGoogleLogin}>

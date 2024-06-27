@@ -28,11 +28,11 @@ body,html {
   fill:var(--white) !important;
 }
 
-.textUppercase {
+.textCapitalize {
   text-transform: uppercase;
 }
 
-.firstLetterUppercase::first-letter {
+.firstLetterCapitalize::first-letter {
   text-transform: uppercase;
 }
 

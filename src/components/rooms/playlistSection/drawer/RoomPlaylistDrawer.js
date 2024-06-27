@@ -4,7 +4,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 import { Accordion, AccordionDetails, AccordionSummary, Divider, Drawer, List, ListItem, ListItemText, Typography } from "@mui/material";
 import React, { useState } from "react";
-import {isFromSpotify} from '../../../../services/utils';
+import {delay, isFromSpotify} from '../../../../services/utils';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -15,8 +15,6 @@ import DrawerPlayPauseButton from './DrawerPlayPauseButton';
 
 const RoomPlaylistDrawer = ({t,isSpotifyAvailable, room,roomRef,open, changeOpen, isAdminView, userVoteArray, roomPlaylist, setIdPlaying, handleVoteChange,handleRemoveMediaFromPlaylist, setIsPlaying,  data, roomIsActuallyPlaying, roomIdActuallyPlaying, roomIdActuallyDisplaying }) => {
     
-    const delay = ms => new Promise(res => setTimeout(res, ms));
-
     const [descriptionOpen, setDescriptionOpen] = useState(false);
     
     const handleOpenDescription =

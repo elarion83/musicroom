@@ -50,6 +50,7 @@ import ModalChangeRoomAdmin from "./rooms/modalsOrDialogs/ModalChangeRoomAdmin";
 import RoomTutorial from "./rooms/RoomTutorial";
 import { mockYoutubeMusicResult, mockYoutubeTrendResult } from "../services/mockedArray";
 import SoundWave from "../services/SoundWave";
+import { returnAnimateReplace } from "../services/animateReplace";
 
 const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
@@ -114,6 +115,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     const [layoutDisplay, setLayoutdisplay] = useState('default');
     const [layoutDisplayClass, setLayoutDisplayClass] = useState('defaultLayout');
 
+    // animated elements
+
     useEffect(() => {
         switch (layoutDisplay) {
             case 'compact':
@@ -172,16 +175,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         }
     }, [OpenAddToPlaylistModal]) ;
 
-
-    async function initTutorial() {
-        if(isTutorialShown) {
-            await delay(8000); 
-            hideTuto('-35vh'); 
-            await delay(2000);   
-            setIsTutorialShown(false);    
-        }
-    }
-
     // GET DOCUMENT ON INIT (get firebase room datas)
 	useEffect(() => {
         if(isVarExistNotEmpty(roomId)) {
@@ -191,7 +184,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 initRoom(roomDatas, roomId.toLowerCase(), !firebaseRoom.exists(), currentUser, roomRef);
             };
             initRoomFetchFirebase();
-            setPageTitle('Playlist '+roomId+ ' - '+envAppNameUrl);
+            setPageTitle('Playlist '+roomId+ ' | '+envAppNameUrl);
         }
 	}, [roomId]);
 
@@ -219,7 +212,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 	useEffect(() => {
         let unsubscribe = () => {};
         if(loaded) {
-            initTutorial();
             if(guestSynchroOrNot) {
                 setPlayerControlsShown(isActuallyAdmin);
                 unsubscribe = onSnapshot(roomRef, (doc) => {
@@ -310,7 +302,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         setPlayedPercents(0);
         await delay(250);        
         let pageTitle = (roomIsPlaying && isVarExistNotEmpty(room.playlistUrls)) ? room.playlistUrls[idPlaying].title : 'Playlist '+roomId;
-        setPageTitle(pageTitle+ ' - '+envAppNameUrl);
+        setPageTitle(pageTitle+ ' | '+envAppNameUrl);
         setPlayerIdPlayed(idPlaying);
         if(isActuallyAdmin) {
            updateFirebaseRoom( roomRef , {
@@ -349,7 +341,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     
     useEffect(() => {
         let pageTitle = (roomIsPlaying && isVarExistNotEmpty(room.playlistUrls)) ? room.playlistUrls[playerIdPlayed].title : 'Playlist '+roomId;
-        setPageTitle(pageTitle+' - '+envAppNameUrl);
+        setPageTitle(pageTitle+' | '+envAppNameUrl);
     }, [roomIsPlaying]);
             
 
@@ -835,17 +827,14 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         changeOpen={setOpenPassWordModal}
                     /> 
             
-                <ModalChangeRoomAdmin open={openRoomChangeAdminModal} changeAdmin={changeAdmin} playlistAdminPass={room.adminPass} changeOpen={setOpenRoomChangeAdminModal} adminView={isActuallyAdmin} />
-                <ModalShareRoom open={openInvitePeopleToRoomModal} changeOpen={setOpenInvitePeopleToRoomModal} />
-                <ModalLeaveRoom open={openLeaveRoomModal} changeOpen={setOpenLeaveRoomModal} handleQuitRoom={handleQuitRoomInComp} />
-                <ModalForceSpotifyDisconnect open={openForceDisconnectSpotifyModal} changeOpen={setOpenForceDisconnectSpotifyModal} handleDisconnectSpotify={disconnectSpotify} />
-                <ModalForceDeezerDisconnect open={openForceDisconnectDeezerModal} changeOpen={setOpenForceDisconnectDeezerModal} handleDisconnectDeezer={disconnectDeezer} />
-                {isTutorialShown && 
-                    <RoomTutorial 
-                        slideOutProp={tutoTranslateY}
-                        layout={isPlaylistExistNotEmpty(room.playlistUrls) ? room.playlistUrls.length > 6 ? 'small': 'classic' : 'classic'}
-                    />
-                }
+                    <ModalChangeRoomAdmin open={openRoomChangeAdminModal} changeAdmin={changeAdmin} playlistAdminPass={room.adminPass} changeOpen={setOpenRoomChangeAdminModal} adminView={isActuallyAdmin} />
+                    <ModalShareRoom open={openInvitePeopleToRoomModal} changeOpen={setOpenInvitePeopleToRoomModal} />
+                    <ModalLeaveRoom open={openLeaveRoomModal} changeOpen={setOpenLeaveRoomModal} handleQuitRoom={handleQuitRoomInComp} />
+                    <ModalForceSpotifyDisconnect open={openForceDisconnectSpotifyModal} changeOpen={setOpenForceDisconnectSpotifyModal} handleDisconnectSpotify={disconnectSpotify} />
+                    <ModalForceDeezerDisconnect open={openForceDisconnectDeezerModal} changeOpen={setOpenForceDisconnectDeezerModal} handleDisconnectDeezer={disconnectDeezer} />
+                        {isTutorialShown && <RoomTutorial 
+                            layout={isPlaylistExistNotEmpty(room.playlistUrls) ? room.playlistUrls.length > 6 ? 'small': 'classic' : 'classic'}
+                        />}
                 </> 
             </>}
             {!loaded && <Box className="loadingRoomInfo"> <SoundWave waveNumber={450} isPlayingOrNo={true} /><Typography  className="fontFamilyNunito"> Loading ..</Typography></Box>}

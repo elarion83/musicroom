@@ -20,7 +20,7 @@ export function playedSeconds(player) {
 }
 
 export function playerNotSync(room, player) {
-    return((Math.abs(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds) - playedSeconds(player) > 5) || (Math.abs(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds) - playedSeconds(player) < -5));
+    return((Math.abs(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds) - playedSeconds(player) > 3) || (Math.abs(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds) - playedSeconds(player) < -3));
 }
 
 /* FIREBASE HELPERS */

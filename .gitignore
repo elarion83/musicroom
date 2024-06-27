@@ -33,3 +33,4 @@ yarn-error.log*
 .netlify
 src/components/not_used/
 HOW TO DEPLOY.txt
+src/assets/img/favicon.psd

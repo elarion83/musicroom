@@ -37,7 +37,9 @@ const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
             <ModalsHeader icon={() => <AccountCircleIcon />} title={t('ModalUserSettingsTitle')} />
 
             <DialogContent dividers sx={{pt:2}}>
-                <UserAvatarComponent user={user} cssClass='userAvatarBig' />
+                <Box className='userAvatarBig' sx={{'outlineColor': 'rgba('+user.customDatas.colorRgb+',0.7)'}}>
+                    <UserAvatarComponent user={user} cssClass='animate__animated animate__delay-5s animate__slow animate__bounce animate__infinite' />
+                </Box>
                 <Box sx={{textAlign:'center', mb:2, fontWeight:'bold'}}>
                     {isEditingPseudo && 
                         <Grid item md={12}>
