@@ -14,6 +14,12 @@
         width: 100%;
         
     }
+
+    >div {    
+      animation: bounceCustom 5s; /* Durée de l'animation */
+      animation-delay: 5s; /* Délai avant chaque répétition */
+      animation-iteration-count: infinite; /* Répétition infinie */
+    }
 }
 
 .userInfosList .small span {

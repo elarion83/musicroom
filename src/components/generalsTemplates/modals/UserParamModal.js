@@ -38,7 +38,7 @@ const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
 
             <DialogContent dividers sx={{pt:2}}>
                 <Box className='userAvatarBig' sx={{'outlineColor': 'rgba('+user.customDatas.colorRgb+',0.7)'}}>
-                    <UserAvatarComponent user={user} cssClass='animate__animated animate__delay-5s animate__slow animate__bounce animate__infinite' />
+                    <UserAvatarComponent user={user} needOutline={false} cssClass='animate__animated' />
                 </Box>
                 <Box sx={{textAlign:'center', mb:2, fontWeight:'bold'}}>
                     {isEditingPseudo && 
@@ -70,23 +70,18 @@ const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
                         </Box>
                     }
                     
-                    {!user.isAnonymous && 
-                        <>
-                            <List dense={true} className="userInfosList">
-                                
-                                <ListItem disablePadding>
-                                    <ListItemText primary={user.email} />
-                                </ListItem>
-                                <ListItem disablePadding className="small">
-                                    <ListItemText primary={t('UserMemberSince')+' '+new Date(user.metadata.creationTime).toLocaleDateString('fr-FR', timestampToDateoptions)} />
-                                </ListItem>
-                                <ListItem disablePadding className="small">
-                                    <ListItemText primary={t('UserMemberLastLogin')+' '+new Date(user.metadata.lastSignInTime).toLocaleDateString('fr-FR', timestampToHoursAndMinOptions)} />
-                                </ListItem>
-                            </List>
+                    <List dense={true} className="userInfosList">
                         
-                        </>
-                    }
+                        <ListItem disablePadding>
+                            <ListItemText primary={user.email} />
+                        </ListItem>
+                        <ListItem disablePadding className="small">
+                            <ListItemText primary={t('UserMemberSince')+' '+new Date(user.metadata.creationTime).toLocaleDateString('fr-FR', timestampToDateoptions)} />
+                        </ListItem>
+                        <ListItem disablePadding className="small">
+                            <ListItemText primary={t('UserMemberLastLogin')+' '+new Date(user.metadata.lastSignInTime).toLocaleDateString('fr-FR', timestampToHoursAndMinOptions)} />
+                        </ListItem>
+                    </List>
                 </Box>
                             
                 <FormGroup>

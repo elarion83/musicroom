@@ -77,7 +77,7 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
                                     variant="contained"
                                     startIcon={<Icon icon="mdi:anonymous" />}
                                     onClick={e => handleAnonymousLogin()}>
-                                <Typography fontSize="small">{t('ModalLoginButtonAnon')} </Typography>
+                                <Typography fontSize="small">{t(!loginLoading ?'ModalLoginButtonAnon' : ('GeneralLoading'))} </Typography>
                             </LoadingButton>
                         <Divider sx={{mt:2,mb:2}}>
                             {t('GeneralOr')} 
@@ -89,7 +89,7 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
                                     startIcon={<Icon icon="ri:google-fill" />}
                                     variant="contained"
                                     onClick={handleGoogleLogin}>
-                                <Typography fontSize="small">{t('ModalLoginButtonGoogle')} </Typography>
+                                <Typography fontSize="small">{t(!loginLoading ? 'ModalLoginButtonGoogle' : ('GeneralLoading'))} </Typography>
                             </LoadingButton>  
                     </Grid> 
                     <Grid sx={{mt:2, mb:2}}>
