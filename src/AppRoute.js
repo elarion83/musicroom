@@ -9,6 +9,7 @@ const AppRoutes = () => (
             <Route index element={<App />} />
             <Route path=":roomId" element={<App />} />
         </Route>
+          <Route path="/:roomId" element={<App />} />
     </Routes>
   </Router>
 );

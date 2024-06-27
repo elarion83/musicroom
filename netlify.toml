@@ -1,0 +1,7 @@
+[build]
+  publish = "build" # Remplacez "build" par le dossier de publication de votre projet
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
