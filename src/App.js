@@ -146,7 +146,6 @@ function App( {t} ) {
 
   /* POST-LOGIN-FUNCTION */
   async function doActionAfterAuth(user, objectType = 'simple') {
-    console.log('doActionAfterAuth');
     var entireUserDatas = (objectType == 'simple') ? user : user.user;
     var newUser = getAdditionalUserInfo(user).isNewUser;
     let userRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, entireUserDatas.uid);
@@ -211,7 +210,7 @@ function App( {t} ) {
           finishAuthProcess(currentUser, userDocSnap.data(), 'persistentAuth')
         } 
       } else {
-        console.log('loug ?')
+        setIsAppLoading(false);
       }
     });
 
@@ -284,7 +283,7 @@ function App( {t} ) {
       <Container maxWidth={false} className={roomId ? 'main_container' : 'main_container homecontainer'} sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
          <AppBar className={(roomId && isSignedIn) ? stickyDisplay ? 'topBarIsInRoomSticky' : 'topBarIsInRoom' : 'topBarClassic'} position="static" sx={{bgcolor: '#202124'}}>
             <Toolbar>
-               <img src="img/logo_py1.png" style={{ width: 'auto', maxWidth:'50%', maxHeight:'30px'}} alt={envAppNameHum+" logo"} />
+               <img src="img/logo__new.png" style={{ width: 'auto', maxWidth:'50%', maxHeight:'45px'}} alt={envAppNameHum+" logo"} />
                 <UserTopBar loggedIn={isSignedIn} user={userInfos} setUserInfo={setUserInfoEdit} joinRoomByRoomId={joinRoomByRoomId} handleOpenLoginModal={setLoginModalOpen} handleLogout={logOut} />
             </Toolbar>
           </AppBar>
@@ -313,13 +312,10 @@ function App( {t} ) {
                 </Container>
             </Box>
           }
-        {roomId && 
-          <>
-            {isSignedIn && 
-                <Room currentUser={userInfos} className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain} setStickyDisplay={setStickyDisplay}></Room>     
-            }
-          </>
+        {roomId && isSignedIn && 
+          <Room currentUser={userInfos} className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain} setStickyDisplay={setStickyDisplay}></Room>     
         }
+
         {!isSignedIn && (roomId || loginModalOpen) && 
         <LoginModal 
           open={true} 
@@ -328,25 +324,30 @@ function App( {t} ) {
           handleGoogleLogin={handleGoogleLogin}
           handlePasswordAndMailLogin={handlePasswordAndMailLogin}
           loginErrorMessage={loginErrorMessage}
-          loginLoading={(isVarExistNotEmpty(roomId) && isSignedIn) ? isAppLoading : isLoginLoading}
+          loginLoading={isVarExistNotEmpty(roomId) ? isAppLoading : isLoginLoading}
           redirectToHome={handleQuitRoomMain}
           roomId={roomId}
         />}
 
-        <Snackbar
-          open={loginOkSnackBarOpen}
-          autoHideDuration={3000}
-          onClose={() => setLoginOkSnackBarOpen(false)}
-          sx={{borderRadius:'2px'}}
-          message={t('GeneralSnackWelcome', {who:userInfos.displayName})}
-        />
-        <Snackbar
-          open={loginNewUserOkSnackBarOpen}
-          autoHideDuration={3000}
-          onClose={() => setLoginNewUserOkSnackBarOpen(false)}
-          sx={{borderRadius:'2px'}}
-          message={t('GeneralSnackWelcome', {who:userInfos.displayName})+" 1e "+ t('GeneralLogin').toLowerCase()}
-        />
+        {isSignedIn && 
+          <>
+            <Snackbar
+              open={loginOkSnackBarOpen}
+              autoHideDuration={3000}
+              onClose={() => setLoginOkSnackBarOpen(false)}
+              sx={{borderRadius:'2px'}}
+              message={t('GeneralSnackWelcome', {who:userInfos.displayName})}
+            />
+            <Snackbar
+              open={loginNewUserOkSnackBarOpen}
+              autoHideDuration={3000}
+              onClose={() => setLoginNewUserOkSnackBarOpen(false)}
+              sx={{borderRadius:'2px'}}
+              message={t('GeneralSnackWelcome', {who:userInfos.displayName})+" 1e "+ t('GeneralLogin').toLowerCase()}
+            />
+          </>
+        }
+        
         <Snackbar
           open={logoutOkSnackBarOpen}
           autoHideDuration={3000}

@@ -354,7 +354,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
             
 
     useKeypress([' '], () => {
-        if(room && !OpenAddToPlaylistModal) {
+        if(room && !OpenAddToPlaylistModal && (isActuallyAdmin || !guestSynchroOrNot)) {
             setIsPlaying(!roomIsPlaying);
         }
     });

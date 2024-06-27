@@ -9,7 +9,7 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Paper from '@mui/material/Paper';
-import { isFromSpotify } from '../../../services/utils';
+import { isEmpty, isFromSpotify } from '../../../services/utils';
 
 import { Icon } from '@iconify/react';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -43,25 +43,33 @@ const RoomPlaylist = ({ t, isSpotifyAvailable, handleChangeIdShownInDrawer, room
                                             transition: 'all 0.3s ease-out'
                                         }
                                     }} key={'playlist_' + idx} xs={12} selected={roomIdActuallyPlaying === idx}>
-                                    {idx === roomIdActuallyPlaying && !(isFromSpotify(d) && !isSpotifyAvailable) && <ListItemIcon sx={{ pt: '10px', color: 'var(--white)', pl: 1, pr: -2, zIndex: 2, display: 'flex', flexDirection: 'column' }}>
-                                        <SoundWave waveNumber={7} isPlayingOrNo={roomIsActuallyPlaying} />
-                                    </ListItemIcon>}
-                                    {(isFromSpotify(d) && !isSpotifyAvailable) && <Icon style={{ display: 'inline', marginRight: '0.5em', marginTop: '0.5em', color: 'red' }} icon="ps:forbidden" />}
+                                    {idx === roomIdActuallyPlaying && !(isFromSpotify(d) && !isSpotifyAvailable) && 
+                                        <ListItemIcon sx={{ pt: '10px', color: 'var(--white)', pl: 1, pr: -2, zIndex: 2, display: 'flex', flexDirection: 'column' }}>
+                                            <SoundWave waveNumber={7} isPlayingOrNo={roomIsActuallyPlaying} />
+                                        </ListItemIcon>
+                                    }
+                                    {(isFromSpotify(d) && !isSpotifyAvailable) && 
+                                        <Icon style={{ display: 'inline', marginRight: '0.5em', marginTop: '0.5em', color: 'red' }} icon="ps:forbidden" />
+                                    }
                                     <Grid item sx={{ display: 'block', zIndex: 2, pl: 0, pb: 0.5, pt: 0.5, flexGrow: 1, overflow: 'hidden' }}>
                                         <Typography component="p" className="flexRowCenterHDirectChild varelaFontTitle textEllipsis" onClick={e => (idx === idDisplaying) ? handleChangeIdActuallyDisplaying(-1) : handleChangeIdActuallyDisplaying(idx)} sx={{ pl: 0, mb: -0.5, mt: 0, wordBreak: 'break-all' }}>
-                                            {(d.title.length === 0) ? d.url : d.title}
+                                            {isEmpty(d.title) ? d.url : d.title}
                                         </Typography>
 
-                                        {idx === roomIdActuallyPlaying && <Typography sx={{ display: 'block', width: '100%', ml: 0, mb: 0, color: 'var(--grey-inspired)', fontSize: '10px', textTransform: 'uppercase' }} className='fontFamilyNunito'>
-                                            {roomIsActuallyPlaying ? t('GeneralPlaying') : t('GeneralPause')}
-                                        </Typography>}
+                                        {idx === roomIdActuallyPlaying && 
+                                            <Typography sx={{ display: 'block', width: '100%', ml: 0, mb: 0, color: 'var(--grey-inspired)', fontSize: '10px', textTransform: 'uppercase' }} className='fontFamilyNunito'>
+                                                {roomIsActuallyPlaying ? t('GeneralPlaying') : t('GeneralPause')}
+                                            </Typography>
+                                        }
                                     </Grid>
                                     <MoreVertIcon sx={{ position: 'absolute', zIndex: 1, right: '10px', top: 'calc(50% - 12px)', opacity: 0.5, color: 'var(--grey-light)' }} />
-                                    {idx === roomIdActuallyPlaying && <LinearProgress sx={{
+                                    {idx === roomIdActuallyPlaying && 
+                                        <LinearProgress sx={{
                                         top: 0, left: 0, position: 'absolute', width: '100%', height: '100%', zIndex: 1, opacity: 0.5, "& .MuiLinearProgress-barColorPrimary": {
-                                            backgroundColor: "var(--grey-dark)",
+                                            backgroundColor: "var(--main-color)",
                                         }
-                                    }} variant="determinate" value={roomPlayedActuallyPlayed} />}
+                                        }} variant="determinate" value={roomPlayedActuallyPlayed} />
+                                    }
                                 </ListItemButton>
                             </Grid>
                         </Fade>)

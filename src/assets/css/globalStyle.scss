@@ -1,24 +1,3 @@
-body,html {
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-.colorBlue {
-  color: var(--blue-light) !important;
-}
-
-.colorWhite, 
-.colorWhite svg {
-  color:var(--white) !important;
-  fill:var(--white) !important;
-}
-
-.scroll  {
-  scrollbar-width:thin !important;
-  scroll-behavior: smooth;
-  margin-bottom: 8em;
-}
-
 #root {
     background:var(--grey-dark);
     max-width: 100vw;
@@ -34,6 +13,36 @@ body,html {
     }
 }
 
+body,html {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.colorBlue {
+  color: var(--blue-light) !important;
+}
+
+.colorWhite, 
+.colorWhite svg {
+  color:var(--white) !important;
+  fill:var(--white) !important;
+}
+
+.textUppercase {
+  text-transform: uppercase;
+}
+
+.firstLetterUppercase::first-letter {
+  text-transform: uppercase;
+}
+
+.scroll  {
+  scrollbar-width:thin !important;
+  scroll-behavior: smooth;
+  margin-bottom: 8em;
+}
+
+
 .blurtextura {
   background-image: url('../img/circles.png');
   background-size: contain;
@@ -45,15 +54,38 @@ body,html {
   position: relative;
 }
 
-.flexRowCenterH svg {
-  z-index: 2;
-  margin-right: 1em;
-}
-
-.flexRowCenterH, .flexRowCenterHDirectChild>* {
+.flexRowCenterH {
   display: flex !important;
   flex-direction: row;
   align-items: center;
+  svg {
+    z-index: 2;
+    margin-right: 1em;
+  }
+}
+.flexRowCenterHDirectChild>* {
+  display: flex !important;
+  flex-direction: row;
+  align-items: center;
+}
+
+.max-lined {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.max-line-1 {
+  -webkit-line-clamp: 1;
+}
+
+.max-line-2 {
+  -webkit-line-clamp: 2;
+}
+
+.max-line-3 {
+  -webkit-line-clamp: 3;
 }
 
 .hidden, .jss5 {

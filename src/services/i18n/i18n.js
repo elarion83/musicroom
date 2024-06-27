@@ -40,6 +40,7 @@ const resources = {
         "GeneralPlaying":'Playing',
         "GeneralPause":'Paused',
         "GeneralLoading":'Loading..',
+        "GeneralAdded":'Added',
         "GeneralAddedBy":'Added by',
         "GeneralNotLinked" : " not linked",
         "GeneralLinked" : " linked",
@@ -73,6 +74,9 @@ const resources = {
 
         "HomePageButtonsCreateRoom" : "Create a playlist",
         "HomePageButtonsJoinRoom" : "Join a playlist",
+
+        "RoomTutorialSwipe" : "Swipe to open search !",
+        "RoomTutorialClic" : "Clic to open search !",
 
         "RoomAlertSpotifyNotVisibleTitle":"The Spotify player is only visible to the playlist's host.",
         "RoomAlertSpotifyNotVisibleText":"Add something to the playlist while you wait!",
@@ -191,6 +195,7 @@ const resources = {
         "GeneralPlaying":'En lecture',
         "GeneralPause":'En Pause',
         "GeneralLoading":'Chargement..',
+        "GeneralAdded":'Ajouté',
         "GeneralAddedBy":'Ajouté par',
         "GeneralNotLinked" : " non relié",
         "GeneralLinked" : " relié",
@@ -230,6 +235,9 @@ const resources = {
 
         "HomePageButtonsCreateRoom" : "Créer une playlist",
         "HomePageButtonsJoinRoom" : "Rejoindre une playlist",
+
+        "RoomTutorialSwipe" : "Swipe pour rechercher !",
+        "RoomTutorialClic" : "Clique pour rechercher !",
 
         "RoomAlertSpotifyNotVisibleTitle":"Le lecteur Spotify n'est visible que par l'host de la playlist.",
         "RoomAlertSpotifyNotVisibleText":"Ajoute quelque chose dans la playlist en attendant !",

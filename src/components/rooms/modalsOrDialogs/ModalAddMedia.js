@@ -13,7 +13,6 @@ import Snackbar from '@mui/material/Snackbar';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import validator from 'validator';
-import SearchResultItem from '../searchResultItem';
 import { YTV3APIDurationToReadable, cleanMediaTitle, getDisplayTitle, getLocale, getYTVidId, isEmpty, isProdEnv } from '../../../services/utils';
 import { withTranslation } from 'react-i18next';
 import { Button, Dialog, SwipeableDrawer, Typography } from '@mui/material';
@@ -23,7 +22,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { searchTextArray, spotifyApiSearchObject, youtubeApiSearchObject, youtubeApiVideoInfoParams } from '../../../services/utilsArray';
 import { KeyboardArrowDown } from '@mui/icons-material';
 import  NewContentslider  from '../../../services/YoutubeVideoSlider';
-import SearchResultItemNew from '../searchResultItemNew';
+import SearchResultItem from '../SearchResultItem';
 import { mockYoutubeSearchResoltForVald, mockYoutubeSearchResultForVald, mockYoutubeTrendResult } from '../../../services/mockedArray';
 import YoutubeVideoSlider from '../../../services/YoutubeVideoSlider';
 import { returnAnimateReplace } from '../../../services/animateReplace';
@@ -37,6 +36,8 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
     const [showYoutubeTrends, setShowYoutubeTrends] = useState(true);
     const [isSearching, setIsSearching] = useState(false);
     const animatedElementsRef = [];
+    const animatedDownElementsRef = [];
+
     const [needAnimationReplace, setNeedAnimationReplace] = useState(false);
 
     const [tabIndex, setTabIndex] = useState(0);
@@ -49,7 +50,8 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
     const addingObject = { title: '', deleted: false, source: '', url: '', addedBy: currentUser.displayName };
 
     async function changeOpenInComp(openOrNot) {
-        returnAnimateReplace(animatedElementsRef, {In:"Out", Up:"Down", animate__delay:'animate__delay-2s'}, /In|Up|animate__delay/gi);
+        returnAnimateReplace(animatedElementsRef, {In:"Out", Up:"Down", animate__delay:'animate__delay-1s'}, /In|Up|animate__delay/gi);
+            returnAnimateReplace(animatedDownElementsRef, {Out:"In", Down:"Up", animate__delay:'animate__delay-1s'}, /Out|Down|animate__delay/gi);
         await delay(200);
         setNeedAnimationReplace(true);
         changeOpen(openOrNot);
@@ -58,7 +60,8 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
 
 	useEffect(() => {
         if(open && needAnimationReplace) {
-            returnAnimateReplace(animatedElementsRef, {Out:"In", Down:"Up", animate__delay:'animate__delay-2s'}, /Out|Down|animate__delay/gi);
+            returnAnimateReplace(animatedDownElementsRef, {Out:"In", Up:"Down", animate__delay:'animate__delay-1s'}, /Out|Up|animate__delay/gi);
+            returnAnimateReplace(animatedElementsRef, {Out:"In", Down:"Up", animate__delay:'animate__delay-1s'}, /Out|Down|animate__delay/gi);
         }
 	}, [open]); 
 
@@ -158,7 +161,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                 onOpen={(e) => changeOpen(true)}
                 open={open}
             >
-            <Container sx={{ padding: '3em', pt: 0, height: '100vh', zIndex: 3 }} maxWidth={false} className="full_width_modal_content_container">
+            <Container maxWidth={false} className="full_width_modal_content_container">
 
                 <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'row', position:'relative', mt:1 }} className="autowriter_container">
                     <Typed
@@ -194,7 +197,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                 </Grid>
 
                 {room.localeYoutubeTrends.length > 0 && room.localeYoutubeMusicTrends.length > 0 && showYoutubeTrends &&
-                <Container sx={{padding:'0 !important'}} maxWidth={false}>
+                <Container sx={{padding:'0 !important', paddingBottom:'90px !important' }} maxWidth={false}>
                     
                     <Typography variant="h6" sx={{mt:1, ml:1, color:'var(--white)'}} gutterBottom>
                         {t('GeneralSmthTrendings', {what:'Videos'})}
@@ -218,14 +221,14 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                        {/* <Tab sx={{ color: 'var(--white)' }} label="Deezer" disabled={mediaSearchResultDeezer && mediaSearchResultDeezer.length > 1 ? false : true} />
                         <Tab sx={{ color: 'var(--white)' }} label="Dailymotion" disabled={mediaSearchResultDailyMotion.length > 1 ? false : true} /> 
                     </Tabs> */}
-                    <Box sx={{ lineHeight: "15px", p: 0, pt: 0, mb: 0, paddingBottom:'80px !important' }}>
+                    <Box sx={{ lineHeight: "15px", p: 0, pt: 0, mb: 0, paddingBottom:'90px !important' }}>
                         {tabIndex === 0 && (
                             <Box>
-                                {mediaSearchResultYoutube.length > 0 &&
+                                {!isEmpty(mediaSearchResultYoutube) &&
                                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ mt: 0 }}>
                                         {mediaSearchResultYoutube.map(function (media, idyt) {
                                             return (
-                                                <SearchResultItemNew
+                                                <SearchResultItem
                                                     key={idyt}
                                                     image={media.snippet.thumbnails.high.url}
                                                     title={cleanMediaTitle(media.snippet.title)}
@@ -249,7 +252,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ mt: 0 }}>
                                         {mediaSearchResultSpotify.map(function (media, idsp) {
                                             return (
-                                                <SearchResultItemNew
+                                                <SearchResultItem
                                                     key={idsp}
                                                     image={media.album.images[0].url}
                                                     title={media.artists[0].name + ' - ' + media.name}
@@ -319,36 +322,39 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                 <Snackbar
                     open={recentlyAdded}
                     autoHideDuration={6000}
-                    sx={{ borderRadius: '2px', zIndex:2501, mb:4, bottom:'40px' }}
-                    message={recentlyAddedTitle + " ajouté !"}
+                    sx={{ borderRadius: '2px', zIndex:2501, mb:4, bottom:'65px' }}
+                    message={recentlyAddedTitle +" "+ t('GeneralAdded')+" !"}
                 />
             </Container>
 
-                <Grid  sx={{ bgcolor: '#202124', pb: 0, cursor:'pointer', flexFlow: 'nowrap', position:'fixed', bottom:0, zIndex:100 }} container 
-                        onClick={(e) => changeOpenInComp(false)} ref={el => animatedElementsRef.push(el)}  className='animate__animated animate__fadeInUpBig animate__delay-2s animate__fast' >
+                <Grid container onClick={(e) => changeOpenInComp(false)} ref={el => animatedElementsRef.push(el)} className='closeAddMediaModal animate__animated animate__fadeInUpBig animate__delay-1s animate__fast' >
                     <Button
                         className='modal_full_screen_close_left'
                         aria-label="close"
                         xs={12}
                     >
-                        <KeyboardArrowDown sx={{ fontSize: '3.5em', color: 'var(--white)', fill: 'var(--white)' }} />
+                        <KeyboardArrowDown className='colorWhite' sx={{ fontSize: '3.5em' }} />
                     </Button >
                     {room.playlistEmpty &&
-                        <Box sx={{ display: 'flex', flexDirection: 'column', padding: '1em' }}>
-                            <Typography  sx={{color: 'var(--main-color-lighter)', textTransform: 'uppercase'}}> Playlist <b>{room.id}</b></Typography>
-                            <Typography sx={{ color: 'var(--white)', display: 'block', width: '100%', ml: 0, fontSize: '12px' }} > Playlist {t('GeneralEmpty')} </Typography>
-                        </Box>}
+                        <Box sx={{ display: 'flex', flexDirection: 'column', padding: '1em' }} >
+                            <Typography  sx={{color: 'var(--main-color-lighter)'}}  ref={el => animatedDownElementsRef.push(el)} className='animate__animated animate__fadeInDownBig animate__delay-1s animate__slow textUppercase'> Playlist <b>{room.id}</b></Typography>
+                            <Typography sx={{ display: 'block', width: '100%', ml: 0, fontSize: '12px' }}  ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUpBig animate__delay-1s animate__slow colorWhite'> Playlist {t('GeneralEmpty')} </Typography>
+                        </Box>
+                    }
                     {typeof (room.playlistUrls) !== 'undefined' && !room.playlistEmpty &&
                         <Box sx={{ display: 'flex', flexDirection: 'column', p: '8px' }}>
-                            <Typography sx={{ color: 'var(--white)', display: 'block', width: '100%', ml: 0, pl: 0, fontSize: '12px', textTransform: 'uppercase' }} > Playlist <b>{room.id}</b></Typography>
+                            <Typography sx={{ display: 'block', width: '100%', ml: 0, pl: 0, fontSize: '12px' }}  ref={el => animatedDownElementsRef.push(el)} className='animate__animated animate__fadeInDownBig animate__delay-1s animate__slow colorWhite textUppercase'> Playlist <b>{room.id}</b></Typography>
 
-                            <Box sx={{ color: 'var(--white)', display: 'flex', gap: '10px', flexDirection: 'row', alignItems: 'center', width: '100%', ml: 1, mt: 1, fontSize: '10px', textTransform: 'uppercase' }} >
-                                <SoundWave waveNumber={7} isPlayingOrNo={roomIsPlaying} />
-                                <Typography fontSize="small" component={'span'} className='varelaFontTitle' >
-                                    {getDisplayTitle(room.playlistUrls[room.playing])}
-                                </Typography>
+                            <Box 
+                             ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUpBig animate__delay-1s animate__slow colorWhite'
+                                sx={{display: 'flex', gap: '10px', flexDirection: 'row', alignItems: 'center', width: '100%', ml: 1, mt: 1, fontSize: '10px' }} >
+                                    <SoundWave waveNumber={7} isPlayingOrNo={roomIsPlaying} />
+                                    <Typography fontSize="small" component={'span'} className='varelaFontTitle max-lined max-line-2 firstLetterUppercase' >
+                                        {getDisplayTitle(room.playlistUrls[room.playing])}
+                                    </Typography>
                             </Box>
-                        </Box>}
+                        </Box>
+                    }
                 </Grid>
         </SwipeableDrawer>
     )

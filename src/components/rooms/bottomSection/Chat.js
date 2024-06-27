@@ -53,7 +53,7 @@ const Chat = ({t, layoutDisplay, roomRef, setLayoutdisplay, roomParams, currentU
         setIsMessageSentOk(true);
         setTimeout(() => {
             setIsMessageSentOk(false);
-        }, 500);
+        }, 1500);
 
         var waitingLoop = setInterval(function() {
             sendMessageTimeToWait--;
@@ -161,7 +161,7 @@ const Chat = ({t, layoutDisplay, roomRef, setLayoutdisplay, roomParams, currentU
                                     <Typography fontSize='small' sx={{color:messageColor, fontWeight:'bold'}}> 
                                         {value.author}: 
                                     </Typography>
-                                    <Typography fontSize='small' sx={{ml:1, color:'var(--white)'}}>
+                                    <Typography fontSize='small' className='colorWhite' sx={{ml:1}}>
                                         {value.text}
                                     </Typography>
                                 </Box>
@@ -225,8 +225,8 @@ const Chat = ({t, layoutDisplay, roomRef, setLayoutdisplay, roomParams, currentU
                                     loading={isSendingMessage || !canSendMessage} 
                                     onClick={(e) => sendMessage()}
                                     size="small"
+                                    className='sendMessageButton'
                                     sx={{
-                                        mr:-3,
                                         transition: 'var(--transition-fast-easeIn)',
                                         bgcolor: isMessageSentOk ? 'var(--green)' : '',
                                         borderColor: isMessageSentOk ? 'var(--green)' : 'var(--white)',

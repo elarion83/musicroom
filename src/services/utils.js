@@ -3,7 +3,7 @@ import i18n from "i18next";
 import dateFormat from "dateformat";
 
 import { v4 as uuid } from 'uuid';
-import SearchResultItemNew from '../components/rooms/searchResultItemNew';
+import SearchResultItem from '../components/rooms/SearchResultItem';
 
 export const envAppNameUrl = process.env.REACT_APP_NAME_URL;
 export const envAppNameHum = process.env.REACT_APP_NAME;
@@ -233,7 +233,7 @@ export function getCarouselItemsArray(youtubeResults,addingObject, addItemToPlay
         carouselItems.push({
                 id: media.id,
                 renderItem: 
-                <SearchResultItemNew
+                <SearchResultItem
                     key={media.id}
                     image={media.snippet.thumbnails.high.url}
                     title={cleanMediaTitle(media.snippet.title)}
@@ -292,7 +292,7 @@ export function autoAddYTObject(item) {
         visuel: item.snippet.thumbnails.high.url,
         hashId: uuid().slice(0,10).toLowerCase(),
         source: 'youtube',
-        channelOrArtist:item.artists[0].name,
+        channelOrArtist:item.snippet.channelTitle,
         description:item.snippet.description,
         platformId:item.id.videoId,
         title:cleanMediaTitle(item.snippet.title),

@@ -45,6 +45,10 @@
 
 .full_width_modal_content_container {
     overflow-x: hidden !important;
+    padding: 3em;
+    padding-top:0;
+    height: 100vh;
+    z-index: 3;
 }
 
 @media (max-width: 500px) { 
@@ -57,12 +61,6 @@
     .full_width_modal_content_container {
         padding: 0 !important;  
     }
-
-    .input_big input, .input_big.typed,.input_big.typed:focus {
-        font-size: 1em;
-        background-color:rgba(255, 255, 255, 0.1);
-    }
-
 
     .video_title_list span {
         font-size: 0.8em;
