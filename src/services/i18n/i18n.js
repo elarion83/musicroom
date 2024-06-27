@@ -105,6 +105,7 @@ const resources = {
 
         
         "ModalJoinRoomIDOfTheRoom": "ID of the playlist you want to join",
+        "ModalJoinRoomIDOfTheRoomText": "Enter below the ID of the playlist you wish to join (Ex: 5454S, E45FR)",
         "ModalJoinRoomButtonJoin": "Join",
         
         "ModalLoginTitle": "Authentication",
@@ -265,6 +266,7 @@ const resources = {
         "ModalUserRoomListJoinRoomText" : "Rejoindre la playlist",
 
         "ModalJoinRoomIDOfTheRoom": "ID de la playlist a rejoindre",
+        "ModalJoinRoomIDOfTheRoomText": "Entrez ci-dessous l'ID de la playlist que vous souhaitez rejoindre. (Ex : 5454S, E45FR).",
         "ModalJoinRoomButtonJoin": "Rejoindre",
         
         "ModalLoginTitle": "Authentification",

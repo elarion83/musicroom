@@ -35,7 +35,7 @@ const JoinRoomModal = ({ t, open, handleJoinRoom, changeOpen}) => {
             <DialogContent dividers>
                 <Alert severity="info" sx={{mb:1, maxWidth:'350px'}}>
                     <AlertTitle sx={{fontWeight:"bold"}}>{t('ModalJoinRoomIDOfTheRoom')}</AlertTitle>
-                    <Typography fontSize="small" component="p">Entrez ci-dessous l'ID de la playlist que vous souhaitez rejoindre. (Ex : 5454S, E45FR).</Typography>
+                    <Typography fontSize="small" component="p">{t('ModalJoinRoomIDOfTheRoomText')}</Typography>
                 </Alert>
                 <Box className='joinRoomForm'>
                     <div className='input'>
