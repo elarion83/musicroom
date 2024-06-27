@@ -11,12 +11,11 @@ import { withTranslation } from 'react-i18next';
 import ModalsHeader from "./ModalsHeader";
 import { ReactSVG } from "react-svg";
 import { AccountCircle, CancelOutlined , Save } from "@mui/icons-material";
-import { cleanPseudoEntered, isPseudoEnteredValid } from "../../../services/utils";
+import { cleanPseudoEntered, delay, isPseudoEnteredValid } from "../../../services/utils";
 import CachedIcon from '@mui/icons-material/Cached';
 import UserAvatarComponent from "../../../services/utilsComponents";
 const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
 
-  const delay = ms => new Promise(res => setTimeout(res, ms));
   const [pseudo, setPseudo] = useState('');
   const [isEditingPseudo, setIsEditingPseudo] = useState(false);
   const [isEditingUserLoading, setIsEditingUserLoading ] = useState(false);

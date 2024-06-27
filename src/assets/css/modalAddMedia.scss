@@ -44,9 +44,10 @@
     background-color: #202124;
     padding-bottom: 0;
     cursor:pointer;
-    flex-flow: nowrap;
+    flex-flow: nowrap;  
+    flex-wrap: nowrap !important;
     overflow: hidden;
-    position:fixed;
+    position:absolute;
     bottom:0;
     z-index:100;
     .modal_full_screen_close_left {
@@ -90,6 +91,8 @@
 }
 
 .youtubeSlider {
+
+    overflow: hidden;
     .use-spring-carousel-item {
         min-width: 130px;
         padding: 0 5px;

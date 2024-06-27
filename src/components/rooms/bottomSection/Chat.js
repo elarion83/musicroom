@@ -105,21 +105,21 @@ const Chat = ({t, layoutDisplay, roomRef, setLayoutdisplay, roomParams, currentU
                     <Tooltip  ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInLeft animate__fast'}
                         title={!userCanMakeInteraction ? waitingTextReaction(roomParams.interactionFrequence): ''}>  
                         <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mt:1,mr:0, ...(userCanMakeInteraction && {bgcolor: 'orange'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('laugh') : ''}>
-                            <EmojiEmotionsIcon fontSize="small" sx={{color:'var(--white)'}} />
+                            <EmojiEmotionsIcon fontSize="small" className="colorWhite" />
                             {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
                         </Fab>
                     </Tooltip>
                     <Tooltip  ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInLeft '}
                         title={!userCanMakeInteraction ? waitingTextReaction(roomParams.interactionFrequence): ''}>  
                         <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{mt:1,mr:0, ...(userCanMakeInteraction && {bgcolor: '#ff9c22 !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('party') : ''}>
-                            <CelebrationIcon fontSize="small" sx={{color:'var(--white)'}} />
+                            <CelebrationIcon fontSize="small" className="colorWhite" />
                             {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
                         </Fab>
                     </Tooltip>
                     <Tooltip  ref={el => animatedElementsRef.push(el)} className={!roomParams.interactionsAllowed ? 'hiddenButPresent' : 'animate__animated animate__fadeInLeft'}
                         title={!userCanMakeInteraction ? waitingTextReaction(roomParams.interactionFrequence): ''}>  
                         <Fab size="small" variant="extended" className='room_small_button_interactions' sx={{ mt:1,mr:0, ...(userCanMakeInteraction && {bgcolor: 'var(--red-2) !important'}) }} onClick={(e) => userCanMakeInteraction ? createNewRoomInteraction('heart') : ''}>
-                            <FavoriteIcon fontSize="small" sx={{color:'var(--white)'}} />
+                            <FavoriteIcon fontSize="small" className="colorWhite" />
                             {!userCanMakeInteraction && <HourglassBottomIcon className="icon_overlay"/>}
                         </Fab>
                     </Tooltip> 
@@ -143,7 +143,7 @@ const Chat = ({t, layoutDisplay, roomRef, setLayoutdisplay, roomParams, currentU
                     ref={el => animatedElementsRef.push(el)} 
                     className='animate__animated animate__fadeInUp animate__fast chatBox' 
                     sx={{
-                        bgcolor:isChatUltraExpanded ? 'rgba(var(--grey-dark-rgb) ,0.9)': 'rgba(var(--grey-dark-rgb) ,0.8)' , 
+                        bgcolor:'rgba(var(--grey-dark-rgb) ,0.95)',
                         p:1,
                         borderTop:'4px solid var(--grey-dark-rgb)', 
                         boxShadow:20

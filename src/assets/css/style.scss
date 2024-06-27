@@ -44,10 +44,11 @@
 }
 
 .full_width_modal_content_container {
-    overflow-x: hidden !important;
+    overflow-y: scroll !important;
     padding: 3em;
     padding-top:0;
-    height: 100vh;
+    min-height: 100vh;
+    max-width: 100vw;
     z-index: 3;
 }
 

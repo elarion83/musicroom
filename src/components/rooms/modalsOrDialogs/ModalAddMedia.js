@@ -210,10 +210,10 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                 </Container>}
 
                 {mediaSearchResultYoutube.length > 0 && <Grid item xs={12}>
-                    <Typography variant="h6" sx={{mt:2}} gutterBottom>
+                   {/* <Typography variant="h6" sx={{mt:2}} gutterBottom>
                         {t('ModalAddMediaSearchResultTitle', {searchTerm:searchedTerm})}
                     </Typography>
-                   {/* <Tabs value={tabIndex} onChange={handleTabChange} sx={{ bgcolor: '#202124' }}>
+                    <Tabs value={tabIndex} onChange={handleTabChange} sx={{ bgcolor: '#202124' }}>
                         <Tab sx={{ color: 'var(--white)' }} label="Youtube" disabled={mediaSearchResultYoutube.length > 1 ? false : true} />
                         <Tab sx={{ color: 'var(--white)' }} label="Spotify" disabled={mediaSearchResultSpotify && mediaSearchResultSpotify.length > 1 ? false : true} />
                        {/* <Tab sx={{ color: 'var(--white)' }} label="Deezer" disabled={mediaSearchResultDeezer && mediaSearchResultDeezer.length > 1 ? false : true} />
