@@ -149,14 +149,13 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     const onActive = async() => {
         if(isLayoutFullScreen(layoutDisplay) || isLayoutDefault(layoutDisplay)) {  
             returnAnimateReplace(animatedElementsRef, {Left:"Right", Out:"In"}, /Left|Out/gi);     
-//            await delay(1000);
             setLayoutIdle(false);
         }
     }
     const { getRemainingTime } = useIdleTimer({
         onIdle,
         onActive,
-        timeout: 10_000,
+        timeout: 15_000,
         throttle: 1000
     });
 

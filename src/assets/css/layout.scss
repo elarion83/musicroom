@@ -5,7 +5,10 @@
         position: fixed;
         top: 0;
         left: 0;
-        z-index: 9999;
+        z-index: 9999;  
+        background: black;
+        align-items: center;
+        display: flex;
         +div {
             z-index: 99999;
             top: 0px;
