@@ -319,8 +319,8 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                 </Grid>}
                 <Snackbar
                     open={recentlyAdded}
-                    autoHideDuration={6000}
-                    sx={{ borderRadius: '2px', zIndex:2501, mb:4, bottom:'65px' }}
+                    autoHideDuration={4000}
+                    sx={{ borderRadius: '2px', zIndex:2501, mb:4, bottom:'45px' }}
                     message={recentlyAddedTitle +" "+ t('GeneralAdded')+" !"}
                 />
             </Container>
