@@ -140,25 +140,41 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     const [remaining, setRemaining] = useState(0)
     const [layoutIdle, setLayoutIdle] = useState(false);
 
-    const onIdle = async () => {
-        if(isLayoutFullScreen(layoutDisplay) || isLayoutDefault(layoutDisplay)) {
-            returnAnimateReplace(animatedElementsRef, {Right:"Left", In:"Out"}, /Right|In/gi);
-            await delay(1000);
+    const onIdle = async() => {
+        if(isLayoutFullScreen(layoutDisplay) || (isLayoutDefault(layoutDisplay) && window.innerWidth < 600)) {
+            returnAnimateReplace(animatedElementsRef, {Right:"Left",Up:"Down", In:"Out"}, /Right|Up|In/gi);
+            await delay(500);
             setLayoutIdle(true);
         }
     }
 
     const onActive = async() => {
-        if(isLayoutFullScreen(layoutDisplay) || isLayoutDefault(layoutDisplay)) {  
-            returnAnimateReplace(animatedElementsRef, {Left:"Right", Out:"In"}, /Left|Out/gi);     
+        if(isLayoutFullScreen(layoutDisplay) || (isLayoutDefault(layoutDisplay) && window.innerWidth < 600)) {
+            returnAnimateReplace(animatedElementsRef, {Left:"Right",Down:"Up", Out:"In"}, /Left|Down|Out/gi);     
             setLayoutIdle(false);
         }
     }
     const { getRemainingTime } = useIdleTimer({
         onIdle,
         onActive,
-        timeout: 10_000,
-        throttle: 1000
+        timeout: 5_000,
+        throttle: 500,
+        events:[
+            'mousemove',
+            'keydown',
+            'wheel',
+            'DOMMouseScroll',
+            'mousewheel',
+            'mouseover',
+            'mousedown',
+            'touchstart',
+            'touchmove',
+            'MSPointerDown',
+            'pointermove',
+            'MSPointerMove',
+            'visibilitychange',
+            'scroll'
+            ]
     });
 
     useEffect(() => {
@@ -588,7 +604,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                     <Box p={0} sx={{bgcolor:'#303030',borderBottom: '2px solid var(--border-color)'}} className={room.playlistUrls[playerIdPlayed].source+'Display'}> 
                                         <Grid container spacing={0} sx={{ bgcolor:'var(--grey-dark)'}} className={ isLayoutCompact(layoutDisplay) ? 'playerHide playerSection' : 'playerShow playerSection'}>
                                             
-                                            <Grid item className={isLayoutFullScreen(layoutDisplay) ? 'fullscreen' : 'playerContainer'} sm={(isFromSpotify(room.playlistUrls[playerIdPlayed])) ? 12 : 4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
+                                            <Grid item className='playerContainer' sm={(isFromSpotify(room.playlistUrls[playerIdPlayed])) ? 12 : 4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
                                                 {playingJustChanged && 
                                                 <Box className="iconOverPlayer">
                                                     { !roomIsPlaying && <PauseCircleOutlineIcon className='colorWhite' />}
@@ -690,7 +706,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                 {!layoutIdle && 
                                                     <Grid className='player_button_container' item sm={12} sx={{ display:'flex', flexWrap:'wrap',padding:0,pl:1.5,ml:0, pr:1.5,mb: 0 , mt:1, fill:'#f0f1f0'}}   >
                                                         {(isLayoutDefault(layoutDisplay) || isLayoutFullScreen(layoutDisplay)) &&
-                                                            <Box sx={{width:'100%'}} ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInLeft animate__fast'>
+                                                            <Box sx={{width:'100%'}} ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUp animate__fast'>
                                                                 <Grid 
                                                                 item sm={6} className='playerButtons' xs={12} 
                                                                 sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:0, mb: 1.5 }}>
