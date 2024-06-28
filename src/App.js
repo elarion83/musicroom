@@ -282,7 +282,7 @@ function App( {t} ) {
     <>
       <CssBaseline />
       <Container maxWidth={false} className={roomId ? 'main_container' : 'main_container homecontainer'} sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
-         <AppBar className={(roomId && isSignedIn) ? stickyDisplay ? 'topBarIsInRoomSticky' : 'topBarIsInRoom' : 'topBarClassic'} position="static" sx={{bgcolor: '#202124'}}>
+         <AppBar className={(roomId && isSignedIn) ? stickyDisplay ? '' : 'topBarIsInRoom' : 'topBarClassic'} position="static" sx={{bgcolor: '#202124'}}>
             <Toolbar>
                 <img src="img/logo__new.png" style={{ width: 'auto', maxWidth:'50%', maxHeight:'40px', mt:'2px'}} alt={envAppNameHum+" logo"} />
                 <UserTopBar loggedIn={isSignedIn} user={userInfos} setUserInfo={setUserInfoEdit} joinRoomByRoomId={joinRoomByRoomId} handleOpenLoginModal={setLoginModalOpen} handleLogout={logOut} />

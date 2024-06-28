@@ -72,9 +72,9 @@ const VolumeButton = ({volume, setVolume}) => {
     }
   }
   return (
-     <FormGroup sx={{display:'inline'}}>
+     <FormGroup className='volumeButtonContainer'>
       <FormControlLabel
-        control={<MaterialUISwitch sx={{ ml:0.5, mt: 1 }}  className='volumeButton' onChange={(e) => setVolumeInComp()} defaultChecked={volume !== 0 ? true : false}/>}
+        control={<MaterialUISwitch onChange={(e) => setVolumeInComp()} defaultChecked={volume !== 0 ? true : false}/>}
       />
     </FormGroup>
   )

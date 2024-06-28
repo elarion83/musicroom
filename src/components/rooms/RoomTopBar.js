@@ -189,16 +189,16 @@ const RoomTopBar = ({
                     {playerControlsShown && 
                         <>
                             <IconButton onClick={e => (playingFirstInList(playerIdPlayed) && isSpotifyAndIsNotPlayableBySpotify(playerIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? setPlayerIdPlayed(playerIdPlayed - 1) : ''}>
-                                <SkipPrevious fontSize="large" sx={{color:(playingFirstInList(playerIdPlayed) && isSpotifyAndIsNotPlayableBySpotify(playerIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? '#f0f1f0': '#303134'}} />
+                                <SkipPrevious sx={{color:(playingFirstInList(playerIdPlayed) && isSpotifyAndIsNotPlayableBySpotify(playerIdPlayed-1, room.roomParams.isLinkedToSpotify)) ? '#f0f1f0': '#303134'}} />
                             </IconButton>
 
                             <IconButton variant="contained" onClick={e => setIsPlaying(!roomIsPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
-                                { room.actuallyPlaying && <PauseCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
-                                { !room.actuallyPlaying && <PlayCircleOutlineIcon fontSize="large" sx={{color:'#f0f1f0'}} />}
+                                { room.actuallyPlaying && <PauseCircleOutlineIcon  sx={{color:'#f0f1f0'}} />}
+                                { !room.actuallyPlaying && <PlayCircleOutlineIcon sx={{color:'#f0f1f0'}} />}
                             </IconButton>
 
                             <IconButton onClick={e => !playingLastInList(room.playlistUrls.length,playerIdPlayed) ? setPlayerIdPlayed(playerIdPlayed + 1) : ''}>
-                                <SkipNextIcon fontSize="large" sx={{color: !playingLastInList(room.playlistUrls.length,playerIdPlayed) ? '#f0f1f0' : '#303134'}} />
+                                <SkipNextIcon sx={{color: !playingLastInList(room.playlistUrls.length,playerIdPlayed) ? '#f0f1f0' : '#303134'}} />
                             </IconButton>
                         </>}
                     <VolumeButton volume={volume} setVolume={setVolume}/>

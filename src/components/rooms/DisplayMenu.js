@@ -99,11 +99,11 @@ const DisplayMenu = ({t, layoutDisplay, setLayoutdisplay}) => {
           <FullscreenIcon />
           {t('RoomBottomDisplayFullScreen')}
         </MenuItem>
-        <MenuItem selected={isLayoutCompact(layoutDisplay)} onClick={(e) => setLayoutdisplay('compact')} disableRipple>
+       {/* <MenuItem selected={isLayoutCompact(layoutDisplay)} onClick={(e) => setLayoutdisplay('compact')} disableRipple>
           <DvrIcon />
           Compact
         </MenuItem>
-       {/* <MenuItem selected={isLayoutInteractive(layoutDisplay)} onClick={(e) => setLayoutdisplay('interactive')} disableRipple>
+        <MenuItem selected={isLayoutInteractive(layoutDisplay)} onClick={(e) => setLayoutdisplay('interactive')} disableRipple>
           <ChatIcon />
           {t('RoomBottomDisplayInteractive')}
         </MenuItem> */}

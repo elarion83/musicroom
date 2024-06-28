@@ -4,28 +4,22 @@
 *
 */
 
-.interactiveLayout .spotifyDisplay .playerContainer {
-    height: 20%;
-    margin-top: 2em;
-}
-.interactiveLayout .spotifyDisplay .player_button_container {
-    margin-top: 2em;
-}
- 
 ._ControlsRSWP, ._DevicesRSWP, ._InfoRSWP a+div, ._ActionsRSWP  {
 display: none !important;
 }
+
 .PlayerRSWP {
-display: flex;
-flex-direction: column-reverse;
-max-width: 80%;
-margin-left: auto;
-margin-right: auto;
-padding: 1em;
-}
-.PlayerRSWP img {
-margin-left: auto;
-margin-right: auto;
+    display: flex;
+    flex-direction: column-reverse;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1em;
+
+    img {
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 ._SliderRSWP  {
 margin-top: 1em;
@@ -42,95 +36,14 @@ margin-top: 1em;
     background-color: var(--red-2) !important;
 }
 ._InfoRSWP {
-border:none !important;
-}
-._InfoRSWP a {
-width: 100%;
-display: block;
-}
-
-@media (min-width: 800px) { 
-    .spotifyDisplay .musicOnlyPlayer_header .player_button_container>div {
-        margin: 0 auto !important;
-        max-width: 70%;
-    }
-    
-}
-
-
-.guestButtons .volumeButton  {
-    margin-left: 20px;
-}
-
-.defaultLayout .player_button_container {
-    align-items: center;
-}
-
-.fullscreenLayout .deezerDisplay .player_right_side_container {
-    margin-top: 300px;
-    max-width: 100%;
-    width: 100vw !important;
-    position: absolute;
-    text-align: center;
-}
-
-.fullscreenLayout .deezerDisplay .coverImg,
-.interactiveLayout .deezerDisplay .coverImg {
-    margin-top: 1em;
-}
-
-.fullscreenLayout .deezerDisplay .player_right_side_container .flexRowCenterH  {
-    display: block !important;
-}
-
-.fullscreenLayout .guestButtons,
-.fullscreenLayout .adminButtons {
-    align-items: center;
-    flex-basis: 100%;
-    max-width: 100%;
-    margin-bottom: 0;
-}
-
-.fullscreenLayout .adminButtons {
-    padding-top: 0;
-}
-
-.fullscreenLayout .volumeButton {
-    margin-top: 0;
-}
-
-.mediaTitle {
-    color: var(--white) !important;
-}
-
-@media (max-width: 600px) { 
-    .musicOnlyPlayer_header {
-        text-align: center;
-    }
-
-    .musicOnlyPlayer_header .mediaTitle {
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .defaultLayout .guestButtons.guestSync {
-        margin-top: -60px;
-        position: absolute;
-        right: -25px;
+    border:none !important;
+    a {
+        width: 100%;
+        display: block;
     }
 }
 
 
 .spotifyDisplay .player_right_side_container {
     text-align: center;
-}
-
-
-/*
-*
-* STICKY BUTTONS
-*
-*/
-.stickyButtons .volumeButton {
-      margin-top: 0px;
 }

@@ -1,45 +1,80 @@
-/* trick to hide youtube video title */
-.react-player {
-    >div {
-            overflow: hidden;
+/* START TRICK FOR YOUTUBE HIDE TITLE AND INFO FROM EMBED */
+
+
+/* END TRICK FOR YOUTBE */ 
+
+.playerSection {
+
+
+    /*
+    *
+    * LEFT SIDE CONTAINER (TOP ON PHONE) = VIDEO / MEDIA PLAYER
+    *
+    */
+
+        /* TRICK TO HIDE YOUTUBE INFOS IN EMBEDDED IFRAME */
+        .react-player {
+            >div {
+                    transition: all 0.3 var(--transition-fast-easeIn);
+
+                    overflow: hidden;
+                    width: 100%;
+                    /* Keep it the right aspect-ratio */
+                    aspect-ratio: 16/9;
+                    /* No clicking/hover effects */
+                    pointer-events: none;
+                iframe {
+                    width: 300%;
+                    height: 100%;
+                    margin-left: -100%;
+                }
+            }
+        }
+
+
+    /*
+    *
+    * RIGHT SIDE CONTAINER (BOTTOM ON PHONE) = VIDEO / MEDIA INFOS
+    *
+    */
+    .player_right_side_container {
+        display: flex;
+        flex-direction: column !important;
+        justify-content: space-between;
+        height: auto !important;
+        background-image: url('../img/circles.png');
+        background-size: contain;
+        
+        /*
+        *
+        * BUTTONS CONTAINER
+        *
+        */
+        .player_button_container {
             width: 100%;
-            /* Keep it the right aspect-ratio */
-            aspect-ratio: 16/9;
-            /* No clicking/hover effects */
-            pointer-events: none;
-        iframe {
-            width: 300%;
-            height: 100%;
-            margin-left: -100%;
+            >div {
+                background: rgba(2, 2, 2, 0.76);
+                width: 100%;
+                padding: 5px 10px;
+            }
+            .playerButtons {
+                justify-content: space-between;
+                margin: 0;
+                width: 100%;  
+                max-width: 100%;
+                >* {
+                    padding: 0;    
+                    transform: scale(0.9);
+                    
+                }
+                >div {
+                    margin-left: -10px;
+                }
+            }
+            .volumeButtonContainer>label,
+            .volumeButtonContainer>label>span {
+                margin: 0;
+            }
         }
     }
-}
-
-.player_button_container {
-    position: sticky;
-}
-
-.playerHide {
-    overflow: hidden;
-}
-.playerHide .playerContainer, .playerHide .PlayerRSWP{
-    height: 0;
-    opacity: 0;
-}
-
-.coverImg {
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-    width: 100%;
-    max-width: 250px;
-}
-
-.player_right_side_container {
-    display: flex;
-    flex-direction: column !important;
-    justify-content: space-between;
-    height: auto !important;
-    background-image: url('../img/circles.png');
-    background-size: contain;
 }

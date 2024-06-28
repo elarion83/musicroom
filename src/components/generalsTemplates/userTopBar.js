@@ -42,7 +42,7 @@ const UserTopBar = ({ t, user, loggedIn, setUserInfo, handleLogout, handleOpenLo
             <Button 
               variant="outlined" 
               sx={{color:'var(--white)', borderColor:'var(--white)'}}
-              startIcon={<LoginIcon sx={{color:'var(--white)'}}/>}
+              startIcon={<LoginIcon className='colorWhite'/>}
               onClick={(e) => {handleOpenLoginModal(true)}} > {t('GeneralLogin')} </Button>
             }
 

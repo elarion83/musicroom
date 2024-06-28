@@ -340,8 +340,8 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                         </Box>
                     }
                     {isVarExist(room.playlistUrls) && !room.playlistEmpty &&
-                        <Box sx={{ display: 'flex', flexDirection: 'column', p: '8px' }}>
-                            <Typography sx={{ display: 'block', width: '100%', ml: 0, pl: 0, fontSize: '12px' }}  ref={el => animatedDownElementsRef.push(el)} className='animate__animated animate__fadeInDownBig animate__delay-1s animate__slow colorWhite textCapitalize'> Playlist <b>{room.id}</b></Typography>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', p: '8px', pl:0 }}>
+                           <Typography sx={{ display: 'block', width: '100%', ml: 0, pl: 0, fontSize: '12px' }}  ref={el => animatedDownElementsRef.push(el)} className='animate__animated animate__fadeInDownBig animate__delay-1s animate__slow colorWhite textCapitalize'> Playlist <b>{room.id}</b></Typography>
 
                             <Box 
                              ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUpBig animate__delay-1s animate__slow colorWhite'
