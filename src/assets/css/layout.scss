@@ -32,6 +32,12 @@
     }
 }
 
+#root:has(.fullscreenLayout) {
+    max-width: 100%;
+    max-height: 100%;
+    overflow: hidden;
+}
+
 
 .compactLayout {
     .player_button_container {
@@ -127,7 +133,7 @@
     }
 }
 
-@media (min-width: 900px) { 
+@media (min-width: var(--breakpt-tablet)) { 
     .defaultLayout {
         .player_button_container {
             >div {
@@ -139,22 +145,23 @@
     }
 }
 
+/* TRICK TO HIDE YOUTUBE OVERLAY */
 .defaultLayout {
     .react-player {
-            >div {
-                    transition: all 0.3 var(--transition-fast-easeIn);
+        >div {
+                transition: all 0.3 var(--transition-fast-easeIn);
 
-                    overflow: hidden;
-                    width: 100%;
-                    /* Keep it the right aspect-ratio */
-                    aspect-ratio: 16/9;
-                    /* No clicking/hover effects */
-                    pointer-events: none;
-                iframe {
-                    width: 300%;
-                    height: 100%;
-                    margin-left: -100%;
-                }
+                overflow: hidden;
+                width: 100%;
+                /* Keep it the right aspect-ratio */
+                aspect-ratio: 16/9;
+                /* No clicking/hover effects */
+                pointer-events: none;
+            iframe {
+                width: 300%;
+                height: 100%;
+                margin-left: -100%;
             }
         }
+    }
 }

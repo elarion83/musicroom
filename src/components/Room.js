@@ -157,7 +157,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     const { getRemainingTime } = useIdleTimer({
         onIdle,
         onActive,
-        timeout: 5_000,
+        timeout: 15_000,
         throttle: 500,
         events:[
             'mousemove',
