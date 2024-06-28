@@ -5,28 +5,44 @@
 
 .playerSection {
 
-
     /*
     *
     * LEFT SIDE CONTAINER (TOP ON PHONE) = VIDEO / MEDIA PLAYER
     *
     */
 
-    .react-player { 
-        > div {
-            max-height: 240px;
-        }
-        +div {
-            width: 100%;
-            height: calc(100% - 53px);  
-            opacity: 0;
-            position: absolute;
-            top: 0;
-            cursor: pointer;
+    .playerContainer {
+        position: relative;
+
+        .react-player { 
+            > div {
+                max-height: 240px;
+            }
+            +div {
+                width: 100%;
+                height: calc(100% - 53px);  
+                opacity: 0;
+                position: absolute;
+                top: 0;
+                cursor: pointer;
+            }
         }
     }
 
-
+    .iconOverPlayer { // icon when playing change
+        position: absolute;
+        top: 45%;
+        z-index: 1;
+        width: 100%;
+        text-align: center;
+        svg {
+            transform: scale(4);
+            opacity: 0;
+            animation: typedjsBlinkReverse 1s;
+            -webkit-animation: typedjsBlinkReverse 1s;
+            animation: typedjsBlinkReverse 1s;
+        }
+    }
     /*
     *
     * RIGHT SIDE CONTAINER (BOTTOM ON PHONE) = VIDEO / MEDIA INFOS
@@ -64,19 +80,61 @@
                 }
                 >div {
                     margin-left: -10px;
+
                 }
                 .mediaPlayingBar {
                     transform: scale(1);
                     position: absolute;
-                    height: 3px;
+                    height: 3px;                    
+                    transition: all 0.3 var(--transition-fast-easeIn);
                     width: 100%;
                     left: 0;
                     top: -3px;
+                }
+                .mediaPlayingBarSoundWave {
+                    transform: scale(1);
+                    position: absolute;
+                    top: -13px;
+                    left: 0;
+                    height: 10px;
+                    overflow: hidden;
+
+                    .soundWaveContainer {
+                        position: absolute;
+                        transform: scaleY(0.5);
+                        opacity: 0.7;
+                    }
                 }
             }
             .volumeButtonContainer>label,
             .volumeButtonContainer>label>span {
                 margin: 0;
+            }
+        }
+    }
+}
+
+
+
+@media (max-width: 600px) { 
+    .playerSection {
+        .playerContainer {
+            position: relative;
+
+            &:hover {
+                +.player_right_side_container .player_button_container {
+                    .playerButtons .mediaPlayingBar {
+                        height: 5px;
+                        top: -5px;
+                    }
+                    .playerButtons .mediaPlayingBarSoundWave {
+                        top: -17px;
+                        height: 12px;
+                    }
+                    >div {
+                        background: rgba(2, 2, 2, 0.9);
+                    }
+                }
             }
         }
     }

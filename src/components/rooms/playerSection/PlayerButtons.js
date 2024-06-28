@@ -1,4 +1,4 @@
-import { Grid, Icon, IconButton, LinearProgress } from "@mui/material";
+import { Box, Grid, Icon, IconButton, LinearProgress } from "@mui/material";
 import { playingFirstInList } from "../../../services/utils";
 import { playedSeconds } from "../../../services/utilsRoom";
 import { Replay10,Forward10, SkipPrevious, Replay } from "@mui/icons-material";
@@ -8,13 +8,14 @@ import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
+import SoundWave from "../../../services/SoundWave";
 
 const PlayerButtons = ({room,playerControlsShown,roomPlayedActuallyPlayed, playerRef,playingLastInListInComp, localVolume,playerIdPlayed,roomIsPlaying, setLocalVolume,setIsPlaying,setIdPlaying, setLayoutdisplay,isLayoutFullScreen,layoutDisplay, goToSecond}) => {
    
     return(
         <>
-            <LinearProgress className="mediaPlayingBar"  variant="determinate" value={roomPlayedActuallyPlayed} 
-            />
+            <LinearProgress className="mediaPlayingBar"  variant="determinate" value={roomPlayedActuallyPlayed} />
+            <Box sx={{width:roomPlayedActuallyPlayed+'%'}} className="mediaPlayingBarSoundWave"><SoundWave isPlayingOrNo={roomIsPlaying} waveNumber={150} /></Box>
             {playerControlsShown && 
             <>
                 <IconButton onClick={e => (playingFirstInList(playerIdPlayed)) ? setIdPlaying(playerIdPlayed-1) : ''}>

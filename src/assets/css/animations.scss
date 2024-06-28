@@ -1,3 +1,22 @@
+@keyframes typedjsBlinkReverse { /* for the typing effect in the search bar */
+    50% {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes typedjsBlinkReverse {  /* for the typing effect in the search bar */
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
 @keyframes typedjsBlink { /* for the typing effect in the search bar */
     50% {
         opacity: 0.0;

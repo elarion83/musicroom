@@ -55,12 +55,6 @@
 
 @media (max-width: 600px) { 
     .defaultLayout {
-        /* TRICK TO HIDE YOUTUBE INFOS IN EMBEDDED IFRAME 
-        *
-        * ONLY USED IN DefaultLayout BECAUSE IT CROP THE MEDIA IN FULLSCREEN
-        *
-        */
-
         .player_right_side_container {
             position: relative;
             .player_button_container {
@@ -75,6 +69,20 @@
                 }
             }
         }
+        
+        &.guestView {
+            
+            .player_right_side_container {
+                .player_button_container {
+                    >div {
+                        top: -44px;
+                        .playerButtons .volumeButtonContainer  {
+                                margin-left: auto !important; 
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -83,7 +91,6 @@
         
         .playerSection .player_right_side_container {
             overflow: hidden;
-
             .player_button_container {
                 position: initial;
                 width: 65%;    
@@ -100,10 +107,14 @@
                         .mediaPlayingBar {
                             display: none;
                         }
+                        .mediaPlayingBarSoundWave {
+                            display: none;
+                        }
                     }
                 }
             }
         }
+
     }
 }
 

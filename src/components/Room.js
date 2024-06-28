@@ -88,6 +88,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 	const [playerIdPlayed, setPlayerIdPlayed] = useState(0);
     const [playerControlsShown, setPlayerControlsShown] = useState(false);
 	const [roomIsPlaying, setRoomIsPlaying] = useState(true);
+    const [playingJustChanged, setPlayingJustChanged] = useState(false);
     const [localVolume, setLocalVolume] = useState(1);
     const [pip] = useState(true);
     const [guestSynchroOrNot, setGuestSynchroOrNot] = useState(true);
@@ -119,20 +120,21 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     // animated elements
 
     useEffect(() => {
+        var adminClass = guestSynchroOrNot ? isActuallyAdmin ? 'adminView' : 'guestView' : '';
         switch (layoutDisplay) {
             case 'compact':
-                setLayoutDisplayClass('compactLayout');
+                setLayoutDisplayClass('compactLayout '+adminClass);
                 break;
             case 'fullscreen':
-                setLayoutDisplayClass('fullscreenLayout');
+                setLayoutDisplayClass('fullscreenLayout '+adminClass);
                 break;
             case 'interactive':
-                setLayoutDisplayClass('interactiveLayout');
+                setLayoutDisplayClass('interactiveLayout '+adminClass);
                 break;
             default:
-                setLayoutDisplayClass('defaultLayout');
+                setLayoutDisplayClass('defaultLayout '+adminClass);
         }
-    }, [layoutDisplay]);
+    }, [layoutDisplay, guestSynchroOrNot, isActuallyAdmin]);
 
     // FULL SCREEN INACTIVITY
     const [remaining, setRemaining] = useState(0)
@@ -155,7 +157,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     const { getRemainingTime } = useIdleTimer({
         onIdle,
         onActive,
-        timeout: 15_000,
+        timeout: 10_000,
         throttle: 1000
     });
 
@@ -298,6 +300,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         if(isActuallyAdmin) {
            updateFirebaseRoom( roomRef , {actuallyPlaying: PlayingOrNot})
         }
+        setPlayingJustChanged(true);
+        await delay(1000);
+        setPlayingJustChanged(false);
     }
     
     async function setIdPlaying(idPlaying) {
@@ -339,6 +344,11 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     async function goToSecond(seconds) {
         playerRef.current.seekTo(seconds, 'seconds'); 
+    }
+
+    async function goToPercentage(percentage) {
+        console.log(percentage);
+//        playerRef.current.seekTo(seconds, 'seconds'); 
     }
 
     
@@ -575,10 +585,16 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         {!room.playlistEmpty && 
                             <>
                                 {isVarExistNotEmpty(room.playlistUrls) && 
-                                    <Box sx={{bgcolor:'#303030',borderBottom: '2px solid var(--border-color)', padding:"0px 0em"}} className={room.playlistUrls[playerIdPlayed].source+'Display'}> 
+                                    <Box p={0} sx={{bgcolor:'#303030',borderBottom: '2px solid var(--border-color)'}} className={room.playlistUrls[playerIdPlayed].source+'Display'}> 
                                         <Grid container spacing={0} sx={{ bgcolor:'var(--grey-dark)'}} className={ isLayoutCompact(layoutDisplay) ? 'playerHide playerSection' : 'playerShow playerSection'}>
-
+                                            
                                             <Grid item className={isLayoutFullScreen(layoutDisplay) ? 'fullscreen' : 'playerContainer'} sm={(isFromSpotify(room.playlistUrls[playerIdPlayed])) ? 12 : 4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
+                                                {playingJustChanged && 
+                                                <Box className="iconOverPlayer">
+                                                    { !roomIsPlaying && <PauseCircleOutlineIcon className='colorWhite' />}
+                                                    { roomIsPlaying && <PlayCircleOutlineIcon className='colorWhite' />}
+                                                </Box>
+                                            }
                                                 {isFromSpotify(room.playlistUrls[playerIdPlayed]) && spotifyPlayerShow &&
                                                     <>
                                                         {isActuallyAdmin &&
@@ -644,6 +660,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                     />
                                                 }
                                                 <div onClick={e => playerControlsShown ? setIsPlaying(!roomIsPlaying) : ''}></div>
+                                                
                                             </Grid>
                                             <Grid item sm={(isFromSpotify(room.playlistUrls[playerIdPlayed]) || isLayoutCompact(layoutDisplay)) ? 12 : 8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }} className={`player_right_side_container ${(['spotify', 'deezer'].includes(room.playlistUrls[playerIdPlayed].source)) ? "musicOnlyPlayer_header" : ""}`}>
                                                 { /* pip ? 'Disable PiP' : 'Enable PiP' */ }
@@ -656,14 +673,14 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                         </Typography>
                                                     </Grid>
 
-                                                    <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1, fontSize: '12px', textTransform:'uppercase', color:'var(--grey-lighter)' }} className='fontFamilyNunito'>
+                                                    <Typography sx={{ display:'block', width:'100%',ml:0, mb: 1, fontSize: '14px', color:'var(--grey-lighter)' }} className='textCapialize fontFamilyNunito'>
                                                         {room.playlistUrls[playerIdPlayed].channelOrArtist}
                                                     </Typography> 
 
                                                     <Grid item sm={12} md={12} >
-                                                        <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', textTransform:'uppercase', color:'var(--grey-inspired)' }} className='fontFamilyNunito'>
-                                                            {roomIsPlaying ? t('GeneralPlaying') : t('GeneralPause')}
-                                                            {playerBuffering ? ' | Loading' : ''}
+                                                        <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', color:'var(--grey-inspired)' }} className='textCapialize fontFamilyNunito'>
+                                                            {/*roomIsPlaying ? t('GeneralPlaying') : t('GeneralPause') */}
+                                                            {playerBuffering ? ' Loading' : ''}
                                                         </Typography> 
                                                         {(playerReady && playerRef.current !== null && !isFromSpotify(room.playlistUrls[playerIdPlayed])) && 
                                                         <Typography sx={{ fontSize: '10px', ml:0, mb: 1, color:'var(--grey-inspired)'}} className='fontFamilyNunito'> {~~(Math.round(playerRef.current.getCurrentTime())/60) + 'm'+Math.round(playerRef.current.getCurrentTime()) % 60+ 's / ' + formatNumberToMinAndSec(playerRef.current.getDuration())}</Typography>}
@@ -707,7 +724,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                     </Box>
                                 }
                                 <Toolbar className="playlistToolbar">
-                                    <Typography component="h6" className="fontFamilyNunito" sx={{ flexGrow: 1, textTransform:'uppercase', fontSize:'12px', color:'white' }}>
+                                    <Typography component="h6" className="fontFamilyNunito textCapitalize colorWhite" sx={{ flexGrow: 1, fontSize:'12px' }}>
                                              {t('GeneralInPlaylist')} :
                                     </Typography>
                                 </Toolbar>
