@@ -139,20 +139,16 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     const [layoutIdle, setLayoutIdle] = useState(false);
 
     const onIdle = async () => {
-        console.log('onIdle');
         if(isLayoutFullScreen(layoutDisplay) || isLayoutDefault(layoutDisplay)) {
             returnAnimateReplace(animatedElementsRef, {Right:"Left", In:"Out"}, /Right|In/gi);
             await delay(1000);
             setLayoutIdle(true);
-            console.log('true');
         }
     }
 
     const onActive = async() => {
-        console.log('onActive');
         if(isLayoutFullScreen(layoutDisplay) || isLayoutDefault(layoutDisplay)) {  
-            returnAnimateReplace(animatedElementsRef, {Left:"Right", Out:"In"}, /Left|Out/gi);
-            console.log('false');      
+            returnAnimateReplace(animatedElementsRef, {Left:"Right", Out:"In"}, /Left|Out/gi);     
 //            await delay(1000);
             setLayoutIdle(false);
         }
@@ -160,7 +156,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     const { getRemainingTime } = useIdleTimer({
         onIdle,
         onActive,
-        timeout: 700_000,
+        timeout: 10_000,
         throttle: 1000
     });
 
@@ -648,7 +644,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                         }}
                                                     />
                                                 }
-                                                <div style={{width:'100%',height:'100%',opacity:0,top:0,position:'absolute'}}></div>
+                                                <div onClick={e => playerControlsShown ? setIsPlaying(!roomIsPlaying) : ''}></div>
                                             </Grid>
                                             <Grid item sm={(isFromSpotify(room.playlistUrls[playerIdPlayed]) || isLayoutCompact(layoutDisplay)) ? 12 : 8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }} className={`player_right_side_container ${(['spotify', 'deezer'].includes(room.playlistUrls[playerIdPlayed].source)) ? "musicOnlyPlayer_header" : ""}`}>
                                                 { /* pip ? 'Disable PiP' : 'Enable PiP' */ }
@@ -698,7 +694,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                                             playingLastInList={playingLastInList}
                                                                             isLayoutFullScreen={isLayoutFullScreen}
                                                                             layoutDisplay={layoutDisplay}
-                                                                            playingLastInList={playingLastInList}
+                                                                            playingLastInListInComp={playingLastInList}
+                                                                            roomPlayedActuallyPlayed={playedPercents} 
+
                                                                         />
                                                                 </Grid>
                                                             </Box>

@@ -6,6 +6,11 @@
         top: 0;
         left: 0;
         z-index: 9999;
+        +div {
+            z-index: 99999;
+            top: 0px;
+            position: fixed;
+        }
     }
 
     .player_button_container {
@@ -38,9 +43,21 @@
     }
 }
 
+/*
+*
+* 600 PX IS THE BREAKPOINT WHERE MEDIA PASS ON TOP OF TITLE
+*
+*/
+
 
 @media (max-width: 600px) { 
     .defaultLayout {
+        /* TRICK TO HIDE YOUTUBE INFOS IN EMBEDDED IFRAME 
+        *
+        * ONLY USED IN DefaultLayout BECAUSE IT CROP THE MEDIA IN FULLSCREEN
+        *
+        */
+
         .player_right_side_container {
             position: relative;
             .player_button_container {
@@ -49,47 +66,40 @@
                     top: -45px;
                     margin: 0;
                     left: 0;
+                    .playerButtons {
+                        padding: 0;
+                    }
                 }
             }
-        }
-    }
-}
-
-@media (max-width: 900px) { 
-
-    .defaultLayout .player_button_container {
-        padding-top: 0;
-
-        .playerButtons {
-            padding-top: 0;
-            .volumeButton {
-                margin-top: 0;
-            }
-        }
-        button{
-            padding-top: 0;
         }
     }
 }
 
 @media (min-width: 600px) { 
     .defaultLayout {
-        .playerSection .player_right_side_container .player_button_container {
-            position: initial;
-            width: 65%;
-            >div {
-                background: transparent;
-                padding-top: 25px;
-                .playerButtons {
-                    gap: 15px;
-                    >* {
-                        transform: scale(1);
+        
+        .playerSection .player_right_side_container {
+            overflow: hidden;
+
+            .player_button_container {
+                position: initial;
+                width: 65%;    
+                align-content: flex-end;
+                padding-bottom: 15px;
+                >div {
+                    background: transparent;
+                    padding-top: 25px;
+                    .playerButtons {
+                        gap: 15px;
+                        >* {
+                            transform: scale(1);
+                        }
+                        .mediaPlayingBar {
+                            display: none;
+                        }
                     }
                 }
             }
-        }
-        .react-player > div {
-            max-height: 240px;
         }
     }
 }
@@ -104,4 +114,24 @@
             }
         }
     }
+}
+
+.defaultLayout {
+    .react-player {
+            >div {
+                    transition: all 0.3 var(--transition-fast-easeIn);
+
+                    overflow: hidden;
+                    width: 100%;
+                    /* Keep it the right aspect-ratio */
+                    aspect-ratio: 16/9;
+                    /* No clicking/hover effects */
+                    pointer-events: none;
+                iframe {
+                    width: 300%;
+                    height: 100%;
+                    margin-left: -100%;
+                }
+            }
+        }
 }

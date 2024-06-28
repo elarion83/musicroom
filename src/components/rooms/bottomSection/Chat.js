@@ -124,18 +124,12 @@ const Chat = ({t, layoutDisplay, roomRef, setLayoutdisplay, roomParams, currentU
                         </Fab>
                     </Tooltip> 
                     
-                    {layoutDisplay !== 'interactive' && <Tooltip  ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInLeft animate__faster' title={t('RoomBottomButtonChatHide')}>  
+                    <Tooltip  ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInLeft animate__faster' title={t('RoomBottomButtonChatHide')}>  
                         <Fab size="small" variant="extended" className='room_small_button_interactions'  
                             sx={{justifyContent: 'center', ml:0, mt:1}} onClick={e => hideTchatInComp()} >
                             <Icon icon="tabler:messages-off" width='20' />
                         </Fab>
-                    </Tooltip>}
-                    {layoutDisplay === 'interactive' && <Tooltip  ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInLeft animate__faster' title={t('RoomBottomButtonChatHide')}>  
-                        <Fab size="small" variant="extended" className='room_small_button_interactions'  
-                            sx={{justifyContent: 'center', ml:0, mt:1}} onClick={e => setLayoutdisplay('default')} >
-                            <ViewModuleIcon sx={{color:'rgb(25, 118, 210)'}} />
-                        </Fab>
-                    </Tooltip>} 
+                    </Tooltip>
                 </Grid>
                 <Grid item xs={10} md={11} sx={{pr:'4vw'}} 
                 className="chatBoxGrid" >

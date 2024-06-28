@@ -1,4 +1,4 @@
-import { Grid, Icon, IconButton } from "@mui/material";
+import { Grid, Icon, IconButton, LinearProgress } from "@mui/material";
 import { playingFirstInList } from "../../../services/utils";
 import { playedSeconds } from "../../../services/utilsRoom";
 import { Replay10,Forward10, SkipPrevious, Replay } from "@mui/icons-material";
@@ -9,10 +9,12 @@ import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 
-const PlayerButtons = ({room,playerControlsShown, playerRef,playingLastInList, localVolume,playerIdPlayed,roomIsPlaying, setLocalVolume,setIsPlaying,setIdPlaying, setLayoutdisplay,isLayoutFullScreen,layoutDisplay, goToSecond}) => {
+const PlayerButtons = ({room,playerControlsShown,roomPlayedActuallyPlayed, playerRef,playingLastInListInComp, localVolume,playerIdPlayed,roomIsPlaying, setLocalVolume,setIsPlaying,setIdPlaying, setLayoutdisplay,isLayoutFullScreen,layoutDisplay, goToSecond}) => {
    
     return(
         <>
+            <LinearProgress className="mediaPlayingBar"  variant="determinate" value={roomPlayedActuallyPlayed} 
+            />
             {playerControlsShown && 
             <>
                 <IconButton onClick={e => (playingFirstInList(playerIdPlayed)) ? setIdPlaying(playerIdPlayed-1) : ''}>
@@ -32,8 +34,8 @@ const PlayerButtons = ({room,playerControlsShown, playerRef,playingLastInList, l
                     <Forward10 fontSize="medium" sx={{color:'#f0f1f0'}} />
                 </IconButton>
 
-                <IconButton onClick={e => !playingLastInList(room.playlistUrls.length,playerIdPlayed) ? setIdPlaying(playerIdPlayed+1) : ''}>
-                    <SkipNextIcon fontSize="medium" sx={{color: !playingLastInList(room.playlistUrls.length,playerIdPlayed) ? '#f0f1f0' : '#303134'}} />
+                <IconButton onClick={e => !playingLastInListInComp(room.playlistUrls.length,playerIdPlayed) ? setIdPlaying(playerIdPlayed+1) : ''}>
+                    <SkipNextIcon fontSize="medium" sx={{color: !playingLastInListInComp(room.playlistUrls.length,playerIdPlayed) ? '#f0f1f0' : '#303134'}} />
                 </IconButton>
                 
                 <IconButton onClick={e => (room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds > 10) ? goToSecond(0) : ''} >
