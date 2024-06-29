@@ -51,9 +51,9 @@ const ModalAuthPhone = ({t, open,close, doActionAfterAuth, loginLoading}) => {
 
   const handleVerifyCode = async () => {
     try {
-      const credential = await confirmationResult.confirm(verificationCode);
       setIsMessageSent(false);        
       setPhoneLoginError('');      
+      const credential = await confirmationResult.confirm(verificationCode);
       doActionAfterAuth(credential, 'userInUser');
     } catch (error) {
       setPhoneLoginError('Error verifying code:'+ error.message);
