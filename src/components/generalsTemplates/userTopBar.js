@@ -18,7 +18,8 @@ import UserRoomListModal from './modals/UserRoomListModal';
 import { ReactSVG } from "react-svg";
 import { withTranslation } from 'react-i18next';
 import UserAvatarComponent from '../../services/utilsComponents';
-const UserTopBar = ({ t, user, loggedIn, setUserInfo, handleLogout, handleOpenLoginModal, joinRoomByRoomId }) => {
+import { LoadingButton } from '@mui/lab';
+const UserTopBar = ({ t, user, loggedIn,loginLoading, setUserInfo, handleLogout, handleOpenLoginModal, joinRoomByRoomId }) => {
 
   // menu
     function handleClickMenu(event) {
@@ -39,11 +40,16 @@ const UserTopBar = ({ t, user, loggedIn, setUserInfo, handleLogout, handleOpenLo
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', textAlign: 'center', width:'100%' }}>
           
           {!loggedIn && 
-            <Button 
+            <LoadingButton
+              loading={loginLoading} 
+              loadingPosition='start'
               variant="outlined" 
-              sx={{color:'var(--white)', borderColor:'var(--white)'}}
+              size='small'
+              className='loginButtonTop main_bg_color  varelaFontTitle buttonBorder texturaBgButton'
               startIcon={<LoginIcon className='colorWhite'/>}
-              onClick={(e) => {handleOpenLoginModal(true)}} > {t('GeneralLogin')} </Button>
+              onClick={(e) => {handleOpenLoginModal(true)}} > 
+                <Typography fontSize="small">{t('GeneralLogin')} </Typography>
+            </LoadingButton>
             }
 
           {loggedIn && 

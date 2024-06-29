@@ -71,6 +71,10 @@
     background-position:50%;
 }
 
+.loginPhoneModal .phoneField .MuiInputAdornment-root {
+    height: 0;
+}
+
 @media (max-width: 900px) { 
     .contentSlider .slideBox{
         h5 {

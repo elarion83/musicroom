@@ -118,7 +118,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
 
                 if(isProdEnv()) {
                     axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, {
-                        params: youtubeApiSearchObject(searchTerm,12)
+                        params: youtubeApiSearchObject(searchTerm,24)
                     })
                     .then(function (response) {
                         setMediaSearchResultYoutube(response.data.items);

@@ -54,7 +54,7 @@ const BottomInteractions = ({ t,roomRef, layoutDisplay, setLayoutdisplay, paramD
                
                 <Fab ref={el => animatedElementsRef.push(el)}
                     sx={{width:'56px',height:'56px', mt:'-4em'}}
-                    className='main_bg_color animate__animated animate__fadeInUp'
+                    className='main_bg_color buttonBorder animate__animated animate__fadeInUp'
                     aria-label="add" onClick={(e) => setOpenAddToPlaylistModal(true)}>
                     <GFontIcon icon='format_list_bulleted_add' customClass='addMediaIcon' />
                 </Fab>
