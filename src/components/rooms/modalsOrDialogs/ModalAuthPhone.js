@@ -19,7 +19,7 @@ const ModalAuthPhone = ({t, open,close, doActionAfterAuth, loginLoading}) => {
 
     //auth.settings.appVerificationDisabledForTesting = true;
   useEffect(() => {
-    if (!recaptchaVerifier && open) {
+    if (!recaptchaVerifier && !isMessageSent) {
         setPhoneLoginError('');
         const verifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
         size: 'invisible',
@@ -33,7 +33,6 @@ const ModalAuthPhone = ({t, open,close, doActionAfterAuth, loginLoading}) => {
         setRecaptchaVerifier(verifier);
         });
     }
-            console.log(recaptchaVerifier);
   }, [recaptchaVerifier,open]);
 
   const handleSignIn = async () => {

@@ -140,9 +140,7 @@ function App( {t} ) {
 
   /* ANONYMOUS LOGIN HANDLER */
   async function anonymousLogin() {
-    //preLoginFunc();
-    setIsLoginLoading(true);
-    setIsAppLoading(true);
+    preLoginFunc();
     signInAnonymously(auth).then((result) => { 
         doActionAfterAuth(result, 'userInUser');
       })
@@ -175,29 +173,29 @@ function App( {t} ) {
     globalDatas.displayName = customDatas.displayName;
     globalDatas.customDatas = customDatas;
     setUserInfo(globalDatas);
-    setPhoneAuthModalOpen(false);
-    setLoginModalOpen(false);
     setIsSignedIn(true);
 
     if('newAuth' === actionType) {
       handleLoginSnack(newUser);
-      doActionAfterLogin();
       CreateGoogleAnalyticsEvent('Actions',globalDatas.providerId+' login',globalDatas.providerId+' login');
     }
 
+    setPhoneAuthModalOpen(false);
+    setLoginModalOpen(false);
     setIsAppLoading(false);
+    doActionAfterLogin();
   }
 
   /* CALLBACK AFTER LOGIN */
   function doActionAfterLogin() {
     switch(funcAfterLogin) {
       case 'createRoom':
-        setFuncAfterLogin('');
         createNewRoom();
+        setFuncAfterLogin('');
         break;
       case 'joinRoom':
-        setFuncAfterLogin('');
         setJoinRoomModalOpen(true);
+        setFuncAfterLogin('');
         break;
       default:
     }
@@ -325,14 +323,14 @@ function App( {t} ) {
           <Room currentUser={userInfos} className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain} setStickyDisplay={setStickyDisplay}></Room>     
         }
 
-        {!isAppLoading && <><div id="recaptcha-container"></div>
-        {!isSignedIn && <ModalAuthPhone
-          open={(phoneAuthModalOpen && !isSignedIn)}
+        {(!isSignedIn && phoneAuthModalOpen) &&<><div id="recaptcha-container"></div>
+        <ModalAuthPhone
           close={(e) => setPhoneAuthModalOpen(false)}
+          open={(phoneAuthModalOpen && !isSignedIn)}
           loginLoading={isVarExistNotEmpty(roomId) ? isAppLoading : isLoginLoading}
           doActionAfterAuth={doActionAfterAuth}
-        />}</>
-        }
+        />
+        </>}
         {!isSignedIn && (roomId || loginModalOpen) && 
         <LoginModal 
           open={true} 
