@@ -140,7 +140,9 @@ function App( {t} ) {
 
   /* ANONYMOUS LOGIN HANDLER */
   async function anonymousLogin() {
-    preLoginFunc();
+    //preLoginFunc();
+    setIsLoginLoading(true);
+    setIsAppLoading(true);
     signInAnonymously(auth).then((result) => { 
         doActionAfterAuth(result, 'userInUser');
       })
@@ -173,29 +175,29 @@ function App( {t} ) {
     globalDatas.displayName = customDatas.displayName;
     globalDatas.customDatas = customDatas;
     setUserInfo(globalDatas);
+    setPhoneAuthModalOpen(false);
+    setLoginModalOpen(false);
     setIsSignedIn(true);
 
     if('newAuth' === actionType) {
       handleLoginSnack(newUser);
+      doActionAfterLogin();
       CreateGoogleAnalyticsEvent('Actions',globalDatas.providerId+' login',globalDatas.providerId+' login');
     }
 
-    setPhoneAuthModalOpen(false);
-    setLoginModalOpen(false);
     setIsAppLoading(false);
-    doActionAfterLogin();
   }
 
   /* CALLBACK AFTER LOGIN */
   function doActionAfterLogin() {
     switch(funcAfterLogin) {
       case 'createRoom':
-        createNewRoom();
         setFuncAfterLogin('');
+        createNewRoom();
         break;
       case 'joinRoom':
-        setJoinRoomModalOpen(true);
         setFuncAfterLogin('');
+        setJoinRoomModalOpen(true);
         break;
       default:
     }
@@ -323,13 +325,14 @@ function App( {t} ) {
           <Room currentUser={userInfos} className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain} setStickyDisplay={setStickyDisplay}></Room>     
         }
 
-        {!isSignedIn && <><div id="recaptcha-container"></div>
-        <ModalAuthPhone
+        {!isAppLoading && <><div id="recaptcha-container"></div>
+        {!isSignedIn && <ModalAuthPhone
           open={(phoneAuthModalOpen && !isSignedIn)}
+          close={(e) => setPhoneAuthModalOpen(false)}
           loginLoading={isVarExistNotEmpty(roomId) ? isAppLoading : isLoginLoading}
           doActionAfterAuth={doActionAfterAuth}
-        />
-        </>}
+        />}</>
+        }
         {!isSignedIn && (roomId || loginModalOpen) && 
         <LoginModal 
           open={true} 

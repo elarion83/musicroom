@@ -9,7 +9,7 @@ import { LoadingButton } from '@mui/lab';
 import { withTranslation } from 'react-i18next';
 import MuiPhoneNumber from "mui-phone-number";
 
-const ModalAuthPhone = ({t, open, doActionAfterAuth, loginLoading}) => {
+const ModalAuthPhone = ({t, open,close, doActionAfterAuth, loginLoading}) => {
     const [isMessageSent, setIsMessageSent] = useState(false);
     const [confirmationResult, setConfirmationResult] = useState(null);
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -86,6 +86,16 @@ const ModalAuthPhone = ({t, open, doActionAfterAuth, loginLoading}) => {
                         onClick={handleSignIn}>
                         <Typography fontSize="small">{loginLoading ? t('GeneralLoading') : 'Envoyer SMS'} </Typography>
                     </LoadingButton>
+                    <LoadingButton 
+                        loading={loginLoading}
+                        sx={{mt:1}}
+                        loadingPosition='start'
+                        className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
+                        variant="contained"
+                        startIcon={<Icon icon="mdi:phone" />}
+                        onClick={() => close(false)}>
+                        <Typography fontSize="small">{loginLoading ? t('GeneralLoading') : 'Cancel'} </Typography>
+                    </LoadingButton>
                 </>
                 }
                 
@@ -97,8 +107,26 @@ const ModalAuthPhone = ({t, open, doActionAfterAuth, loginLoading}) => {
                         value={verificationCode}
                         onChange={(e) => setVerificationCode(e.target.value)}
                     />
-                    <Button onClick={handleVerifyCode}>Verify Code</Button>
-                    <Button onClick={() => setIsMessageSent(false)}>Cancel</Button> 
+                    <LoadingButton 
+                        loading={loginLoading}
+                        sx={{mt:1}}
+                        loadingPosition='start'
+                        className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
+                        variant="contained"
+                        startIcon={<Icon icon="mdi:phone" />}
+                        onClick={handleVerifyCode}>
+                        <Typography fontSize="small">{loginLoading ? t('GeneralLoading') : 'Verify'} </Typography>
+                    </LoadingButton>
+                    <LoadingButton 
+                        loading={loginLoading}
+                        sx={{mt:1}}
+                        loadingPosition='start'
+                        className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
+                        variant="contained"
+                        startIcon={<Icon icon="mdi:phone" />}
+                        onClick={() => setIsMessageSent(false)}>
+                        <Typography fontSize="small">{loginLoading ? t('GeneralLoading') : 'Cancel'} </Typography>
+                    </LoadingButton>
                 </>
             }</>
             </Grid>            
