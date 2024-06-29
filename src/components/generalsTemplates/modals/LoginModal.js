@@ -1,30 +1,25 @@
 import { Icon } from "@iconify/react";
 import { Alert, Box, Button, Dialog, Link, DialogContent, Divider, Grid, Typography } from "@mui/material";
-import { useState } from "react";
-
-import TextField from '@mui/material/TextField';
+import React, { useState } from "react";
 
 import { LoadingButton } from "@mui/lab";
 import PrivacyPolicyModal from '../modals/PrivacyPolicyModal';
-
 import { withTranslation } from 'react-i18next';
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 import ModalsHeader from "./ModalsHeader";
 
-const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLogin, handlePasswordAndMailLogin, loginLoading, redirectToHome, roomId, loginErrorMessage}) => {
+const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLogin,handlePhoneLogin, handlePasswordAndMailLogin, loginLoading, redirectToHome, roomId, loginErrorMessage}) => {
     
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
     const [PrivacyPolicyModalOpen, setPrivacyPolicyModalOpen] = useState(false);
-        
+          
     async function onEmailAndPasswordSubmit() {
         handlePasswordAndMailLogin(email, password); 
     }
 
     return(
-
-
-        <Dialog open={open} TransitionComponent={SlideUp} onClose={() => changeOpen(false)}
+        <Dialog className="loginModal" open={open} TransitionComponent={SlideUp} onClose={() => changeOpen(false)}
         sx={{
             "& .MuiDialog-container": {
                 "& .MuiPaper-root": {
@@ -37,6 +32,7 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
             <ModalsHeader icon={() => <Icon icon='carbon:user-avatar' style={{marginRight:'10px'}} />} title={t('ModalLoginTitle')} />
  
             <DialogContent dividers sx={{pt:2}}>
+
                 {loginErrorMessage && <Alert severity="error" sx={{mb:2}}>{loginErrorMessage}</Alert>}     
                     <Grid container direction="column" >
                        {/* <Box sx={{display:'flex', flexDirection:'column'}}>     
@@ -70,27 +66,39 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
                         <Divider sx={{mt:3,mb:2}}>
                             {t('GeneralOr')} 
                         </Divider>   */}
-                            <LoadingButton 
-                                    loading={loginLoading}
-                                    loadingPosition='start'
-                                    className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
-                                    variant="contained"
-                                    startIcon={<Icon icon="mdi:anonymous" />}
-                                    onClick={e => handleAnonymousLogin()}>
-                                <Typography fontSize="small">{t(!loginLoading ?'ModalLoginButtonAnon' : ('GeneralLoading'))} </Typography>
-                            </LoadingButton>
+                        <LoadingButton 
+                                loading={loginLoading}
+                                loadingPosition='start'
+                                className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
+                                variant="contained"
+                                startIcon={<Icon icon="mdi:phone" />}
+                                onClick={e => handlePhoneLogin(true)}>
+                            <Typography fontSize="small">{loginLoading ? t('GeneralLoading') : t('GeneralBy')+' SMS'} </Typography>
+                        </LoadingButton>
                         <Divider sx={{mt:2,mb:2}}>
                             {t('GeneralOr')} 
                         </Divider>  
-                            <LoadingButton
-                                    loadingPosition='start'
-                                    loading={loginLoading}
-                                    className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
-                                    startIcon={<Icon icon="ri:google-fill" />}
-                                    variant="contained"
-                                    onClick={handleGoogleLogin}>
-                                <Typography fontSize="small">{t(!loginLoading ? 'ModalLoginButtonGoogle' : ('GeneralLoading'))} </Typography>
-                            </LoadingButton>  
+                        <LoadingButton 
+                                loading={loginLoading}
+                                loadingPosition='start'
+                                className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
+                                variant="contained"
+                                startIcon={<Icon icon="mdi:anonymous" />}
+                                onClick={e => handleAnonymousLogin()}>
+                            <Typography fontSize="small">{t(!loginLoading ?'ModalLoginButtonAnon' : ('GeneralLoading'))} </Typography>
+                        </LoadingButton>
+                        <Divider sx={{mt:2,mb:2}}>
+                            {t('GeneralOr')} 
+                        </Divider>  
+                        <LoadingButton
+                                loadingPosition='start'
+                                loading={loginLoading}
+                                className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
+                                startIcon={<Icon icon="ri:google-fill" />}
+                                variant="contained"
+                                onClick={handleGoogleLogin}>
+                            <Typography fontSize="small">{t(!loginLoading ? 'ModalLoginButtonGoogle' : ('GeneralLoading'))} </Typography>
+                        </LoadingButton>  
                     </Grid> 
                     <Grid sx={{mt:2, mb:2}}>
                         {roomId && 

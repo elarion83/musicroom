@@ -28,10 +28,11 @@ import {replaceCurrentUrlWithHomeUrl, replaceCurrentUrlWithRoomUrl } from './ser
 
 import { withTranslation } from 'react-i18next';
 import { createUserDataObject } from "./services/utilsArray";
-import { browserLocalPersistence, createUserWithEmailAndPassword, getAdditionalUserInfo, onAuthStateChanged, setPersistence, signInAnonymously, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
+import { RecaptchaVerifier, browserLocalPersistence, createUserWithEmailAndPassword, getAdditionalUserInfo, onAuthStateChanged, setPersistence, signInAnonymously, signInWithEmailAndPassword, signInWithPhoneNumber, signInWithPopup, signOut } from "firebase/auth";
 import {  doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { getCleanRoomId } from "./services/utilsRoom";
 import { useNavigate, useParams } from 'react-router-dom';
+import ModalAuthPhone from "./components/rooms/modalsOrDialogs/ModalAuthPhone";
 function App( {t} ) {
   
   // general app statuts
@@ -55,6 +56,9 @@ function App( {t} ) {
   // modal statuts
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [joinRoomModalOpen, setJoinRoomModalOpen] = useState(false);
+
+  // phone auth
+  const [phoneAuthModalOpen, setPhoneAuthModalOpen] = useState(false);
 
   // snackbar statuts
   const [loginNewUserOkSnackBarOpen, setLoginNewUserOkSnackBarOpen] = useState(false);
@@ -176,6 +180,8 @@ function App( {t} ) {
       CreateGoogleAnalyticsEvent('Actions',globalDatas.providerId+' login',globalDatas.providerId+' login');
     }
 
+    setPhoneAuthModalOpen(false);
+    setLoginModalOpen(false);
     setIsAppLoading(false);
     doActionAfterLogin();
   }
@@ -285,7 +291,7 @@ function App( {t} ) {
          <AppBar className={(roomId && isSignedIn) ? stickyDisplay ? '' : 'topBarIsInRoom appBar' : 'topBarClassic appBar'} position="static" sx={{bgcolor: '#202124'}}>
             <Toolbar>
                 {!(roomId && isSignedIn) && <img className="appLogo" src="img/logo__new.png" alt={envAppNameHum+" logo"} />}
-                <UserTopBar loggedIn={isSignedIn} user={userInfos} setUserInfo={setUserInfoEdit} joinRoomByRoomId={joinRoomByRoomId} handleOpenLoginModal={setLoginModalOpen} handleLogout={logOut} />
+                <UserTopBar loginLoading={isVarExistNotEmpty(roomId) ? isAppLoading : isLoginLoading} loggedIn={isSignedIn} user={userInfos} setUserInfo={setUserInfoEdit} joinRoomByRoomId={joinRoomByRoomId} handleOpenLoginModal={setLoginModalOpen} handleLogout={logOut} />
             </Toolbar>
           </AppBar>
           {!roomId && 
@@ -317,12 +323,14 @@ function App( {t} ) {
           <Room currentUser={userInfos} className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain} setStickyDisplay={setStickyDisplay}></Room>     
         }
 
+        {!isSignedIn && <div id="recaptcha-container"></div>}
         {!isSignedIn && (roomId || loginModalOpen) && 
         <LoginModal 
           open={true} 
           changeOpen={(e) => setLoginModalOpen(false)}
           handleAnonymousLogin={anonymousLogin}
           handleGoogleLogin={handleGoogleLogin}
+          handlePhoneLogin={(e) => setPhoneAuthModalOpen(true)}
           handlePasswordAndMailLogin={handlePasswordAndMailLogin}
           loginErrorMessage={loginErrorMessage}
           loginLoading={isVarExistNotEmpty(roomId) ? isAppLoading : isLoginLoading}
@@ -330,6 +338,12 @@ function App( {t} ) {
           roomId={roomId}
         />}
 
+        <ModalAuthPhone
+          open={(phoneAuthModalOpen && !isSignedIn)}
+          loginLoading={isVarExistNotEmpty(roomId) ? isAppLoading : isLoginLoading}
+          doActionAfterAuth={doActionAfterAuth}
+        />
+        
         {isSignedIn && 
           <>
             <Snackbar
@@ -348,7 +362,6 @@ function App( {t} ) {
             />
           </>
         }
-        
         <Snackbar
           open={logoutOkSnackBarOpen}
           autoHideDuration={3000}

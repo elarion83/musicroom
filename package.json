@@ -22,6 +22,7 @@
     "firebase": "^10.9.0",
     "git": "^0.1.5",
     "i18next": "^23.2.3",
+    "mui-phone-number": "github:ioki-mobility/mui-phone-number#1a40e38182c4c54978e0834cf9ce4379106453d1",
     "pnpm": "^8.5.1",
     "process": "^0.11.10",
     "react": "^17.0.2",

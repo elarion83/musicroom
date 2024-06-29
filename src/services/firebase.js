@@ -5,7 +5,7 @@ import "firebase/compat/storage";
 
 import { initializeApp } from 'firebase/app';
 import { getDatabase } from 'firebase/database';
-import  { EmailAuthProvider, getAuth, GoogleAuthProvider } from 'firebase/auth';
+import  { EmailAuthProvider, getAuth, GoogleAuthProvider, signInWithPhoneNumber  } from 'firebase/auth';
 import { getStorage } from 'firebase/storage';
 import { getFirestore } from "firebase/firestore";
 
@@ -26,6 +26,7 @@ export const storage = getStorage(app);
 export const database = getDatabase(app);
 export const auth = getAuth(app);
 
+auth.settings.appVerificationDisabledForTesting = true;
 export const mailAndPassProvider = new EmailAuthProvider();
 export const googleProvider = new GoogleAuthProvider();
 export const db = getFirestore(app);
