@@ -323,7 +323,13 @@ function App( {t} ) {
           <Room currentUser={userInfos} className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain} setStickyDisplay={setStickyDisplay}></Room>     
         }
 
-        {!isSignedIn && <div id="recaptcha-container"></div>}
+        {!isSignedIn && <><div id="recaptcha-container"></div>
+        <ModalAuthPhone
+          open={(phoneAuthModalOpen && !isSignedIn)}
+          loginLoading={isVarExistNotEmpty(roomId) ? isAppLoading : isLoginLoading}
+          doActionAfterAuth={doActionAfterAuth}
+        />
+        </>}
         {!isSignedIn && (roomId || loginModalOpen) && 
         <LoginModal 
           open={true} 
@@ -338,11 +344,6 @@ function App( {t} ) {
           roomId={roomId}
         />}
 
-        <ModalAuthPhone
-          open={(phoneAuthModalOpen && !isSignedIn)}
-          loginLoading={isVarExistNotEmpty(roomId) ? isAppLoading : isLoginLoading}
-          doActionAfterAuth={doActionAfterAuth}
-        />
         
         {isSignedIn && 
           <>
