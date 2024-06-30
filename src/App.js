@@ -336,7 +336,7 @@ function App( {t} ) {
         />
         </>}
         <LoginModal 
-          open={!isSignedIn && (roomId || loginModalOpen)} 
+          open={!isSignedIn && (isVarExistNotEmpty(roomId) || loginModalOpen)} 
           changeOpen={(e) => setLoginModalOpen(false)}
           handleAnonymousLogin={anonymousLogin}
           handleGoogleLogin={handleGoogleLogin}
