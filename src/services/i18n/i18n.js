@@ -8,7 +8,7 @@ import { getLocale } from "../utils";
 const resources = {
   en: {
     translation: {
-        "GeneralSlogan" : 'Real-time collaborative playlists',
+        "GeneralSlogan" : 'Real-time collective playlists',
         "GeneralContinue":'Continue',
         "GeneralLogin" : "Login",
         "GeneralLogout":'Logout',
@@ -173,7 +173,7 @@ const resources = {
   },
   fr: {
     translation: {
-        "GeneralSlogan" : 'Playlists collaborative en temps réel',
+        "GeneralSlogan" : 'Playlists collective en temps réel',
         "GeneralContinue":'Continuer',
         "GeneralLogin":'Connexion',
         "GeneralLogout":'Déconnexion',
@@ -219,7 +219,7 @@ const resources = {
         "GeneralDownloadAPK" : "Télécharger l'APP",
         
         
-        "HomePageSlide1Title":"Une playlist en temps réel a plusieurs !",
+        "HomePageSlide1Title":"Une playlist en temps réel entre potes !",
         "HomePageSlide1Text1" : "Ajoutez des médias depuis Spotify et Youtube à une playlist collective lue en temps réel.",
         "HomePageSlide1Text2":"Votez, tchatez, réagissez et vibrez ensemble au rythme de votre playlist. Entre potes, en soirée, en voiture, en voyage, ou au sport, Play-it est l'outil indispensable !",
         "HomePageSlide2Title" :"En étant tous au même endroit ..",
