@@ -12,6 +12,7 @@ import ModalsHeader from "./ModalsHeader";
 import { timestampToDateoptions } from "../../../services/utilsArray";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { getCleanRoomId } from "../../../services/utilsRoom";
+import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 
 const UserRoomListModal = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
 
@@ -44,7 +45,7 @@ const UserRoomListModal = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
     }
 
     return(
-        <Dialog open={open} onClose={(e) => changeOpen(false)}>
+        <Dialog open={open} onClose={(e) => changeOpen(false)} TransitionComponent={SlideUp}>
 
             <ModalsHeader icon={() => <AppsIcon fontSize="small" sx={{mr:1}} />} title={t('UserMenuMyRooms')} />
 

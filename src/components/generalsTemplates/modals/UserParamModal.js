@@ -6,6 +6,7 @@ import { useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import { LoadingButton } from "@mui/lab";
 import { timestampToDateoptions, timestampToHoursAndMinOptions } from "../../../services/utilsArray";
+import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 
 import { withTranslation } from 'react-i18next';
 import ModalsHeader from "./ModalsHeader";
@@ -31,7 +32,7 @@ const UserParamModal = ({ t, open, changeOpen, user, setUserInfo}) => {
         setIsEditingPseudo(false);
     }
     return(
-        <Dialog open={open} onClose={(e) => changeOpen(false)}>
+        <Dialog open={open} TransitionComponent={SlideUp} onClose={(e) => changeOpen(false)}>
             
             <ModalsHeader icon={() => <AccountCircleIcon />} title={t('ModalUserSettingsTitle')} />
 
