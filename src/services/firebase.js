@@ -8,6 +8,7 @@ import { getDatabase } from 'firebase/database';
 import  { EmailAuthProvider, getAuth, GoogleAuthProvider, signInWithPhoneNumber  } from 'firebase/auth';
 import { getStorage } from 'firebase/storage';
 import { getFirestore } from "firebase/firestore";
+import { getLocale } from "./utils";
 
 // Firebase Configs
 const firebaseConfig = {
@@ -24,8 +25,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
 export const database = getDatabase(app);
-export const auth = getAuth(app);
-
+const auth = getAuth(app);
+auth.languageCode = getLocale();
+export {auth};
 export const mailAndPassProvider = new EmailAuthProvider();
 export const googleProvider = new GoogleAuthProvider();
 export const db = getFirestore(app);

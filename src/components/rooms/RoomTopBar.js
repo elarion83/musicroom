@@ -21,7 +21,7 @@ import Groups3Icon from '@mui/icons-material/Groups3';
 
 import { withTranslation } from 'react-i18next';
 import VolumeButton from "./playerSection/VolumeButton";
-import { GFontIcon, appApkFileUrl, playingFirstInList, playingLastInList } from '../../services/utils';
+import { GFontIcon, UserIsFromApp, appApkFileUrl, playingFirstInList, playingLastInList } from '../../services/utils';
 
 const RoomTopBar = ({
                 t,
@@ -160,14 +160,19 @@ const RoomTopBar = ({
                         <Typography className='varelaFontTitle'>{t('RoomLeftMenuRoomLeave')}</Typography>
                     </ListItemButton>
                 </ListItem>
-                <ListItem key='playlistDrawAPK' className='texturaBgButton' sx={{position:'absolute', bottom:0,pb:0.5, pt:0.5, bgcolor:'var(--main-color-lighter)'}} disablePadding>
-                    <ListItemButton href={appApkFileUrl}>
-                        <ListItemIcon>
-                            {<GFontIcon icon="install_mobile" customClass='colorWhite'/>}
-                        </ListItemIcon> 
-                        <Typography className='varelaFontTitle colorWhite '>{t('GeneralDownloadAPK')}</Typography>
-                    </ListItemButton>
-                </ListItem>
+                
+                {!UserIsFromApp && 
+                    <>    
+                        <ListItem key='playlistDrawAPK' className='texturaBgButton' sx={{position:'absolute', bottom:0,pb:0.5, pt:0.5, bgcolor:'var(--main-color-lighter)'}} disablePadding>
+                            <ListItemButton href={appApkFileUrl}>
+                                <ListItemIcon>
+                                    {<GFontIcon icon="install_mobile" customClass='colorWhite'/>}
+                                </ListItemIcon> 
+                                <Typography className='varelaFontTitle colorWhite '>{t('GeneralDownloadAPK')}</Typography>
+                            </ListItemButton>
+                        </ListItem>
+                    </>
+                }
             </SwipeableDrawer>
             <Tooltip  className='animate__animated animate__fadeInLeft animate__delay-1s animate__fast' title={t('RoomLeftMenuRoomParams')} sx={{ bgColor:'#30363c'}}>
                 <Badge invisible={!isLinkedToSpotify && !isLinkedToDeezer} variant="dot" sx={{zIndex:'1200','& .MuiBadge-badge': {

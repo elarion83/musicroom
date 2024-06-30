@@ -7,6 +7,7 @@ import PrivacyPolicyModal from '../modals/PrivacyPolicyModal';
 import { withTranslation } from 'react-i18next';
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 import ModalsHeader from "./ModalsHeader";
+import { UserIsFromApp } from "../../../services/utils";
 
 const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLogin,handlePhoneLogin, handlePasswordAndMailLogin, loginLoading, redirectToHome, roomId, loginErrorMessage}) => {
     
@@ -73,7 +74,7 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
                                 variant="contained"
                                 startIcon={<Icon icon="mdi:phone" />}
                                 onClick={e => handlePhoneLogin(true)}>
-                            <Typography fontSize="small">{loginLoading ? t('GeneralLoading') : t('GeneralBy')+' SMS'} </Typography>
+                            <Typography fontSize="small">{loginLoading ? t('GeneralLoading') : t('ModalLoginButtonSMS')} </Typography>
                         </LoadingButton>
                         <Divider sx={{mt:2,mb:2}}>
                             {t('GeneralOr')} 
@@ -87,18 +88,23 @@ const LoginModal = ({ t, open, changeOpen, handleAnonymousLogin, handleGoogleLog
                                 onClick={e => handleAnonymousLogin()}>
                             <Typography fontSize="small">{t(!loginLoading ?'ModalLoginButtonAnon' : ('GeneralLoading'))} </Typography>
                         </LoadingButton>
-                        <Divider sx={{mt:2,mb:2}}>
-                            {t('GeneralOr')} 
-                        </Divider>  
-                        <LoadingButton
-                                loadingPosition='start'
-                                loading={loginLoading}
-                                className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
-                                startIcon={<Icon icon="ri:google-fill" />}
-                                variant="contained"
-                                onClick={handleGoogleLogin}>
-                            <Typography fontSize="small">{t(!loginLoading ? 'ModalLoginButtonGoogle' : ('GeneralLoading'))} </Typography>
-                        </LoadingButton>  
+
+                        {!UserIsFromApp &&
+                            <>
+                                <Divider sx={{mt:2,mb:2}}>
+                                    {t('GeneralOr')} 
+                                </Divider>  
+                                <LoadingButton
+                                        loadingPosition='start'
+                                        loading={loginLoading}
+                                        className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
+                                        startIcon={<Icon icon="ri:google-fill" />}
+                                        variant="contained"
+                                        onClick={handleGoogleLogin}>
+                                    <Typography fontSize="small">{t(!loginLoading ? 'ModalLoginButtonGoogle' : ('GeneralLoading'))} </Typography>
+                                </LoadingButton> 
+                            </>
+                        } 
                     </Grid> 
                     <Grid sx={{mt:2, mb:2}}>
                         {roomId && 

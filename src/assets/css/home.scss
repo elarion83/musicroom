@@ -71,8 +71,15 @@
     background-position:50%;
 }
 
-.loginPhoneModal .phoneField .MuiInputAdornment-root {
-    height: 0;
+.loginPhoneModal {
+
+    .MuiPaper-root {
+        overflow: visible;
+    }
+
+    .phoneField .MuiInputAdornment-root {
+        height: 0;
+    }
 }
 
 @media (max-width: 900px) { 

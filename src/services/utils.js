@@ -152,9 +152,7 @@ export function userIsFromWeb() {
     return typeof document !== 'undefined';
 }
 
-export function userIsFromApp() {
-    return typeof navigator !== 'undefined' && navigator.product === 'ReactNative';
-}
+export const UserIsFromApp = navigator.userAgent.includes ('wv');
 
 export function createInteractionAnimation(interaction, layoutDisplay = 'unknown') {
     const interactionDisplay = document.createElement("img");
