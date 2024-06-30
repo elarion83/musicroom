@@ -290,14 +290,14 @@ function App( {t} ) {
   return (
     <>
       <CssBaseline />
-      <Container maxWidth={false} className={roomId ? 'main_container' : 'main_container homecontainer'} sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
-         <AppBar className={(roomId && isSignedIn) ? stickyDisplay ? '' : 'topBarIsInRoom appBar' : 'topBarClassic appBar'} position="static" sx={{bgcolor: '#202124'}}>
+      <Container maxWidth={false} className={isVarExistNotEmpty(roomId) ? 'main_container' : 'main_container homecontainer'} sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
+         <AppBar className={(isVarExistNotEmpty(roomId) && isSignedIn) ? stickyDisplay ? '' : 'topBarIsInRoom appBar' : 'topBarClassic appBar'} position="static" sx={{bgcolor: '#202124'}}>
             <Toolbar>
-                {!(roomId && isSignedIn) && <img className="appLogo" src="img/logo__new.png" alt={envAppNameHum+" logo"} />}
+                {!(isVarExistNotEmpty(roomId) && isSignedIn) && <img className="appLogo" src="img/logo__new.png" alt={envAppNameHum+" logo"} />}
                 <UserTopBar loginLoading={loginModalOpen} loggedIn={isSignedIn} user={userInfos} setUserInfo={setUserInfoEdit} joinRoomByRoomId={joinRoomByRoomId} handleOpenLoginModal={setLoginModalOpen} handleLogout={logOut} />
             </Toolbar>
           </AppBar>
-          {!roomId && 
+          {!isVarExistNotEmpty(roomId) && 
             <Box sx={{  paddingBottom:'10px !important', bgcolor:'rgba(48, 48, 48, 0)',height: 'auto', pl:2, pr:2}} >
               <Container maxWidth="sm" sx={{pt:3}}>
                 <Contentslider />
@@ -323,7 +323,7 @@ function App( {t} ) {
               </Container>
             </Box>
           }
-        {roomId && isSignedIn && 
+        {isVarExistNotEmpty(roomId) && isSignedIn && 
           <Room currentUser={userInfos} className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain} setStickyDisplay={setStickyDisplay}></Room>     
         }
 

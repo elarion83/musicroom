@@ -18,7 +18,7 @@ import { arrayUnion, onSnapshot, updateDoc } from 'firebase/firestore';
 import { createMessageObject } from '../../../services/utilsArray';
 
 
-const Chat = ({t, layoutDisplay, roomRef, setLayoutdisplay, roomParams, currentUser, roomId, userCanMakeInteraction,createNewRoomInteraction, hideTchat, openAddToPlaylistModal}) => {
+const Chat = ({t, roomRef, roomParams, currentUser, roomId, userCanMakeInteraction,createNewRoomInteraction, hideTchat, openAddToPlaylistModal}) => {
 
     const [isChatUltraExpanded, setIsChatUltraExpanded] = useState(false);
     const chatBoxRef = useRef([]);

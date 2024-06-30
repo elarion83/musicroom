@@ -148,8 +148,9 @@ export function isLayoutCompact(actualLayout) {
     return actualLayout === 'compact';
 }
 
-export function userIsFromWeb() {
-    return typeof document !== 'undefined';
+export function lastItemInObj(object) {
+    console.log(object.reverse().splice(0,1));
+    return object.reverse().splice(0,1);
 }
 
 export const UserIsFromApp = navigator.userAgent.includes ('wv');

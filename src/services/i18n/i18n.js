@@ -272,7 +272,7 @@ const resources = {
         "ModalJoinRoomIDOfTheRoomText": "Entrez ci-dessous l'ID de la playlist que vous souhaitez rejoindre. (Ex : 5454S, E45FR).",
         "ModalJoinRoomButtonJoin": "Rejoindre",
         
-        "ModalLoginTitle": "Authentification",
+        "ModalLoginTitle": "Autheentification",
         "ModalLoginFormPlaceholderEmailAdress": "Adresse E-mail",
         "ModalLoginFormPlaceholderPassword":"Mot de passe",
         "ModalLoginButtonAnon": "Continuer en anonyme",

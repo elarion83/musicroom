@@ -98,6 +98,7 @@ export function createMessageObject(user, roomId, text) {
         author: user.displayName,
         authorColor: user.customDatas.color ?? 'var(--main-color)',
         roomId: roomId,
+        uid: uuid().slice(0, 8).toLowerCase(),
         text:text,
         timestamp: Date.now(),
     };

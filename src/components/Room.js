@@ -2,27 +2,23 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import {  db } from "../services/firebase";
-import { doc, getDoc, onSnapshot, setDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, onSnapshot, setDoc, } from 'firebase/firestore';
 import { useIdleTimer } from 'react-idle-timer'
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import 'animate.css';
 import axios from "axios";
 import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
-import {isFromSpotify,isFromDeezer,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, isVarExist,  isDevEnv, secondsSinceEventFromNow, autoAddYTObject, randomInt, isVarExistNotEmpty, setPageTitle, envAppNameUrl, isEmpty} from '../services/utils';
+import {isFromSpotify,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, isVarExist,  isDevEnv, secondsSinceEventFromNow, autoAddYTObject, randomInt, isVarExistNotEmpty, setPageTitle, envAppNameUrl, isEmpty, lastItemInObj} from '../services/utils';
 import RoomPlaylistDrawer from "./rooms/playlistSection/drawer/RoomPlaylistDrawer";
 
-import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
-import SkipPrevious from '@mui/icons-material/SkipPrevious';
 import Typography from '@mui/material/Typography';
 
 import RoomModalAddMedia from './rooms/modalsOrDialogs/ModalAddMedia';
@@ -40,12 +36,9 @@ import { CreateGoogleAnalyticsEvent } from '../services/googleAnalytics';
 
 import { withTranslation } from 'react-i18next';
 import ModalEnterRoomPassword from "./rooms/modalsOrDialogs/ModalEnterRoomPassword";
-import VolumeButton from "./rooms/playerSection/VolumeButton";
 import EmptyPlaylist from "./rooms/playlistSection/EmptyPlaylist";
-import { Icon } from "@iconify/react";
-import { Forward10, Replay10 } from "@mui/icons-material";
 import { emptyToken, interactionObject, playerRefObject, youtubeApiSearchObject, youtubeApiVideosParams } from "../services/utilsArray";
-import { playedSeconds, playerNotSync, updateFirebaseRoom } from "../services/utilsRoom";
+import { playerNotSync, updateFirebaseRoom } from "../services/utilsRoom";
 import ModalChangeRoomAdmin from "./rooms/modalsOrDialogs/ModalChangeRoomAdmin";
 import RoomTutorial from "./rooms/RoomTutorial";
 import { mockYoutubeMusicResult, mockYoutubeTrendResult } from "../services/mockedArray";
@@ -101,7 +94,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     const [openInvitePeopleToRoomModal, setOpenInvitePeopleToRoomModal] = useState(false);
     const [openPassWordModal, setOpenPassWordModal] = useState(true);
     const [OpenAddToPlaylistModal, setOpenAddToPlaylistModal] = useState(false);
-    const [addMediaModalAlreadyOpened, setAddMediaModalAlreadyOpened] = useState(false);
     const [openRoomParamModal, setOpenRoomParamModal] = useState(false);
     const [openRoomChangeAdminModal, setOpenRoomChangeAdminModal] = useState(false);
     const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
@@ -375,7 +367,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
             
 
     useKeypress([' '], () => {
-        if(room && !OpenAddToPlaylistModal && (isActuallyAdmin || !guestSynchroOrNot)) {
+        if((room && !OpenAddToPlaylistModal) && (isActuallyAdmin || !guestSynchroOrNot)) {
             setIsPlaying(!roomIsPlaying);
         }
     });
