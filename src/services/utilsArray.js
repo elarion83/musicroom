@@ -4,7 +4,7 @@ import CelebrationIcon from '@mui/icons-material/Celebration';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, InstapaperIcon, InstapaperShareButton, RedditIcon, RedditShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
-import { formatNumberToMinAndSec, getLocale, getRandomHexColor, hexColorToRgb, randomInt } from './utils';
+import { UserIsFromApp, formatNumberToMinAndSec, getLocale, getRandomHexColor, hexColorToRgb, randomInt } from './utils';
 import { v4 as uuid } from 'uuid';
 
 export const notifsTextArray = {
@@ -193,6 +193,7 @@ export function createUserDataObject(userUid = 0, registerType, pseudo, anonLogi
         colorRgb:hexColorToRgb(userColor),
         avatarId:randomInt(1,9),
         uid:userUid,
+        createdFrom: UserIsFromApp ? 'app' : 'web',
         loginType: anonLogin ? 'anon' : registerType,
         userParams:{
             NotifsActivated:true
