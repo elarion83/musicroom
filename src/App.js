@@ -126,7 +126,7 @@ function App( {t} ) {
   async function preLoginFunc() {
     setIsLoginLoading(true);
     setIsAppLoading(true);
-    await setPersistence(auth, browserLocalPersistence);
+   // await setPersistence(auth, browserLocalPersistence);
   }
 
   /* GOOGLE LOGIN HANDLER */

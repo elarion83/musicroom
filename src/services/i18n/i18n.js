@@ -179,7 +179,7 @@ const resources = {
         "GeneralLogout":'Déconnexion',
         "GeneralSearchOn":'Chercher sur',
         "GeneralSearchFor":'Chercher des ',
-        "GeneralOr":'Ou',
+        "GeneralOr":'Où',
         "GeneralOn":'Sur',
         "GeneralAnd":'Et',
         "GeneralYes":'Oui',
@@ -272,7 +272,7 @@ const resources = {
         "ModalJoinRoomIDOfTheRoomText": "Entrez ci-dessous l'ID de la playlist que vous souhaitez rejoindre. (Ex : 5454S, E45FR).",
         "ModalJoinRoomButtonJoin": "Rejoindre",
         
-        "ModalLoginTitle": "Autheentification",
+        "ModalLoginTitle": "Authentification",
         "ModalLoginFormPlaceholderEmailAdress": "Adresse E-mail",
         "ModalLoginFormPlaceholderPassword":"Mot de passe",
         "ModalLoginButtonAnon": "Continuer en anonyme",
