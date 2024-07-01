@@ -6,6 +6,7 @@ import { withTranslation } from 'react-i18next';
 import { SlideUp } from '../../../services/materialSlideTransition/Slide';
 import useDigitInput from "react-digit-input";
 import ModalsHeader from "../../generalsTemplates/modals/ModalsHeader";
+import ModalsFooter from "../../generalsTemplates/modals/ModalsFooter";
 
 const ModalChangePlaylistAdmin = ({ t,open,playlistAdminPass,changeOpen,adminView, changeAdmin }) => {
     const [value, onChange] = React.useState('');
@@ -43,7 +44,7 @@ const ModalChangePlaylistAdmin = ({ t,open,playlistAdminPass,changeOpen,adminVie
                             Donnez le mot de passe ci-dessous a quelqu'un pour qu'il devienne hôte de cette playlist à votre place.
                         </Alert>
 
-                        <Typography component="span" sx={{mt:1, fontSize:'2em', mb:'0.5em'}} className="playlistAdminPass">
+                        <Typography component="span" sx={{mt:1, fontSize:'2em', mb:'0.5em'}} className="playlistAdminPass textCapitalize">
                             {playlistAdminPass}
                         </Typography>
                     </>
@@ -76,11 +77,12 @@ const ModalChangePlaylistAdmin = ({ t,open,playlistAdminPass,changeOpen,adminVie
                 }
             </DialogContent>
             
-            <DialogActions>
-                <Button variant="outlined" onClick={(e) => changeOpen(false)} autoFocus>
-                    {t('GeneralClose')}
-                </Button>
-            </DialogActions>
+            <ModalsFooter 
+                backButtonText={t('GeneralBack')} 
+                backFunc={(e) => changeOpen(false)} 
+                secondButton={false}
+            />
+            
         </Dialog>
     )
 };

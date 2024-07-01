@@ -7,6 +7,7 @@ import { Alert, AlertTitle, Dialog, DialogActions, DialogContent, DialogContentT
 import { withTranslation } from 'react-i18next';
 import { SlideUp } from '../../../services/materialSlideTransition/Slide';
 import ModalsHeader from '../../generalsTemplates/modals/ModalsHeader';
+import ModalsFooter from '../../generalsTemplates/modals/ModalsFooter';
 
 const ModalLeaveRoom = ({ t, open, changeOpen, handleQuitRoom }) => {
 
@@ -20,14 +21,12 @@ const ModalLeaveRoom = ({ t, open, changeOpen, handleQuitRoom }) => {
                     {t('ModalLeaveRoomText')}
                 </Alert>
             </DialogContent>
-            <DialogActions>
-                <Button variant="outlined" onClick={(e) => handleQuitRoom()}>
-                    {t('GeneralLeave')}
-                </Button>
-                <Button variant="outlined" onClick={(e) => changeOpen(false)} autoFocus>
-                    {t('GeneralStay')}
-                </Button>
-            </DialogActions>
+            
+            <ModalsFooter 
+                backButtonText={t('GeneralStay')} 
+                backFunc={(e) => changeOpen(false)} 
+                secondButtonFunc={handleQuitRoom} 
+            />
         </Dialog>
     )
 };

@@ -22,6 +22,7 @@ const resources = {
         "GeneralBy":'By',
         "GeneralVia":'From',        
         "GeneralErrorHappened":'An error has occurred',
+        "GeneralBack":'Back',
         "GeneralClose":'Close',
         "GeneralLeave":'Leave',
         "GeneralStay":'Stay',
@@ -53,6 +54,7 @@ const resources = {
         "GeneralSnackSeeYouSoon" : "See you soon !",
         "GeneralNickname" : "Nickname",
         "GeneralDownloadAPK" : "Get Android APP",
+        "GeneralSendItToFriends" : "Send it to your friends",
 
         
         "HomePageSlide1Title":"A real-time playlist for more than one person!",
@@ -120,7 +122,7 @@ const resources = {
         "ModalLoginTermsYoutubeTerms": "Youtube terms of use.",
         
         "ModalLeaveRoomTitle": "Leave the playlist",
-        "ModalLeaveRoomText": "You're about to leave the playlist to go back to reception. Are you sure?",
+        "ModalLeaveRoomText": "You're about to go back to reception. Are you sure?",
         
         "ModalShareRoomTitle": "Share the playlist",
         "ModalShareRoomCopyUrl": "Share url",
@@ -187,6 +189,7 @@ const resources = {
         "GeneralBy":'Par',
         "GeneralVia":'Via',
         "GeneralErrorHappened":'Une erreur est survenue',
+        "GeneralBack":'Retour',
         "GeneralClose":'Fermer',
         "GeneralLeave":'Quitter',
         "GeneralStay":'Rester',
@@ -217,6 +220,7 @@ const resources = {
         "GeneralSnackSeeYouSoon" : "A bientôt !",
         "GeneralNickname" : "Pseudo",
         "GeneralDownloadAPK" : "Télécharger l'APP",
+        "GeneralSendItToFriends" : "Envoyez la à vos amis",
         
         
         "HomePageSlide1Title":"Une playlist en temps réel entre potes !",
@@ -283,7 +287,7 @@ const resources = {
         "ModalLoginTermsYoutubeTerms": "les conditions d'utilisation de Youtube.",
         
         "ModalLeaveRoomTitle": "Quitter la playlist",
-        "ModalLeaveRoomText": "Vous êtes sur le point de quitter la playlist pour retourner à l'accueil. Êtes-vous sûrs ?",
+        "ModalLeaveRoomText": "Vous êtes sur le point de retourner à l'accueil. Êtes-vous sûrs ?",
         
         "ModalShareRoomTitle": "Partager la playlist",
         "ModalShareRoomCopyUrl": "Url de partage",

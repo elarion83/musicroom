@@ -13,6 +13,7 @@ import { timestampToDateoptions } from "../../../services/utilsArray";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { getCleanRoomId } from "../../../services/utilsRoom";
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
+import ModalsFooter from "./ModalsFooter";
 
 const UserRoomListModal = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
 
@@ -82,11 +83,14 @@ const UserRoomListModal = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
                     )}
                 </>}
             </DialogContent>
-            <DialogActions>
-                <Button variant="outlined" onClick={(e) => changeOpen(false)} autoFocus>
-                    {t('GeneralClose')}
-                </Button>
-            </DialogActions>
+
+            
+            <ModalsFooter 
+                backButtonText={t('GeneralBack')} 
+                backFunc={(e) => changeOpen(false)} 
+                secondButton={false}
+            />
+            
         </Dialog>
     )
 };

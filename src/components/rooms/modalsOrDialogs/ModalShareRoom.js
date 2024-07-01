@@ -13,6 +13,7 @@ import { withTranslation } from 'react-i18next';
 import { SlideUp } from '../../../services/materialSlideTransition/Slide';
 import ModalsHeader from '../../generalsTemplates/modals/ModalsHeader';
 import { delay } from '../../../services/utils';
+import ModalsFooter from '../../generalsTemplates/modals/ModalsFooter';
 
 const ModalShareRoom = ({ t, open, changeOpen }) => {
 
@@ -21,7 +22,7 @@ const ModalShareRoom = ({ t, open, changeOpen }) => {
 
     async function setCopiedToClipboardToTrueAndFalse() {
         setCopiedToClipboard(true);
-        await delay(2000);
+        await delay(5000);
         setCopiedToClipboard(false);
     }
 
@@ -54,16 +55,24 @@ const ModalShareRoom = ({ t, open, changeOpen }) => {
                         copiedToClipboard ? <DoneIcon /> : <ContentCopyIcon /> 
                     }
                     severity={copiedToClipboard ? "success" : "info"} sx={{cursor:'pointer'}}>
-                        <AlertTitle  sx={{fontWeight:'bold'}}>{t('ModalShareRoomCopyUrl')}</AlertTitle>
+                        <AlertTitle sx={{fontWeight:'bold'}}>{t(!copiedToClipboard ? 'ModalShareRoomCopyUrl' : 'ModalShareRoomUrlCopiedText')}</AlertTitle>
+                        
                         <Typography className='fontFamilyNunito'>
-                            {copiedToClipboard ? 
-                                t('ModalShareRoomUrlCopiedText') : 
-                                roomUrl
+                            {copiedToClipboard ?  
+                                t('GeneralSendItToFriends') + ' !' :
+                                roomUrl 
                             }
                         </Typography>
                     </Alert>
                 </CopyToClipboard>
             </DialogContent>
+            
+            <ModalsFooter 
+                backButtonText={t('GeneralBack')} 
+                backFunc={(e) => changeOpen(false)} 
+                secondButton={false}
+            />
+
         </Dialog>
     )
 };
