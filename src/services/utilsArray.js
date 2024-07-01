@@ -96,6 +96,7 @@ export const playerRefObject = {
 export function createMessageObject(user, roomId, text) {
     return {
         author: user.displayName,
+        authorUid: user.uid,
         authorColor: user.customDatas.color ?? 'var(--main-color)',
         roomId: roomId,
         uid: uuid().slice(0, 8).toLowerCase(),
@@ -189,6 +190,7 @@ export function createUserDataObject(userUid = 0, registerType, pseudo, anonLogi
     return {
         displayName:pseudo, 
         creationTime:Date.now(),
+        lastSignInTime:Date.now(),
         color: userColor,
         colorRgb:hexColorToRgb(userColor),
         avatarId:randomInt(1,9),

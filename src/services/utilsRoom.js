@@ -27,3 +27,7 @@ export function playerNotSync(room, player) {
 export async function updateFirebaseRoom(roomRef, newRoomDatas, merge = true) {
     await updateDoc(roomRef, newRoomDatas);
 }
+
+export async function updateFirebaseUser(userRef, newUserData, merge=true) {
+    await updateDoc(userRef, newUserData);
+}

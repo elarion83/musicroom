@@ -29,7 +29,7 @@ import { withTranslation } from 'react-i18next';
 import { createUserDataObject } from "./services/utilsArray";
 import { browserLocalPersistence, createUserWithEmailAndPassword, getAdditionalUserInfo, onAuthStateChanged, setPersistence, signInAnonymously, signInWithEmailAndPassword, signInWithPhoneNumber, signInWithPopup, signOut } from "firebase/auth";
 import {  doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import { getCleanRoomId } from "./services/utilsRoom";
+import { getCleanRoomId, updateFirebaseUser } from "./services/utilsRoom";
 import { useNavigate, useParams } from 'react-router-dom';
 import ModalAuthPhone from "./components/rooms/modalsOrDialogs/ModalAuthPhone";
 function App( {t} ) {
@@ -161,20 +161,24 @@ function App( {t} ) {
       var userInfosTemp = createUserDataObject(entireUserDatas.uid, !entireUserDatas.providerData[0] ? 'anon' : entireUserDatas.providerData[0].providerId, PseudoGenerated, entireUserDatas.isAnonymous);
       await setDoc(userRef, userInfosTemp).then(async () => {
         await getDoc(userRef).then(async (userFirebaseData) => {
-          await finishAuthProcess(entireUserDatas, userFirebaseData.data(), 'newAuth', newUser);
+          await finishAuthProcess(entireUserDatas, userFirebaseData.data(), 'newAuth', newUser, userRef);
         });
       });
     }  else {
       await getDoc(userRef).then(async (userFirebaseData) => {
-        await finishAuthProcess(entireUserDatas, userFirebaseData.data(), 'newAuth', newUser);
+        await finishAuthProcess(entireUserDatas, userFirebaseData.data(), 'newAuth', newUser, userRef);
       });
     }
   }
 
   /* END-LOGIN-FUNCTION */
-  async function finishAuthProcess(globalDatas, customDatas, actionType, newUser=false) {
+  async function finishAuthProcess(globalDatas, customDatas, actionType, newUser=false, userRef) {
+    let signInDate = Date.now();
+    updateFirebaseUser(userRef,{lastSignInTime:signInDate});
     globalDatas.displayName = customDatas.displayName;
+    globalDatas.lastSignInTime = signInDate;
     globalDatas.customDatas = customDatas;
+
     setUserInfo(globalDatas);
     setIsSignedIn(true);
 
@@ -217,7 +221,7 @@ function App( {t} ) {
         const userDocRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, currentUser.uid);
         const userDocSnap = await getDoc(userDocRef);
         if (userDocSnap.exists()) {
-          finishAuthProcess(currentUser, userDocSnap.data(), 'persistentAuth')
+          finishAuthProcess(currentUser, userDocSnap.data(), 'persistentAuth', false, userDocRef)
         } 
       } else {
         setIsAppLoading(false);

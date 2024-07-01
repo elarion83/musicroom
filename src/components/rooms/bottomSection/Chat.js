@@ -12,10 +12,11 @@ import { LoadingButton } from "@mui/lab";
 import { db } from '../../../services/firebase';
 
 import { returnAnimateReplace } from '../../../services/animateReplace';
-import { waitingTextReaction, waitingTextChat, GFontIcon } from '../../../services/utils';
+import { waitingTextReaction, waitingTextChat, GFontIcon, delay } from '../../../services/utils';
 import { withTranslation } from 'react-i18next';
-import { arrayUnion, onSnapshot, updateDoc } from 'firebase/firestore';
+import { arrayUnion, doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { createMessageObject } from '../../../services/utilsArray';
+import UserParamModal from '../../generalsTemplates/modals/UserParamModal';
 
 
 const Chat = ({t, roomRef, roomParams, currentUser, roomId, userCanMakeInteraction,createNewRoomInteraction, hideTchat, openAddToPlaylistModal}) => {
@@ -45,6 +46,9 @@ const Chat = ({t, roomRef, roomParams, currentUser, roomId, userCanMakeInteracti
     var sendMessageTimeToWait = 10;
     const [cantSendMessageReason, setCantSendMessageReason] = useState('');
         
+    const [userParamModalOpen, setUserParamModalOpen] = useState(false);
+    const [userInfoModalDatas, setUserInfoModalDatas] = useState(null);
+
     async function resetChatAfterMessage() {
         scrollToLastMessage();
         setMessageToSend('');
@@ -81,16 +85,25 @@ const Chat = ({t, roomRef, roomParams, currentUser, roomId, userCanMakeInteracti
     }
     async function hideTchatInComp() {
         returnAnimateReplace(animatedElementsRef, {In:"Out", Up:"Down", animate__delay:''}, /In|Up|animate__delay/gi);
+        await delay(500);
+        hideTchat();
+    }
 
-        setTimeout(() => {
-            hideTchat();
-        }, 500);
+    async function showUserInfo(userUid) {
+        let userRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, userUid);
+        await getDoc(userRef).then(async (userFirebaseData) => {
+            var userDatas= {
+                customDatas:userFirebaseData.data()
+            };
+            setUserInfoModalDatas(userDatas);
+            await delay(500);
+            setUserParamModalOpen(true);
+        });
     }
 
 	useEffect(() => {
         scrollToLastMessage();
 	}, [isChatUltraExpanded]); 
-
 
     return(
         <Box sx={{ flexGrow: 1 , pl:1, pr:1, mb:1}}>
@@ -152,7 +165,7 @@ const Chat = ({t, roomRef, roomParams, currentUser, roomId, userCanMakeInteracti
                                 var messageColor = value.authorColor ?? 'var(--main-color)';
                                 return(
                                 <Box key={key} sx={{display:'flex',mb:1, justifyContent:'start'}}>
-                                    <Typography fontSize='small' sx={{color:messageColor, fontWeight:'bold'}}> 
+                                    <Typography fontSize='small' sx={{cursor:'pointer', color:messageColor, fontWeight:'bold'}} onClick={(e) => showUserInfo(value.authorUid)}> 
                                         {value.author}: 
                                     </Typography>
                                     <Typography fontSize='small' className='colorWhite' sx={{ml:1}}>
@@ -237,6 +250,8 @@ const Chat = ({t, roomRef, roomParams, currentUser, roomId, userCanMakeInteracti
                     />
                 </Grid>
             </Grid>
+            <UserParamModal open={userParamModalOpen} changeOpen={setUserParamModalOpen} user={userInfoModalDatas} ownProfile={false} />
+
         </Box>
     )
 };

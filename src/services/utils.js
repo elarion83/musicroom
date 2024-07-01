@@ -20,6 +20,10 @@ export function secondsSinceEventFromNow(event) {
     return Date.now() - event;
 }
 
+export function isUserAnon(user) {
+    return user.loginType === 'anon';
+}
+
 export function createDefaultRoomObject(roomId, roomOwner) {
     return {
         id: roomId,
