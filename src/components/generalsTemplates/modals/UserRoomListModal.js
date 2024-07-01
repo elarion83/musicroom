@@ -10,7 +10,7 @@ import AppsIcon from '@mui/icons-material/Apps';
 import { withTranslation } from 'react-i18next';
 import ModalsHeader from "./ModalsHeader";
 import { timestampToDateoptions } from "../../../services/utilsArray";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 import { getCleanRoomId } from "../../../services/utilsRoom";
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 import ModalsFooter from "./ModalsFooter";
@@ -23,7 +23,7 @@ const UserRoomListModal = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
     useEffect(() => {
         if(open) {
             const fetchRooms = async () => {
-                const q = query(collection(db, process.env.REACT_APP_ROOM_COLLECTION), where('adminUid', '==', user.uid));
+                const q = query(collection(db, process.env.REACT_APP_ROOM_COLLECTION), where('adminUid', '==', user.uid), orderBy('creationTimeStamp', 'desc') );
                 const querySnapshot = await getDocs(q);
                 const roomsListQuery = querySnapshot.docs.map(doc => ({
                     id: doc.id,
@@ -46,7 +46,14 @@ const UserRoomListModal = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
     }
 
     return(
-        <Dialog open={open} onClose={(e) => changeOpen(false)} TransitionComponent={SlideUp}>
+        <Dialog open={open} onClose={(e) => changeOpen(false)} TransitionComponent={SlideUp} sx={{
+            "& .MuiDialog-container": {
+                "& .MuiPaper-root": {
+                width: "100%",
+                maxWidth: "500px",  // Set your width here
+                },
+            },
+        }}>
 
             <ModalsHeader icon={() => <AppsIcon fontSize="small" sx={{mr:1}} />} title={t('UserMenuMyRooms')} />
 
@@ -65,19 +72,19 @@ const UserRoomListModal = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
 
                         var createdDate = new Date(room.creationTimeStamp).toLocaleDateString('fr-FR', timestampToDateoptions);
                         return(
-                        <Box title={t('ModalUserRoomListJoinRoomText')} onClick={(e) => joinRoomByRoomIdInComp(getCleanRoomId(room.id))} key={key} 
-                        sx={{mb:1, p:1,justifyContent:'start',position:'relative', overflow:'hidden',boxShadow: 2,minWidth:'350px', cursor:'pointer',bgcolor:'var(--main-color)',border:'1px solid var(--grey-light)', borderRadius:'4px'}}>
-                            <QueueMusicIcon className="iconPlaylistList" fontSize="small" sx={{mr:1}} />
-                            <Typography fontSize='medium' sx={{textTransform: 'uppercase',color:'var(--white)'}}> 
-                            ID : <b>{room.id}</b>
-                            </Typography>
-                            <Typography fontSize='small' sx={{color:'var(--white)'}}> 
-                                {t('ModalUserRoomListCreated')} <b>{createdDate}</b>
-                            </Typography>
-                            <Typography fontSize='small' sx={{color:'var(--white)'}}> 
-                                {room.playlistUrls.length } {t('GeneralMediasInPlaylist')}
-                            </Typography>
-                        </Box>
+                            <Box title={t('ModalUserRoomListJoinRoomText')} onClick={(e) => joinRoomByRoomIdInComp(getCleanRoomId(room.id))} key={key} 
+                            sx={{mb:1, p:1,justifyContent:'start',position:'relative', overflow:'hidden',boxShadow: 2,cursor:'pointer',bgcolor:'var(--main-color)',border:'1px solid var(--grey-light)', borderRadius:'4px'}}>
+                                <QueueMusicIcon className="iconPlaylistList" fontSize="small" sx={{mr:1}} />
+                                <Typography fontSize='medium' className="fontFamilyNunito textCapitalize colorWhite"> 
+                                ID : <b>{room.id}</b>
+                                </Typography>
+                                <Typography fontSize='small' className="colorWhite"> 
+                                    {t('ModalUserRoomListCreated')} <b>{createdDate}</b>
+                                </Typography>
+                                <Typography fontSize='small' className="colorWhite"> 
+                                    {room.playlistUrls.length } {t('GeneralMediasInPlaylist')}
+                                </Typography>
+                            </Box>
                         )
                     }
                     )}

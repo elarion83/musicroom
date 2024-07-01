@@ -122,14 +122,14 @@ export function interactionObject(user,type) {
 /*
  API YOUTUBE
 ***************/
-export function youtubeApiSearchObject(search, maxResults) {
+export function youtubeApiSearchObject(search, maxResults, order = 'viewCount') {
     return {
         part: 'snippet',
         key: process.env.REACT_APP_YOUTUBE_API_KEY,
         q: search,
         relevanceLanguage:getLocale(),
         regionCode:getLocale(),
-        order:'viewCount',
+        order:order,
         maxResults: maxResults,
         videoEmbeddable:true,
         type: 'video'

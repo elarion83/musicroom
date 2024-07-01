@@ -4,7 +4,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 import { Accordion, AccordionDetails, AccordionSummary, Divider, Drawer, List, ListItem, ListItemText, Typography } from "@mui/material";
 import React, { useState } from "react";
-import {delay, isFromSpotify} from '../../../../services/utils';
+import {delay, isFromSpotify, isVarExistNotEmpty} from '../../../../services/utils';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -20,7 +20,7 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable, room,roomRef,open, changeOpen
     const handleOpenDescription =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       setDescriptionOpen(descriptionOpen ? false : true);
-    };
+    };  
 
     function handleVoteChangeInComp(idMedia, mediaHashId, type) {
         roomPlaylist[idMedia].vote[type]++;
@@ -117,20 +117,22 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable, room,roomRef,open, changeOpen
                             </Button>
                         }
                     </ListItemText>
-                    <Box sx={{pl:2,pr:2,pb:1}}>
-                        <Accordion  expanded={descriptionOpen} onChange={handleOpenDescription('panel1')} className='mediaDescriptionAccordion'>
-                            <AccordionSummary
-                            aria-controls="panel1-content"
-                            id="panel1-header"
-                            >
-                            {descriptionOpen ? <ExpandLessIcon sx={{mr:1}} /> : <ExpandMoreIcon sx={{mr:1}} />} 
-                            <Typography  className="varelaFontTitle">Description</Typography>
-                            </AccordionSummary>
-                            <AccordionDetails onClick={handleOpenDescription(false)} className="fontFamilyNunito">
-                                <Typography fontSize="smaller">{data.description}</Typography>
-                            </AccordionDetails>
-                        </Accordion>
-                    </Box>
+                    {isVarExistNotEmpty(data.description) && 
+                        <Box sx={{pl:2,pr:2,pb:1}}>
+                            <Accordion  expanded={descriptionOpen} onChange={handleOpenDescription('panel1')} className='mediaDescriptionAccordion'>
+                                <AccordionSummary
+                                aria-controls="panel1-content"
+                                id="panel1-header"
+                                >
+                                {descriptionOpen ? <ExpandLessIcon sx={{mr:1}} /> : <ExpandMoreIcon sx={{mr:1}} />} 
+                                <Typography  className="varelaFontTitle">Description</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails onClick={handleOpenDescription(false)} className="fontFamilyNunito">
+                                    <Typography fontSize="smaller">{data.description}</Typography>
+                                </AccordionDetails>
+                            </Accordion>
+                        </Box>
+                    }
                 </List>
             </>}
     </Drawer>

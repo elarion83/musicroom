@@ -85,40 +85,48 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
             });
     }
 
+    async function addMediaFromUrl(url) {
+        addingObject.url = url;
+        addingObject.title = addingObject.url;
+        addingObject.source = "url";
+        if (addingObject.url.includes('youtube') || addingObject.url.includes('youtu.be')) {
+            addingObject.source = "youtube";
+            var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+            var match = addingObject.url.match(regExp);
+
+            await getYoutubeVideoInfosFromId(match[7], addingObject);
+        }
+        if (addingObject.url.includes('dailymotion')) {
+            addingObject.source = "dailymotion";
+        }
+        if (addingObject.url.includes('soundcloud')) {
+            addingObject.source = "soundcloud";
+        }
+        if (addingObject.url.includes('vimeo')) {
+            addingObject.source = "vimeo";
+        }
+
+        addingObject.vote = { 'up': 0, 'down': 0 };
+        addingObject.hashId = uuid().slice(0, 10).toLowerCase()
+        handleCheckAndAddObjectToPlaylistFromObject(addingObject);
+        setIsSearching(false);
+        setSearchTerm('');
+    }
+
+    async function mockEndYoutubeResults() {
+        
+    }
+
     async function handleSearchForMedia() {
         setIsSearching(true);
         if (searchTerm !== '') {
             if (validator.isURL(searchTerm.trim())) {
-                addingObject.url = searchTerm.trim();
-                addingObject.title = addingObject.url;
-                addingObject.source = "url";
-                if (addingObject.url.includes('youtube') || addingObject.url.includes('youtu.be')) {
-                    addingObject.source = "youtube";
-                    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-                    var match = addingObject.url.match(regExp);
-
-                    await getYoutubeVideoInfosFromId(match[7], addingObject);
-                }
-                if (addingObject.url.includes('dailymotion')) {
-                    addingObject.source = "dailymotion";
-                }
-                if (addingObject.url.includes('soundcloud')) {
-                    addingObject.source = "soundcloud";
-                }
-                if (addingObject.url.includes('vimeo')) {
-                    addingObject.source = "vimeo";
-                }
-
-                addingObject.vote = { 'up': 0, 'down': 0 };
-                addingObject.hashId = uuid().slice(0, 10).toLowerCase()
-                handleCheckAndAddObjectToPlaylistFromObject(addingObject);
-                setIsSearching(false);
-                setSearchTerm('');
+                addMediaFromUrl(searchTerm);
             } else {
 
                 if(isProdEnv()) {
                     axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, {
-                        params: youtubeApiSearchObject(searchTerm,24)
+                        params: youtubeApiSearchObject(searchTerm,24, 'relevance')
                     })
                     .then(function (response) {
                         setMediaSearchResultYoutube(response.data.items);
