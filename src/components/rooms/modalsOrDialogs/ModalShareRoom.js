@@ -48,13 +48,13 @@ const ModalShareRoom = ({ t, open, changeOpen }) => {
                         </ShareButtonComponent>
                     );
                 })*/}
-                <CopyToClipboard onCopy={(e) => setCopiedToClipboardToTrueAndFalse()} text={(roomUrl)}>
+                <CopyToClipboard className={`texturaBgButton border bordSolid bord2 ${copiedToClipboard ? 'bordGreenLight' : 'bordLight'}`} onCopy={(e) => setCopiedToClipboardToTrueAndFalse()} text={(roomUrl)}>
                     <Alert
                      icon={
                         copiedToClipboard ? <DoneIcon /> : <ContentCopyIcon /> 
                     }
                     severity={copiedToClipboard ? "success" : "info"} sx={{cursor:'pointer'}}>
-                        <AlertTitle sx={{fontWeight:'bold'}}>{t('ModalShareRoomCopyUrl')}</AlertTitle>
+                        <AlertTitle  sx={{fontWeight:'bold'}}>{t('ModalShareRoomCopyUrl')}</AlertTitle>
                         <Typography className='fontFamilyNunito'>
                             {copiedToClipboard ? 
                                 t('ModalShareRoomUrlCopiedText') : 
