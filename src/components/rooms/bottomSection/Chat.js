@@ -43,7 +43,7 @@ const Chat = ({t, roomRef, roomParams, currentUser, roomId, userCanMakeInteracti
     const [isSendingMessage, setIsSendingMessage] = useState(false);
     const [isMessageSentOk, setIsMessageSentOk] = useState(false);
     const [canSendMessage, setCanSendMessage] = useState(true);
-    var sendMessageTimeToWait = 10;
+    var sendMessageTimeToWait = 5;
     const [cantSendMessageReason, setCantSendMessageReason] = useState('');
         
     const [userParamModalOpen, setUserParamModalOpen] = useState(false);
@@ -64,7 +64,7 @@ const Chat = ({t, roomRef, roomParams, currentUser, roomId, userCanMakeInteracti
             setCantSendMessageReason(waitingTextChat(sendMessageTimeToWait));
             if (sendMessageTimeToWait === 0) {
                 setCanSendMessage(true);
-                sendMessageTimeToWait = 10;
+                sendMessageTimeToWait = 5;
                 clearInterval(waitingLoop);
             }
         }, 1000);

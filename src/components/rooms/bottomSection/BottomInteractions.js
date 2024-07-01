@@ -78,11 +78,11 @@ const BottomInteractions = ({ t,roomRef, layoutDisplay, setLayoutdisplay, paramD
                 </Fab>
 
                 <Tooltip ref={el => animatedElementsRef.push(el)} className={!roomParams.isChatActivated ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-1s'} title={t('RoomBottomButtonChatShow')}>  
-                     <Badge showZero badgeContent={(messagesCount - messagesReadedCount)} slotProps={{ badge: { className:'colorWhite fontFamilyNunito'} }} sx={{'& .MuiBadge-badge': {
+                     <Badge  max={9} badgeContent={(messagesCount - messagesReadedCount)} slotProps={{ badge: { className: 'colorWhite fontFamilyNunito'} }} sx={{'& .MuiBadge-badge': {
                                             right:'5px',
                                             zIndex:1200,
                                             bgcolor:'var(--red-2)'
-                                        }, ml:'-2px'}}  invisible={!newMessages}>
+                                        }}}  invisible={!newMessages}>
                         <Fab size="small" variant="extended" className='room_small_button_interactions'  
                         sx={{justifyContent: 'center', ml:0}} onClick={e => expandTchatAnimation()} >
                         <Icon icon="tabler:messages" width='20'/>
