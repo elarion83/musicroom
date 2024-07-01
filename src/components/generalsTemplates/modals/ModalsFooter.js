@@ -14,14 +14,14 @@ const ModalsFooter = ({
     }) => {
     return(
         
-        <DialogActions>
+        <DialogActions sx={{justifyContent:'space-between'}}>
             {backButton && 
-            <Button startIcon={<ArrowBackIosNewIcon sx={{fontSize:'1em !important'}} className="colorWhite" />} size="small" className="texturaBgButton" variant="contained" color="success" onClick={(e) => backFunc()}>
+            <Button startIcon={<ArrowBackIosNewIcon sx={{fontSize:'1em !important', mt:'-2px'}} className="colorWhite" />} size="small" className="texturaBgButton varelaFontTitle" variant="contained" color="success" onClick={(e) => backFunc()}>
                 {backButtonText}
             </Button>
             }
             {secondButton &&
-                <Button  startIcon={<CloseIcon sx={{fontSize:'1em !important'}} className="colorWhite" />} size="small" className="texturaBgButton"  variant="contained" color="error" onClick={(e) => secondButtonFunc()}>
+                <Button  startIcon={<CloseIcon sx={{fontSize:'1.2em !important', mt:'-2px'}} className="colorWhite" />} size="small" className="texturaBgButton varelaFontTitle"  variant="contained" color="error" onClick={(e) => secondButtonFunc()}>
                     {secondButtonText}
                 </Button>
             }
