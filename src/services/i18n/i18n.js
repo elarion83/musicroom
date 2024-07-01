@@ -123,7 +123,7 @@ const resources = {
         "ModalLeaveRoomText": "You're about to leave the playlist to go back to reception. Are you sure?",
         
         "ModalShareRoomTitle": "Share the playlist",
-        "ModalShareRoomCopyUrl": "Copy url",
+        "ModalShareRoomCopyUrl": "Share url",
         "ModalShareRoomUrlCopiedText": "URL Copied !",
         
         "ModalParamsRoomTitle": "Playlist settings",
@@ -286,7 +286,7 @@ const resources = {
         "ModalLeaveRoomText": "Vous êtes sur le point de quitter la playlist pour retourner à l'accueil. Êtes-vous sûrs ?",
         
         "ModalShareRoomTitle": "Partager la playlist",
-        "ModalShareRoomCopyUrl": "Copier l'url",
+        "ModalShareRoomCopyUrl": "Url de partage",
         "ModalShareRoomUrlCopiedText": "URL copiée !",
 
         "ModalParamsRoomTitle": "Paramètres de la playlist ",

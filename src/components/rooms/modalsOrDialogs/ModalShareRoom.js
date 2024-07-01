@@ -4,9 +4,10 @@ import React, { useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { shareArray } from '../../../services/utilsArray';
 
+import DoneIcon from '@mui/icons-material/Done';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import ShareIcon from '@mui/icons-material/Share';
-import { Dialog, DialogContent, Grid } from "@mui/material";
+import { AlertTitle, Dialog, DialogContent, Grid, Typography } from "@mui/material";
 
 import { withTranslation } from 'react-i18next';
 import { SlideUp } from '../../../services/materialSlideTransition/Slide';
@@ -30,7 +31,7 @@ const ModalShareRoom = ({ t, open, changeOpen }) => {
             
             <DialogContent dividers sx={{ pt: 2 }}>
 
-                {Object.entries(shareArray).map(([key, share]) => {
+                {/*Object.entries(shareArray).map(([key, share]) => {
                     const ShareButtonComponent = share.button;
                     const ShareIconComponent = share.icon;
                     return(
@@ -46,14 +47,22 @@ const ModalShareRoom = ({ t, open, changeOpen }) => {
                             <ShareIconComponent size={45} round />
                         </ShareButtonComponent>
                     );
-                })}
-
-                <Grid sx={{ mt: 2 }}>
-                    <CopyToClipboard onCopy={(e) => setCopiedToClipboardToTrueAndFalse()} text={(roomUrl)}>
-                        <Button variant="contained"><ContentCopyIcon sx={{ mr: 1.5 }} /> {t('ModalShareRoomCopyUrl')} </Button>
-                    </CopyToClipboard>
-                    {copiedToClipboard && <Alert severity="success" sx={{ mt: 1.5 }} > {t('ModalShareRoomUrlCopiedText')} </Alert>}
-                </Grid>
+                })*/}
+                <CopyToClipboard onCopy={(e) => setCopiedToClipboardToTrueAndFalse()} text={(roomUrl)}>
+                    <Alert
+                     icon={
+                        copiedToClipboard ? <DoneIcon /> : <ContentCopyIcon /> 
+                    }
+                    severity={copiedToClipboard ? "success" : "info"} sx={{cursor:'pointer'}}>
+                        <AlertTitle sx={{fontWeight:'bold'}}>{t('ModalShareRoomCopyUrl')}</AlertTitle>
+                        <Typography className='fontFamilyNunito'>
+                            {copiedToClipboard ? 
+                                t('ModalShareRoomUrlCopiedText') : 
+                                roomUrl
+                            }
+                        </Typography>
+                    </Alert>
+                </CopyToClipboard>
             </DialogContent>
         </Dialog>
     )
