@@ -230,6 +230,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 setPlayerControlsShown(isActuallyAdmin);
                 unsubscribe = onSnapshot(roomRef, (doc) => {
                     var roomDataInFb = doc.data();
+                    var actualMessagesLength = room.messagesArray.length;
                     if(playerRef.current && playerRef.current.getCurrentTime && !isActuallyAdmin && playerNotSync(roomDataInFb, playerRef)) {
                         goToSecond(Math.floor(roomDataInFb.mediaActuallyPlayingAlreadyPlayedData.playedSeconds));
                     } 
@@ -242,13 +243,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     setRoomInteractionsArray(roomDataInFb.interactionsArray);
                    
                     setIsActuallyAdmin(roomDataInFb.adminUid == currentUser.uid);
+                    
                     setRoom(roomDataInFb);
-
-                    if(!newMessages && 
-                        (roomDataInFb.messagesArray.length !== room.messagesArray.length) && 
-                        (!isEmpty(roomDataInFb.messagesArray))) {
-                        setNewMessages(true);
-                    }
                 });
             } else {
                 if(!isActuallyAdmin) {
@@ -813,6 +809,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         roomId={roomId}
                         roomRef={roomRef}
                         roomParams={room.roomParams}
+                        roomMessages={room.messagesArray ?? ''}
                         roomNotifs={room.notifsArray ?? ''}
                         userCanMakeInteraction={userCanMakeInteraction}
                         OpenAddToPlaylistModal={OpenAddToPlaylistModal}
@@ -827,8 +824,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         checkNotificationsLength={(room.notifsArray && room.notifsArray.length > 0) ? true:false}
                         layoutDisplay={layoutDisplay}
                         setLayoutdisplay={setLayoutdisplay}
-                        newMessages={newMessages}
-                        setNewMessages={setNewMessages}
                     />
 
                     <ModalEnterRoomPassword 

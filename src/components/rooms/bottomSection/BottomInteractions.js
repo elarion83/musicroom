@@ -10,16 +10,19 @@ import { Icon } from '@iconify/react';
 import { useState } from 'react';
 
 import {returnAnimateReplace } from '../../../services/animateReplace';
-import { waitingTextReaction, GFontIcon } from '../../../services/utils';
+import { waitingTextReaction, GFontIcon, isVarExist, isEmpty } from '../../../services/utils';
 import { notifsTextArray , reactsArray} from '../../../services/utilsArray';
 import {CreateGoogleAnalyticsEvent} from '../../../services/googleAnalytics';
 
 import { withTranslation } from 'react-i18next';
 import { getLastNotif } from '../../../services/utilsRoom';
 
-const BottomInteractions = ({ t,roomRef,newMessages,setNewMessages,  layoutDisplay, setLayoutdisplay, paramDrawerIsOpen, handleOpenDrawerParam, currentUser, roomId, roomParams, roomNotifs, userCanMakeInteraction, createNewRoomInteraction, setOpenAddToPlaylistModal,handleOpenShareModal,handleOpenLeaveRoomModal, OpenAddToPlaylistModal, checkRoomExist, checkInterractionLength,checkNotificationsLength }) => {
+const BottomInteractions = ({ t,roomRef, layoutDisplay, setLayoutdisplay, paramDrawerIsOpen, handleOpenDrawerParam, currentUser, roomId, roomParams, roomNotifs,roomMessages, userCanMakeInteraction, createNewRoomInteraction, setOpenAddToPlaylistModal,handleOpenShareModal,handleOpenLeaveRoomModal, OpenAddToPlaylistModal, checkRoomExist, checkInterractionLength,checkNotificationsLength }) => {
 
     const [isChatExpanded, setIsChatExpanded] = useState(false);
+    const [newMessages,setNewMessages] = useState(false);
+    const [messagesCount, setMessagesCount] = useState(0);
+    const [messagesReadedCount, setMessagesReadedCount] = useState(0);
     const animatedElementsRef = [];
     async function expandTchatAnimation() {
         returnAnimateReplace(animatedElementsRef, {In:"Out",Up:'Down', animate__delay:''}, /In|Up|animate__delay/gi);
@@ -31,15 +34,19 @@ const BottomInteractions = ({ t,roomRef,newMessages,setNewMessages,  layoutDispl
 
     async function closeTchatFunc() {
         setNewMessages(false);
+        setMessagesReadedCount(roomMessages.length);
         setIsChatExpanded(false);
     }
 
 	useEffect(() => {
-        if(isChatExpanded) {
-            setNewMessages(false);
+        if(!isEmpty(roomMessages)) {
+            if(!isChatExpanded && (roomMessages.length != messagesCount)) {
+                setNewMessages(true);
+            }
+            setMessagesCount(roomMessages.length)
         }
-	}, [isChatExpanded]); 
-
+	}, [roomMessages]); 
+    
 
     const lastNotifType = roomNotifs.length > 0 ? getLastNotif(roomNotifs).type : 'none';
 
@@ -71,10 +78,11 @@ const BottomInteractions = ({ t,roomRef,newMessages,setNewMessages,  layoutDispl
                 </Fab>
 
                 <Tooltip ref={el => animatedElementsRef.push(el)} className={!roomParams.isChatActivated ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-1s'} title={t('RoomBottomButtonChatShow')}>  
-                     <Badge  sx={{'& .MuiBadge-badge': {
-                                            right:'0px',
+                     <Badge showZero badgeContent={(messagesCount - messagesReadedCount)} slotProps={{ badge: { className:'colorWhite fontFamilyNunito'} }} sx={{'& .MuiBadge-badge': {
+                                            right:'5px',
+                                            zIndex:1200,
                                             bgcolor:'var(--red-2)'
-                                        }, ml:'-2px'}}  invisible={!newMessages} variant="dot">
+                                        }, ml:'-2px'}}  invisible={!newMessages}>
                         <Fab size="small" variant="extended" className='room_small_button_interactions'  
                         sx={{justifyContent: 'center', ml:0}} onClick={e => expandTchatAnimation()} >
                         <Icon icon="tabler:messages" width='20'/>
@@ -84,7 +92,7 @@ const BottomInteractions = ({ t,roomRef,newMessages,setNewMessages,  layoutDispl
 
                 <Tooltip ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUp animate__delay-1s' title={t('RoomLeftMenuRoomParams')}>  
                     <Badge invisible={!roomParams.spotify.IsLinked} variant="dot" sx={{'& .MuiBadge-badge': {
-                            right:'10px',
+                            right:'15px',
                             bgcolor:'var(--red-2)',
                             zIndex:10000
                         }}} >
