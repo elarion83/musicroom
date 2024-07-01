@@ -1,6 +1,6 @@
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { Fab, Grid, Snackbar, Tooltip } from '@mui/material';
-import React from "react";
+import React, { useEffect } from "react";
 
 import TuneIcon from '@mui/icons-material/Tune';
 import Badge from '@mui/material/Badge';
@@ -17,11 +17,10 @@ import {CreateGoogleAnalyticsEvent} from '../../../services/googleAnalytics';
 import { withTranslation } from 'react-i18next';
 import { getLastNotif } from '../../../services/utilsRoom';
 
-const BottomInteractions = ({ t,roomRef, layoutDisplay, setLayoutdisplay, paramDrawerIsOpen, handleOpenDrawerParam, currentUser, roomId, roomParams, roomNotifs, userCanMakeInteraction, createNewRoomInteraction, setOpenAddToPlaylistModal,handleOpenShareModal,handleOpenLeaveRoomModal, OpenAddToPlaylistModal, checkRoomExist, checkInterractionLength,checkNotificationsLength }) => {
+const BottomInteractions = ({ t,roomRef,newMessages,setNewMessages,  layoutDisplay, setLayoutdisplay, paramDrawerIsOpen, handleOpenDrawerParam, currentUser, roomId, roomParams, roomNotifs, userCanMakeInteraction, createNewRoomInteraction, setOpenAddToPlaylistModal,handleOpenShareModal,handleOpenLeaveRoomModal, OpenAddToPlaylistModal, checkRoomExist, checkInterractionLength,checkNotificationsLength }) => {
 
     const [isChatExpanded, setIsChatExpanded] = useState(false);
     const animatedElementsRef = [];
-
     async function expandTchatAnimation() {
         returnAnimateReplace(animatedElementsRef, {In:"Out",Up:'Down', animate__delay:''}, /In|Up|animate__delay/gi);
         setTimeout(() => {
@@ -29,6 +28,18 @@ const BottomInteractions = ({ t,roomRef, layoutDisplay, setLayoutdisplay, paramD
             CreateGoogleAnalyticsEvent('Actions','Expand chat','Expand chat');
         }, 500);
     }
+
+    async function closeTchatFunc() {
+        setNewMessages(false);
+        setIsChatExpanded(false);
+    }
+
+	useEffect(() => {
+        if(isChatExpanded) {
+            setNewMessages(false);
+        }
+	}, [isChatExpanded]); 
+
 
     const lastNotifType = roomNotifs.length > 0 ? getLastNotif(roomNotifs).type : 'none';
 
@@ -60,10 +71,15 @@ const BottomInteractions = ({ t,roomRef, layoutDisplay, setLayoutdisplay, paramD
                 </Fab>
 
                 <Tooltip ref={el => animatedElementsRef.push(el)} className={!roomParams.isChatActivated ? 'hiddenButPresent' : 'animate__animated animate__fadeInUp animate__delay-1s'} title={t('RoomBottomButtonChatShow')}>  
-                    <Fab size="small" variant="extended" className='room_small_button_interactions'  
+                     <Badge  sx={{'& .MuiBadge-badge': {
+                                            right:'0px',
+                                            bgcolor:'var(--red-2)'
+                                        }, ml:'-2px'}}  invisible={!newMessages} variant="dot">
+                        <Fab size="small" variant="extended" className='room_small_button_interactions'  
                         sx={{justifyContent: 'center', ml:0}} onClick={e => expandTchatAnimation()} >
                         <Icon icon="tabler:messages" width='20'/>
                     </Fab>
+                    </Badge>
                 </Tooltip>
 
                 <Tooltip ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUp animate__delay-1s' title={t('RoomLeftMenuRoomParams')}>  
@@ -91,7 +107,7 @@ const BottomInteractions = ({ t,roomRef, layoutDisplay, setLayoutdisplay, paramD
 
             </div>}
             {(isChatExpanded || layoutDisplay === 'interactive') && 
-                <Chat openAddToPlaylistModal={setOpenAddToPlaylistModal} roomRef={roomRef} currentUser={currentUser} layoutDisplay={layoutDisplay} setLayoutdisplay={setLayoutdisplay} roomId={roomId} createNewRoomInteraction={createNewRoomInteraction} userCanMakeInteraction={userCanMakeInteraction} roomParams={roomParams} className='chatBox' hideTchat={e => setIsChatExpanded(false)} />
+                <Chat openAddToPlaylistModal={setOpenAddToPlaylistModal} roomRef={roomRef} currentUser={currentUser} layoutDisplay={layoutDisplay} setLayoutdisplay={setLayoutdisplay} roomId={roomId} createNewRoomInteraction={createNewRoomInteraction} userCanMakeInteraction={userCanMakeInteraction} roomParams={roomParams} className='chatBox' hideTchat={e => closeTchatFunc(false)} />
             }
             
             {checkNotificationsLength && (getLastNotif(roomNotifs).createdBy !== currentUser.displayName) && notifsTextArray[getLastNotif(roomNotifs).type] &&

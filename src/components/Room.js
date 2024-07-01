@@ -105,11 +105,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     const [mediaDataShowInDrawer, setMediaDataShowInDrawer] = useState();
     const [mediaDataDrawerOpen, setMediaDataDrawerOpen] = useState(false);
 
-    // layout
+    // layout and display elements
     const [layoutDisplay, setLayoutdisplay] = useState('default');
     const [layoutDisplayClass, setLayoutDisplayClass] = useState('defaultLayout');
-    const animatedElementsRef = [];
+    const [newMessages, setNewMessages] = useState(false);
     // animated elements
+    const animatedElementsRef = [];
 
     useEffect(() => {
         var adminClass = guestSynchroOrNot ? isActuallyAdmin ? 'adminView' : 'guestView' : '';
@@ -242,6 +243,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                    
                     setIsActuallyAdmin(roomDataInFb.adminUid == currentUser.uid);
                     setRoom(roomDataInFb);
+
+                    if(!newMessages && 
+                        (roomDataInFb.messagesArray.length !== room.messagesArray.length) && 
+                        (!isEmpty(roomDataInFb.messagesArray))) {
+                        setNewMessages(true);
+                    }
                 });
             } else {
                 if(!isActuallyAdmin) {
@@ -780,8 +787,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         }
                     </>
                 </Container>
-            
-                <>
+            <>
                     <RoomModalAddMedia 
                         room={room}
                         roomIsPlaying={roomIsPlaying}
@@ -821,6 +827,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         checkNotificationsLength={(room.notifsArray && room.notifsArray.length > 0) ? true:false}
                         layoutDisplay={layoutDisplay}
                         setLayoutdisplay={setLayoutdisplay}
+                        newMessages={newMessages}
+                        setNewMessages={setNewMessages}
                     />
 
                     <ModalEnterRoomPassword 
