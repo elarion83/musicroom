@@ -230,10 +230,9 @@ function App( {t} ) {
   /* LOGOUT FUNCTION */
   function logOut() {
     setIsSignedIn(false);
-    setUserInfo({});
-    localStorage.removeItem("Play-It_RoomId");
     signOut(auth).then(() => {
-      goFromPlaylistToHome();
+      setUserInfo({});
+      localStorage.removeItem("Play-It_RoomId");
       setLogoutOkSnackBarOpen(true);   
       CreateGoogleAnalyticsEvent('Actions','Logout','Logout');
     });
@@ -301,19 +300,19 @@ function App( {t} ) {
             <Box sx={{  paddingBottom:'10px !important', bgcolor:'rgba(48, 48, 48, 0)',height: 'auto', pl:2, pr:2}} >
               <Container maxWidth="sm" sx={{pt:3}}>
                 <Contentslider />
-                <Button variant="filled" className='main_bg_color  varelaFontTitle buttonBorder texturaBgButton' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em'}} 
+                <Button variant="filled" className='main_bg_color  varelaFontTitle texturaBgButton' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em'}} 
                   onClick={(e) => isSignedIn ? createNewRoom() : handleLoginAndRoom('createRoom')}>
                     <Icon icon="carbon:intent-request-create" width="30" style={{marginRight:'20px'}}/> 
                     <Typography variant="button" sx={{pt:'3px'}}>{t('HomePageButtonsCreateRoom')} </Typography>
                 </Button> 
-                <Button variant="filled" className='main_bg_color varelaFontTitle buttonBorder texturaBgButton' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em'}} 
+                <Button variant="filled" className='main_bg_color varelaFontTitle texturaBgButton' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em'}} 
                   onClick={(e) => isSignedIn ? setJoinRoomModalOpen(true) : handleLoginAndRoom('joinRoom')}> 
                     <Icon icon="icon-park-outline:connect"  width="30" style={{marginRight:'20px'}}/>
                     <Typography variant="button" sx={{pt:'3px'}}>{t('HomePageButtonsJoinRoom')} </Typography>
                 </Button> 
 
                 {!UserIsFromApp && 
-                <Button variant="outlined" size="small" target="_blank" href={appApkFileUrl} className='varelaFontTitle buttonBorder' sx={{width:'100%',transform:'scale(0.8)',color:'var(--white)',bgcolor:'var(--grey-dark)', height:'50px', mt:'2em', mb:'2em'}} > 
+                <Button size="small" target="_blank" href={appApkFileUrl} className='varelaFontTitle buttonBorder' sx={{width:'100%',transform:'scale(0.8)',color:'var(--white)',bgcolor:'var(--grey-dark)', height:'50px', mt:'2em', mb:'2em'}} > 
                   <GFontIcon icon="install_mobile"/>
                   <Typography variant="button" sx={{pl:2, textTransform:'uppercase'}}> {t('GeneralDownloadAPK')} </Typography>
                 </Button> }

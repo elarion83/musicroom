@@ -44,8 +44,8 @@ const UserTopBar = ({ t, user, loggedIn,loginLoading, setUserInfo, handleLogout,
               loading={loginLoading} 
               loadingPosition='start'
               variant="outlined" 
-              size='small'
-              className='loginButtonTop main_bg_color  varelaFontTitle buttonBorder texturaBgButton'
+              size='medium'
+              className='loginButtonTop main_bg_color  varelaFontTitle texturaBgButton'
               startIcon={<LoginIcon className='colorWhite'/>}
               onClick={(e) => {handleOpenLoginModal(true)}} > 
                 <Typography fontSize="small">{t('GeneralLogin')} </Typography>

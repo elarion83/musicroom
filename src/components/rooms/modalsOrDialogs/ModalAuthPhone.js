@@ -9,6 +9,7 @@ import { LoadingButton } from '@mui/lab';
 import { withTranslation } from 'react-i18next';
 import MuiPhoneNumber from "mui-phone-number";
 import { SlideUp } from '../../../services/materialSlideTransition/Slide';
+import ModalsFooter from '../../generalsTemplates/modals/ModalsFooter';
 
 const ModalAuthPhone = ({t, open,close, doActionAfterAuth, loginLoading}) => {
   const [isMessageSent, setIsMessageSent] = useState(false);
@@ -126,12 +127,13 @@ const ModalAuthPhone = ({t, open,close, doActionAfterAuth, loginLoading}) => {
             {isVarExistNotEmpty(phoneLoginError) && <Alert severity="error" sx={{mt:2}}>{phoneLoginError}</Alert>}     
 
         </DialogContent>
-        
-          <DialogActions>
-              <Button variant="outlined" onClick={(e) => !isMessageSent ? close(false) : setIsMessageSent(false)}>
-                  {t('GeneralClose')}
-              </Button>
-          </DialogActions>
+      
+        <ModalsFooter 
+          backButton={false}
+          secondButtonText={t('GeneralClose')} 
+          secondButtonFunc={(e) => !isMessageSent ? close(false) : setIsMessageSent(false)} 
+        />
+           
       </Dialog>
     </>
   );

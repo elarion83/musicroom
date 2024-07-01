@@ -72,8 +72,7 @@
 }
 
 .loginPhoneModal {
-
-    .MuiPaper-root {
+    .MuiPaper-root, .MuiDialogContent-root {
         overflow: visible;
     }
 

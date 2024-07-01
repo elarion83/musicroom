@@ -125,7 +125,12 @@ b, * {
   }
 }
 
-.buttonBorder, // first button
+.buttonBorder {
+  
+  border-color:var(--main-color-darker) !important;
+  border-style: solid !important;
+  border-width: 4px !important;
+} // first button
 .border {
   border-color:var(--main-color-darker);
   border-style: solid;
