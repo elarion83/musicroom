@@ -135,42 +135,51 @@ b, * {
   border-color:var(--main-color-darker);
   border-style: solid;
   border-width: 4px;
-
-  &.bordNormal {
+}
+  .bordNormal {
     border-color:var(--main-color);
   }
-  &.bordLight {
+  .bordLight {
     border-color:var(--main-color-lighter);
   }
 
-  &.bordGreen {
+  .bordGreen {
     border-color: var(--green-2);
   }
 
-  &.bordGreenLight {
+  .bordGreenLight {
     border-color: var(--green-light);
   }
+  .bordRed {
+    border-color: var(--red);
+  }
+  .bordOrange {
+    border-color: var(--orange);
+  }
 
-  &.bord1 {
+  .bordRedLight {
+    border-color: var(--red-2);
+  }
+
+  .bord1 {
     border-width: 1px;
   }
-  &.bord2 {
+  .bord2 {
     border-width: 2px;
   }
-  &.bord3 {
+  .bord3 {
     border-width: 3px;
   }
-  &.bord4 {
+  .bord4 {
     border-width: 4px;
   }
 
-  &.bordDash {
+  .bordDash {
     border-style: dashed;
   }
-  &.bordSolid {
+  .bordSolid {
     border-style: solid;
   }
-}
 
 
 .btnIconFixToLeft .MuiButton-startIcon{

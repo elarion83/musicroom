@@ -107,7 +107,7 @@ const resources = {
         "ModalUserRoomListJoinRoomText" : "Join the playlist",
 
         
-        "ModalJoinRoomIDOfTheRoom": "ID of the playlist you want to join",
+        "ModalJoinRoomIDOfTheRoom": "Playlist ID",
         "ModalJoinRoomIDOfTheRoomText": "Enter below the ID of the playlist you wish to join (Ex: 5454S, E45FR)",
         "ModalJoinRoomButtonJoin": "Join",
         
@@ -163,9 +163,9 @@ const resources = {
         "RoomLeftMenuRoomLeave" : "Leave the playlist",
         
         "RoomEmptyAlertWelcome":"Welcome in the playlist !",
-        "RoomEmptyAlertWelcomeClickHere":"Click here to share it",
+        "RoomEmptyAlertWelcomeClickHere":"Click here to share it to your friends ",
         "RoomEmptyAlertPlaylist":"The playlist is empty !",
-        "RoomEmptyAlertPlaylistClickHere":"Click here to start",
+        "RoomEmptyAlertPlaylistClickHere":"Click here to start looking for medias to play",
         "RoomEmptyAlertSpotify":"Spotify Premium is not linked to the playlist !",
         "RoomEmptyAlertSpotifyClickHere":"Click here to link",
         "RoomEmptyAlertSpotifyBold":"Spotify Premium needed",
@@ -272,7 +272,7 @@ const resources = {
         "ModalUserRoomListCreated" : "Crée le",
         "ModalUserRoomListJoinRoomText" : "Rejoindre la playlist",
 
-        "ModalJoinRoomIDOfTheRoom": "ID de la playlist a rejoindre",
+        "ModalJoinRoomIDOfTheRoom": "ID de playlist",
         "ModalJoinRoomIDOfTheRoomText": "Entrez ci-dessous l'ID de la playlist que vous souhaitez rejoindre. (Ex : 5454S, E45FR).",
         "ModalJoinRoomButtonJoin": "Rejoindre",
         
@@ -329,9 +329,9 @@ const resources = {
         "RoomLeftMenuRoomLeave" : "Quitter la playlist",
         
         "RoomEmptyAlertWelcome":"Bienvenue dans la playlist !",
-        "RoomEmptyAlertWelcomeClickHere":"Clique ici pour la partager",
+        "RoomEmptyAlertWelcomeClickHere":"Clique ici pour la partager à tes potes",
         "RoomEmptyAlertPlaylist":"La playlist est vide !",
-        "RoomEmptyAlertPlaylistClickHere":"Clique ici ou swipe up pour ajouter à la playlist !",
+        "RoomEmptyAlertPlaylistClickHere":"Clique ici ou swipe up pour chercher des médias !",
         "RoomEmptyAlertSpotify":"Spotify Premium n'est pas connecté !",
         "RoomEmptyAlertSpotifyClickHere":"Clique ici pour lier les deux",
         "RoomEmptyAlertSpotifyBold":"Spotify Premium requis",

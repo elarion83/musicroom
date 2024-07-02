@@ -175,6 +175,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                         typeSpeed={5}
                         showCursor
                         backSpeed={15}
+                        bindInputFocusEvents={true}
                         attr="placeholder"
                         loop
                          >
@@ -183,6 +184,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                             className="input_big typed"
                             type='text'
                             variant="standard"
+                            autoFocus={true}
                             onKeyPress={(ev) => { if (ev.key === 'Enter') { handleSearchForMedia() } }}
                             onChange={e => setSearchTerm(e.target.value)}
                             value={searchTerm}
