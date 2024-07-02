@@ -58,7 +58,14 @@ const JoinRoomModal = ({ t, open, handleJoinRoom, changeOpen}) => {
     }
 
     return(<>
-         <Dialog open={open} TransitionComponent={SlideUp} onClose={(e) => changeOpen(false)} >
+         <Dialog open={open} TransitionComponent={SlideUp} onClose={(e) => changeOpen(false)} sx={{
+            "& .MuiDialog-container": {
+                "& .MuiPaper-root": {
+                width: "100%",
+                maxWidth: "500px",  // Set your width here
+                },
+            },
+        }}>
             <ModalsHeader icon={() => <Icon icon='icon-park-outline:connect' style={{marginRight:'10px'}} />} title={t('HomePageButtonsJoinRoom')} />
 
             <DialogContent dividers>
