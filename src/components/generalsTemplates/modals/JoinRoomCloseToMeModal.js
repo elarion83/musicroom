@@ -20,7 +20,7 @@ const JoinRoomCloseToMeModal = ({ t, open, close, handleJoinRoom, userPosition})
 
     const [loadingPlaylistSearch, setLoadingPlaylistSearch] = useState(false);
     const [playlistList, setPlaylistList] = useState({});
-    const [playlistNumberShow,setPlaylistNumberShow ] = useState(3)
+    const [maxNumberShown, setMaxNumberShown] = useState(3);
 
     const fetchRooms = async () => {
         setLoadingPlaylistSearch(true);
@@ -66,7 +66,7 @@ const JoinRoomCloseToMeModal = ({ t, open, close, handleJoinRoom, userPosition})
                 },
             },
         }}>
-            <ModalsHeader icon={() => <Icon icon='icon-park-outline:connect' style={{marginRight:'10px'}} />} title={'Playlists'+ t('GeneralNearBy')} />
+            <ModalsHeader icon={() => <Icon icon='icon-park-outline:connect' style={{marginRight:'10px'}} />} title={'Playlists '+ t('GeneralNearBy')} />
 
             <DialogContent dividers>
                 <Grid container direction="column" >
@@ -89,19 +89,19 @@ const JoinRoomCloseToMeModal = ({ t, open, close, handleJoinRoom, userPosition})
                     <Grid container direction="row" sx={{mt:2, mb:2}}>
                     
                         {Object.entries(playlistList).map(([key, room]) => {
-                            if(key < playlistNumberShow) {
+                            if(key < maxNumberShown) {
                                 return(
                                     <RoomListItem key={key} room={room} joinRoom={joinRoomByRoomIdInComp} layout="nearbyList" />
                                 )
                             }
                         })}
                     </Grid>
-                    {playlistList.length > playlistNumberShow &&
+                    {(playlistList.length > maxNumberShown) &&
                         <LoadingButton 
                         loading={loadingPlaylistSearch}
                             size="small" 
                             loadingPosition='start'
-                            onClick={(e) => setPlaylistNumberShow(playlistNumberShow+3)} 
+                            onClick={(e) => setMaxNumberShown(maxNumberShown+3)} 
                             className='btnIconFixToLeft varelaFontTitle texturaBgButton'  
                             position="end"
                             sx={{flexBasis:'100%'}}

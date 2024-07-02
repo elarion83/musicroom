@@ -235,7 +235,7 @@ const resources = {
         "GeneralSeeMore":'Voir plus',
         "GeneralSeeLess":'Voir moins',
         
-        "GeneralNearBy" : 'A proximité',
+        "GeneralNearBy" : 'a proximité',
 
         "HomePageSlide1Title":"Une playlist en temps réel entre potes !",
         "HomePageSlide1Text1" : "Ajoutez des médias depuis Spotify et Youtube à une playlist collective lue en temps réel.",
