@@ -1,30 +1,86 @@
 import { Icon } from "@iconify/react";
-import { Alert, AlertTitle } from "@mui/material";
-import { withTranslation } from 'react-i18next';
+import { Alert, AlertTitle, CircularProgress, Typography } from "@mui/material";
+import NotListedLocationOutlinedIcon from '@mui/icons-material/NotListedLocationOutlined';
+import { withTranslation } from "react-i18next";
+import { useState } from "react";
+import WhereToVoteOutlinedIcon from '@mui/icons-material/WhereToVoteOutlined';
 
-const EmptyPlaylist = ({t, setOpenInvitePeopleToRoomModal, setOpenAddToPlaylistModal, spotifyIsLinked, deezerIsLinked  }) => {
+const EmptyPlaylist = ({t,isAdminView, setOpenInvitePeopleToRoomModal, setOpenAddToPlaylistModal, roomRef, roomParams, updateFirebaseRoom }) => {
     
     const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
     
+    const [localisationLoading, setLocalisationLoading] = useState(false);
+    async function localizeRoom() {
+        setLocalisationLoading(true);
+        let posObject = {lat:0,long:0};
+        let tempParams = roomParams;
+
+        if(!tempParams.isLocalisable) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    posObject = {
+                        lat:position.coords.latitude,
+                        long:position.coords.longitude,
+                    }
+                    tempParams.isLocalisable = true;
+                    setLocalisationLoading(false);
+                    updateFirebaseRoom( roomRef , {localisation: posObject, roomParams:tempParams});
+                });
+        } else {
+            tempParams.isLocalisable = false;
+            updateFirebaseRoom( roomRef , {localisation: posObject, roomParams:tempParams});
+            setLocalisationLoading(false);
+        }      
+    }
+
     return(
        <>
-        <Alert severity="success" variant="filled" 
+        <Alert 
+            severity="success" variant="filled" 
             icon={<Icon icon="uil:smile-beam" width="35"/>} 
-            className='animate__animated animate__fadeInUp animate__slow emptyPlaylistAlert'
+            className='animate__animated animate__fadeInUp animate__slow texturaBgButton bord2 bordGreenLight bordSolid'
             onClick={(e) => setOpenInvitePeopleToRoomModal(true)}
-            sx={{m:2, border:'2px solid var(--green-2)', cursor:'pointer'}}> 
+            sx={{m:2, cursor:'pointer'}}
+        > 
             <AlertTitle className='varelaFontTitle' sx={{mb:0}}>{t('RoomEmptyAlertWelcome')} </AlertTitle> 
-            <p style={{color:'var(--white)', margin:0}}>{t('RoomEmptyAlertWelcomeClickHere')}</p>
+            <Typography fontSize='small' className="fontFamilyNunito colorWhite">{t('RoomEmptyAlertWelcomeClickHere')}</Typography>
         </Alert>
-        <Alert severity="warning" 
+
+        {isAdminView && 
+            <Alert 
+                severity={roomParams.isLocalisable ? "success" : "info"}
+                variant="filled" 
+                icon={localisationLoading ? 
+                    <CircularProgress className="colorWhite" sx={{maxHeight:'35px',maxWidth:'35px'}} /> : 
+                    roomParams.isLocalisable ?                     
+                        <WhereToVoteOutlinedIcon fontSize="large" sx={{maxHeight:'35px',maxWidth:'35px'}}/> :
+                        <NotListedLocationOutlinedIcon fontSize="large" sx={{maxHeight:'35px',maxWidth:'35px'}}/>
+                    } 
+                sx={{m:2, cursor:'pointer'}} 
+                className={`animate__animated animate__fadeInUp animate__slow texturaBgButton bord2  bordSolid ${roomParams.isLocalisable ? "bordGreenLight" : "bordLight"}`}
+                onClick={(e) => localizeRoom()} 
+            >
+                <AlertTitle className='varelaFontTitle'>{roomParams.isLocalisable ? "Ta Playlist est géolocalisée" : "Geolocalise ta playlist !"}</AlertTitle>
+                <Typography fontSize='small' className="fontFamilyNunito colorWhite">
+                    {roomParams.isLocalisable ? 
+                    "Elle est visible par les gens aux alentours, clique pour annuler." : 
+                    "Clique pour la rendre accessible aux gens à proximité !"
+                    }
+                </Typography>
+            </Alert>
+        }
+
+        <Alert 
+            severity="warning" 
             variant="filled" 
             icon={<Icon icon="iconoir:music-double-note-add" width="35" />} 
-            sx={{m:2, border:'2px solid #febc21', cursor:'pointer'}} 
-            className='animate__animated animate__fadeInUp animate__slow emptyPlaylistAlert'
-            onClick={(e) => setOpenAddToPlaylistModal(true)} >
+            sx={{m:2, cursor:'pointer'}} 
+            className='animate__animated animate__fadeInUp animate__slow texturaBgButton bord2 bordOrange bordSolid'
+            onClick={(e) => setOpenAddToPlaylistModal(true)} 
+        >
             <AlertTitle className='varelaFontTitle'>{t('RoomEmptyAlertPlaylist')}</AlertTitle>
-            <p style={{color:'var(--white)', margin:0}}>{t('RoomEmptyAlertPlaylistClickHere')}</p>
+            <Typography fontSize='small' className="fontFamilyNunito colorWhite">{t('RoomEmptyAlertPlaylistClickHere')}</Typography>
         </Alert>
+        
         
        {/* {!deezerIsLinked && 
             <Alert severity="warning" variant="filled" 

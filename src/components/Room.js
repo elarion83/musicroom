@@ -109,6 +109,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     const [layoutDisplay, setLayoutdisplay] = useState('default');
     const [layoutDisplayClass, setLayoutDisplayClass] = useState('defaultLayout');
     const [newMessages, setNewMessages] = useState(false);
+
     // animated elements
     const animatedElementsRef = [];
 
@@ -743,10 +744,14 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         }
                         { room.playlistEmpty && 
                             <EmptyPlaylist 
+                                isAdminView={isActuallyAdmin} 
                                 setOpenInvitePeopleToRoomModal={setOpenInvitePeopleToRoomModal}
                                 setOpenAddToPlaylistModal={setOpenAddToPlaylistModal}
                                 spotifyIsLinked={room.roomParams.spotify.IsLinked}
                                 deezerIsLinked={room.roomParams.deezer.IsLinked}
+                                roomParams={room.roomParams}
+                                roomRef={roomRef}
+                                updateFirebaseRoom={updateFirebaseRoom}
                             />
                         }
                         {isPlaylistExistNotEmpty(room.playlistUrls) && 
