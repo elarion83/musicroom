@@ -3,6 +3,7 @@ import { Icon } from "@iconify/react";
 import { Alert, AlertTitle, Dialog, DialogActions, DialogContent, DialogContentText, Divider, Grid, Typography } from "@mui/material";
 import useDigitInput from 'react-digit-input';
 import { Box } from '@mui/system';
+import NotListedLocationOutlinedIcon from '@mui/icons-material/WhereToVoteOutlined';
 import { LoadingButton } from '@mui/lab';
 
 import { withTranslation } from 'react-i18next';
@@ -91,6 +92,7 @@ const JoinRoomModal = ({ t, open, handleJoinRoom, changeOpen}) => {
                         loading={getPositionLoading} 
                         size="small" 
                         loadingPosition='start'
+                        startIcon={<NotListedLocationOutlinedIcon />}
                         onClick={(e) => getUserPositionAndOpenModal()} 
                         className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite'  
                         position="end"

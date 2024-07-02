@@ -1,4 +1,5 @@
 import * as React from 'react';
+import AddIcon from '@mui/icons-material/Add';
 import { Icon } from "@iconify/react";
 import { Alert, AlertTitle, Card, CardContent, CardMedia, Dialog, DialogActions, DialogContent, DialogContentText, Divider, Grid, Typography } from "@mui/material";
 import useDigitInput from 'react-digit-input';
@@ -11,10 +12,11 @@ import ModalsHeader from './ModalsHeader';
 import { getCleanRoomId } from '../../../services/utilsRoom';
 import ModalsFooter from './ModalsFooter';
 import { useState , useEffect } from 'react';
-import { getTimeStampOfMoment, haversineDistance, isVarNull } from '../../../services/utils';
+import { getTimeStampOfMoment, haversineDistance, isEmpty, isVarNull } from '../../../services/utils';
 import { db } from '../../../services/firebase';
 import RoomListItem from '../../rooms/RoomListItem';
 import { DateRange, LocationOn, PlaylistPlay } from '@mui/icons-material';
+import FindReplaceIcon from '@mui/icons-material/FindReplace';
 
 const JoinRoomCloseToMeModal = ({ t, open, close, handleJoinRoom, userPosition}) => {
 
@@ -66,50 +68,56 @@ const JoinRoomCloseToMeModal = ({ t, open, close, handleJoinRoom, userPosition})
                 },
             },
         }}>
-            <ModalsHeader icon={() => <Icon icon='icon-park-outline:connect' style={{marginRight:'10px'}} />} title={'Playlists '+ t('GeneralNearBy')} />
+            <ModalsHeader icon={() => <FindReplaceIcon style={{marginRight:'10px'}} />} title={'Playlists '+ t('GeneralNearBy')} />
 
             <DialogContent dividers>
                 <Grid container direction="column" >
                    
-                    {Object.keys(playlistList).length === 0 &&
+                    {isEmpty(playlistList) &&
                         <Alert severity="warning">{t('GeneralNoResult')}</Alert>
                     }
-                    <LoadingButton 
-                        loading={loadingPlaylistSearch}
-                        size="small" 
-                        loadingPosition='start'
-                        onClick={(e) => refreshList()} 
-                        className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite'  
-                        position="end"
-                        sx={{flexBasis:'100%'}}
-                    >
-                        {t(loadingPlaylistSearch ? 'GeneralLoading' : 'GeneralRefresh')}  
-                    </LoadingButton>
-
-                    <Grid container direction="row" sx={{mt:2, mb:2}}>
-                    
-                        {Object.entries(playlistList).map(([key, room]) => {
-                            if(key < maxNumberShown) {
-                                return(
-                                    <RoomListItem key={key} room={room} joinRoom={joinRoomByRoomIdInComp} layout="nearbyList" />
-                                )
-                            }
-                        })}
-                    </Grid>
-                    {(playlistList.length > maxNumberShown) &&
+                   
+                    {!isEmpty(playlistList) && 
+                    <>
                         <LoadingButton 
-                        loading={loadingPlaylistSearch}
+                            loading={loadingPlaylistSearch}
                             size="small" 
+                            startIcon={<FindReplaceIcon />}
                             loadingPosition='start'
-                            onClick={(e) => setMaxNumberShown(maxNumberShown+3)} 
-                            className='btnIconFixToLeft varelaFontTitle texturaBgButton'  
+                            onClick={(e) => refreshList()} 
+                            className='main_bg_color btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite'  
                             position="end"
                             sx={{flexBasis:'100%'}}
                         >
-                        {t(loadingPlaylistSearch ? 'GeneralLoading' : 'GeneralSeeMore')}  
-                            
+                            {t(loadingPlaylistSearch ? 'GeneralLoading' : 'GeneralRefresh')}  
                         </LoadingButton>
-                    }
+
+                        <Grid container direction="row" sx={{mt:2, mb:2}}>
+                        
+                            {Object.entries(playlistList).map(([key, room]) => {
+                                if(key < maxNumberShown) {
+                                    return(
+                                        <RoomListItem key={key} room={room} joinRoom={joinRoomByRoomIdInComp} layout="nearbyList" />
+                                    )
+                                }
+                            })}
+                        </Grid>
+                        {(playlistList.length > maxNumberShown) &&
+                            <LoadingButton 
+                            loading={loadingPlaylistSearch}
+                                size="small" 
+                                startIcon={<AddIcon />}
+                                loadingPosition='start'
+                                onClick={(e) => setMaxNumberShown(maxNumberShown+3)} 
+                                className='btnIconFixToLeft varelaFontTitle texturaBgButton'  
+                                position="end"
+                                sx={{flexBasis:'100%'}}
+                            >
+                            {t(loadingPlaylistSearch ? 'GeneralLoading' : 'GeneralSeeMore')}  
+                                
+                            </LoadingButton>
+                        }
+                    </>}
                 </Grid>
             </DialogContent>  
             <ModalsFooter 
