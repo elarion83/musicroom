@@ -358,11 +358,15 @@ export function haversineDistance(lat1, lon1, lat2, lon2) {
 }
 
 export function getReadeableDistance(distanceInMeters) {
+    if (distanceInMeters < 100) {
+        return distanceInMeters.toFixed(0) + ' cm';
+    }
     if (distanceInMeters < 1000) {
-        return distanceInMeters.toFixed(0) + 'mètres';
-    } else {
-        const distanceInKilometers = distanceInMeters / 1000;
-        return distanceInKilometers.toFixed(2) +'kilomètres';
+        return distanceInMeters.toFixed(0) + 'm';
+    } 
+    else {
+        let distanceInKilometers = distanceInMeters / 1000;
+        return distanceInKilometers.toFixed(2) +' km';
     }
 }
 

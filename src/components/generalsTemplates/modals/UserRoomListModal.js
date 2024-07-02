@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import { Alert, Button, Dialog, DialogActions, DialogContent, Typography } from "@mui/material";
+import { Alert, Button, Dialog, DialogActions, DialogContent, Grid, Typography } from "@mui/material";
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import { db } from '../../../services/firebase'; 
 import { useState } from "react";
@@ -14,6 +14,7 @@ import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 import { getCleanRoomId } from "../../../services/utilsRoom";
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 import ModalsFooter from "./ModalsFooter";
+import RoomListItem from "../../rooms/RoomListItem";
 
 const UserRoomListModal = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
 
@@ -68,26 +69,16 @@ const UserRoomListModal = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
                     {Object.keys(roomList).length === 0 &&
                         <Alert severity="warning">{t('ModalUserRoomListEmpty')}.</Alert>
                     }
+                    <Grid container sx={{gap:'5px'}}>
                     {Object.entries(roomList).map(([key, room]) => {
 
                         var createdDate = new Date(room.creationTimeStamp).toLocaleDateString('fr-FR', timestampToDateoptions);
                         return(
-                            <Box title={t('ModalUserRoomListJoinRoomText')} onClick={(e) => joinRoomByRoomIdInComp(getCleanRoomId(room.id))} key={key} 
-                            sx={{mb:1, p:1,justifyContent:'start',position:'relative', overflow:'hidden',boxShadow: 2,cursor:'pointer',bgcolor:'var(--main-color)',border:'1px solid var(--grey-light)', borderRadius:'4px'}}>
-                                <QueueMusicIcon className="iconPlaylistList" fontSize="small" sx={{mr:1}} />
-                                <Typography fontSize='medium' className="fontFamilyNunito textCapitalize colorWhite"> 
-                                ID : <b>{room.id}</b>
-                                </Typography>
-                                <Typography fontSize='small' className="colorWhite"> 
-                                    {t('ModalUserRoomListCreated')} <b>{createdDate}</b>
-                                </Typography>
-                                <Typography fontSize='small' className="colorWhite"> 
-                                    {room.playlistUrls.length } {t('GeneralMediasInPlaylist')}
-                                </Typography>
-                            </Box>
+                            <RoomListItem key={key} room={room} joinRoom={joinRoomByRoomIdInComp} />
+
                         )
                     }
-                    )}
+                    )}</Grid>
                 </>}
             </DialogContent>
 
