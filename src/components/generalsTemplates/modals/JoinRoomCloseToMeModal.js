@@ -66,23 +66,24 @@ const JoinRoomCloseToMeModal = ({ t, open, close, handleJoinRoom, userPosition})
                 },
             },
         }}>
-            <ModalsHeader icon={() => <Icon icon='icon-park-outline:connect' style={{marginRight:'10px'}} />} title={'Playlists à proximité'} />
+            <ModalsHeader icon={() => <Icon icon='icon-park-outline:connect' style={{marginRight:'10px'}} />} title={'Playlists'+ t('GeneralNearBy')} />
 
             <DialogContent dividers>
                 <Grid container direction="column" >
                    
                     {Object.keys(playlistList).length === 0 &&
-                        <Alert severity="warning">Aucun résultat.</Alert>
+                        <Alert severity="warning">{t('GeneralNoResult')}</Alert>
                     }
                     <LoadingButton 
-                    loading={loadingPlaylistSearch}
+                        loading={loadingPlaylistSearch}
                         size="small" 
+                        loadingPosition='start'
                         onClick={(e) => refreshList()} 
                         className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite'  
                         position="end"
                         sx={{flexBasis:'100%'}}
                     >
-                        Rafraîchir
+                        {t(loadingPlaylistSearch ? 'GeneralLoading' : 'GeneralRefresh')}  
                     </LoadingButton>
 
                     <Grid container direction="row" sx={{mt:2, mb:2}}>
@@ -99,12 +100,14 @@ const JoinRoomCloseToMeModal = ({ t, open, close, handleJoinRoom, userPosition})
                         <LoadingButton 
                         loading={loadingPlaylistSearch}
                             size="small" 
+                            loadingPosition='start'
                             onClick={(e) => setPlaylistNumberShow(playlistNumberShow+3)} 
                             className='btnIconFixToLeft varelaFontTitle texturaBgButton'  
                             position="end"
                             sx={{flexBasis:'100%'}}
                         >
-                            Voir plus
+                        {t(loadingPlaylistSearch ? 'GeneralLoading' : 'GeneralSeeMore')}  
+                            
                         </LoadingButton>
                     }
                 </Grid>

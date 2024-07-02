@@ -57,14 +57,10 @@ const EmptyPlaylist = ({t,isAdminView, setOpenInvitePeopleToRoomModal, setOpenAd
                     } 
                 sx={{m:2, cursor:'pointer'}} 
                 className={`animate__animated animate__fadeInUp animate__slow texturaBgButton bord2  bordSolid ${roomParams.isLocalisable ? "bordGreenLight" : "bordLight"}`}
-                onClick={(e) => localizeRoom()} 
-            >
-                <AlertTitle className='varelaFontTitle'>{roomParams.isLocalisable ? "Ta Playlist est géolocalisée" : "Geolocalise ta playlist !"}</AlertTitle>
+                onClick={(e) => localizeRoom()} >
+                <AlertTitle className='varelaFontTitle'>{roomParams.isLocalisable ? t('RoomEmptyAlterGeolocTitleEnabled') : t('RoomEmptyAlterGeolocTitleDisabled')}</AlertTitle>
                 <Typography fontSize='small' className="fontFamilyNunito colorWhite">
-                    {roomParams.isLocalisable ? 
-                    "Elle est visible par les gens aux alentours, clique pour annuler." : 
-                    "Clique pour la rendre accessible aux gens à proximité !"
-                    }
+                    {roomParams.isLocalisable ? t('RoomEmptyAlterGeolocTextEnabled') : t('RoomEmptyAlterGeolocTextDisabled')}
                 </Typography>
             </Alert>
         }

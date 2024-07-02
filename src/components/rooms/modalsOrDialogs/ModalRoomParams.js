@@ -14,7 +14,7 @@ import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 import ModalsHeader from "../../generalsTemplates/modals/ModalsHeader";
 import { timestampToHoursAndMinOptions } from "../../../services/utilsArray";
 
-const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDisconnectFromSpotifyModal, handleDisconnectFromDeezerModal, handleChangeRoomParams }) => {
+const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDisconnectFromSpotifyModal, handleDisconnectFromDeezerModal, handleChangeGeoloc, handleChangeRoomParams }) => {
 
     const REDIRECT_URI = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ":" + window.location.port : '');
 
@@ -99,6 +99,12 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
             change : handleChangeSyncPeopleByDefault,
             title:t('ModalParamsRoomAutoSyncTitle'),
             text:t('ModalParamsRoomAutoSyncText')
+        },
+        isLocalisable: {
+            checked:roomParams.isLocalisable,
+            change : handleChangeGeoloc,
+            title:t('RoomEmptyAlterGeolocTitleDisabled'),
+            text:t('RoomEmptyAlterGeolocTextDisabled')
         }
     }
 

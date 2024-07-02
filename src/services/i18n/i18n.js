@@ -41,6 +41,8 @@ const resources = {
         "GeneralPlaying":'Playing',
         "GeneralPause":'Paused',
         "GeneralLoading":'Loading..',
+        "GeneralRefresh":'Refresh',
+        "GeneralNoResult":"No result",
         "GeneralAdded":'Added',
         "GeneralAddedBy":'Added by',
         "GeneralNotLinked" : " not linked",
@@ -55,7 +57,10 @@ const resources = {
         "GeneralNickname" : "Nickname",
         "GeneralDownloadAPK" : "Get Android APP",
         "GeneralSendItToFriends" : "Send it to your friends",
+        "GeneralSeeMore":'See more',
+        "GeneralSeeLess":'See less',
 
+        "GeneralNearBy" : 'Nearby',
         
         "HomePageSlide1Title":"A real-time playlist for more than one person!",
         "HomePageSlide1Text1" : "Add media from Spotify and Youtube to a collective playlist played back in real time.",
@@ -170,7 +175,11 @@ const resources = {
         "RoomEmptyAlertSpotifyClickHere":"Click here to link",
         "RoomEmptyAlertSpotifyBold":"Spotify Premium needed",
         "RoomEmptyAlertDeezer":"Deezer is not linked to the playlist !",
-        "RoomEmptyAlertDeezerClickHere":"Click here to link",
+        "RoomEmptyAlertDeezerClickHere":"Click here to link",  
+        "RoomEmptyAlterGeolocTitleDisabled":"Geolocalize your playlist!",
+        "RoomEmptyAlterGeolocTitleEnabled":"Your Playlist is geolocalized",
+        "RoomEmptyAlterGeolocTextDisabled":"Click to make it accessible to people nearby!",
+        "RoomEmptyAlterGeolocTextEnabled":"It is visible to people in the vicinity, click to cancel."
     }
   },
   fr: {
@@ -201,6 +210,8 @@ const resources = {
         "GeneralPlaying":'En lecture',
         "GeneralPause":'En Pause',
         "GeneralLoading":'Chargement..',
+        "GeneralRefresh":'Rafraîchir',
+        "GeneralNoResult":"Aucun résultat",
         "GeneralAdded":'Ajouté',
         "GeneralAddedBy":'Ajouté par',
         "GeneralNotLinked" : " non relié",
@@ -221,8 +232,11 @@ const resources = {
         "GeneralNickname" : "Pseudo",
         "GeneralDownloadAPK" : "Télécharger l'APP",
         "GeneralSendItToFriends" : "Envoyez la à vos amis",
+        "GeneralSeeMore":'Voir plus',
+        "GeneralSeeLess":'Voir moins',
         
-        
+        "GeneralNearBy" : 'A proximité',
+
         "HomePageSlide1Title":"Une playlist en temps réel entre potes !",
         "HomePageSlide1Text1" : "Ajoutez des médias depuis Spotify et Youtube à une playlist collective lue en temps réel.",
         "HomePageSlide1Text2":"Votez, tchatez, réagissez et vibrez ensemble au rythme de votre playlist. Entre potes, en soirée, en voiture, en voyage, ou au sport, Play-it est l'outil indispensable !",
@@ -337,6 +351,10 @@ const resources = {
         "RoomEmptyAlertSpotifyBold":"Spotify Premium requis",
         "RoomEmptyAlertDeezer":"Deezer n'est pas connecté !",
         "RoomEmptyAlertDeezerClickHere":"Clique ici pour lier les deux",
+        "RoomEmptyAlterGeolocTitleDisabled":"Geolocalise ta playlist !",
+        "RoomEmptyAlterGeolocTitleEnabled":"Ta Playlist est géolocalisée",
+        "RoomEmptyAlterGeolocTextDisabled":"Clique pour la rendre accessible aux gens à proximité !",
+        "RoomEmptyAlterGeolocTextEnabled":"Elle est visible par les gens aux alentours, clique pour annuler."
     }
   }
 };

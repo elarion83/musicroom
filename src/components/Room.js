@@ -470,6 +470,25 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         updateFirebaseRoom( roomRef , {roomParams: newParams});
     }
 
+    function handleUpdateRoomGeoloc() {
+        let posObject = {lat:0,long:0};
+        let tempParams = room.roomParams;
+
+        if(!tempParams.isLocalisable) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                posObject = {
+                    lat:position.coords.latitude,
+                    long:position.coords.longitude,
+                }
+                tempParams.isLocalisable = true;
+                updateFirebaseRoom( roomRef , {localisation: posObject, roomParams:tempParams});
+            });
+        } else {
+            tempParams.isLocalisable = false;
+            updateFirebaseRoom( roomRef , {localisation: posObject, roomParams:tempParams});
+        }  
+    }
+
     useEffect(() => {
         var queryParameters = new URLSearchParams(window.location.search);
         var token = queryParameters.get("deetoken") ? queryParameters.get("deetoken") : queryParameters.get("spotoken") ? queryParameters.get("spotoken") : '';
@@ -807,7 +826,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         handleChangeRoomParams={handleChangeRoomParams} 
                         handleDisconnectFromDeezerModal={setOpenForceDisconnectDeezerModal} 
                         handleDisconnectFromSpotifyModal={setOpenForceDisconnectSpotifyModal} 
-                        roomParams={room.roomParams} 
+                        roomParams={room.roomParams}
+                        handleChangeGeoloc={handleUpdateRoomGeoloc} 
                     />
                     <BottomInteractions 
                         currentUser={currentUser}

@@ -90,13 +90,14 @@ const JoinRoomModal = ({ t, open, handleJoinRoom, changeOpen}) => {
                     <LoadingButton 
                         loading={getPositionLoading} 
                         size="small" 
+                        loadingPosition='start'
                         onClick={(e) => getUserPositionAndOpenModal()} 
                         className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite'  
                         position="end"
                     >
-                                Playlists à proximité
+                        {t(getPositionLoading ? 'GeneralLoading' : 'Playlists '+ t('GeneralNearBy'))}
                     </LoadingButton>
-                    {userPositionError && <p> ERREUR POTO </p>}
+                    {userPositionError && <p> t('GeneralErrorHappened') </p>}
                 </Grid>
             </DialogContent>
            
