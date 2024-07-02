@@ -1,7 +1,6 @@
 .joinRoomForm {
     display: flex;
-    gap: 10px;  
-    justify-content: space-between;
+    justify-content: space-evenly;
     .input {
         position: relative;
         width: 50px;
