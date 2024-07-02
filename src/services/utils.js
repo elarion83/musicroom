@@ -4,6 +4,7 @@ import dateFormat from "dateformat";
 
 import { v4 as uuid } from 'uuid';
 import SearchResultItem from '../components/rooms/SearchResultItem';
+import { Timestamp } from 'firebase/firestore';
 
 export const envAppNameUrl = process.env.REACT_APP_NAME_URL;
 export const envAppNameHum = process.env.REACT_APP_NAME;
@@ -372,3 +373,12 @@ export function getReadeableDistance(distanceInMeters) {
 
 export const appApkFileUrl = process.env.REACT_APP_FRONT_HOME_URL+"/play-it.apk";
 
+export function getTimeStampOfMoment(moment) {
+      switch (moment) {
+        case '1HourAgo':
+            let oneHourAgo = Timestamp.now().toDate();
+            oneHourAgo.setHours(oneHourAgo.getHours() - 1);
+            return Timestamp.fromDate(oneHourAgo).seconds;
+        default:
+    }
+}

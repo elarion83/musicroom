@@ -11,7 +11,7 @@ import ModalsHeader from './ModalsHeader';
 import { getCleanRoomId } from '../../../services/utilsRoom';
 import ModalsFooter from './ModalsFooter';
 import { useState , useEffect } from 'react';
-import { haversineDistance, isVarNull } from '../../../services/utils';
+import { getTimeStampOfMoment, haversineDistance, isVarNull } from '../../../services/utils';
 import { db } from '../../../services/firebase';
 import RoomListItem from '../../rooms/RoomListItem';
 import { DateRange, LocationOn, PlaylistPlay } from '@mui/icons-material';
@@ -20,12 +20,12 @@ const JoinRoomCloseToMeModal = ({ t, open, close, handleJoinRoom, userPosition})
 
     const [loadingPlaylistSearch, setLoadingPlaylistSearch] = useState(false);
     const [playlistList, setPlaylistList] = useState({});
-    const [playlistNumberShow,setPlaylistNumberShow ] = useState(2)
+    const [playlistNumberShow,setPlaylistNumberShow ] = useState(3)
 
     const fetchRooms = async () => {
         setLoadingPlaylistSearch(true);
         try {
-            const q = query(collection(db, process.env.REACT_APP_ROOM_COLLECTION), where('roomParams.isLocalisable', '==', true), orderBy('creationTimeStamp', 'desc') );
+            const q = query(collection(db, process.env.REACT_APP_ROOM_COLLECTION), where('roomParams.isLocalisable', '==', true),  where('creationTimeStamp', '>', getTimeStampOfMoment('1HourAgo')), orderBy('creationTimeStamp', 'desc') );
             const querySnapshot = await getDocs(q);
             const tempList = [];
             querySnapshot.forEach(doc => {
