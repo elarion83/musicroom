@@ -13,7 +13,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import validator from 'validator';
-import { YTV3APIDurationToReadable, cleanMediaTitle, delay, getDisplayTitle, getLocale, getYTVidId, isEmpty, isProdEnv, isVarExist } from '../../../services/utils';
+import { YTV3APIDurationToReadable, cleanMediaTitle, delay, enablersDurationToReadable, getArtistsSpotify, getDisplayTitle, getLocale, getYTVidId, isEmpty, isProdEnv, isVarExist, isVarExistNotEmpty } from '../../../services/utils';
 import { withTranslation } from 'react-i18next';
 import { Button, Dialog, SwipeableDrawer, Typography } from '@mui/material';
 import SoundWave from "../../../services/SoundWave";
@@ -26,7 +26,7 @@ import SearchResultItem from '../SearchResultItem';
 import { mockYoutubeSearchResoltForVald, mockYoutubeSearchResultForVald, mockYoutubeTrendResult } from '../../../services/mockedArray';
 import YoutubeVideoSlider from '../../../services/YoutubeVideoSlider';
 import { returnAnimateReplace } from '../../../services/animateReplace';
-const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, roomIsPlaying, currentUser, validatedObjectToAdd, spotifyTokenProps, DeezerTokenProps }) => {
+const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, roomIsPlaying, currentUser, validatedObjectToAdd, DeezerTokenProps }) => {
     const [mediaSearchResultYoutube, setMediaSearchResultYoutube] = useState([]);
     const [mediaSearchResultSpotify, setMediaSearchResultSpotify] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -118,6 +118,8 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
     }
 
     async function handleSearchForMedia() {
+
+        let spotifyEnabler = room.enablerSpotify;
         setIsSearching(true);
         if (searchTerm !== '') {
             if (validator.isURL(searchTerm.trim())) {
@@ -134,15 +136,17 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                         setIsSearching(false);
                     });
 
-                    if (spotifyTokenProps.length !== 0) {
+                } else {
+                    
+                    if (spotifyEnabler.isLinked) {
                         await axios.get("https://api.spotify.com/v1/search", {
-                            headers: { Authorization: `Bearer ${spotifyTokenProps}` },
+                            headers: { Authorization: `Bearer ${spotifyEnabler.token}` },
                             params: spotifyApiSearchObject(searchTerm)
                         }).then(function (response) {
+                            console.log(response);
                             setMediaSearchResultSpotify(response.data.tracks.items);
                         });
                     }
-                } else {
                     setMediaSearchResultYoutube(mockYoutubeSearchResultForVald);
                     setShowYoutubeTrends(false);
                     setIsSearching(false);
@@ -219,16 +223,11 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
 
                 </Container>}
 
-                {mediaSearchResultYoutube.length > 0 && <Grid item xs={12}>
-                   {/* <Typography variant="h6" sx={{mt:2}} gutterBottom>
-                        {t('ModalAddMediaSearchResultTitle', {searchTerm:searchedTerm})}
-                    </Typography>
+                {!(showYoutubeTrends) && <Grid item xs={12}>
                     <Tabs value={tabIndex} onChange={handleTabChange} sx={{ bgcolor: '#202124' }}>
                         <Tab sx={{ color: 'var(--white)' }} label="Youtube" disabled={mediaSearchResultYoutube.length > 1 ? false : true} />
                         <Tab sx={{ color: 'var(--white)' }} label="Spotify" disabled={mediaSearchResultSpotify && mediaSearchResultSpotify.length > 1 ? false : true} />
-                       {/* <Tab sx={{ color: 'var(--white)' }} label="Deezer" disabled={mediaSearchResultDeezer && mediaSearchResultDeezer.length > 1 ? false : true} />
-                        <Tab sx={{ color: 'var(--white)' }} label="Dailymotion" disabled={mediaSearchResultDailyMotion.length > 1 ? false : true} /> 
-                    </Tabs> */}
+                    </Tabs>
                     <Box sx={{ lineHeight: "15px", p: 0, pt: 0, mb: 0, paddingBottom:'90px !important' }}>
                         {tabIndex === 0 && (
                             <Box>
@@ -256,21 +255,22 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                         )}
                         {tabIndex === 1 && (
                             <Box>
-                                {mediaSearchResultSpotify.length > 1 && <Grid item xs={12}>
+                                {!isEmpty(mediaSearchResultSpotify) && <Grid item xs={12}>
                                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ mt: 0 }}>
                                         {mediaSearchResultSpotify.map(function (media, idsp) {
                                             return (
                                                 <SearchResultItem
                                                     key={idsp}
                                                     image={media.album.images[0].url}
-                                                    title={media.artists[0].name + ' - ' + media.name}
+                                                    title={media.name}
                                                     source='spotify'
                                                     uid={uuid().slice(0, 10).toLowerCase()}
                                                     platformId={media.uri}
                                                     addedBy={addingObject.addedBy}
                                                     url={media.uri}
+                                                    duration={enablersDurationToReadable(media.duration_ms, 'spotify')}
                                                     date={dateFormat(media.album.release_date, 'd mmm yyyy')}
-                                                    channelOrArtist={media.artists[0].name}
+                                                    channelOrArtist={getArtistsSpotify(media.artists)}
                                                     addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject}
                                                 />)
                                         })}

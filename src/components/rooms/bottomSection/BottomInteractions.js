@@ -91,16 +91,11 @@ const BottomInteractions = ({ t,roomRef, layoutDisplay, setLayoutdisplay, paramD
                 </Tooltip>
 
                 <Tooltip ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUp animate__delay-1s' title={t('RoomLeftMenuRoomParams')}>  
-                    <Badge invisible={!roomParams.spotify.IsLinked} variant="dot" sx={{'& .MuiBadge-badge': {
-                            right:'15px',
-                            bgcolor:'var(--red-2)',
-                            zIndex:10000
-                        }}} >
-                        <Fab size="small" variant="extended" className='room_small_button_interactions' 
-                        sx={{justifyContent: 'center', ml:0.5}} onClick={e => handleOpenDrawerParam(!paramDrawerIsOpen)} >
-                            <TuneIcon fontSize="small" />
-                        </Fab>
-                    </Badge>
+                   
+                    <Fab size="small" variant="extended" className='room_small_button_interactions' 
+                    sx={{justifyContent: 'center', ml:0.5}} onClick={e => handleOpenDrawerParam(!paramDrawerIsOpen)} >
+                        <TuneIcon fontSize="small" />
+                    </Fab>
                 </Tooltip>
                 <Tooltip  ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUp animate__delay-1s'>  
                     <Fab size="small" variant="extended" className='room_small_button_interactions'  
@@ -127,21 +122,7 @@ const BottomInteractions = ({ t,roomRef, layoutDisplay, setLayoutdisplay, paramD
                     message={ notifsTextArray[lastNotifType].replace('//AUTHOR//', getLastNotif(roomNotifs).createdBy)}
                 />
             }
-            <Snackbar
-                open={((Date.now() - roomParams.spotify.TokenTimestamp) < 5000) && roomParams.spotify.AlreadyHaveBeenLinked}
-                autoHideDuration={5000}
-                sx={{ borderRadius:'2px'}}
-                message={roomParams.spotify.IsLinked ? roomParams.spotify.UserConnected + " a ajouté Spotify a la playlist !" : "La connexion Spotify a expirée"}
-            />
 
-
-            <Snackbar
-                open={((Date.now() - roomParams.deezer.TokenTimestamp) < 5000) && roomParams.deezer.AlreadyHaveBeenLinked}
-                autoHideDuration={5000}
-                sx={{ borderRadius:'2px'}}
-                message={roomParams.deezer.IsLinked ? roomParams.deezer.UserConnected + " a ajouté Deezer a la playlist !" : "La connexion Deezer a expirée"}
-            />
-            
         </Grid>
     )
 };

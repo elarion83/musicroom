@@ -31,3 +31,8 @@ export async function updateFirebaseRoom(roomRef, newRoomDatas, merge = true) {
 export async function updateFirebaseUser(userRef, newUserData, merge=true) {
     await updateDoc(userRef, newUserData);
 }
+
+
+export function roomIdLocallyStored() {
+    return localStorage.getItem("Play-It_RoomId");
+}

@@ -5,6 +5,7 @@ import dateFormat from "dateformat";
 import { v4 as uuid } from 'uuid';
 import SearchResultItem from '../components/rooms/SearchResultItem';
 import { Timestamp } from 'firebase/firestore';
+import { getCleanRoomId, updateFirebaseUser } from './utilsRoom';
 
 export const envAppNameUrl = process.env.REACT_APP_NAME_URL;
 export const envAppNameHum = process.env.REACT_APP_NAME;
@@ -59,20 +60,15 @@ export function createDefaultRoomObject(roomId, roomOwner) {
             allowEverybodyToAddMedia:true,
             interactionsAllowed:true,
             interactionFrequence:5000,
-            deezer:{
-                IsLinked:false,
-                AlreadyHaveBeenLinked:false,
-                Token:'',
-                TokenTimestamp:0,
-                UserConnected:''
-            },
-            spotify:{
-                IsLinked:false,
-                AlreadyHaveBeenLinked:false,
-                Token:'',
-                TokenTimestamp:0,
-                UserConnected:''
-            }
+        },
+        enablerSpotify:{
+                isLinked:false,
+                isLinkable:true,
+                alreadyHaveBeenLinked:false,
+                token:'',
+                tokenTimestamp:0,
+                expirationTokenTimestamp:0,
+                userConnected:''
         },
         localeYoutubeTrends : [],
         localeYoutubeMusicTrends : [],
@@ -224,20 +220,31 @@ export function getLocale() {
     return lang;
 }
 
-export function YTV3APIDurationToReadable(duration) {
-  var match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+export function enablersDurationToReadable(duration, enabler = 'youtube') {
+    switch(enabler) {
+        case 'youtube': 
+            // youtube send a weird format
+            var match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
 
-  match = match.slice(1).map(function(x) {
-    if (x != null) {
-        return x.replace(/\D/, '');
+            match = match.slice(1).map(function(x) {
+                if (x != null) {
+                    return x.replace(/\D/, '');
+                }
+            });
+
+            var hours = (parseInt(match[0]) || 0);
+            var minutes = (parseInt(match[1]) || 0);
+            var seconds = (parseInt(match[2]) || 0);
+            return hours * 3600 + minutes * 60 + seconds;
+
+        break;
+        case 'spotify':
+            // spotify send millisecond
+            return Math.floor(duration / 1000);
+        break;
+        default:
     }
-  });
-
-  var hours = (parseInt(match[0]) || 0);
-  var minutes = (parseInt(match[1]) || 0);
-  var seconds = (parseInt(match[2]) || 0);
-  return hours * 3600 + minutes * 60 + seconds;
-
+ 
 }
 
 export function getCarouselItemsArray(youtubeResults,addingObject, addItemToPlaylist) {
@@ -254,7 +261,7 @@ export function getCarouselItemsArray(youtubeResults,addingObject, addItemToPlay
                     source='youtube'
                     uid={uuid().slice(0, 10).toLowerCase()}
                     platformId={media.id}
-                    duration={media.contentDetails.duration ? YTV3APIDurationToReadable(media.contentDetails.duration) : null}
+                    duration={media.contentDetails.duration ? enablersDurationToReadable(media.contentDetails.duration, 'youtube') : null}
                     addedBy={addingObject.addedBy}
                     url={'https://www.youtube.com/watch?v=' + media.id}
                     date={dateFormat(media.snippet.publishedAt, 'd mmm yyyy')}
@@ -390,5 +397,44 @@ export function getTimeStampOfMoment(moment) {
     return newTimestamp;
 
 }
+
+export function userSpotifyTokenObject(token) {
+    return {
+        token: token,
+        refreshtoken:null,
+        expiration: getTimeStampOfMoment('+1'),
+        alreadyConnected:true,
+        connected:true,
+        lastConnexionTimestamp: Date.now(),
     }
+}
+export function checkStorageRoomId(roomId = '', joinRoomByRoomId ) { // handle recovery of room id (from url or local memory)
+    if(localStorage.getItem("Play-It_RoomId")) { // check if user have roomid in memory storage
+        isEmpty(roomId) ?  
+            joinRoomByRoomId(localStorage.getItem("Play-It_RoomId")) // if don't have room id in url then join the one in memory
+            : // in url (new access or redirect)
+            localStorage.setItem("Play-It_RoomId", getCleanRoomId(roomId)) // if have room id in url keep going,just set it in memory 
+        ;
+    }
+}
+
+
+
+// TEST SAVE USER SPOTIFY TOKEN IN FIREBASE
+export async function saveSpotifyToken(userRef,SpotifyTokenObject,userInfos, setUserInfo, joinRoomByRoomId) {
+    await updateFirebaseUser(userRef,{spotifyConnect:SpotifyTokenObject});
+
+    userInfos.customDatas.spotifyConnect = SpotifyTokenObject;
+    setUserInfo(userInfos);
+    joinRoomByRoomId(localStorage.getItem("Play-It_RoomId"));
+}
+
+export function getArtistsSpotify(artistsArray) {
+    var returnString = '';
+    var i = 0;
+    artistsArray.forEach(artist => {
+        returnString = (i == 0) ? artist.name : returnString+ ' & ' +artist.name;
+        i++;
+    });
+    return returnString;
 }

@@ -23,12 +23,12 @@ import { Snackbar, Typography } from "@mui/material";
 import { PseudoGenerated } from './services/pseudoGenerator';
 
 import { CreateGoogleAnalyticsEvent } from './services/googleAnalytics';
-import { GFontIcon, UserIsFromApp, appApkFileUrl, envAppNameHum, isEmpty, isVarExist, isVarExistNotEmpty, setPageTitle } from "./services/utils";
+import { GFontIcon, UserIsFromApp, appApkFileUrl, checkStorageRoomId, envAppNameHum, isEmpty, isVarExist, isVarExistNotEmpty, saveSpotifyToken, setPageTitle, setUserSpotifyToken, userSpotifyTokenObject } from "./services/utils";
 
 import { withTranslation } from 'react-i18next';
 import { createUserDataObject } from "./services/utilsArray";
 import { browserLocalPersistence, createUserWithEmailAndPassword, getAdditionalUserInfo, onAuthStateChanged, setPersistence, signInAnonymously, signInWithEmailAndPassword, signInWithPhoneNumber, signInWithPopup, signOut } from "firebase/auth";
-import {  doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import {  Timestamp, doc, getDoc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
 import { getCleanRoomId, updateFirebaseUser } from "./services/utilsRoom";
 import { useNavigate, useParams } from 'react-router-dom';
 import ModalAuthPhone from "./components/rooms/modalsOrDialogs/ModalAuthPhone";
@@ -47,6 +47,9 @@ function App( {t} ) {
   var testRoomIdGetter = isVarExist(routeParams.roomId) ? routeParams.roomId : (window.location.pathname.substring(1).length === 5) ? window.location.pathname.substring(1) : '';
   const [roomId, setRoomId] = useState(testRoomIdGetter);
 
+  // temp token infos
+  const [spotifyToken, setSpotifyToken] = useState(null);
+
   // user infos
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [userInfos, setUserInfo] = useState({});
@@ -63,18 +66,23 @@ function App( {t} ) {
   const [loginOkSnackBarOpen, setLoginOkSnackBarOpen] = useState(false);
   const [logoutOkSnackBarOpen, setLogoutOkSnackBarOpen] = useState(false);
 
+  const urlHash = window.location.hash; 
+  const haveSpotifyTokenInUrl = urlHash.includes("access_token"); // spotify hash
   useEffect(() => {
-      if(localStorage.getItem("Play-It_RoomId") && isEmpty(roomId)) {
-        joinRoomByRoomId(localStorage.getItem("Play-It_RoomId"));
-      }
-      if(localStorage.getItem("Play-It_RoomId") && !isEmpty(roomId)) {
-        localStorage.setItem("Play-It_RoomId", getCleanRoomId(roomId));
-      }
-  })
+    if(haveSpotifyTokenInUrl && !isAppLoading && userInfos) {
+      let SpotifyToken = urlHash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1];
+      let userRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, userInfos.uid);
+      saveSpotifyToken(userRef,userSpotifyTokenObject(SpotifyToken),userInfos, setUserInfo, joinRoomByRoomId);
+    } 
+    if(!haveSpotifyTokenInUrl) { 
+  //    checkStorageRoomId(roomId, joinRoomByRoomId);
+    }
+  }, [urlHash, isAppLoading])
 
-  
+
+  // phone modal login (maybe to move ?)
   useEffect(() => {
-      setIsLoginLoading(phoneAuthModalOpen);
+    setIsLoginLoading(phoneAuthModalOpen);
   }, [phoneAuthModalOpen]);
 
   function createNewRoom() {
@@ -230,6 +238,28 @@ function App( {t} ) {
 
     return () => unsubscribe();
   }, []);
+
+/*
+useEffect(() => {
+        let unsubscribe = () => {};
+        if(!isAppLoading && isVarExistNotEmpty(userInfos)) {        
+          console.log('app');
+          const userDocRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, userInfos.uid);
+          unsubscribe = onSnapshot(userDocRef, (doc) => {
+              var userDataInFb = doc.data();
+              var tempUserDataGlobalDatas = userInfos;
+              tempUserDataGlobalDatas.displayName = userDataInFb.displayName;
+              tempUserDataGlobalDatas.customDatas = userDataInFb;
+              console.log(tempUserDataGlobalDatas);
+              setUserInfo(tempUserDataGlobalDatas);
+          });
+        } else {
+          unsubscribe();
+        }
+
+        return () => unsubscribe();
+	}, [isAppLoading]); 
+*/
 
   /* LOGOUT FUNCTION */
   function logOut() {

@@ -12,7 +12,7 @@ const RoomTutorial = ({t, layout, customClass}) => {
     useEffect(() => {
         setTimeout(() => {
             returnAnimateReplace(animatedElementsTutoRef, {In:"Out", Up:"Down"}, /In|Up|animate__delay/gi);
-        }, 8000);
+        }, 6000);
     });
 
     return(

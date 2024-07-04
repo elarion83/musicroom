@@ -7,6 +7,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import { withTranslation } from 'react-i18next';
 import ModalsHeader from '../../generalsTemplates/modals/ModalsHeader';
+import { SlideUp } from '../../../services/materialSlideTransition/Slide';
 
 const ModalEnterRoomPassword = ({ t, password, open, changeOpen }) => {
 
@@ -28,7 +29,14 @@ const ModalEnterRoomPassword = ({ t, password, open, changeOpen }) => {
     }
 
     return(
-       <Dialog open={open}>
+       <Dialog open={open} TransitionComponent={SlideUp} onClose={(e) => changeOpen(false)} sx={{
+            "& .MuiDialog-container": {
+                "& .MuiPaper-root": {
+                width: "100%",
+                maxWidth: "500px",  // Set your width here
+                },
+            },
+        }}>
             <ModalsHeader icon={() => <PasswordIcon />} title={t('ModalLoginFormPlaceholderPassword')} />
 
             <DialogContent dividers sx={{pt:0}}>

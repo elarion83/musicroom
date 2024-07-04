@@ -198,8 +198,17 @@ export function createUserDataObject(userUid = 0, registerType, pseudo, anonLogi
         uid:userUid,
         createdFrom: UserIsFromApp ? 'app' : 'web',
         loginType: anonLogin ? 'anon' : registerType,
+        spotifyConnect: {
+            token : '',
+            refreshtoken:'',
+            expiration: 0,
+            alreadyConnected:false,
+            connected:false,
+            lastConnexionTimestamp:null,
+        },
         userParams:{
             NotifsActivated:true
         }
+        
     }
 }

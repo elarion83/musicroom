@@ -16,8 +16,6 @@ import { timestampToHoursAndMinOptions } from "../../../services/utilsArray";
 
 const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDisconnectFromSpotifyModal, handleDisconnectFromDeezerModal, handleChangeGeoloc, handleChangeRoomParams }) => {
 
-    const REDIRECT_URI = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ":" + window.location.port : '');
-
     const [showPassword, setShowPassword] = useState(false);
 
     const [password, setPassword] = useState(roomParams.password);
@@ -140,34 +138,14 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
                         </Alert>
                     */}
 
-                    {roomParams.spotify.IsLinked &&
                         <Button
                             sx={{ bgcolor: '#1ed760', mb:3 }}
                             startIcon={<Icon style={{ display: 'inline', color: 'white', marginRight: '0.5em' }} icon="mdi:spotify" />}
                             variant="contained"
                             color="success"
-                            onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
+                            onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${process.env.REACT_APP_FRONT_HOME_URL}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
                             {t('ModalParamsRoomConnectToSpotifyText')}
                         </Button>
-                    }
-                    {roomParams.spotify.IsLinked &&
-                        <Alert
-                        sx={{mb:3}}
-                            action={
-                                <Tooltip title="Forcer la déconnexion">
-                                    <Button onClick={e => handleDisconnectFromSpotifyModal(true)}>
-                                        <ExitToAppIcon fontSize="small" />
-                                    </Button>
-                                </Tooltip>
-                            }
-                        >
-                            <b>{t('ModalParamsRoomConnectedToSpotifyText')}</b>
-                            <Typography fontSize='small' className='fontFamilyNunito'>
-                                Grâce à {roomParams.spotify.UserConnected} à {' '}
-                                {new Date(roomParams.spotify.TokenTimestamp).toLocaleTimeString('fr-FR', timestampToHoursAndMinOptions).replace(':', 'h')}
-                            </Typography>
-                        </Alert>
-                    }
 
                     {Object.entries(paramsArray).map(([key, param]) => {
                         return(
