@@ -373,12 +373,22 @@ export function getReadeableDistance(distanceInMeters) {
 
 export const appApkFileUrl = process.env.REACT_APP_FRONT_HOME_URL+"/play-it.apk";
 
+// retourne le timestamp d'un certain moment
 export function getTimeStampOfMoment(moment) {
-      switch (moment) {
-        case '1HourAgo':
-            let oneHourAgo = Timestamp.now().toDate();
-            oneHourAgo.setHours(oneHourAgo.getHours() - 1);
-            return Timestamp.fromDate(oneHourAgo).seconds;
-        default:
+    let hoursOffset = parseFloat(moment);
+
+    // Obtenir le timestamp actuel en millisecondes
+    let currentTimestamp = Date.now();
+
+    // Calculer le décalage en millisecondes
+    let offsetMilliseconds = hoursOffset * 60 * 60 * 1000;
+
+    // Calculer le nouveau timestamp en ajoutant ou soustrayant le décalage
+    let newTimestamp = currentTimestamp + offsetMilliseconds;
+
+    // Retourner le nouveau timestamp
+    return newTimestamp;
+
+}
     }
 }

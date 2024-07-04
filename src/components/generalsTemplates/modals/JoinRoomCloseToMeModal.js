@@ -27,7 +27,7 @@ const JoinRoomCloseToMeModal = ({ t, open, close, handleJoinRoom, userPosition})
     const fetchRooms = async () => {
         setLoadingPlaylistSearch(true);
         try {
-            const q = query(collection(db, process.env.REACT_APP_ROOM_COLLECTION), where('roomParams.isLocalisable', '==', true),  where('creationTimeStamp', '>', getTimeStampOfMoment('1HourAgo')), orderBy('creationTimeStamp', 'desc') );
+            const q = query(collection(db, process.env.REACT_APP_ROOM_COLLECTION), where('roomParams.isLocalisable', '==', true),  where('creationTimeStamp', '>', getTimeStampOfMoment('-0.5')), orderBy('creationTimeStamp', 'desc') );
             const querySnapshot = await getDocs(q);
             const tempList = [];
             querySnapshot.forEach(doc => {

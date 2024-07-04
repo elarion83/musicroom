@@ -187,10 +187,11 @@ export const timestampToHoursAndMinOptions = {
 
 export function createUserDataObject(userUid = 0, registerType, pseudo, anonLogin = false) {
     var userColor = getRandomHexColor();
+    var nowTimestamp = Date.now();
     return {
         displayName:pseudo, 
-        creationTime:Date.now(),
-        lastSignInTime:Date.now(),
+        creationTime:nowTimestamp,
+        lastSignInTime:nowTimestamp,
         color: userColor,
         colorRgb:hexColorToRgb(userColor),
         avatarId:randomInt(1,9),
