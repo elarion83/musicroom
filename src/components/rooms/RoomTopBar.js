@@ -175,14 +175,10 @@ const RoomTopBar = ({
                 }
             </SwipeableDrawer>
             <Tooltip  className='animate__animated animate__fadeInLeft animate__delay-1s animate__fast' title={t('RoomLeftMenuRoomParams')} sx={{ bgColor:'#30363c'}}>
-                <Badge invisible={!isLinkedToSpotify && !isLinkedToDeezer} variant="dot" sx={{zIndex:'1200','& .MuiBadge-badge': {
-                    right:'10px',
-                    bgcolor:'var(--red-2)'
-                }}} >
+               
                     <TuneIcon 
                     onClick={e => handleOpenDrawerParam(!paramDrawerIsOpen)} 
                     sx={{mr:1, cursor:'pointer', color:'var(--white)'}}/>
-                </Badge>
             </Tooltip>
                 
             <Typography  className='animate__animated animate__fadeInLeft animate__fast' component="div" sx={{ flexGrow: 1 , textTransform:'uppercase', fontSize:'12px',}}>

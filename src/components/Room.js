@@ -797,6 +797,7 @@ window.location.href = process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT+'?client
                                                                             playingLastInListInComp={playingLastInList}
                                                                             roomPlayedActuallyPlayed={barPercentage} 
                                                                             playerType={room.playlistUrls[playerIdPlayed].source}
+                                                                            spotifyControlsShown={currentUser.customDatas.spotifyConnect.connected}
                                                                         />
                                                                 </Grid>
                                                             </Box>
