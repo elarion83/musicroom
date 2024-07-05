@@ -26,6 +26,7 @@ import SearchResultItem from '../SearchResultItem';
 import { mockYoutubeSearchResoltForVald, mockYoutubeSearchResultForVald, mockYoutubeTrendResult } from '../../../services/mockedArray';
 import YoutubeVideoSlider from '../../../services/YoutubeVideoSlider';
 import { returnAnimateReplace } from '../../../services/animateReplace';
+import { checkRoomSpotifyTokenExpiration } from '../../../services/utilsRoom';
 const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, roomIsPlaying, currentUser, validatedObjectToAdd, DeezerTokenProps }) => {
     const [mediaSearchResultYoutube, setMediaSearchResultYoutube] = useState([]);
     const [mediaSearchResultSpotify, setMediaSearchResultSpotify] = useState([]);
@@ -130,7 +131,16 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                     axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, {
                         params: youtubeApiSearchObject(searchTerm,24, 'relevance')
                     })
-                    .then(function (response) {
+                    .then(async function (response) {
+                        if (spotifyEnabler.isLinked) {
+                            checkRoomSpotifyTokenExpiration(room);
+                            axios.get("https://api.spotify.com/v1/search", {
+                                headers: { Authorization: `Bearer ${spotifyEnabler.token}` },
+                                params: spotifyApiSearchObject(searchTerm)
+                            }).then(function (response) {
+                                setMediaSearchResultSpotify(response.data.tracks.items);
+                            });
+                        }
                         setMediaSearchResultYoutube(response.data.items);
                         setShowYoutubeTrends(false);
                         setIsSearching(false);
@@ -139,11 +149,11 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                 } else {
                     
                     if (spotifyEnabler.isLinked) {
-                        await axios.get("https://api.spotify.com/v1/search", {
+                        checkRoomSpotifyTokenExpiration(room);
+                        axios.get("https://api.spotify.com/v1/search", {
                             headers: { Authorization: `Bearer ${spotifyEnabler.token}` },
                             params: spotifyApiSearchObject(searchTerm)
                         }).then(function (response) {
-                            console.log(response);
                             setMediaSearchResultSpotify(response.data.tracks.items);
                         });
                     }
@@ -208,7 +218,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                     </LoadingButton>
                 </Grid>
 
-                {room.localeYoutubeTrends.length > 0 && room.localeYoutubeMusicTrends.length > 0 && showYoutubeTrends &&
+                {(room.localeYoutubeTrends.length > 0 && room.localeYoutubeMusicTrends.length > 0 && showYoutubeTrends) &&
                 <Container sx={{padding:'0 !important', paddingBottom:'90px !important' }} maxWidth={false}>
                     
                     <Typography variant="h6" sx={{mt:1, ml:1}} className='colorWhite 'gutterBottom>

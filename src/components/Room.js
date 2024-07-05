@@ -294,7 +294,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 	useEffect(() => {
         if(loaded) {
             /* LOAD YOUTUBE TRENDS */
-            if(isEmpty(room.localeYoutubeTrends.length)) {
+            if(isEmpty(room.localeYoutubeTrends)) {
                 if(isDevEnv()) {
                     updateFirebaseRoom( roomRef , {
                         localeYoutubeTrends: mockYoutubeTrendResult,
