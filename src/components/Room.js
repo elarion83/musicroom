@@ -705,7 +705,9 @@ window.location.href = process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT+'?client
                                                                     }
                                                                 </>
                                                             ) : (
-                                                                <Box >
+                                                                <Grid className="react-player" >
+                                                                    
+                                                                           
                                                                     <img style={{marginLeft:'auto', display:'block',marginRight:'auto',maxHeight:'240px'}} src={room.playlistUrls[room.playing].visuel} />
                                                                     {currentUser.customDatas.spotifyConnect.connected ? 
                                                                         (
@@ -720,8 +722,15 @@ window.location.href = process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT+'?client
                                                                                 autoPlay={roomIsPlaying}
                                                                                 initialVolume={localVolume}
                                                                             />
-                                                                        ) : (
-                                                                            <Alert className="alertConnectSpotify"
+                                                                        ) : (<></>
+                                                                        )
+                                                                    }
+                                                                </Grid>
+                                                            )
+                                                        }
+                                                    </>
+                                                }
+                                                 {!currentUser.customDatas.spotifyConnect.connected && <Alert className="animate__animated animate__fadeInUp animate__slow texturaBgButton bord2 bordGreen bordSolid alertConnectSpotify"
                                                                                             onClick={(e) => connectToSpotify(true)} 
 
 
@@ -729,15 +738,7 @@ window.location.href = process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT+'?client
                                                                                 <AlertTitle                                                                                 onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${process.env.REACT_APP_FRONT_HOME_URL}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}
  sx={{fontWeight:"bold"}}>Lecteur spotify</AlertTitle>
                                                                                 <Typography fontSize="small" component="p">Clique pour relier ton compte spotify premium</Typography>
-                                                                            </Alert>
-                                                                        )
-                                                                    }
-                                                                </Box>
-                                                            )
-                                                        }
-                                                    </>
-                                                }
-                                                
+                                                                            </Alert>}
                                             </Grid>
                                             <Grid item sm={8} xs={12} sx={{ padding:0,pl:0,ml:0, mb: 0,pt:0,height:'100%', color:'white' }} className={`player_right_side_container`}>
                                                 { /* pip ? 'Disable PiP' : 'Enable PiP' */ }
