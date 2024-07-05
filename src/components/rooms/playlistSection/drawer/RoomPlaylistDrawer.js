@@ -87,14 +87,6 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable, room,roomRef,open, changeOpen
                        
                     </ListItem>
                      
-                    {isFromSpotify(data) && !isSpotifyAvailable && 
-                        <>
-                            <Divider />
-                            <ListItem sx={{pt:0, mt:0}}>
-                                <ListItemText primary="Lecture Impossible" secondary="Spotify déconnecté de la playlist" />
-                            </ListItem>
-                        </>
-                    }
                     <Divider variant="middle" light={true} sx={{width:'40%'}} />
                     <ListItemText sx={{m:1,ml:2}}>
                         <Button size="small" variant="text" 

@@ -33,6 +33,21 @@
     .playerButtons {
         padding: 0;
     }
+
+    .iconOverPlayer {  
+        position: absolute;
+        z-index: 10000;
+        width: 100%;
+        text-align: center;
+        height: 80vh;
+        line-height: 100%;
+        top: 0;
+        padding-top: 40vh;
+    }
+
+    .playerSection .playerContainer {
+        overflow: visible;
+    }
 }
 
 #root:has(.fullscreenLayout) {

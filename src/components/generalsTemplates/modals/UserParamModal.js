@@ -37,6 +37,7 @@ const UserParamModal = ({ t, open, changeOpen, user = null, setUserInfo = null, 
     async function resetSpotifyToken() {
         user.customDatas.spotifyConnect = userSpotifyTokenObject(null, 'reset');
         setUserInfo(user);
+        changeOpen(false);
     }
 
     return(
