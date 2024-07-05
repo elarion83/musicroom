@@ -1,7 +1,7 @@
 import React from "react";
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { Alert, AlertTitle, Box, Dialog, DialogContent, FormGroup, Grid, IconButton, InputAdornment, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Typography } from "@mui/material";
+import { Alert, AlertTitle, Box, Button, Dialog, DialogContent, FormGroup, Grid, Icon, IconButton, InputAdornment, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import { LoadingButton } from "@mui/lab";
@@ -12,7 +12,7 @@ import { withTranslation } from 'react-i18next';
 import ModalsHeader from "./ModalsHeader";
 import { ReactSVG } from "react-svg";
 import { AccountCircle, CancelOutlined , Save } from "@mui/icons-material";
-import { cleanPseudoEntered, delay, isPseudoEnteredValid, isUserAnon, isVarExist } from "../../../services/utils";
+import { cleanPseudoEntered, delay, isPseudoEnteredValid, isUserAnon, isVarExist, userSpotifyTokenObject } from "../../../services/utils";
 import CachedIcon from '@mui/icons-material/Cached';
 import UserAvatarComponent from "../../../services/utilsComponents";
 const UserParamModal = ({ t, open, changeOpen, user = null, setUserInfo = null, ownProfile = true}) => {
@@ -32,6 +32,11 @@ const UserParamModal = ({ t, open, changeOpen, user = null, setUserInfo = null, 
         await delay(500);
         setIsEditingUserLoading(false);
         setIsEditingPseudo(false);
+    }
+
+    async function resetSpotifyToken() {
+        user.customDatas.spotifyConnect = userSpotifyTokenObject(null, 'reset');
+        setUserInfo(user);
     }
 
     return(
@@ -87,8 +92,34 @@ const UserParamModal = ({ t, open, changeOpen, user = null, setUserInfo = null, 
                                     <ListItemText primary={t('UserMemberLastLogin')+' '+new Date(user.customDatas.lastSignInTime).toLocaleDateString('fr-FR', timestampToHoursAndMinOptions)} />
                                 </ListItem>
                             </List>
+                            
+                        {ownProfile && 
+                            <>
+                                {user.customDatas.spotifyConnect.connected ? (
+                                    <Button
+                                        className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
+
+                                        startIcon={<Icon style={{ display: 'inline', color: 'white', marginRight: '0.5em' }} icon="mdi:spotify" />}
+                                        variant="contained"
+                                        color="success"
+                                        onClick={e => resetSpotifyToken()}>
+                                        Me déconnecter de spotify
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        className='main_bg_color btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
+                                        startIcon={<Icon style={{ display: 'inline', color: 'white', marginRight: '0.5em', }} icon="mdi:spotify" />}
+                                        variant="contained"
+                                        color="success"
+                                        onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${process.env.REACT_APP_FRONT_HOME_URL}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
+                                        Connecter a spotify
+                                    </Button>
+                                )
+                                }
+                            </>
+                        }
                         </Box>
-                                    
+                        
                         <FormGroup>
                             {user.isAnonymous && 
                                 <Alert sx={{mb:2, alignItems: 'center'}}  severity='warning'>

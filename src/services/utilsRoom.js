@@ -1,6 +1,7 @@
-import { updateDoc } from "firebase/firestore";
-import { isFromSpotify } from "./utils"; 
+import { doc, updateDoc } from "firebase/firestore";
+import { isFromSpotify, userSpotifyTokenObject } from "./utils"; 
 import { v4 as uuid } from 'uuid';
+import { db } from "./firebase";
 
 export function getLastNotif(roomNotifs = []) {
     return roomNotifs[roomNotifs.length - 1];
@@ -15,12 +16,21 @@ export function getCleanRoomId(id = null) {
 }
 
 /* PLAYER HELPERS */
-export function playedSeconds(player) {
-    return Math.abs(player.current.getCurrentTime());
+export function playedSeconds(player, origin = 'youtube') {
+    if('spotify' == origin) {
+        return Math.floor(player.current.state.progressMs/1000);
+    }
+    else {
+        return Math.floor(player.current.getCurrentTime());
+    }
 }
 
 export function playerNotSync(room, player) {
     return((Math.abs(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds) - playedSeconds(player) > 3) || (Math.abs(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds) - playedSeconds(player) < -3));
+}
+
+export function playerSpotifyNotSync(room, player) {
+    return((Math.abs(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds) - playedSeconds(player, 'spotify') > 5) || (Math.abs(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds) - playedSeconds(player, 'spotify') < -5));
 }
 
 /* FIREBASE HELPERS */
@@ -35,4 +45,19 @@ export async function updateFirebaseUser(userRef, newUserData, merge=true) {
 
 export function roomIdLocallyStored() {
     return localStorage.getItem("Play-It_RoomId");
+}
+
+export function checkCurrentUserSpotifyTokenExpiration(currentUser) {
+    if(currentUser.customDatas.spotifyConnect.expiration < Date.now()) {
+        let userRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, currentUser.uid);
+        updateFirebaseUser(userRef,{spotifyConnect:userSpotifyTokenObject(null, 'reset')});
+    }
+}
+
+
+export function checkRoomSpotifyTokenExpiration(room) {
+    if(room.enablerSpotify.expirationTokenTimestamp < Date.now()) {
+        let roomRef = doc(db, process.env.REACT_APP_ROOM_COLLECTION, room.id);
+        updateFirebaseRoom(roomRef,{enablerSpotify:userSpotifyTokenObject(null, 'reset')});
+    }
 }

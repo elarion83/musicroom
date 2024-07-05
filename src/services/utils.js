@@ -398,16 +398,31 @@ export function getTimeStampOfMoment(moment) {
 
 }
 
-export function userSpotifyTokenObject(token) {
+export function userSpotifyTokenObject(token = null, connectOrReset = 'connect') {
     return {
-        token: token,
+        token: (connectOrReset == 'connect') ? token : '',
         refreshtoken:null,
-        expiration: getTimeStampOfMoment('+1'),
+        expiration: (connectOrReset == 'connect') ? getTimeStampOfMoment('+1') : '',
         alreadyConnected:true,
-        connected:true,
-        lastConnexionTimestamp: Date.now(),
+        connected:(connectOrReset == 'connect') ? true : false,
+        lastConnexionTimestamp: (connectOrReset == 'connect') ? Date.now() : '',
     }
 }
+
+export function roomSpotifyTokenObject(userToken = null, userUid = null, connectOrReset = 'reset') {
+    return {
+        isLinked: (connectOrReset == 'connect') ? true : false,
+        isLinkable:true,
+        token:(connectOrReset == 'connect') ? userToken.token : '',
+        expirationTokenTimestamp: (connectOrReset == 'connect') ? userToken.expiration : '',
+        alreadyHaveBeenLinked:true,
+        userConnected:(connectOrReset == 'connect') ? userUid : '',
+        tokenTimestamp: (connectOrReset == 'connect') ? userToken.lastConnexionTimestamp : '',
+    }
+}
+
+
+
 export function checkStorageRoomId(roomId = '', joinRoomByRoomId ) { // handle recovery of room id (from url or local memory)
     if(localStorage.getItem("Play-It_RoomId")) { // check if user have roomid in memory storage
         isEmpty(roomId) ?  

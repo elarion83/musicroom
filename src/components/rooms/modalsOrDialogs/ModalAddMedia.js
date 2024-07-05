@@ -262,7 +262,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                                                 <SearchResultItem
                                                     key={idsp}
                                                     image={media.album.images[0].url}
-                                                    title={media.name}
+                                                    title={media.name+ ' - '+media.artists[0].name}
                                                     source='spotify'
                                                     uid={uuid().slice(0, 10).toLowerCase()}
                                                     platformId={media.uri}

@@ -4,48 +4,14 @@
 *
 */
 
-._ControlsRSWP, ._DevicesRSWP, ._InfoRSWP a+div, ._ActionsRSWP  {
+._ControlsRSWP, ._DevicesRSWP, ._InfoRSWP a+div, ._ActionsRSWP, .PlayerRSWP, ._ContentRSWP, ._SliderRSWP  {
 display: none !important;
 }
 
-.PlayerRSWP {
-    display: flex;
-    flex-direction: column-reverse;
-    width: 100%;
-    height:  !important;
-    min-height: 0 !important;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0em;
-
-    img {
-        display: none;
-    }
-}
-
-._ContentRSWP {
-    height: 0 !important;
-    min-height: 0 !important;
-}
-._SliderRSWP span {
-    cursor: pointer;
-    -webkit-box-shadow: 0px 2px 15px 1px rgba(0,0,0,0.57) !important;
-    box-shadow: 0px 2px 15px 1px rgba(0,0,0,0.57) !important;
-    height: 15px !important;
-    width: 15px !important;
-    left: -5px !important;
-    top: -5px !important;
-    background-color: var(--main-color) !important;
-}
 ._InfoRSWP {
     border:none !important;
     a {
         width: 100%;
         display: block;
     }
-}
-
-
-.spotifyDisplay .player_right_side_container {
-    text-align: center;
 }

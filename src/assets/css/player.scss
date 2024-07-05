@@ -13,11 +13,16 @@
 
     .playerContainer {
         position: relative;
+        overflow: hidden;
         min-height: 150px;
+        
+        background-image:url('../img/textura_white.png');
+        background-size: cover;  
+        background-color: rgba(21, 10, 10, 0.74);
 
         .react-player { 
             > div {
-                max-height: 240px;
+                max-height: 240px
             }
             +div {
                 width: 100%;
@@ -27,6 +32,20 @@
                 top: 0;
                 cursor: pointer;
             }
+        }
+
+        .alertConnectSpotify {  
+            position: absolute;
+            cursor: pointer !important;
+            z-index: 999;
+            top: 10%;
+            height: 80%;
+            align-items: center;
+            width: 80%;
+            left: 10%;
+            opacity: 0.9;
+            margin-left: auto;
+            margin-right: auto;
         }
     }
 
