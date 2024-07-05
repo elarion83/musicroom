@@ -188,6 +188,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     // TUTORIAL
     const [isTutorialShown, setIsTutorialShown] = useState(true);
 
+    const [vart , setVart] = useState(false);
     useEffect(() => {
         if(OpenAddToPlaylistModal && isTutorialShown) {
             setIsTutorialShown(false);
@@ -382,7 +383,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }
 
 
-    async function throttletest() {     
+    function throttletest() {     
         if((loaded && roomIsPlaying && isFromSpotify(room.playlistUrls[playerIdPlayed]))) {
             if(isVarExist(spotifyPlayerRef.current)) {   
                 var SpotifyPlayedPercents = Math.floor(spotifyPlayerRef.current.state.position);
@@ -578,10 +579,24 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         setOpenLeaveRoomModal(leaveRoomModalIsOpen);
     }
 
+    const [spotifyEndSwitchTempFix, setSpotifyEndSwitchTempFix] = useState(true);
     async function SpotifyPlayerCallBack(e){
-    
+        if(e.type === 'player_update') {
+            if(e.previousTracks[0] && (e.track.id === e.previousTracks[0].id && spotifyEndSwitchTempFix) && !mediaIndexExist(room.playlistUrls,playerIdPlayed+1) && room.roomParams.isAutoPlayActivated) {
+                
+                if(isActuallyAdmin) {
+                    addMediaForAutoPlayByYoutubeId(room.playlistUrls[playerIdPlayed].title);
+                    await delay(250);
+                    setIdPlaying(playerIdPlayed+1);
+                } else {
+                }
+            }
+        }
     }
    
+   function connectToSpotify() {
+window.location.href = process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT+'?client_id='+process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID+'&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri='+process.env.REACT_APP_FRONT_HOME_URL+'&response_type='+process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE;
+   }
     // use state change to change spotify volume
     useEffect(() => {
         if(loaded && isVarExist(spotifyPlayerRef.current)) { 
@@ -690,8 +705,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                                     }
                                                                 </>
                                                             ) : (
-                                                                <Box 
-                                                                        className='react-player'>
+                                                                <Box >
                                                                     <img style={{marginLeft:'auto', display:'block',marginRight:'auto',maxHeight:'240px'}} src={room.playlistUrls[room.playing].visuel} />
                                                                     {currentUser.customDatas.spotifyConnect.connected ? 
                                                                         (
@@ -708,9 +722,10 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                                             />
                                                                         ) : (
                                                                             <Alert className="alertConnectSpotify"
-                                                                                onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${process.env.REACT_APP_FRONT_HOME_URL}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}
-                                                                                sx={{position:'absolute', zIndex:9, cursor:'pointer !important'}}
-                                                                                >
+                                                                                            onClick={(e) => connectToSpotify(true)} 
+
+
+                                                                                                                                                                >
                                                                                 <AlertTitle                                                                                 onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${process.env.REACT_APP_FRONT_HOME_URL}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}
  sx={{fontWeight:"bold"}}>Lecteur spotify</AlertTitle>
                                                                                 <Typography fontSize="small" component="p">Clique pour relier ton compte spotify premium</Typography>
