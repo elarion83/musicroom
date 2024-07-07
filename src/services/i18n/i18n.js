@@ -134,7 +134,7 @@ const resources = {
         "ModalShareRoomUrlCopiedText": "URL Copied !",
         
         "ModalParamsRoomTitle": "Playlist settings",
-        "ModalParamsRoomConnectToSpotifyText":"Connect to Spotify Premium",
+        "ModalParamsRoomConnectToSpotifyText":"Connect to Spotify",
         "ModalParamsRoomConnectedToSpotifyText":"The playlist is connected to Spotify",
         "ModalParamsRoomConnectToDeezerText":"Connect to Deezer",
         "ModalParamsRoomConnectedToDeezerText":"The playlist is connected to Deezer",
@@ -238,10 +238,10 @@ const resources = {
         "GeneralNearBy" : 'a proximité',
 
         "HomePageSlide1Title":"Une playlist en temps réel entre potes !",
-        "HomePageSlide1Text1" : "Ajoutez des médias depuis Spotify et Youtube à une playlist à plusieurs lue en temps réel.",
-        "HomePageSlide1Text2":"Votez, tchatez, réagissez et vibrez ensemble au rythme de votre playlist. Entre potes, en soirée, en voiture, en voyage, ou au sport, Play-it est l'outil indispensable !",
+        "HomePageSlide1Text1" : "Ajoute des médias depuis Spotify et Youtube à une playlist avec tes potes !",
+        "HomePageSlide1Text2":"Votez, tchatez, réagissez et vibrez ensemble au rythme de votre playlist. Entre potes, en soirée, en voiture, en voyage, Play-it est indispensable !",
         "HomePageSlide2Title" :"En étant tous au même endroit ..",
-        "HomePageSlide2Text":"Idéal pour les soirées, Play-it permet a chaque convive d'ajouter sa musique ou sa vidéo à la suite de la playlist, plus besoin d'utiliser le téléphone de l'hôte de la soirée !",
+        "HomePageSlide2Text":"Idéal pour les soirées, avec Play-It chaque convive peut mettre la musique depuis son téléphone, plus besoin d'embêter de l'hôte de la soirée !",
         "HomePageSlide3Title" :".. ou en étant chacun chez soi",
         "HomePageSlide3Text1":"Vibre au même rythme que tes potes à des endroits différents de la planète !",
         "HomePageSlide3Text2":"En voyage, chacun dans sa voiture, chacun chez soi en révisant ou en mattant les dernières vidéos youtube sous la couette !",

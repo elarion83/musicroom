@@ -810,7 +810,7 @@ window.location.href = process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT+'?client
                                 }
                                 <Toolbar className="playlistToolbar">
                                     <Typography component="h6" className="fontFamilyNunito textCapitalize colorWhite" sx={{ flexGrow: 1, fontSize:'12px' }}>
-                                             {t('GeneralInPlaylist')} :
+                                             {t('GeneralInPlaylist')} 
                                     </Typography>
                                 </Toolbar>
                             </>
