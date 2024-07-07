@@ -702,7 +702,7 @@ window.location.href = process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT+'?client
                                                                 </>
                                                             ) : (
                                                                 <>
-                                                                    {!currentUser.customDatas.spotifyConnect.connected && isFromSpotify(room.playlistUrls[playerIdPlayed]) &&
+                                                                    {(!currentUser.customDatas.spotifyConnect.connected && isFromSpotify(room.playlistUrls[playerIdPlayed])) &&
                                                                         <Alert className="animate__animated animate__fadeInUp animate__slow texturaBgButton bord2 bordGreen bordSolid alertConnectSpotify" onClick={(e) => connectToSpotify(true)} >
                                                                             <AlertTitle sx={{fontWeight:"bold"}}>Lecteur spotify</AlertTitle>
                                                                             <Typography fontSize="small" component="p">Clique pour utiliser ton compte spotify premium</Typography>

@@ -74,8 +74,8 @@ function App( {t} ) {
       let userRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, userInfos.uid);
       saveSpotifyToken(userRef,userSpotifyTokenObject(SpotifyToken),userInfos, setUserInfo, joinRoomByRoomId);
     } 
-    if(!haveSpotifyTokenInUrl) { 
-  //    checkStorageRoomId(roomId, joinRoomByRoomId);
+    if(!haveSpotifyTokenInUrl && !isAppLoading && userInfos) { 
+      checkStorageRoomId(roomId, joinRoomByRoomId);
     }
   }, [urlHash, isAppLoading])
 
