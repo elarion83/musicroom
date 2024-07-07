@@ -8,7 +8,7 @@ import { getLocale } from "../utils";
 const resources = {
   en: {
     translation: {
-        "GeneralSlogan" : 'Real-time collective playlists',
+        "GeneralSlogan" : 'Real-time group playlists',
         "GeneralContinue":'Continue',
         "GeneralLogin" : "Login",
         "GeneralLogout":'Logout',
@@ -63,7 +63,7 @@ const resources = {
         "GeneralNearBy" : 'Nearby',
         
         "HomePageSlide1Title":"A real-time playlist for more than one person!",
-        "HomePageSlide1Text1" : "Add media from Spotify and Youtube to a collective playlist played back in real time.",
+        "HomePageSlide1Text1" : "Add media from Spotify and Youtube to a group playlist played back in real time.",
         "HomePageSlide1Text2":"With your mates, at a party, in the car, on a trip or at the gym, Play-it is the essential tool!",
         "HomePageSlide2Title" :"By all being in the same place...",
         "HomePageSlide2Text":"Ideal for parties, Play-it allows each guest to add their own music or video to the playlist, eliminating the need to use the party host's phone!",
@@ -184,7 +184,7 @@ const resources = {
   },
   fr: {
     translation: {
-        "GeneralSlogan" : 'Playlists collective en temps réel',
+        "GeneralSlogan" : 'Playlists à plusieurs en temps réel',
         "GeneralContinue":'Continuer',
         "GeneralLogin":'Connexion',
         "GeneralLogout":'Déconnexion',
@@ -238,7 +238,7 @@ const resources = {
         "GeneralNearBy" : 'a proximité',
 
         "HomePageSlide1Title":"Une playlist en temps réel entre potes !",
-        "HomePageSlide1Text1" : "Ajoutez des médias depuis Spotify et Youtube à une playlist collective lue en temps réel.",
+        "HomePageSlide1Text1" : "Ajoutez des médias depuis Spotify et Youtube à une playlist à plusieurs lue en temps réel.",
         "HomePageSlide1Text2":"Votez, tchatez, réagissez et vibrez ensemble au rythme de votre playlist. Entre potes, en soirée, en voiture, en voyage, ou au sport, Play-it est l'outil indispensable !",
         "HomePageSlide2Title" :"En étant tous au même endroit ..",
         "HomePageSlide2Text":"Idéal pour les soirées, Play-it permet a chaque convive d'ajouter sa musique ou sa vidéo à la suite de la playlist, plus besoin d'utiliser le téléphone de l'hôte de la soirée !",
