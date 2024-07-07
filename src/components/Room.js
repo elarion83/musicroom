@@ -870,7 +870,7 @@ window.location.href = process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT+'?client
                         currentUser={currentUser} 
                         youtubeLocaleTrends={room.youtubeLocaleTrends}
                         DeezerTokenProps={false} 
-                        spotifyTokenProps={room.enablerSpotify.Token} 
+                        spotifyTokenProps={room.enablerSpotify.token} 
                         validatedObjectToAdd={handleAddValidatedObjectToPlaylist} 
                     /> 
                     <ModalRoomParams 

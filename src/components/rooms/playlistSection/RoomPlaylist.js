@@ -9,7 +9,7 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Paper from '@mui/material/Paper';
-import { isEmpty, isFromSpotify } from '../../../services/utils';
+import { cleanMediaTitle, isEmpty, isFromSpotify } from '../../../services/utils';
 
 import { Icon } from '@iconify/react';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -53,7 +53,7 @@ const RoomPlaylist = ({ t, isSpotifyAvailable, handleChangeIdShownInDrawer, room
                                     }
                                     <Grid item sx={{ display: 'block', zIndex: 2, pl: 0, pb: 0.5, pt: 0.5, flexGrow: 1, overflow: 'hidden' }}>
                                         <Typography component="p" className="flexRowCenterHDirectChild varelaFontTitle textEllipsis" onClick={e => (idx === idDisplaying) ? handleChangeIdActuallyDisplaying(-1) : handleChangeIdActuallyDisplaying(idx)} sx={{ pl: 0, mb: -0.5, mt: 0, wordBreak: 'break-all' }}>
-                                            {isEmpty(d.title) ? d.url : d.title}
+                                            {isEmpty(d.title) ? d.url : cleanMediaTitle(d.title)}
                                         </Typography>
 
                                         {idx === roomIdActuallyPlaying && 

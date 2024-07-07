@@ -1,5 +1,5 @@
 import { doc, updateDoc } from "firebase/firestore";
-import { isFromSpotify, userSpotifyTokenObject } from "./utils"; 
+import { isFromSpotify, roomSpotifyTokenObject, userSpotifyTokenObject } from "./utils"; 
 import { v4 as uuid } from 'uuid';
 import { db } from "./firebase";
 
@@ -58,6 +58,6 @@ export function checkCurrentUserSpotifyTokenExpiration(currentUser) {
 export function checkRoomSpotifyTokenExpiration(room) {
     if(room.enablerSpotify.expirationTokenTimestamp < Date.now()) {
         let roomRef = doc(db, process.env.REACT_APP_ROOM_COLLECTION, room.id);
-        updateFirebaseRoom(roomRef,{enablerSpotify:userSpotifyTokenObject(null, 'reset')});
+        updateFirebaseRoom(roomRef,{enablerSpotify:roomSpotifyTokenObject(null,null, 'reset')});
     }
 }
