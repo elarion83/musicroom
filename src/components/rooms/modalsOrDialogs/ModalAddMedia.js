@@ -15,7 +15,7 @@ import Tabs from '@mui/material/Tabs';
 import validator from 'validator';
 import { YTV3APIDurationToReadable, cleanMediaTitle, delay, enablersDurationToReadable, getArtistsSpotify, getDisplayTitle, getLocale, getYTVidId, isEmpty, isProdEnv, isVarExist, isVarExistNotEmpty } from '../../../services/utils';
 import { withTranslation } from 'react-i18next';
-import { Button, Dialog, SwipeableDrawer, Typography } from '@mui/material';
+import { Button, Dialog, Icon, SwipeableDrawer, Typography } from '@mui/material';
 import SoundWave from "../../../services/SoundWave";
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';

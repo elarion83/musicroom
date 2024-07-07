@@ -881,6 +881,7 @@ window.location.href = process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT+'?client
                         handleDisconnectFromDeezerModal={setOpenForceDisconnectDeezerModal} 
                         handleDisconnectFromSpotifyModal={setOpenForceDisconnectSpotifyModal} 
                         roomParams={room.roomParams}
+                        spotify={room.enablerSpotify}
                         handleChangeGeoloc={handleUpdateRoomGeoloc} 
                     />
                     <BottomInteractions 

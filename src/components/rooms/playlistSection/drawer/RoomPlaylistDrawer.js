@@ -4,7 +4,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 import { Accordion, AccordionDetails, AccordionSummary, Divider, Drawer, List, ListItem, ListItemText, Typography } from "@mui/material";
 import React, { useState } from "react";
-import {delay, isFromSpotify, isVarExistNotEmpty} from '../../../../services/utils';
+import {cleanMediaTitle, delay, isFromSpotify, isVarExistNotEmpty} from '../../../../services/utils';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -72,7 +72,7 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable, room,roomRef,open, changeOpen
                             primary={
                                 <React.Fragment>
                                     <Typography component="h6" className="varelaFontTitle" fontWeight='bold' sx={{color:'var(--grey-dark)', textShadow:'1px 1px 1px var(--white)'}}  >
-                                        {data.title} 
+                                        {cleanMediaTitle(data.title)} 
                                     </Typography>
                                 </React.Fragment>
                             }

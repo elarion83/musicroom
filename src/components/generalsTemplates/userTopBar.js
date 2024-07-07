@@ -17,6 +17,8 @@ import UserParamModal from './modals/UserParamModal';
 import UserRoomListModal from './modals/UserRoomListModal';
 import { ReactSVG } from "react-svg";
 import { withTranslation } from 'react-i18next';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
 import UserAvatarComponent from '../../services/utilsComponents';
 import { LoadingButton } from '@mui/lab';
 const UserTopBar = ({ t, user, loggedIn,loginLoading, setUserInfo, handleLogout, handleOpenLoginModal, joinRoomByRoomId }) => {
@@ -78,7 +80,7 @@ const UserTopBar = ({ t, user, loggedIn,loginLoading, setUserInfo, handleLogout,
                 >
                 <MenuItem onClick={e => setUserParamModalOpen(true)}>
                     <ListItemIcon>
-                      <TuneIcon fontSize="small" />
+                      <AccountCircleIcon fontSize="small" />
                     </ListItemIcon>
                     <Typography className='varelaFontTitle'>
                       {t('UserMenuMyProfile')} 

@@ -43,7 +43,7 @@ const UserParamModal = ({ t, open, changeOpen, user = null, setUserInfo = null, 
     return(
         <Dialog open={open} TransitionComponent={SlideUp} onClose={(e) => changeOpen(false)}>
             
-            <ModalsHeader icon={() => <AccountCircleIcon />} title={t('ModalUserSettingsTitle')} />
+            <ModalsHeader icon={() => <AccountCircleIcon />} title={t('UserMenuMyProfile')} />
 
             <DialogContent dividers sx={{pt:2}}>
                 {isVarExist(user) &&
@@ -73,7 +73,7 @@ const UserParamModal = ({ t, open, changeOpen, user = null, setUserInfo = null, 
                                     <Typography component="div"  fontSize="large" fontWeight="bold" className="fontFamilyNunito" sx={{display:'inline'}}>
                                         {user.customDatas.displayName}
                                     </Typography>
-                                    {(!isUserAnon(user) && ownProfile) &&
+                                    {(!(user.isAnonymous) && ownProfile) &&
                                         <IconButton aria-label="delete" sx={{p:0, ml:1}}  color="primary" onClick={(e) => setIsEditingPseudo(true)} >
                                             <EditIcon fontSize="small" />
                                         </IconButton>
@@ -101,19 +101,21 @@ const UserParamModal = ({ t, open, changeOpen, user = null, setUserInfo = null, 
                                         className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
 
                                         startIcon={<Icon style={{ display: 'inline', color: 'white', marginRight: '0.5em' }} icon="mdi:spotify" />}
-                                        variant="contained"
+                                        variant="contained"                            
+                                        sx={{ width:'100%' }}
                                         color="success"
                                         onClick={e => resetSpotifyToken()}>
                                         Me déconnecter de spotify
                                     </Button>
                                 ) : (
                                     <Button
+                                        sx={{ width:'100%' }}
                                         className='main_bg_color btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
                                         startIcon={<Icon style={{ display: 'inline', color: 'white', marginRight: '0.5em', }} icon="mdi:spotify" />}
                                         variant="contained"
                                         color="success"
                                         onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${process.env.REACT_APP_FRONT_HOME_URL}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
-                                        Connecter a spotify
+                                        {t('ModalParamsRoomConnectToSpotifyText')}
                                     </Button>
                                 )
                                 }

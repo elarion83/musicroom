@@ -14,7 +14,7 @@ import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 import ModalsHeader from "../../generalsTemplates/modals/ModalsHeader";
 import { timestampToHoursAndMinOptions } from "../../../services/utilsArray";
 
-const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDisconnectFromSpotifyModal, handleDisconnectFromDeezerModal, handleChangeGeoloc, handleChangeRoomParams }) => {
+const ModalRoomParams = ({ t, adminView,spotify, open, changeOpen, roomParams, handleDisconnectFromSpotifyModal, handleDisconnectFromDeezerModal, handleChangeGeoloc, handleChangeRoomParams }) => {
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -138,7 +138,10 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
                         </Alert>
                     */}
 
+                    {!spotify.isLinked && 
                         <Button
+                            className='main_bg_color btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
+
                             sx={{ bgcolor: '#1ed760', mb:3 }}
                             startIcon={<Icon style={{ display: 'inline', color: 'white', marginRight: '0.5em' }} icon="mdi:spotify" />}
                             variant="contained"
@@ -146,6 +149,7 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDis
                             onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${process.env.REACT_APP_FRONT_HOME_URL}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
                             {t('ModalParamsRoomConnectToSpotifyText')}
                         </Button>
+                    }
 
                     {Object.entries(paramsArray).map(([key, param]) => {
                         return(

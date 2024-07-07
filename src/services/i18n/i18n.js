@@ -230,7 +230,7 @@ const resources = {
         "GeneralSnackWelcome" : "Bienvenue {{who}} !",
         "GeneralSnackSeeYouSoon" : "A bientôt !",
         "GeneralNickname" : "Pseudo",
-        "GeneralDownloadAPK" : "Télécharger l'APP",
+        "GeneralDownloadAPK" : "Télécharge l'APP",
         "GeneralSendItToFriends" : "Envoyez la à vos amis",
         "GeneralSeeMore":'Voir plus',
         "GeneralSeeLess":'Voir moins',

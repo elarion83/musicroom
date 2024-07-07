@@ -86,7 +86,7 @@ export function cleanMediaTitle(mediaTitle) {
 }
 
 export function getDisplayTitle(media, length = 25) {
-    return media.title ? media.title : media.url.substring(0,length)+'..'
+    return media.title ? cleanMediaTitle(media.title) : media.url.substring(0,length)+'..'
 }
 
 export function formatNumberToMinAndSec(number) {
