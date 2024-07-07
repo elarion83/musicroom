@@ -69,7 +69,7 @@ const UserRoomListModal = ({t, open, changeOpen, user, joinRoomByRoomId}) => {
                     {Object.keys(roomList).length === 0 &&
                         <Alert severity="warning">{t('ModalUserRoomListEmpty')}.</Alert>
                     }
-                    <Grid container sx={{gap:'5px'}}>
+                    <Grid container>
                     {Object.entries(roomList).map(([key, room]) => {
 
                         var createdDate = new Date(room.creationTimeStamp).toLocaleDateString('fr-FR', timestampToDateoptions);

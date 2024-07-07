@@ -16,7 +16,7 @@ const PlayerButtons = ({room,playerControlsShown,playerType,spotifyControlsShown
     return(
         <>
             <LinearProgress className="mediaPlayingBar"  variant="determinate" value={roomPlayedActuallyPlayed} />
-            <Box sx={{width:roomPlayedActuallyPlayed+'%'}} className="mediaPlayingBarSoundWave"><SoundWave isPlayingOrNo={roomIsPlaying} waveNumber={150} /></Box>
+            
             {playerControlsShown  &&
             <>
                 <IconButton onClick={e => (playingFirstInList(playerIdPlayed)) ? setIdPlaying(playerIdPlayed-1) : ''}>
