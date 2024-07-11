@@ -239,15 +239,15 @@ const resources = {
 
         "HomePageSlide1Title":"Une playlist en temps réel entre potes !",
         "HomePageSlide1Text1" : "Ajoute des médias depuis Spotify et Youtube à une playlist avec tes potes !",
-        "HomePageSlide1Text2":"Votez, tchatez, réagissez et vibrez ensemble au rythme de votre playlist. Entre potes, en soirée, en voiture, en voyage, Play-it est indispensable !",
+        "HomePageSlide1Text2":"Créez, vibrez et réagissez ensemble au rythme de votre playlist. Entre potes, en soirée, en voiture, au travail, Play-it est indispensable !",
         "HomePageSlide2Title" :"En étant tous au même endroit ..",
-        "HomePageSlide2Text":"Idéal pour les soirées, avec Play-It chaque convive peut mettre la musique depuis son téléphone, plus besoin d'embêter de l'hôte de la soirée !",
-        "HomePageSlide3Title" :".. ou en étant chacun chez soi",
-        "HomePageSlide3Text1":"Vibre au même rythme que tes potes à des endroits différents de la planète !",
-        "HomePageSlide3Text2":"En voyage, chacun dans sa voiture, chacun chez soi en révisant ou en mattant les dernières vidéos youtube sous la couette !",
+        "HomePageSlide2Text":"Idéal pour les soirées, avec Play-It, chaque convive peut mettre la musique depuis son téléphone, plus besoin d'embêter de l'hôte de la soirée !",
+        "HomePageSlide3Title" :".. ou chacun de son côté !",
+        "HomePageSlide3Text1":"Vibrez ensemble et en même temps à des endroits différents !",  
+        "HomePageSlide3Text2":"En voyage, en séminaires d'entreprise, chacun chez soi en révisant ou en réunion à travers le globe !",
         "HomePageSlide4Title" :"Une playlist.. et bien plus !",
         "HomePageSlide4Text1": "Grâce au chat, aux émoticones et aux votes, les membres de la playlist font partie intégrante de l'ambiance !",
-        "HomePageSlide4Text2":"Retrouvez et relisez les playlist qui vous on plu grâce à la lecture désynchronisée !",
+        "HomePageSlide4Text2":"Lecture désynchronisé, mot de passe, paramètres personnalisés, sur play-it, c'est vous le maître !",
 
 
         "UserMenuMyProfile" : "Mon profil",
