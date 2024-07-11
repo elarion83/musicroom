@@ -25,37 +25,42 @@
             color: var(--white) !important;
         }
 
-        img.mainIcon {
-            width: 150px;
-            margin-bottom: 1em;
-            transform: none;
-            margin-left: auto;
-            z-index: 2;
-            margin-right: auto;
-            &.altIcon {
-            width: 116px;
-            top: 110px;
-            z-index: 1;
-            opacity: 0.5;
-            left: 20%;
-            position: absolute;
-            &.left {
-                left: 30%;
+        img {
+            filter: hue-rotate(180deg) saturate(1000%);
+
+            &.mainIcon {
+                width: 150px;
+                margin-bottom: 1em;
+                transform: none;
+                margin-left: auto;
+                z-index: 2;
+                margin-right: auto;
+
+                &.altIcon {
+                    width: 116px;
+                    top: 110px;
+                    z-index: 1;
+                    opacity: 0.5;
+                    left: 20%;
+                    position: absolute;
+
+                    &.left {
+                        left: 30%;
+                    }
+                    &.middle {
+                        top:80px;
+                    }
+                    &.top {
+                        top:40px;
+                    }
+                    &.small {
+                        width: 56px;
+                    }
+                    &.right {
+                        left: 60%;
+                    }
+                }
             }
-            &.middle {
-                top:80px;
-            }
-            &.top {
-                top:40px;
-            }
-            &.small {
-                width: 56px;
-            }
-            &.right {
-                left: 60%;
-            }
-        }
-        
         }
     }
 }

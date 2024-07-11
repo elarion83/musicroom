@@ -237,7 +237,7 @@ const resources = {
         
         "GeneralNearBy" : 'a proximité',
 
-        "HomePageSlide1Title":"Une playlist en temps réel entre potes !",
+        "HomePageSlide1Title":"Youtube et Spotify au même endroit, mais à plusieurs !",
         "HomePageSlide1Text1" : "Ajoute des médias depuis Spotify et Youtube à une playlist avec tes potes !",
         "HomePageSlide1Text2":"Créez, vibrez et réagissez ensemble au rythme de votre playlist. Entre potes, en soirée, en voiture, au travail, Play-it est indispensable !",
         "HomePageSlide2Title" :"En étant tous au même endroit ..",
@@ -247,7 +247,7 @@ const resources = {
         "HomePageSlide3Text2":"En voyage, en séminaires d'entreprise, chacun chez soi en révisant ou en réunion à travers le globe !",
         "HomePageSlide4Title" :"Une playlist.. et bien plus !",
         "HomePageSlide4Text1": "Grâce au chat, aux émoticones et aux votes, les membres de la playlist font partie intégrante de l'ambiance !",
-        "HomePageSlide4Text2":"Lecture désynchronisé, mot de passe, paramètres personnalisés, sur play-it, c'est vous le maître !",
+        "HomePageSlide4Text2":"Lecture désynchronisé, mot de passe, paramètres personnalisés,.. sur play-it, c'est vous le maître !",
 
 
         "UserMenuMyProfile" : "Mon profil",
