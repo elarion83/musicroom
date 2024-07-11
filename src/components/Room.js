@@ -14,7 +14,7 @@ import axios from "axios";
 import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
-import {isFromSpotify,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, isVarExist,  isDevEnv, secondsSinceEventFromNow, autoAddYTObject, randomInt, isVarExistNotEmpty, setPageTitle, envAppNameUrl, isEmpty, lastItemInObj, userSpotifyTokenObject, getTimeStampOfMoment, roomSpotifyTokenObject} from '../services/utils';
+import {isFromSpotify,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, isVarExist,  isDevEnv, secondsSinceEventFromNow, autoAddYTObject, randomInt, isVarExistNotEmpty, setPageTitle, envAppNameUrl, isEmpty, lastItemInObj, userSpotifyTokenObject, getTimeStampOfMoment, roomSpotifyTokenObject, spotifyConnectUrl, goToSpotifyConnectUrl} from '../services/utils';
 import RoomPlaylistDrawer from "./rooms/playlistSection/drawer/RoomPlaylistDrawer";
 
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
@@ -41,7 +41,7 @@ import { emptyToken, interactionObject, playerRefObject, youtubeApiSearchObject,
 import { checkCurrentUserSpotifyTokenExpiration, playedSeconds, playerNotSync, playerSpotifyNotSync, updateFirebaseRoom, updateFirebaseUser } from "../services/utilsRoom";
 import ModalChangeRoomAdmin from "./rooms/modalsOrDialogs/ModalChangeRoomAdmin";
 import RoomTutorial from "./rooms/RoomTutorial";
-import { mockYoutubeMusicResult, mockYoutubeTrendResult } from "../services/mockedArray";
+import { mockYoutubeGamingResult, mockYoutubeMusicResult, mockYoutubeTrendResult } from "../services/mockedArray";
 import SoundWave from "../services/SoundWave";
 import { returnAnimateReplace } from "../services/animateReplace";
 import PlayerButtons from "./rooms/playerSection/PlayerButtons";
@@ -285,33 +285,38 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 	}, [loaded,roomInteractionsArray]); 
 
 
-    /*  THINGS DONE AFTER CAUSE I DON'T WANT TO LOSE TIME WHEN CREATING/FETCHING ROOM
-    *
-    * 
-    * LOAD YOUTUBE TRENDS
-    * *
+    /*  LOAD YOUTUBE TRENDS
+    * DONE AFTER CAUSE I DON'T WANT TO LOSE TIME WHEN CREATING/FETCHING ROOM
+    *   BUT IT STILL SO UGLY OMG
     * */
 	useEffect(() => {
         if(loaded) {
-            /* LOAD YOUTUBE TRENDS */
             if(isEmpty(room.localeYoutubeTrends)) {
                 if(isDevEnv()) {
                     updateFirebaseRoom( roomRef , {
-                        localeYoutubeTrends: mockYoutubeTrendResult,
+                        localeYoutubeEntertainmentTrends: mockYoutubeTrendResult,
+                        localeYoutubeGamingTrends: mockYoutubeGamingResult,
                         localeYoutubeMusicTrends: mockYoutubeMusicResult});
                     return
                 } else {
                     axios.get(process.env.REACT_APP_YOUTUBE_VIDEOS_URL, { 
-                        params: youtubeApiVideosParams('0', 12, 'snippet,contentDetails') 
+                        params: youtubeApiVideosParams('24', 32, 'snippet,contentDetails') 
                     })
                     .then(function (response) {
-                        updateFirebaseRoom( roomRef , {localeYoutubeTrends: response.data.items});
+                        updateFirebaseRoom( roomRef , {localeYoutubeEntertainmentTrends: response.data.items});
                         
                         axios.get(process.env.REACT_APP_YOUTUBE_VIDEOS_URL, { 
-                            params: youtubeApiVideosParams('10', 12, 'snippet,contentDetails')
+                            params: youtubeApiVideosParams('10', 32, 'snippet,contentDetails')
                             })
                         .then(function (musicResponse) {
                             updateFirebaseRoom( roomRef , {localeYoutubeMusicTrends: musicResponse.data.items});
+                            
+                            axios.get(process.env.REACT_APP_YOUTUBE_VIDEOS_URL, { 
+                                params: youtubeApiVideosParams('20', 32, 'snippet,contentDetails')
+                            })
+                            .then(function (gamingResponse) {
+                                updateFirebaseRoom( roomRef , {localeYoutubeGamingTrends: gamingResponse.data.items});
+                            })
                         })
                     });
                 }
@@ -594,15 +599,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         }
     }
    
-   function connectToSpotify() {
-window.location.href = process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT+'?client_id='+process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID+'&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri='+process.env.REACT_APP_FRONT_HOME_URL+'&response_type='+process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE;
-   }
     // use state change to change spotify volume
     useEffect(() => {
         if(loaded && isVarExist(spotifyPlayerRef.current)) { 
             spotifyPlayerRef.current.setVolume(localVolume);
         }
-    }, [localVolume,loaded]) ;
+    }, [localVolume,loaded]);
 
     async function addMediaForAutoPlayByYoutubeId(lastMediaTitle) {
         
@@ -703,7 +705,7 @@ window.location.href = process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT+'?client
                                                             ) : (
                                                                 <>
                                                                     {(!currentUser.customDatas.spotifyConnect.connected && isFromSpotify(room.playlistUrls[playerIdPlayed])) &&
-                                                                        <Alert className="animate__animated animate__fadeInUp animate__slow texturaBgButton bord2 bordGreen bordSolid alertConnectSpotify" onClick={(e) => connectToSpotify(true)} >
+                                                                        <Alert className="animate__animated animate__fadeInUp animate__slow texturaBgButton bord2 bordGreen bordSolid alertConnectSpotify" onClick={(e) => goToSpotifyConnectUrl()} >
                                                                             <AlertTitle sx={{fontWeight:"bold"}}>Lecteur spotify</AlertTitle>
                                                                             <Typography fontSize="small" component="p">Clique pour utiliser ton compte spotify premium</Typography>
                                                                         </Alert>

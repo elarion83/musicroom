@@ -137,12 +137,13 @@ export function youtubeApiSearchObject(search, maxResults, order = 'viewCount') 
 }
 
 export function youtubeApiVideosParams(categoryId = '0', number, parts) {
+    // https://gist.github.com/dgp/1b24bf2961521bd75d6c youtube video categories id list
     return  {
         part: parts,
         key: process.env.REACT_APP_YOUTUBE_API_KEY,
         chart: 'mostPopular',
         maxResults: number,
-        videoCategoryId:categoryId, // music
+        videoCategoryId:categoryId, 
         regionCode: getLocale(),
     }
 }

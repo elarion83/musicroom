@@ -25,7 +25,7 @@ const YoutubeVideoSlider = ({itemsArray,addingObject=null,addItemToPlaylist}) =>
 
     const { carouselFragment,useListenToCustomEvent,slideToItem,slideToPrevItem,getCurrentActiveItem, slideToNextItem } = useSpringCarousel({
         gutter: 0,
-        itemsPerSlide: 6, 
+        itemsPerSlide: window.innerWidth > 900 ? 6 : 2, 
         withLoop: true,
         items: getCarouselItemsArray(itemsArray,addingObject,addItemToPlaylist),
     })

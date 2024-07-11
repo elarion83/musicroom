@@ -223,7 +223,7 @@ const resources = {
         "GeneralVideos":'Vidéos',
         "GeneralMovieTrailers":"Bande annonces",
         "GeneralEvery":'Toutes les',
-        "GeneralSmthTrendings" : "{{what}} en tendances",
+        "GeneralSmthTrendings" : "{{what}} en tendance",
         "GeneralHome":'Accueil',
         "GeneralAnon" : "Anonyme",
         "GeneralLength":"Longueur",

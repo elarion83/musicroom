@@ -22,7 +22,6 @@
         font-size: 2em;
         caret-color: transparent;
         color:var(--white) !important;
-        text-transform: uppercase;
         background-color:var(--main-bg-color) !important;
         width: 100%; 
         flex-grow: 1;
@@ -101,7 +100,7 @@
     .carouselControls {
         display: flex;
         justify-content: space-between;
-        margin-top: 1em;
+        margin-top: 0.5em;
         button {
             background: rgba(0, 0, 0, 0.6)
         }

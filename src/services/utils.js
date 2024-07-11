@@ -71,7 +71,9 @@ export function createDefaultRoomObject(roomId, roomOwner) {
                 userConnected:''
         },
         localeYoutubeTrends : [],
+        localeYoutubeEntertainmentTrends : [],
         localeYoutubeMusicTrends : [],
+        localeYoutubeGamingTrends : [],
         interactionsArray:[],
         messagesArray:[],
         creationTimeStamp	: Date.now()
@@ -452,4 +454,10 @@ export function getArtistsSpotify(artistsArray) {
         i++;
     });
     return returnString;
+}
+
+export const spotifyConnectUrl = process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT+'?client_id='+process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID+'&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri='+process.env.REACT_APP_FRONT_HOME_URL+'&response_type='+process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE
+
+export function goToSpotifyConnectUrl() {
+    window.location.href = spotifyConnectUrl;
 }

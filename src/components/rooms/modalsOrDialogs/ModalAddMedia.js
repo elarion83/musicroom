@@ -218,18 +218,23 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                     </LoadingButton>
                 </Grid>
 
-                {(room.localeYoutubeTrends.length > 0 && room.localeYoutubeMusicTrends.length > 0 && showYoutubeTrends) &&
+                {(room.localeYoutubeGamingTrends.length > 0 && room.localeYoutubeMusicTrends.length > 0 && showYoutubeTrends) &&
                 <Container sx={{padding:'0 !important', paddingBottom:'90px !important' }} maxWidth={false}>
                     
                     <Typography variant="h6" sx={{mt:1, ml:1}} className='colorWhite 'gutterBottom>
-                        {t('GeneralSmthTrendings', {what:'Videos'})}
-                    </Typography>
-                    <YoutubeVideoSlider itemsArray={room.localeYoutubeTrends} addingObject={addingObject} addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject} />
-
-                    <Typography variant="h6" sx={{mt:4, ml:1}} className='colorWhite 'gutterBottom>
-                        {t('GeneralSmthTrendings', {what:t('GeneralMusics')})}
+                        {t('GeneralMusics')}
                     </Typography>
                     <YoutubeVideoSlider itemsArray={room.localeYoutubeMusicTrends} addingObject={addingObject} addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject} />
+
+                    <Typography variant="h6" sx={{mt:4, ml:1}} className='colorWhite 'gutterBottom>
+                        {'Gaming'}
+                    </Typography>
+                    <YoutubeVideoSlider itemsArray={room.localeYoutubeGamingTrends} addingObject={addingObject} addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject} />
+
+                    <Typography variant="h6" sx={{mt:4, ml:1}} className='colorWhite 'gutterBottom>
+                        {'Entertainment'}
+                    </Typography>
+                    <YoutubeVideoSlider itemsArray={room.localeYoutubeEntertainmentTrends} addingObject={addingObject} addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject} />
 
                 </Container>}
 

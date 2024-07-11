@@ -12,7 +12,7 @@ import { withTranslation } from 'react-i18next';
 import ModalsHeader from "./ModalsHeader";
 import { ReactSVG } from "react-svg";
 import { AccountCircle, CancelOutlined , Save } from "@mui/icons-material";
-import { cleanPseudoEntered, delay, isPseudoEnteredValid, isUserAnon, isVarExist, userSpotifyTokenObject } from "../../../services/utils";
+import { cleanPseudoEntered, delay, goToSpotifyConnectUrl, isPseudoEnteredValid, isUserAnon, isVarExist, userSpotifyTokenObject } from "../../../services/utils";
 import CachedIcon from '@mui/icons-material/Cached';
 import UserAvatarComponent from "../../../services/utilsComponents";
 const UserParamModal = ({ t, open, changeOpen, user = null, setUserInfo = null, ownProfile = true}) => {
@@ -114,7 +114,7 @@ const UserParamModal = ({ t, open, changeOpen, user = null, setUserInfo = null, 
                                         startIcon={<Icon style={{ display: 'inline', color: 'white', marginRight: '0.5em', }} icon="mdi:spotify" />}
                                         variant="contained"
                                         color="success"
-                                        onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${process.env.REACT_APP_FRONT_HOME_URL}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
+                                        onClick={(e) => goToSpotifyConnectUrl()}>
                                         {t('ModalParamsRoomConnectToSpotifyText')}
                                     </Button>
                                 )
