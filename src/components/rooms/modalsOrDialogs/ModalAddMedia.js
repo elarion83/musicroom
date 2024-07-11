@@ -185,7 +185,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
 
                 <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'row', position:'relative', mt:1 }} className="autowriter_container">
                     <Typed
-                        strings={searchTextArray()}
+                        strings={searchTextArray}
                         typeSpeed={5}
                         showCursor
                         backSpeed={15}
