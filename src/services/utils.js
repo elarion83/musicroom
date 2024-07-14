@@ -101,7 +101,7 @@ export function isFromSource(itemSource, sourceCheck) {
     return itemSource === sourceCheck;
 }
 
-export function isFromSpotify(media) {
+export function isFromSpotify(media = null) {
     return media.source === 'spotify';
 }
 
@@ -456,7 +456,7 @@ export function getArtistsSpotify(artistsArray) {
     return returnString;
 }
 
-export const spotifyConnectUrl = process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT+'?client_id='+process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID+'&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri='+process.env.REACT_APP_FRONT_HOME_URL+'&response_type='+process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE
+export const spotifyConnectUrl = process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT+'?client_id='+process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID+'&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private%20user-top-read%20playlist-read-private&redirect_uri='+process.env.REACT_APP_FRONT_HOME_URL+'&response_type='+process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE
 
 export function goToSpotifyConnectUrl() {
     window.location.href = spotifyConnectUrl;

@@ -164,6 +164,20 @@ export function spotifyApiSearchObject(search) {
     }
 }
 
+export function spotifyApiTopTracksObject() {
+    return {
+        limit: 50,
+        type: "tracks"
+    }
+}
+export function spotifyApiPlaylistTracksObject(playlistId) {
+    return {
+        limit: 50,
+        market: getLocale()
+    }
+}
+
+
 export const emptyToken = {
     IsLinked:false,
     AlreadyHaveBeenLinked:true,
@@ -183,6 +197,9 @@ export const timestampToHoursAndMinOptions = {
   minute: '2-digit', 
   hour12: false
 };
+
+
+// end spotify helpers */
 
 export function createUserDataObject(userUid = 0, registerType, pseudo, anonLogin = false) {
     var userColor = getRandomHexColor();

@@ -20,7 +20,9 @@ const resources = {
         "GeneralYes":'Yes',
         "GeneralNo":'No',
         "GeneralBy":'By',
-        "GeneralVia":'From',        
+        "GeneralVia":'From',     
+        "GeneralSuggestions":'Suggestions',  
+        "GeneralForYou":'For You',  
         "GeneralErrorHappened":'An error has occurred',
         "GeneralBack":'Back',
         "GeneralClose":'Close',
@@ -100,6 +102,7 @@ const resources = {
         "RoomChatWelcomeMessage": "Welcome on the chat !",
         "RoomChatPlaceholder" : "Send a message",
 
+        "ModalAddMediaSpotifyRecommTitle": "Only for you",
         "ModalAddMediaSearchResultTitle": "Results for {{searchTerm}}",
 
         "ModalUserSettingsTitle" : "Account settings",
@@ -197,6 +200,8 @@ const resources = {
         "GeneralNo":'Non',
         "GeneralBy":'Par',
         "GeneralVia":'Via',
+        "GeneralSuggestions":'Suggestions',
+        "GeneralForYou":'Pour vous',  
         "GeneralErrorHappened":'Une erreur est survenue',
         "GeneralBack":'Retour',
         "GeneralClose":'Fermer',
@@ -223,6 +228,7 @@ const resources = {
         "GeneralVideos":'Vidéos',
         "GeneralMovieTrailers":"Bande annonces",
         "GeneralEvery":'Toutes les',
+        "GeneralTrendings" : "En tendance",
         "GeneralSmthTrendings" : "{{what}} en tendance",
         "GeneralHome":'Accueil',
         "GeneralAnon" : "Anonyme",
@@ -275,6 +281,7 @@ const resources = {
         "RoomChatWelcomeMessage": "Bienvenue sur le chat !",
         "RoomChatPlaceholder" : "Envoyer un message",
 
+        "ModalAddMediaSpotifyRecommTitle": "Selon vos goûts",
         "ModalAddMediaSearchResultTitle": "Résultats pour {{searchTerm}}",
 
         "ModalUserSettingsTitle" : "Paramètres du compte",

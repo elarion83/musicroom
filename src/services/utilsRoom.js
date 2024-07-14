@@ -1,5 +1,5 @@
 import { doc, updateDoc } from "firebase/firestore";
-import { isFromSpotify, roomSpotifyTokenObject, userSpotifyTokenObject } from "./utils"; 
+import { isDevEnv, isFromSpotify, roomSpotifyTokenObject, userSpotifyTokenObject } from "./utils"; 
 import { v4 as uuid } from 'uuid';
 import { db } from "./firebase";
 
@@ -25,12 +25,11 @@ export function playedSeconds(player, origin = 'youtube') {
     }
 }
 
-export function playerNotSync(room, player) {
-    return((Math.abs(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds) - playedSeconds(player) > 3) || (Math.abs(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds) - playedSeconds(player) < -3));
-}
-
-export function playerSpotifyNotSync(room, player) {
-    return((Math.abs(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds) - playedSeconds(player, 'spotify') > 5) || (Math.abs(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds) - playedSeconds(player, 'spotify') < -5));
+export function playerNotSync(room, player) { // check if user is not sync with the datas
+    var source = room.playlistUrls[room.playing].source;
+    var delay = ('spotify' == source) ? 5 : isDevEnv() ? 3 : 2;
+    var firebasePlayedSeconds = Math.abs(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds);
+    return((firebasePlayedSeconds - playedSeconds(player, source) > delay) || (firebasePlayedSeconds - playedSeconds(player, source) < -delay));
 }
 
 /* FIREBASE HELPERS */
