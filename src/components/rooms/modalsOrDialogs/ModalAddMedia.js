@@ -13,13 +13,13 @@ import Snackbar from '@mui/material/Snackbar';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import validator from 'validator';
-import { YTV3APIDurationToReadable, cleanMediaTitle, delay, enablersDurationToReadable, getArtistsSpotify, getDisplayTitle, getLocale, getYTVidId, isEmpty, isProdEnv, isVarExist, isVarExistNotEmpty } from '../../../services/utils';
+import { YTV3APIDurationToReadable, cleanMediaTitle, delay, enablersDurationToReadable, getArtistsSpotify, getDisplayTitle, getLocale, getYTVidId, goToSpotifyConnectUrl, isEmpty, isProdEnv, isVarExist, isVarExistNotEmpty } from '../../../services/utils';
 import { withTranslation } from 'react-i18next';
 import { Button, Dialog, Icon, SwipeableDrawer, Typography } from '@mui/material';
 import SoundWave from "../../../services/SoundWave";
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { searchTextArray, spotifyApiSearchObject, youtubeApiSearchObject, youtubeApiVideoInfoParams } from '../../../services/utilsArray';
+import { searchTextArray, spotifyApiPlaylistTracksObject, spotifyApiSearchObject, spotifyApiTopTracksObject, youtubeApiSearchObject, youtubeApiVideoInfoParams } from '../../../services/utilsArray';
 import { KeyboardArrowDown } from '@mui/icons-material';
 import  NewContentslider  from '../../../services/YoutubeVideoSlider';
 import SearchResultItem from '../SearchResultItem';
@@ -27,7 +27,7 @@ import { mockYoutubeSearchResoltForVald, mockYoutubeSearchResultForVald, mockYou
 import YoutubeVideoSlider from '../../../services/YoutubeVideoSlider';
 import { returnAnimateReplace } from '../../../services/animateReplace';
 import { checkRoomSpotifyTokenExpiration } from '../../../services/utilsRoom';
-const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, roomIsPlaying, currentUser, validatedObjectToAdd, DeezerTokenProps }) => {
+const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends,playlistId,enablerSpotify,playlistEmpty, room, changeOpen, roomIsPlaying, currentUser, validatedObjectToAdd, DeezerTokenProps }) => {
     const [mediaSearchResultYoutube, setMediaSearchResultYoutube] = useState([]);
     const [mediaSearchResultSpotify, setMediaSearchResultSpotify] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -35,7 +35,10 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
     const [recentlyAdded, setRecentlyAdded] = useState(false);
     const [recentlyAddedTitle, setRecentlyAddedTitle] = useState('');
     const [showYoutubeTrends, setShowYoutubeTrends] = useState(true);
+    const [spotifyTrendsTracks, setSpotifyTrendsTracks] = useState([]);
+    const [spotifyTopTracks, setSpotifyTopTracks] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
+    const [showResult, setShowResult] = useState(false);
     const animatedElementsRef = [];
     const animatedDownElementsRef = [];
 
@@ -61,6 +64,26 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
         if(open && needAnimationReplace) {
             returnAnimateReplace(animatedDownElementsRef, {Out:"In", Up:"Down", animate__delay:'animate__delay-1s'}, /Out|Up|animate__delay/gi);
             returnAnimateReplace(animatedElementsRef, {Out:"In", Down:"Up", animate__delay:'animate__delay-1s'}, /Out|Down|animate__delay/gi);
+        }
+
+        if(open && currentUser.customDatas.spotifyConnect.connected && isEmpty(spotifyTopTracks)) {
+            axios.get(process.env.REACT_APP_ROOM_SPOTIFY_ME_ENDPOINT+'/top/tracks', {
+                headers: { Authorization: `Bearer ${currentUser.customDatas.spotifyConnect.token}` },
+                params: spotifyApiTopTracksObject()
+                
+            }).then(function (response) {
+                setSpotifyTopTracks(response.data.items);
+            });
+        }
+
+        if(open && isEmpty(spotifyTrendsTracks) && enablerSpotify.isLinked) {
+            axios.get("https://api.spotify.com/v1/playlists/37i9dQZF1DXcBWIGoYBM5M/tracks", {
+                headers: { Authorization: `Bearer ${enablerSpotify.token}` },
+                params: spotifyApiPlaylistTracksObject('37i9dQZF1DXcBWIGoYBM5M')
+                
+            }).then(function (response) {
+                setSpotifyTrendsTracks(response.data.items);
+            });
         }
 	}, [open]); 
 
@@ -120,9 +143,9 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
 
     async function handleSearchForMedia() {
 
-        let spotifyEnabler = room.enablerSpotify;
+        let spotifyEnabler = enablerSpotify;
         setIsSearching(true);
-        if (searchTerm !== '') {
+        if (!isEmpty(searchTerm)) {
             if (validator.isURL(searchTerm.trim())) {
                 addMediaFromUrl(searchTerm);
             } else {
@@ -134,7 +157,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                     .then(async function (response) {
                         if (spotifyEnabler.isLinked) {
                             checkRoomSpotifyTokenExpiration(room);
-                            axios.get("https://api.spotify.com/v1/search", {
+                            axios.get(process.env.REACT_APP_ROOM_SPOTIFY_SEARCH_ENDPOINT, {
                                 headers: { Authorization: `Bearer ${spotifyEnabler.token}` },
                                 params: spotifyApiSearchObject(searchTerm)
                             }).then(function (response) {
@@ -142,15 +165,16 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                             });
                         }
                         setMediaSearchResultYoutube(response.data.items);
-                        setShowYoutubeTrends(false);
+                    }).finally(function () {
                         setIsSearching(false);
+                        setShowResult(true);
                     });
 
                 } else {
                     
                     if (spotifyEnabler.isLinked) {
                         checkRoomSpotifyTokenExpiration(room);
-                        axios.get("https://api.spotify.com/v1/search", {
+                        await axios.get(process.env.REACT_APP_ROOM_SPOTIFY_SEARCH_ENDPOINT, {
                             headers: { Authorization: `Bearer ${spotifyEnabler.token}` },
                             params: spotifyApiSearchObject(searchTerm)
                         }).then(function (response) {
@@ -158,8 +182,8 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                         });
                     }
                     setMediaSearchResultYoutube(mockYoutubeSearchResultForVald);
-                    setShowYoutubeTrends(false);
                     setIsSearching(false);
+                    setShowResult(true);
                 }
             }
             setSearchedTerm(searchTerm);
@@ -176,7 +200,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                 anchor='bottom'
                 hysteresis={0.2}
                 TransitionComponent={SlideUp}
-                swipeAreaWidth={room.playlistEmpty ? 350 : 100}
+                swipeAreaWidth={playlistEmpty ? 350 : 100}
                 onClose={(e) => changeOpen(false)}
                 onOpen={(e) => changeOpen(true)}
                 open={open}
@@ -217,35 +241,37 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                         <SearchIcon />
                     </LoadingButton>
                 </Grid>
-
-                {(room.localeYoutubeGamingTrends.length > 0 && room.localeYoutubeMusicTrends.length > 0 && showYoutubeTrends) &&
-                <Container sx={{padding:'0 !important', paddingBottom:'90px !important' }} maxWidth={false}>
-                    
-                    <Typography variant="h6" sx={{mt:1, ml:1}} className='colorWhite 'gutterBottom>
-                        {t('GeneralMusics')}
-                    </Typography>
-                    <YoutubeVideoSlider itemsArray={room.localeYoutubeMusicTrends} addingObject={addingObject} addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject} />
-
-                    <Typography variant="h6" sx={{mt:4, ml:1}} className='colorWhite 'gutterBottom>
-                        {'Gaming'}
-                    </Typography>
-                    <YoutubeVideoSlider itemsArray={room.localeYoutubeGamingTrends} addingObject={addingObject} addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject} />
-
-                    <Typography variant="h6" sx={{mt:4, ml:1}} className='colorWhite 'gutterBottom>
-                        {'Entertainment'}
-                    </Typography>
-                    <YoutubeVideoSlider itemsArray={room.localeYoutubeEntertainmentTrends} addingObject={addingObject} addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject} />
-
-                </Container>}
-
-                {!(showYoutubeTrends) && <Grid item xs={12}>
-                    <Tabs value={tabIndex} onChange={handleTabChange} sx={{ bgcolor: '#202124' }}>
-                        <Tab sx={{ color: 'var(--white)' }} label="Youtube" disabled={mediaSearchResultYoutube.length > 1 ? false : true} />
-                        <Tab sx={{ color: 'var(--white)' }} label="Spotify" disabled={mediaSearchResultSpotify && mediaSearchResultSpotify.length > 1 ? false : true} />
+                
+                <Grid item xs={12}>
+                    <Tabs value={tabIndex} onChange={handleTabChange} variant="fullWidth" sx={{ bgcolor: '#202124' }}>
+                        <Tab className='colorWhite varelaFontTitle' label={showResult ? "Youtube ("+mediaSearchResultYoutube.length+")" : "Youtube"} />
+                        <Tab className='colorWhite varelaFontTitle' label={showResult ? "Spotify ("+mediaSearchResultSpotify.length+")" : "Spotify"} />
                     </Tabs>
-                    <Box sx={{ lineHeight: "15px", p: 0, pt: 0, mb: 0, paddingBottom:'90px !important' }}>
+
+                    <Box sx={{ lineHeight: "15px", p: 1, pt: 0, mb: 0, paddingBottom:'90px !important' }}>
                         {tabIndex === 0 && (
                             <Box>
+                                {isEmpty(mediaSearchResultYoutube) && (room.localeYoutubeGamingTrends.length > 0 && room.localeYoutubeMusicTrends.length > 0 && showYoutubeTrends) &&
+                                    <Container sx={{padding:'0 !important', paddingBottom:'90px !important' }} maxWidth={false}>
+                                        
+                                        <Typography variant="h6" sx={{mt:1, ml:1}} className='colorWhite 'gutterBottom>
+                                            {t('GeneralMusics')}
+                                        </Typography>
+                                        <YoutubeVideoSlider itemsArray={room.localeYoutubeMusicTrends} addingObject={addingObject} addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject} />
+
+                                        <Typography variant="h6" sx={{mt:4, ml:1}} className='colorWhite 'gutterBottom>
+                                            {'Gaming'}
+                                        </Typography>
+                                        <YoutubeVideoSlider itemsArray={room.localeYoutubeGamingTrends} addingObject={addingObject} addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject} />
+
+                                        <Typography variant="h6" sx={{mt:4, ml:1}} className='colorWhite 'gutterBottom>
+                                            {'Entertainment'}
+                                        </Typography>
+                                        <YoutubeVideoSlider itemsArray={room.localeYoutubeEntertainmentTrends} addingObject={addingObject} addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject} />
+
+                                    </Container>
+                                }
+
                                 {!isEmpty(mediaSearchResultYoutube) &&
                                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ mt: 0 }}>
                                         {mediaSearchResultYoutube.map(function (media, idyt) {
@@ -270,27 +296,137 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                         )}
                         {tabIndex === 1 && (
                             <Box>
-                                {!isEmpty(mediaSearchResultSpotify) && <Grid item xs={12}>
-                                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ mt: 0 }}>
-                                        {mediaSearchResultSpotify.map(function (media, idsp) {
-                                            return (
-                                                <SearchResultItem
-                                                    key={idsp}
-                                                    image={media.album.images[0].url}
-                                                    title={media.name+ ' - '+media.artists[0].name}
-                                                    source='spotify'
-                                                    uid={uuid().slice(0, 10).toLowerCase()}
-                                                    platformId={media.uri}
-                                                    addedBy={addingObject.addedBy}
-                                                    url={media.uri}
-                                                    duration={enablersDurationToReadable(media.duration_ms, 'spotify')}
-                                                    date={dateFormat(media.album.release_date, 'd mmm yyyy')}
-                                                    channelOrArtist={getArtistsSpotify(media.artists)}
-                                                    addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject}
-                                                />)
-                                        })}
-                                    </Grid>
-                                </Grid>}
+                                {showResult ? (
+                                    <>
+                                        {isEmpty(mediaSearchResultSpotify) ? (
+                                                <> 
+                                                    {enablerSpotify.isLinked ? (
+                                                        t('GeneralNoResult')
+                                                    ) : ( 
+                                                        <Button
+                                                            className='main_bg_color btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
+
+                                                            sx={{ bgcolor: '#1ed760', mb:3, width:'100%', mt:1 }}
+                                                            startIcon={<Icon style={{ display: 'inline', color: 'white', marginRight: '0.5em' }} icon="mdi:spotify" />}
+                                                            variant="contained"
+                                                            color="success"
+                                                            onClick={(e) => goToSpotifyConnectUrl()}>
+                                                                Activer la recherche Spotify
+                                                        </Button>
+                                                    )}
+                                                </>
+                                            ) : (
+                                                <Grid item xs={12}>
+                                                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ mt: 0 }}>
+                                                        {mediaSearchResultSpotify.map(function (media, idsp) {
+                                                            return (
+                                                                <SearchResultItem
+                                                                    key={idsp}
+                                                                    image={media.album.images[0].url}
+                                                                    title={media.name+ ' - '+media.artists[0].name}
+                                                                    source='spotify'
+                                                                    uid={uuid().slice(0, 10).toLowerCase()}
+                                                                    platformId={media.uri}
+                                                                    addedBy={addingObject.addedBy}
+                                                                    url={media.uri}
+                                                                    duration={enablersDurationToReadable(media.duration_ms, 'spotify')}
+                                                                    date={dateFormat(media.album.release_date, 'd mmm yyyy')}
+                                                                    channelOrArtist={getArtistsSpotify(media.artists)}
+                                                                    addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject}
+                                                                />)
+                                                        })}
+                                                    </Grid>
+                                                </Grid>
+                                            )
+                                        }
+                                    </>
+                                ) : (
+                                    <>
+                                        {enablerSpotify.isLinked ? ( // is room linked to spotify ?
+                                            <>
+                                                {currentUser.customDatas.spotifyConnect.connected ? (
+                                                        <>
+                                                            <Grid item xs={12}>
+                                                                <Typography variant="h6" sx={{mt:1, ml:1}} className='colorWhite 'gutterBottom>
+                                                                    {t('ModalAddMediaSpotifyRecommTitle')}
+                                                                </Typography>
+                                                                <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ mt: 0 }}>
+                                                                    {spotifyTopTracks.map(function (media, idsp) {
+                                                                        return (
+                                                                            <SearchResultItem
+                                                                                key={idsp}
+                                                                                image={media.album.images[0].url}
+                                                                                title={media.name+ ' - '+media.artists[0].name}
+                                                                                source='spotify'
+                                                                                uid={uuid().slice(0, 10).toLowerCase()}
+                                                                                platformId={media.uri}
+                                                                                addedBy={addingObject.addedBy}
+                                                                                url={media.uri}
+                                                                                duration={enablersDurationToReadable(media.duration_ms, 'spotify')}
+                                                                                date={dateFormat(media.album.release_date, 'd mmm yyyy')}
+                                                                                channelOrArtist={getArtistsSpotify(media.artists)}
+                                                                                addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject}
+                                                                            />)
+                                                                    })}
+                                                                </Grid>
+                                                            </Grid>
+                                                        </>
+                                                    ) : (
+                                                        <Grid item xs={12}>
+                                                        
+                                                            <Button
+                                                                className='main_bg_color btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
+
+                                                                sx={{ bgcolor: '#1ed760', mb:1, mt:1, width:'100%' }}
+                                                                startIcon={<Icon style={{ display: 'inline', color: 'white', marginRight: '0.5em' }} icon="mdi:spotify" />}
+                                                                variant="contained"
+                                                                color="success"
+                                                                onClick={(e) => goToSpotifyConnectUrl()}>
+                                                                    Mon profil Spotify
+                                                            </Button>
+                                                            <Typography variant="h6" sx={{mt:1, ml:1}} className='colorWhite 'gutterBottom>
+                                                                {t('GeneralTrendings')}
+                                                            </Typography>
+                                                            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ mt: 0 }}>
+                                                                {spotifyTrendsTracks.map(function (track, idsp) {
+                                                                    let media = track.track;
+                                                                    return (
+                                                                        <SearchResultItem
+                                                                            key={idsp}
+                                                                            image={media.album.images[0].url}
+                                                                            title={media.name+ ' - '+media.artists[0].name}
+                                                                            source='spotify'
+                                                                            uid={uuid().slice(0, 10).toLowerCase()}
+                                                                            platformId={media.uri}
+                                                                            addedBy={addingObject.addedBy}
+                                                                            url={media.uri}
+                                                                            duration={enablersDurationToReadable(media.duration_ms, 'spotify')}
+                                                                            date={dateFormat(media.album.release_date, 'd mmm yyyy')}
+                                                                            channelOrArtist={getArtistsSpotify(media.artists)}
+                                                                            addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject}
+                                                                        />)
+                                                                })}
+                                                            </Grid>
+                                                        </Grid>
+                                                    )
+                                                }
+                                            </>
+                                        ) : (
+                                            <Button
+                                                className='main_bg_color btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
+
+                                                sx={{ bgcolor: '#1ed760', mb:3, width:'100%', mt:1 }}
+                                                startIcon={<Icon style={{ display: 'inline', color: 'white', marginRight: '0.5em' }} icon="mdi:spotify" />}
+                                                variant="contained"
+                                                color="success"
+                                                onClick={(e) => goToSpotifyConnectUrl()}>
+                                                    Activer la recherche Spotify
+                                            </Button>
+                                            )
+                                        }
+                                    </>
+                                )
+                            }
                             </Box>
                         )}
                    {/*     {tabIndex === 2 && (
@@ -341,7 +477,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                             </Box>
                         )}  */}
                     </Box> 
-                </Grid>}
+                </Grid>
                 <Snackbar
                     open={recentlyAdded}
                     autoHideDuration={4000}
@@ -358,18 +494,18 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends, room, changeOpen, room
                     >
                         <KeyboardArrowDown className='colorWhite' sx={{ fontSize: '3.5em' }} />
                     </Button >
-                    {room.playlistEmpty &&
+                    {playlistEmpty &&
                         <Box sx={{ display: 'flex', flexDirection: 'column', padding: '1em' }} >
-                            <Typography  sx={{color: 'var(--main-color-lighter)'}}  ref={el => animatedDownElementsRef.push(el)} className='animate__animated animate__fadeInDownBig animate__delay-1s animate__slow textCapitalize'> Playlist <b>{room.id}</b></Typography>
+                            <Typography  sx={{color: 'var(--main-color-lighter)'}}  ref={el => animatedDownElementsRef.push(el)} className='animate__animated animate__fadeInDownBig animate__delay-1s animate__slow textCapitalize'> Playlist <b>{playlistId}</b></Typography>
                             <Typography sx={{ display: 'block', width: '100%', ml: 0, fontSize: '12px' }}  ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUpBig animate__delay-1s animate__slow colorWhite'> Playlist {t('GeneralEmpty')} </Typography>
                         </Box>
                     }
-                    {isVarExist(room.playlistUrls) && !room.playlistEmpty &&
+                    {isVarExist(room.playlistUrls) && !playlistEmpty &&
                         <Box sx={{ display: 'flex', flexDirection: 'column', p: '8px', pl:0 }}>
-                           <Typography sx={{ display: 'block', width: '100%', ml: 0, pl: 0, fontSize: '12px' }}  ref={el => animatedDownElementsRef.push(el)} className='animate__animated animate__fadeInDownBig animate__delay-1s animate__slow colorWhite textCapitalize'> Playlist <b>{room.id}</b></Typography>
+                           <Typography sx={{ display: 'block', width: '100%', ml: 0, pl: 0, fontSize: '12px' }}  ref={el => animatedDownElementsRef.push(el)} className='animate__animated animate__fadeInDownBig animate__delay-0s animate__slow colorWhite textCapitalize'> Playlist <b>{playlistId}</b></Typography>
 
                             <Box 
-                             ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUpBig animate__delay-1s animate__slow colorWhite'
+                             ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUpBig animate__delay-0s animate__slow colorWhite'
                                 sx={{display: 'flex', gap: '10px', flexDirection: 'row', alignItems: 'center', width: '100%', ml: 1, mt: 1, fontSize: '10px' }} >
                                     <SoundWave waveNumber={7} isPlayingOrNo={roomIsPlaying} />
                                     <Typography fontSize="small" component={'span'} className='varelaFontTitle max-lined max-line-2 firstLetterCapitalize' >

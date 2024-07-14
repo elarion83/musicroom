@@ -38,7 +38,7 @@ import { withTranslation } from 'react-i18next';
 import ModalEnterRoomPassword from "./rooms/modalsOrDialogs/ModalEnterRoomPassword";
 import EmptyPlaylist from "./rooms/playlistSection/EmptyPlaylist";
 import { emptyToken, interactionObject, playerRefObject, youtubeApiSearchObject, youtubeApiVideosParams } from "../services/utilsArray";
-import { checkCurrentUserSpotifyTokenExpiration, playedSeconds, playerNotSync, playerSpotifyNotSync, updateFirebaseRoom, updateFirebaseUser } from "../services/utilsRoom";
+import { checkCurrentUserSpotifyTokenExpiration, checkRoomSpotifyTokenExpiration, playedSeconds, playerNotSync, playerSpotifyNotSync, updateFirebaseRoom, updateFirebaseUser } from "../services/utilsRoom";
 import ModalChangeRoomAdmin from "./rooms/modalsOrDialogs/ModalChangeRoomAdmin";
 import RoomTutorial from "./rooms/RoomTutorial";
 import { mockYoutubeGamingResult, mockYoutubeMusicResult, mockYoutubeTrendResult } from "../services/mockedArray";
@@ -89,7 +89,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     const [guestSynchroOrNot, setGuestSynchroOrNot] = useState(true);
     const [playerReady, setPlayerReady] = useState(false);
 	const [playerBuffering, setPlayerBuffering] = useState(false);
-    const [spotifyPlayerShow, setSpotifyPlayerShow] = useState(true);
+    const [spotifyPlayerIsPlaying, setSpotifyPlayerIsPlaying] = useState(false);
 	const [playedPercents, setPlayedPercents] = useState(0);
 
     // MODALS
@@ -156,7 +156,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         onActive,
         timeout: 12_000,
         throttle: 2000,
-        eventsThrottle:throttletest(),
         events:[
             'mousemove',
             'keydown',
@@ -181,7 +180,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         }, 500)
 
         return () => {
-            clearInterval(interval)
+            clearInterval(interval);
         }
     });
 
@@ -237,6 +236,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 unsubscribe = onSnapshot(roomRef, (doc) => {
                     var roomDataInFb = doc.data();
                     var actualMessagesLength = room.messagesArray.length;
+                    
                     if(playerRef.current && playerRef.current.getCurrentTime && !isActuallyAdmin && playerNotSync(roomDataInFb, playerRef)) {
                         goToSecond(Math.floor(roomDataInFb.mediaActuallyPlayingAlreadyPlayedData.playedSeconds));
                     } 
@@ -244,12 +244,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     if(!isActuallyAdmin) {
                         setPlayerIdPlayed(roomDataInFb.playing); 
                         setRoomIsPlaying(roomDataInFb.actuallyPlaying); 
-
                     }
 
-                        if(guestSynchroOrNot) {
-                            setBarPercentage(Math.round(roomDataInFb.mediaActuallyPlayingAlreadyPlayedData.playedPercentage));
-                        }
                     setRoomInteractionsArray(roomDataInFb.interactionsArray);
                    
                     setIsActuallyAdmin(roomDataInFb.adminUid == currentUser.uid);
@@ -286,12 +282,13 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
 
     /*  LOAD YOUTUBE TRENDS
+    * connect room to spotify user token
     * DONE AFTER CAUSE I DON'T WANT TO LOSE TIME WHEN CREATING/FETCHING ROOM
     *   BUT IT STILL SO UGLY OMG
     * */
 	useEffect(() => {
         if(loaded) {
-            if(isEmpty(room.localeYoutubeTrends)) {
+            if(isEmpty(room.localeYoutubeEntertainmentTrends)) {
                 if(isDevEnv()) {
                     updateFirebaseRoom( roomRef , {
                         localeYoutubeEntertainmentTrends: mockYoutubeTrendResult,
@@ -367,13 +364,15 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         }
     }
 
-    async function handleProgress(event) {
-        setBarPercentage(Math.floor(event.played*100));
+    async function handleProgress(event, playerObjectRef, setBar = true) {
+        if(setBar) {
+            setBarPercentage(Math.floor(event.played*100));
+        }
         if(isActuallyAdmin) {
-            if(Math.floor(event.played*100) > 90 && room.roomParams.isAutoPlayActivated && !mediaIndexExist(room.playlistUrls,playerIdPlayed+1)) {
-                addMediaForAutoPlayByYoutubeId(room.playlistUrls[playerIdPlayed].title);
+            if(Math.floor(event.played*100) > 85 && room.roomParams.isAutoPlayActivated && !mediaIndexExist(room.playlistUrls,playerIdPlayed+1)) {
+                await addMediaForAutoPlayByYoutubeId(room.playlistUrls[playerIdPlayed].title);
             }
-            updateFirebaseRoom( roomRef , {
+            await updateFirebaseRoom( roomRef , {
                 mediaActuallyPlayingAlreadyPlayedData:{
                     playedSeconds:event.playedSeconds,
                     playedPercentage:event.played*100,
@@ -381,39 +380,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 }
             })
         } else {
-            if(guestSynchroOrNot && playerNotSync(room, playerRef)) {
+            if(guestSynchroOrNot && playerNotSync(room, playerObjectRef)) {
                 goToSecond(Math.floor(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds));
             } 
-        }
-    }
-
-
-    function throttletest() {     
-        if((loaded && roomIsPlaying && isFromSpotify(room.playlistUrls[playerIdPlayed]))) {
-            if(isVarExist(spotifyPlayerRef.current)) {   
-                var SpotifyPlayedPercents = Math.floor(spotifyPlayerRef.current.state.position);
-                if(barPercentage !== SpotifyPlayedPercents) {
-                    setBarPercentage(SpotifyPlayedPercents);
-                }
-                var SpotifyplayedSeconds = spotifyPlayerRef.current.state.progressMs/1000;
-                
-                if(isActuallyAdmin) {
-                    updateFirebaseRoom( roomRef , {
-                        mediaActuallyPlayingAlreadyPlayedData:{
-                            playedSeconds:SpotifyplayedSeconds,
-                            playedPercentage:SpotifyPlayedPercents,
-                            played:SpotifyPlayedPercents/100
-                        }
-                    })
-                } 
-                else {
-                    if(guestSynchroOrNot && isVarExist(spotifyPlayerRef.current) && playerSpotifyNotSync(room, spotifyPlayerRef)) {
-                        goToSecond(Math.floor(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds));
-                    }
-                }
-
-                checkCurrentUserSpotifyTokenExpiration(currentUser);
-            }
         }
     }
 
@@ -584,17 +553,38 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         setOpenLeaveRoomModal(leaveRoomModalIsOpen);
     }
 
-    const [spotifyEndSwitchTempFix, setSpotifyEndSwitchTempFix] = useState(true);
+    useEffect(() => {
+        const updateSpotifyPlayerInfos = async () => {
+            if (spotifyPlayerRef.current && spotifyPlayerIsPlaying) {
+                var SpotifyPlayedPercents = Math.floor(spotifyPlayerRef.current.state.position);
+                var SpotifyplayedSeconds = spotifyPlayerRef.current.state.progressMs/1000;
+
+                var progressObjectEvent = {
+                    playedSeconds:SpotifyplayedSeconds,
+                    playedPercentage:SpotifyPlayedPercents,
+                    played : SpotifyPlayedPercents/100
+                }
+
+                await handleProgress(progressObjectEvent, spotifyPlayerRef, false);
+                
+                setBarPercentage(SpotifyPlayedPercents);
+                checkCurrentUserSpotifyTokenExpiration(currentUser);
+                checkRoomSpotifyTokenExpiration(room);
+            }
+        };
+
+        const intervalId = setInterval(updateSpotifyPlayerInfos, 500); // Toutes les 2 secondes
+        return () => {
+            clearInterval(intervalId);
+        };
+    
+    }, [spotifyPlayerIsPlaying]);
+
     async function SpotifyPlayerCallBack(e){
         if(e.type === 'player_update') {
-            if(e.previousTracks[0] && (e.track.id === e.previousTracks[0].id && spotifyEndSwitchTempFix) && !mediaIndexExist(room.playlistUrls,playerIdPlayed+1) && room.roomParams.isAutoPlayActivated) {
-                
-                if(isActuallyAdmin) {
-                    addMediaForAutoPlayByYoutubeId(room.playlistUrls[playerIdPlayed].title);
-                    await delay(250);
-                    setIdPlaying(playerIdPlayed+1);
-                } else {
-                }
+            setSpotifyPlayerIsPlaying(e.isPlaying);
+            if(e.previousTracks[0] && (e.track.id === e.previousTracks[0].id)) {
+               await handleMediaEnd();
             }
         }
     }
@@ -684,7 +674,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                                         pip={pip}
                                                                         height='100%'
                                                                         volume={localVolume}
-                                                                        onProgress={e => handleProgress(e)}
+                                                                        onProgress={e => handleProgress(e, playerRef)}
                                                                         progressInterval = {1000}
                                                                         //onStart={e => handlePlay(true)}
                                                                         onReady={e => handleReady()}
@@ -706,8 +696,10 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                                 <>
                                                                     {(!currentUser.customDatas.spotifyConnect.connected && isFromSpotify(room.playlistUrls[playerIdPlayed])) &&
                                                                         <Alert className="animate__animated animate__fadeInUp animate__slow texturaBgButton bord2 bordGreen bordSolid alertConnectSpotify" onClick={(e) => goToSpotifyConnectUrl()} >
-                                                                            <AlertTitle sx={{fontWeight:"bold"}}>Lecteur spotify</AlertTitle>
-                                                                            <Typography fontSize="small" component="p">Clique pour utiliser ton compte spotify premium</Typography>
+                                                                            <AlertTitle sx={{fontWeight:"bold"}}>Spotify Player</AlertTitle>
+                                                                            <Typography fontSize="small" component="p">
+                                                                                Connecte ton compte pour profiter du player Spotify toi aussi !
+                                                                            </Typography>
                                                                         </Alert>
                                                                     }
                                                                     <Grid className="react-player" >
@@ -866,6 +858,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
             <>
                     <RoomModalAddMedia 
                         room={room}
+                        playlistId={room.id}
+                        enablerSpotify={room.enablerSpotify}
+                        playlistEmpty={room.playlistEmpty}
                         roomIsPlaying={roomIsPlaying}
                         open={OpenAddToPlaylistModal} 
                         changeOpen={setOpenAddToPlaylistModal}
@@ -883,7 +878,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         handleDisconnectFromDeezerModal={setOpenForceDisconnectDeezerModal} 
                         handleDisconnectFromSpotifyModal={setOpenForceDisconnectSpotifyModal} 
                         roomParams={room.roomParams}
-                        spotify={room.enablerSpotify}
                         handleChangeGeoloc={handleUpdateRoomGeoloc} 
                     />
                     <BottomInteractions 
