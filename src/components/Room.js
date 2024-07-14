@@ -237,7 +237,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     var roomDataInFb = doc.data();
                     var actualMessagesLength = room.messagesArray.length;
                     
-                    if(playerRef.current && playerRef.current.getCurrentTime && !isActuallyAdmin && playerNotSync(roomDataInFb, playerRef)) {
+                    var playerRefObject = isFromSpotify(roomDataInFb.playlistUrls[roomDataInFb.playing]) ? spotifyPlayerRef : playerRef;
+                    if(isVarExist(playerRefObject.current) && !isActuallyAdmin && playerNotSync(roomDataInFb, playerRefObject)) {
                         goToSecond(Math.floor(roomDataInFb.mediaActuallyPlayingAlreadyPlayedData.playedSeconds));
                     } 
 
@@ -348,7 +349,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     async function setIdPlaying(idPlaying) {
         await delay(250);   
         setPlayerIdPlayed(idPlaying);
-        goToSecond(0);
+        await goToSecond(0);
         setPlayedPercents(0);
         setBarPercentage(0);
         await delay(250);        
@@ -364,15 +365,17 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         }
     }
 
+    const [isLookingAutoAdd, setIsLookingAutoAdd] = useState(false);
     async function handleProgress(event, playerObjectRef, setBar = true) {
         if(setBar) {
             setBarPercentage(Math.floor(event.played*100));
         }
         if(isActuallyAdmin) {
-            if(Math.floor(event.played*100) > 85 && room.roomParams.isAutoPlayActivated && !mediaIndexExist(room.playlistUrls,playerIdPlayed+1)) {
-                await addMediaForAutoPlayByYoutubeId(room.playlistUrls[playerIdPlayed].title);
+            if(Math.floor(event.played*100) > 85 && room.roomParams.isAutoPlayActivated && !mediaIndexExist(room.playlistUrls,playerIdPlayed+1) && !isLookingAutoAdd) { 
+                setIsLookingAutoAdd(true);
+                addMediaForAutoPlayByYoutubeId(room.playlistUrls[playerIdPlayed].title);
             }
-            await updateFirebaseRoom( roomRef , {
+            updateFirebaseRoom( roomRef , {
                 mediaActuallyPlayingAlreadyPlayedData:{
                     playedSeconds:event.playedSeconds,
                     playedPercentage:event.played*100,
@@ -380,9 +383,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 }
             })
         } else {
-            if(guestSynchroOrNot && playerNotSync(room, playerObjectRef)) {
-                goToSecond(Math.floor(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds));
-            } 
         }
     }
 
@@ -554,26 +554,29 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }
 
     useEffect(() => {
-        const updateSpotifyPlayerInfos = async () => {
-            if (spotifyPlayerRef.current && spotifyPlayerIsPlaying) {
-                var SpotifyPlayedPercents = Math.floor(spotifyPlayerRef.current.state.position);
-                var SpotifyplayedSeconds = spotifyPlayerRef.current.state.progressMs/1000;
+        
+        var updateSpotifyPlayerInfos = async () => {};
+        if(spotifyPlayerIsPlaying) {
+            updateSpotifyPlayerInfos = async () => {
+                if (spotifyPlayerRef.current) {
+                    var SpotifyPlayedPercents = Math.floor(spotifyPlayerRef.current.state.position);
+                    var SpotifyplayedSeconds = spotifyPlayerRef.current.state.progressMs/1000;
 
-                var progressObjectEvent = {
-                    playedSeconds:SpotifyplayedSeconds,
-                    playedPercentage:SpotifyPlayedPercents,
-                    played : SpotifyPlayedPercents/100
+                    var progressObjectEvent = {
+                        playedSeconds:SpotifyplayedSeconds,
+                        playedPercentage:SpotifyPlayedPercents,
+                        played : SpotifyPlayedPercents/100
+                    }
+
+                    await handleProgress(progressObjectEvent, spotifyPlayerRef, false);
+                    
+                    setBarPercentage(SpotifyPlayedPercents);
                 }
-
-                await handleProgress(progressObjectEvent, spotifyPlayerRef, false);
-                
-                setBarPercentage(SpotifyPlayedPercents);
-                checkCurrentUserSpotifyTokenExpiration(currentUser);
-                checkRoomSpotifyTokenExpiration(room);
-            }
-        };
-
-        const intervalId = setInterval(updateSpotifyPlayerInfos, 500); // Toutes les 2 secondes
+            };
+        } else {
+            updateSpotifyPlayerInfos = async () => {};
+        }
+        let intervalId = setInterval(updateSpotifyPlayerInfos, 2000); // Toutes les 2 secondes
         return () => {
             clearInterval(intervalId);
         };
@@ -582,7 +585,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     async function SpotifyPlayerCallBack(e){
         if(e.type === 'player_update') {
-            setSpotifyPlayerIsPlaying(e.isPlaying);
+            if(spotifyPlayerIsPlaying !== e.isPlaying) {
+                setSpotifyPlayerIsPlaying(e.isPlaying); 
+            }
             if(e.previousTracks[0] && (e.track.id === e.previousTracks[0].id)) {
                await handleMediaEnd();
             }
@@ -597,7 +602,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }, [localVolume,loaded]);
 
     async function addMediaForAutoPlayByYoutubeId(lastMediaTitle) {
-        
         var params = youtubeApiSearchObject(lastMediaTitle.split('-')[0],5);
 
         await axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, { params: params })
@@ -606,6 +610,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 var responseItemLength = randomInt(0,response.data.items.length-1);
                 var suggestMedia = autoAddYTObject(response.data.items[responseItemLength]);
                 await handleAddValidatedObjectToPlaylist(suggestMedia);
+                setIsLookingAutoAdd(false);
                 CreateGoogleAnalyticsEvent('Actions','Autoplay add', 'Autoplay add');
             }
         });
@@ -757,9 +762,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                                 {formatNumberToMinAndSec(playedSeconds(playerRef, 'youtube')) +' / ' + formatNumberToMinAndSec(playerRef.current.getDuration())}
                                                             </Typography>
                                                         }
-                                                        {isFromSpotify(room.playlistUrls[playerIdPlayed]) && 
+                                                        {isVarExist(spotifyPlayerRef.current) && isFromSpotify(room.playlistUrls[playerIdPlayed]) && 
                                                             <Typography sx={{ fontSize: '10px', ml:0, mb: 1, color:'var(--grey-inspired)'}} className='fontFamilyNunito'>
-                                                                {formatNumberToMinAndSec(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds)+' / ' + room.playlistUrls[playerIdPlayed].duration}
+                                                                {formatNumberToMinAndSec(playedSeconds(spotifyPlayerRef, 'spotify'))} / {room.playlistUrls[playerIdPlayed].duration}
                                                             </Typography>
                                                         }
                                                     </Grid>
