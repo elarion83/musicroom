@@ -36,7 +36,7 @@
 }
 
 
-.black_style_dialog .MuiPaper-root {
+.black_style_dialog>.MuiPaper-root {
     background:var(--main-bg-color);
     background-image:url('../img/textura.png');
     background-size: cover;

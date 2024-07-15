@@ -66,12 +66,12 @@
 }
 
 .texturaBgButton,.leftDrawerTop  {
-    background: url('../img/textura.png');
+    background-image: url('../img/textura.png');
     background-size: 100%;
 }
 
 .main_container {
-    background: url('../img/textura_white.png');
+    background-image: url('../img/textura_white.png');
     background-size: cover;
     background-position:50%;
 }

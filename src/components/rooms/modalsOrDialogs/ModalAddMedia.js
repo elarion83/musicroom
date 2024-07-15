@@ -15,7 +15,7 @@ import Tabs from '@mui/material/Tabs';
 import validator from 'validator';
 import { cleanMediaTitle, delay, enablersDurationToReadable, getArtistsSpotify, getDisplayTitle, getYTVidId, goToSpotifyConnectUrl, isEmpty, isProdEnv, isVarExist, isVarExistNotEmpty } from '../../../services/utils';
 import { withTranslation } from 'react-i18next';
-import { Button, SwipeableDrawer, Typography } from '@mui/material';
+import { Alert, AlertTitle, Button, SwipeableDrawer, Typography } from '@mui/material';
 import SoundWave from "../../../services/SoundWave";
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 import { searchTextArray, spotifyApiPlaylistTracksObject, spotifyApiSearchObject, spotifyApiTopTracksObject, youtubeApiSearchObject, youtubeApiVideoInfoParams } from '../../../services/utilsArray';
@@ -372,8 +372,11 @@ const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, ro
                                                     ) : (
                                                         <Grid item xs={12} sx={{pt:1}}>
                                                         
+                                                            <Alert severity="info" variant="filled" sx={{mt:1,mb:1 }} className="animate__animated bordLight animate__fadeInUp animate__slow texturaBgButton bord2  bordSolid " onClick={(e) => goToSpotifyConnectUrl()} >
+                                                                <AlertTitle sx={{margin:0}}>Connexion nécessaire pour accéder à vos favoris. </AlertTitle>
+                                                            </Alert>
                                                             <SpotifyConnectButton 
-                                                                text='Me connecter a spotify'
+                                                                text='Mon compte spotify'
                                                                 clickFunc={goToSpotifyConnectUrl}
                                                                 user={currentUser}
                                                             />
@@ -409,10 +412,17 @@ const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, ro
                                         ) : (
                                             <Container sx={{padding:'1em 2em'}}>
                                                 <SpotifyConnectButton 
-                                                    text='Utiliser Spotify pour cette playlist'
+                                                    text='Activer la recherche'
                                                     clickFunc={goToSpotifyConnectUrl}
                                                     user={currentUser}
                                                 />
+                                                
+                                                <Alert severity="info" variant="filled" sx={{mt:1}}className="animate__animated bordLight animate__fadeInUp animate__slow texturaBgButton bord2  bordSolid " onClick={(e) => goToSpotifyConnectUrl()} >
+                                                    <AlertTitle>Recherche sur Spotify</AlertTitle>
+                                                    <Typography fontSize="small" component="p">
+                                                        Active la recherche via Spotify pendant 60 minutes.
+                                                    </Typography>
+                                                </Alert>
                                             </Container>    
                                             )
                                         }
