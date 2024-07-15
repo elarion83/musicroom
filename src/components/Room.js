@@ -606,8 +606,13 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         await axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, { params: params })
         .then(async function(response) {
             if(!isEmpty(response.data.items)) {
-                var responseItemLength = randomInt(0,response.data.items.length-1);
-                var suggestMedia = autoAddYTObject(response.data.items[responseItemLength]);
+                var addedItemIndex = randomInt(0,response.data.items.length-1);
+                var suggestMedia = autoAddYTObject(response.data.items[addedItemIndex]);
+                if(suggestMedia.platformId === room.playlistUrls[playerIdPlayed].platformId) {
+                    response.data.items.splice(addedItemIndex, 1);
+                    addedItemIndex = randomInt(0,response.data.items.length-1);
+                    suggestMedia = autoAddYTObject(response.data.items[addedItemIndex]);
+                }
                 await handleAddValidatedObjectToPlaylist(suggestMedia);
                 setIsLookingAutoAdd(false);
                 CreateGoogleAnalyticsEvent('Actions','Autoplay add', 'Autoplay add');
