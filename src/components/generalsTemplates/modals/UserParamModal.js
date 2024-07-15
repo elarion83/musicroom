@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Alert, AlertTitle, Box, Button, Dialog, DialogContent, FormGroup, Grid, Icon, IconButton, InputAdornment, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Typography } from "@mui/material";
@@ -15,12 +15,16 @@ import { AccountCircle, CancelOutlined , Save } from "@mui/icons-material";
 import { cleanPseudoEntered, delay, goToSpotifyConnectUrl, isPseudoEnteredValid, isUserAnon, isVarExist, userSpotifyTokenObject } from "../../../services/utils";
 import CachedIcon from '@mui/icons-material/Cached';
 import UserAvatarComponent from "../../../services/utilsComponents";
+import { checkCurrentUserSpotifyTokenExpiration } from "../../../services/utilsRoom";
+import SpotifyConnectButton from "../buttons/SpotifyConnectButton";
 const UserParamModal = ({ t, open, changeOpen, user = null, setUserInfo = null, ownProfile = true}) => {
 
     const [pseudo, setPseudo] = useState('');
     const [isEditingPseudo, setIsEditingPseudo] = useState(false);
     const [isEditingUserLoading, setIsEditingUserLoading ] = useState(false);
     
+    var userSpotify = user.customDatas.spotifyConnect;
+    console.log(userSpotify, user.customDatas.spotifyConnect);
 
     async function updateUser() {
         setIsEditingUserLoading(true);
@@ -94,33 +98,13 @@ const UserParamModal = ({ t, open, changeOpen, user = null, setUserInfo = null, 
                                 </ListItem>
                             </List>
                             
-                        {ownProfile && 
-                            <>
-                                {user.customDatas.spotifyConnect.connected ? (
-                                    <Button
-                                        className='main_bg_color buttonBorder btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
-
-                                        startIcon={<Icon style={{ display: 'inline', color: 'white', marginRight: '0.5em' }} icon="mdi:spotify" />}
-                                        variant="contained"                            
-                                        sx={{ width:'100%' }}
-                                        color="success"
-                                        onClick={e => resetSpotifyToken()}>
-                                        Me déconnecter de spotify
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        sx={{ width:'100%' }}
-                                        className='main_bg_color btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
-                                        startIcon={<Icon style={{ display: 'inline', color: 'white', marginRight: '0.5em', }} icon="mdi:spotify" />}
-                                        variant="contained"
-                                        color="success"
-                                        onClick={(e) => goToSpotifyConnectUrl()}>
-                                        {t('ModalParamsRoomConnectToSpotifyText')}
-                                    </Button>
-                                )
-                                }
-                            </>
-                        }
+                            {ownProfile && 
+                                <SpotifyConnectButton 
+                                    text={userSpotify.connected ? 'Connecté à Spotify' : 'Me connecter a spotify'} 
+                                    clickFunc={userSpotify.connected ? resetSpotifyToken : goToSpotifyConnectUrl}
+                                    expiration={userSpotify.expiration}
+                                />
+                            }
                         </Box>
                         
                         <FormGroup>

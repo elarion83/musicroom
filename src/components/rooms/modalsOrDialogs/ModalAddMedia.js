@@ -26,7 +26,8 @@ import SearchResultItem from '../SearchResultItem';
 import { mockYoutubeSearchResoltForVald, mockYoutubeSearchResultForVald, mockYoutubeTrendResult } from '../../../services/mockedArray';
 import YoutubeVideoSlider from '../../../services/YoutubeVideoSlider';
 import { returnAnimateReplace } from '../../../services/animateReplace';
-import { checkRoomSpotifyTokenExpiration } from '../../../services/utilsRoom';
+import { checkCurrentUserSpotifyTokenExpiration, checkRoomSpotifyTokenExpiration } from '../../../services/utilsRoom';
+import SpotifyConnectButton from '../../generalsTemplates/buttons/SpotifyConnectButton';
 const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends,playlistId,enablerSpotify,playlistEmpty, room, changeOpen, roomIsPlaying, currentUser, validatedObjectToAdd, DeezerTokenProps }) => {
     const [mediaSearchResultYoutube, setMediaSearchResultYoutube] = useState([]);
     const [mediaSearchResultSpotify, setMediaSearchResultSpotify] = useState([]);
@@ -66,6 +67,10 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends,playlistId,enablerSpoti
             returnAnimateReplace(animatedElementsRef, {Out:"In", Down:"Up", animate__delay:'animate__delay-1s'}, /Out|Down|animate__delay/gi);
         }
 
+        if(open) {
+            checkCurrentUserSpotifyTokenExpiration(currentUser);
+            checkRoomSpotifyTokenExpiration(room);
+        }
         if(open && currentUser.customDatas.spotifyConnect.connected && isEmpty(spotifyTopTracks)) {
             axios.get(process.env.REACT_APP_ROOM_SPOTIFY_ME_ENDPOINT+'/top/tracks', {
                 headers: { Authorization: `Bearer ${currentUser.customDatas.spotifyConnect.token}` },
@@ -243,7 +248,7 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends,playlistId,enablerSpoti
                 </Grid>
                 
                 <Grid item xs={12}>
-                    <Tabs value={tabIndex} onChange={handleTabChange} variant="fullWidth" sx={{ bgcolor: '#202124' }}>
+                    <Tabs value={tabIndex} onChange={handleTabChange} variant="fullWidth" className="addMediaTabs" sx={{ bgcolor: '#202124' }}>
                         <Tab className='colorWhite varelaFontTitle' label={showResult ? "Youtube ("+mediaSearchResultYoutube.length+")" : "Youtube"} />
                         <Tab className='colorWhite varelaFontTitle' label={showResult ? "Spotify ("+mediaSearchResultSpotify.length+")" : "Spotify"} />
                     </Tabs>
@@ -303,16 +308,10 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends,playlistId,enablerSpoti
                                                     {enablerSpotify.isLinked ? (
                                                         t('GeneralNoResult')
                                                     ) : ( 
-                                                        <Button
-                                                            className='main_bg_color btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
-
-                                                            sx={{ bgcolor: '#1ed760', mb:3, width:'100%', mt:1 }}
-                                                            startIcon={<Icon style={{ display: 'inline', color: 'white', marginRight: '0.5em' }} icon="mdi:spotify" />}
-                                                            variant="contained"
-                                                            color="success"
-                                                            onClick={(e) => goToSpotifyConnectUrl()}>
-                                                                Activer la recherche Spotify
-                                                        </Button>
+                                                        <SpotifyConnectButton 
+                                                            text='Activer la recherche Spotify'
+                                                            clickFunc={goToSpotifyConnectUrl}
+                                                        />
                                                     )}
                                                 </>
                                             ) : (
@@ -372,21 +371,17 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends,playlistId,enablerSpoti
                                                             </Grid>
                                                         </>
                                                     ) : (
-                                                        <Grid item xs={12}>
+                                                        <Grid item xs={12} sx={{pt:1}}>
                                                         
-                                                            <Button
-                                                                className='main_bg_color btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
-
-                                                                sx={{ bgcolor: '#1ed760', mb:1, mt:1, width:'100%' }}
-                                                                startIcon={<Icon style={{ display: 'inline', color: 'white', marginRight: '0.5em' }} icon="mdi:spotify" />}
-                                                                variant="contained"
-                                                                color="success"
-                                                                onClick={(e) => goToSpotifyConnectUrl()}>
-                                                                    Mon profil Spotify
-                                                            </Button>
-                                                            <Typography variant="h6" sx={{mt:1, ml:1}} className='colorWhite 'gutterBottom>
-                                                                {t('GeneralTrendings')}
-                                                            </Typography>
+                                                            <SpotifyConnectButton 
+                                                                text='Me connecter a spotify'
+                                                                clickFunc={goToSpotifyConnectUrl}
+                                                            />
+                                                            {!isEmpty(spotifyTrendsTracks) &&
+                                                                <Typography variant="h6" sx={{mt:1, ml:1}} className='colorWhite 'gutterBottom>
+                                                                    {t('GeneralTrendings')}
+                                                                </Typography>
+                                                            }
                                                             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ mt: 0 }}>
                                                                 {spotifyTrendsTracks.map(function (track, idsp) {
                                                                     let media = track.track;
@@ -412,16 +407,12 @@ const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends,playlistId,enablerSpoti
                                                 }
                                             </>
                                         ) : (
-                                            <Button
-                                                className='main_bg_color btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite' 
-
-                                                sx={{ bgcolor: '#1ed760', mb:3, width:'100%', mt:1 }}
-                                                startIcon={<Icon style={{ display: 'inline', color: 'white', marginRight: '0.5em' }} icon="mdi:spotify" />}
-                                                variant="contained"
-                                                color="success"
-                                                onClick={(e) => goToSpotifyConnectUrl()}>
-                                                    Activer la recherche Spotify
-                                            </Button>
+                                            <Container sx={{padding:'1em 2em'}}>
+                                                <SpotifyConnectButton 
+                                                    text='Utiliser Spotify pour cette playlist'
+                                                    clickFunc={goToSpotifyConnectUrl}
+                                                />
+                                            </Container>    
                                             )
                                         }
                                     </>

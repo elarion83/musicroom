@@ -112,20 +112,15 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     const [layoutDisplayClass, setLayoutDisplayClass] = useState('defaultLayout');
     const [newMessages, setNewMessages] = useState(false);
     const [barPercentage, setBarPercentage] = useState(0);
+
     // animated elements
     const animatedElementsRef = [];
 
     useEffect(() => {
         var adminClass = guestSynchroOrNot ? isActuallyAdmin ? 'adminView' : 'guestView' : '';
         switch (layoutDisplay) {
-            case 'compact':
-                setLayoutDisplayClass('compactLayout '+adminClass);
-                break;
             case 'fullscreen':
                 setLayoutDisplayClass('fullscreenLayout '+adminClass);
-                break;
-            case 'interactive':
-                setLayoutDisplayClass('interactiveLayout '+adminClass);
                 break;
             default:
                 setLayoutDisplayClass('defaultLayout '+adminClass);
@@ -187,7 +182,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     // TUTORIAL
     const [isTutorialShown, setIsTutorialShown] = useState(true);
 
-    const [vart , setVart] = useState(false);
     useEffect(() => {
         if(OpenAddToPlaylistModal && isTutorialShown) {
             setIsTutorialShown(false);
@@ -235,23 +229,27 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 setPlayerControlsShown(isActuallyAdmin);
                 unsubscribe = onSnapshot(roomRef, (doc) => {
                     var roomDataInFb = doc.data();
-                    var actualMessagesLength = room.messagesArray.length;
-                    
-                    var playerRefObject = isFromSpotify(roomDataInFb.playlistUrls[roomDataInFb.playing]) ? spotifyPlayerRef : playerRef;
-                    if(isVarExist(playerRefObject.current) && !isActuallyAdmin && playerNotSync(roomDataInFb, playerRefObject)) {
-                        goToSecond(Math.floor(roomDataInFb.mediaActuallyPlayingAlreadyPlayedData.playedSeconds));
-                    } 
+                    if(isVarExist(roomDataInFb)) {
+                        var actualMessagesLength = room.messagesArray.length;
+                        
+                        if(!roomDataInFb.playlistEmpty) {
+                            var playerRefObject = isFromSpotify(roomDataInFb.playlistUrls[roomDataInFb.playing]) ? spotifyPlayerRef : playerRef;
+                            if(isVarExist(playerRefObject.current) && !isActuallyAdmin && playerNotSync(roomDataInFb, playerRefObject)) {
+                                goToSecond(Math.floor(roomDataInFb.mediaActuallyPlayingAlreadyPlayedData.playedSeconds));
+                            } 
+                        }
 
-                    if(!isActuallyAdmin) {
-                        setPlayerIdPlayed(roomDataInFb.playing); 
-                        setRoomIsPlaying(roomDataInFb.actuallyPlaying); 
+                        if(!isActuallyAdmin) {
+                            setPlayerIdPlayed(roomDataInFb.playing); 
+                            setRoomIsPlaying(roomDataInFb.actuallyPlaying); 
+                        }
+
+                        setRoomInteractionsArray(roomDataInFb.interactionsArray);
+                    
+                        setIsActuallyAdmin(roomDataInFb.adminUid == currentUser.uid);
+                        
+                        setRoom(roomDataInFb);
                     }
-
-                    setRoomInteractionsArray(roomDataInFb.interactionsArray);
-                   
-                    setIsActuallyAdmin(roomDataInFb.adminUid == currentUser.uid);
-                    
-                    setRoom(roomDataInFb);
                 });
             } else {
                 if(!isActuallyAdmin) {
@@ -338,6 +336,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     async function setIsPlaying(PlayingOrNot) {
         setRoomIsPlaying(PlayingOrNot);
+        checkCurrentUserSpotifyTokenExpiration(currentUser);
         if(isActuallyAdmin) {
            updateFirebaseRoom( roomRef , {actuallyPlaying: PlayingOrNot})
         }
