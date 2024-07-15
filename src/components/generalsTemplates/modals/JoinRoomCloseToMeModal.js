@@ -4,6 +4,8 @@ import { Icon } from "@iconify/react";
 import { Alert, AlertTitle, Card, CardContent, CardMedia, Dialog, DialogActions, DialogContent, DialogContentText, Divider, Grid, Typography } from "@mui/material";
 import useDigitInput from 'react-digit-input';
 import { Box } from '@mui/system';
+import NotListedLocationOutlinedIcon from '@mui/icons-material/WhereToVoteOutlined';
+
 import { LoadingButton } from '@mui/lab';
 import { withTranslation } from 'react-i18next';
 import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
@@ -68,29 +70,29 @@ const JoinRoomCloseToMeModal = ({ t, open, close, handleJoinRoom, userPosition})
                 },
             },
         }}>
-            <ModalsHeader icon={() => <FindReplaceIcon style={{marginRight:'10px'}} />} title={'Playlists '+ t('GeneralNearBy')} />
+            <ModalsHeader icon={() => <NotListedLocationOutlinedIcon style={{marginRight:'10px'}} />} title={'Playlists '+ t('GeneralNearBy')} />
 
             <DialogContent dividers>
                 <Grid container direction="column" >
                    
                     {isEmpty(playlistList) &&
-                        <Alert severity="warning">{t('GeneralNoResult')}</Alert>
+                        <Alert severity="warning" sx={{mb:1}}>{t('GeneralNoResult')}</Alert>
                     }
                    
+                    <LoadingButton 
+                        loading={loadingPlaylistSearch}
+                        size="small" 
+                        startIcon={<FindReplaceIcon />}
+                        loadingPosition='start'
+                        onClick={(e) => refreshList()} 
+                        className='main_bg_color btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite'  
+                        position="end"
+                        sx={{flexBasis:'100%'}}
+                    >
+                        {t(loadingPlaylistSearch ? 'GeneralLoading' : 'GeneralRefresh')}  
+                    </LoadingButton>
                     {!isEmpty(playlistList) && 
                     <>
-                        <LoadingButton 
-                            loading={loadingPlaylistSearch}
-                            size="small" 
-                            startIcon={<FindReplaceIcon />}
-                            loadingPosition='start'
-                            onClick={(e) => refreshList()} 
-                            className='main_bg_color btnIconFixToLeft varelaFontTitle texturaBgButton colorWhite'  
-                            position="end"
-                            sx={{flexBasis:'100%'}}
-                        >
-                            {t(loadingPlaylistSearch ? 'GeneralLoading' : 'GeneralRefresh')}  
-                        </LoadingButton>
 
                         <Grid container direction="row" sx={{mt:2, mb:2}}>
                         
