@@ -5,8 +5,10 @@ import { Alert, AlertTitle, Button, Typography } from '@mui/material';
 import { formatNumberToMinAndSec, goToSpotifyConnectUrl, isEmpty, isVarExist, isVarExistNotEmpty, isVarNull } from '../../../services/utils';
 import { withTranslation } from "react-i18next";
 import { LoadingButton } from "@mui/lab";
+import { checkCurrentUserSpotifyTokenExpiration } from "../../../services/utilsRoom";
 
-const SpotifyConnectButton = ({t, text, clickFunc, expiration = null}) => {
+const SpotifyConnectButton = ({t, text, clickFunc, expiration = null, user}) => {
+
 
     const [secondsLeft, setSecondsLeft] = useState(isVarNull(expiration) ? '' : '');
     useEffect(() => {
@@ -21,12 +23,15 @@ const SpotifyConnectButton = ({t, text, clickFunc, expiration = null}) => {
                     return Math.max(Math.floor(difference / 1000), 0); // Return the number of seconds remaining
                 };
 
-                    const interval = setInterval(() => {
-                        setSecondsLeft(calculateTimeLeft());
-                    }, 1000);
+                const interval = setInterval(() => {
+                    if(secondsLeft == 0) {
+                        checkCurrentUserSpotifyTokenExpiration(user);
+                    }
+                    setSecondsLeft(calculateTimeLeft());
+                }, 1000);
 
-                    // Clear interval on component unmount
-                    return () => clearInterval(interval);
+                // Clear interval on component unmount
+                return () => clearInterval(interval);
             }
 
     }, [expiration]);

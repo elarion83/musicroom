@@ -99,6 +99,7 @@ const UserParamModal = ({ t, open, changeOpen, user = null, setUserInfo = null, 
                                     text={userSpotify.connected ? 'Connecté à Spotify' : 'Me connecter a spotify'} 
                                     clickFunc={userSpotify.connected ? resetSpotifyToken : goToSpotifyConnectUrl}
                                     expiration={userSpotify.expiration}
+                                    user={user}
                                 />
                             }
                         </Box>

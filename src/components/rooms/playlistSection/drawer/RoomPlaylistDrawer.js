@@ -60,7 +60,6 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable, room,roomRef,open, changeOpen
                             room={room}
                             roomRef={roomRef}
                             isAdminView={isAdminView}
-                            isPlayable={(isFromSpotify(data) && !isSpotifyAvailable) ? false : true}
                             isPlaying={roomIsActuallyPlaying}
                             setIsPlaying={setIsPlaying}
                             mediaDisplayingData={roomPlaylist[roomIdActuallyDisplaying]}

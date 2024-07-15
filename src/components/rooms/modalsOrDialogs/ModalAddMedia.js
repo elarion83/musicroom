@@ -309,6 +309,7 @@ const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, ro
                                                         <SpotifyConnectButton 
                                                             text='Activer la recherche Spotify'
                                                             clickFunc={goToSpotifyConnectUrl}
+                                                            user={currentUser}
                                                         />
                                                     )}
                                                 </>
@@ -374,6 +375,7 @@ const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, ro
                                                             <SpotifyConnectButton 
                                                                 text='Me connecter a spotify'
                                                                 clickFunc={goToSpotifyConnectUrl}
+                                                                user={currentUser}
                                                             />
                                                             {!isEmpty(spotifyTrendsTracks) &&
                                                                 <Typography variant="h6" sx={{mt:1, ml:1}} className='colorWhite 'gutterBottom>
@@ -409,6 +411,7 @@ const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, ro
                                                 <SpotifyConnectButton 
                                                     text='Utiliser Spotify pour cette playlist'
                                                     clickFunc={goToSpotifyConnectUrl}
+                                                    user={currentUser}
                                                 />
                                             </Container>    
                                             )
