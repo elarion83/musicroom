@@ -6,7 +6,7 @@ import { Box } from "@mui/system";
 import { ListItemIcon } from "@mui/material";
 import SoundWave from "../../../../services/SoundWave";
 
-const DrawerPlayPauseButton = ({ isAdminView,isPlayable, isPlaying, mediaDisplayingData, room, roomRef,setIsPlaying, setIdPlaying, idActuallyPlaying, idActuallyDisplaying }) => {
+const DrawerPlayPauseButton = ({ isAdminView,isPlayable = true, isPlaying, setIsPlaying, setIdPlaying, idActuallyPlaying, idActuallyDisplaying }) => {
     return(
         <Box >
             <ListItemIcon sx={{cursor:'pointer', zIndex:2, position:'relative', display:'flex'}}>
