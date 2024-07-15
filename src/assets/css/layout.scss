@@ -19,6 +19,7 @@
             z-index: 99999;
             top: 0px;
             position: fixed;
+            height: calc(100% - 53px);
         }
     }
 
@@ -37,7 +38,7 @@
     .iconOverPlayer {  
         position: absolute;
         z-index: 10000;
-        width: 100%;
+        width: 100vw;
         text-align: center;
         height: 80vh;
         line-height: 100%;
