@@ -25,7 +25,7 @@ const SpotifyConnectButton = ({t, text, clickFunc, expiration = null, user}) => 
 
                 const interval = setInterval(() => {
                     if(secondsLeft == 0) {
-                        checkCurrentUserSpotifyTokenExpiration(user);
+                        checkCurrentUserSpotifyTokenExpiration(user.customDatas.spotifyConnect, user.uid);
                     }
                     setSecondsLeft(calculateTimeLeft());
                 }, 1000);
@@ -51,7 +51,7 @@ const SpotifyConnectButton = ({t, text, clickFunc, expiration = null, user}) => 
 
             {isVarExist(expiration) && !isEmpty(secondsLeft) &&
                 <Alert  severity="info" sx={{zIndex:1}} className="animate__animated animate__slideInDown">
-                    <AlertTitle >Expire dans <Typography component='span'>{formatNumberToMinAndSec(secondsLeft)}</Typography></AlertTitle>
+                    <AlertTitle fontSize='small' >Expire dans <Typography component='span'>{formatNumberToMinAndSec(secondsLeft)}</Typography></AlertTitle>
                 </Alert>
             }
         </>

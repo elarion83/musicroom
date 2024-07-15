@@ -26,6 +26,7 @@ import YoutubeVideoSlider from '../../../services/YoutubeVideoSlider';
 import { returnAnimateReplace } from '../../../services/animateReplace';
 import { checkCurrentUserSpotifyTokenExpiration, checkRoomSpotifyTokenExpiration } from '../../../services/utilsRoom';
 import SpotifyConnectButton from '../../generalsTemplates/buttons/SpotifyConnectButton';
+import SpotifyTab from './addMediaTabs/SpotifyTab';
 const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, room, changeOpen, roomIsPlaying, currentUser, validatedObjectToAdd, DeezerTokenProps }) => {
     const [mediaSearchResultYoutube, setMediaSearchResultYoutube] = useState([]);
     const [mediaSearchResultSpotify, setMediaSearchResultSpotify] = useState([]);
@@ -66,7 +67,7 @@ const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, ro
         }
 
         if(open) {
-            checkCurrentUserSpotifyTokenExpiration(currentUser);
+            checkCurrentUserSpotifyTokenExpiration(currentUser.customDatas.spotifyConnect, currentUser.uid);
             checkRoomSpotifyTokenExpiration(room);
         }
         if(open && currentUser.customDatas.spotifyConnect.connected && isEmpty(spotifyTopTracks)) {
@@ -299,136 +300,18 @@ const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, ro
                         )}
                         {tabIndex === 1 && (
                             <Box>
-                                {showResult ? (
-                                    <>
-                                        {isEmpty(mediaSearchResultSpotify) ? (
-                                                <> 
-                                                    {enablerSpotify.isLinked ? (
-                                                        t('GeneralNoResult')
-                                                    ) : ( 
-                                                        <SpotifyConnectButton 
-                                                            text='Activer la recherche Spotify'
-                                                            clickFunc={goToSpotifyConnectUrl}
-                                                            user={currentUser}
-                                                        />
-                                                    )}
-                                                </>
-                                            ) : (
-                                                <Grid item xs={12}>
-                                                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ mt: 0 }}>
-                                                        {mediaSearchResultSpotify.map(function (media, idsp) {
-                                                            return (
-                                                                <SearchResultItem
-                                                                    key={idsp}
-                                                                    image={media.album.images[0].url}
-                                                                    title={media.name+ ' - '+media.artists[0].name}
-                                                                    source='spotify'
-                                                                    uid={uuid().slice(0, 10).toLowerCase()}
-                                                                    platformId={media.uri}
-                                                                    addedBy={addingObject.addedBy}
-                                                                    url={media.uri}
-                                                                    duration={enablersDurationToReadable(media.duration_ms, 'spotify')}
-                                                                    date={dateFormat(media.album.release_date, 'd mmm yyyy')}
-                                                                    channelOrArtist={getArtistsSpotify(media.artists)}
-                                                                    addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject}
-                                                                />)
-                                                        })}
-                                                    </Grid>
-                                                </Grid>
-                                            )
-                                        }
-                                    </>
-                                ) : (
-                                    <>
-                                        {enablerSpotify.isLinked ? ( // is room linked to spotify ?
-                                            <>
-                                                {currentUser.customDatas.spotifyConnect.connected ? (
-                                                        <>
-                                                            <Grid item xs={12}>
-                                                                <Typography variant="h6" sx={{mt:1, ml:1}} className='colorWhite 'gutterBottom>
-                                                                    {t('ModalAddMediaSpotifyRecommTitle')}
-                                                                </Typography>
-                                                                <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ mt: 0 }}>
-                                                                    {spotifyTopTracks.map(function (media, idsp) {
-                                                                        return (
-                                                                            <SearchResultItem
-                                                                                key={idsp}
-                                                                                image={media.album.images[0].url}
-                                                                                title={media.name+ ' - '+media.artists[0].name}
-                                                                                source='spotify'
-                                                                                uid={uuid().slice(0, 10).toLowerCase()}
-                                                                                platformId={media.uri}
-                                                                                addedBy={addingObject.addedBy}
-                                                                                url={media.uri}
-                                                                                duration={enablersDurationToReadable(media.duration_ms, 'spotify')}
-                                                                                date={dateFormat(media.album.release_date, 'd mmm yyyy')}
-                                                                                channelOrArtist={getArtistsSpotify(media.artists)}
-                                                                                addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject}
-                                                                            />)
-                                                                    })}
-                                                                </Grid>
-                                                            </Grid>
-                                                        </>
-                                                    ) : (
-                                                        <Grid item xs={12} sx={{pt:1}}>
-                                                        
-                                                            <Alert severity="info" variant="filled" sx={{mt:1,mb:1 }} className="animate__animated bordLight animate__fadeInUp animate__slow texturaBgButton bord2  bordSolid " onClick={(e) => goToSpotifyConnectUrl()} >
-                                                                <AlertTitle sx={{margin:0}}>Connexion nécessaire pour accéder à vos favoris. </AlertTitle>
-                                                            </Alert>
-                                                            <SpotifyConnectButton 
-                                                                text='Mon compte spotify'
-                                                                clickFunc={goToSpotifyConnectUrl}
-                                                                user={currentUser}
-                                                            />
-                                                            {!isEmpty(spotifyTrendsTracks) &&
-                                                                <Typography variant="h6" sx={{mt:1, ml:1}} className='colorWhite 'gutterBottom>
-                                                                    {t('GeneralTrendings')}
-                                                                </Typography>
-                                                            }
-                                                            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ mt: 0 }}>
-                                                                {spotifyTrendsTracks.map(function (track, idsp) {
-                                                                    let media = track.track;
-                                                                    return (
-                                                                        <SearchResultItem
-                                                                            key={idsp}
-                                                                            image={media.album.images[0].url}
-                                                                            title={media.name+ ' - '+media.artists[0].name}
-                                                                            source='spotify'
-                                                                            uid={uuid().slice(0, 10).toLowerCase()}
-                                                                            platformId={media.uri}
-                                                                            addedBy={addingObject.addedBy}
-                                                                            url={media.uri}
-                                                                            duration={enablersDurationToReadable(media.duration_ms, 'spotify')}
-                                                                            date={dateFormat(media.album.release_date, 'd mmm yyyy')}
-                                                                            channelOrArtist={getArtistsSpotify(media.artists)}
-                                                                            addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject}
-                                                                        />)
-                                                                })}
-                                                            </Grid>
-                                                        </Grid>
-                                                    )
-                                                }
-                                            </>
-                                        ) : (
-                                            <Container sx={{padding:'1em 2em'}}>
-                                                <SpotifyConnectButton 
-                                                    text='Activer la recherche'
-                                                    clickFunc={goToSpotifyConnectUrl}
-                                                    user={currentUser}
-                                                />
-                                                
-                                                <Alert severity="info" variant="filled" sx={{mt:1}}className="animate__animated bordLight animate__fadeInUp animate__slow texturaBgButton bord2  bordSolid " onClick={(e) => goToSpotifyConnectUrl()} >
-                                                    <AlertTitle>Recherche sur Spotify</AlertTitle>
-                                                    <Typography fontSize="small" component="p">
-                                                        Active la recherche via Spotify pendant 60 minutes.
-                                                    </Typography>
-                                                </Alert>
-                                            </Container>    
-                                            )
-                                        }
-                                    </>
-                                )
-                            }
+                                <SpotifyTab 
+                                
+                                    showResult={showResult}
+                                    mediaSearchResultSpotify={mediaSearchResultSpotify}
+                                    spotifyLinked={enablerSpotify.isLinked}
+                                    spotifyUserDatas={currentUser.customDatas.spotifyConnect}
+                                    currentUser={currentUser}
+                                    spotifyTrendsTracks={spotifyTrendsTracks}
+                                    spotifyTopTracks={spotifyTopTracks}
+                                    addingObject={addingObject}
+                                    handleCheckAndAddObjectToPlaylistFromObject={handleCheckAndAddObjectToPlaylistFromObject}
+                                />
                             </Box>
                         )}
                    {/*     {tabIndex === 2 && (

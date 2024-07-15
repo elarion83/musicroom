@@ -46,9 +46,9 @@ export function roomIdLocallyStored() {
     return localStorage.getItem("Play-It_RoomId");
 }
 
-export function checkCurrentUserSpotifyTokenExpiration(currentUser) {
-    if(currentUser.customDatas.spotifyConnect.expiration < Date.now()) {
-        let userRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, currentUser.uid);
+export function checkCurrentUserSpotifyTokenExpiration(userSpotifyDatas, userUid) {
+    if(userSpotifyDatas.expiration < Date.now()) {
+        let userRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, userUid);
         updateFirebaseUser(userRef,{spotifyConnect:userSpotifyTokenObject(null, 'reset')});
     }
 }

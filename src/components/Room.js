@@ -336,7 +336,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     async function setIsPlaying(PlayingOrNot) {
         setRoomIsPlaying(PlayingOrNot);
-        checkCurrentUserSpotifyTokenExpiration(currentUser);
+        checkCurrentUserSpotifyTokenExpiration(currentUser.customDatas.spotifyConnect, currentUser.uid);
         if(isActuallyAdmin) {
            updateFirebaseRoom( roomRef , {actuallyPlaying: PlayingOrNot})
         }

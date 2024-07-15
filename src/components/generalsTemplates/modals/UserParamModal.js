@@ -108,7 +108,7 @@ const UserParamModal = ({ t, open, changeOpen, user = null, setUserInfo = null, 
                             {user.isAnonymous && 
                                 <Alert sx={{mb:2, alignItems: 'center'}}  severity='warning'>
                                     <AlertTitle sx={{fontWeight:'bold'}}>{t('ModalUserSettingsEditNotAllowedTitle')}</AlertTitle>
-                                    <Typography fontSize='small'>{t('ModalUserSettingsEditNotAllowedText')}</Typography>
+                                    <Typography fontSize='small' component='p'>{t('ModalUserSettingsEditNotAllowedText')}</Typography>
                                 </Alert>
                             }
                             
