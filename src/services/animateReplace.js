@@ -1,4 +1,4 @@
-import { isVarExist, isVarNull } from "./utils";
+import { isVarNull } from "./utils";
 
 export function returnAnimateReplace(animatedRefElements, replaceArray, replace) {
     animatedRefElements.forEach(animatedElem => {

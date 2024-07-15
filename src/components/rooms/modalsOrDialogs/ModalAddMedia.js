@@ -13,22 +13,20 @@ import Snackbar from '@mui/material/Snackbar';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import validator from 'validator';
-import { YTV3APIDurationToReadable, cleanMediaTitle, delay, enablersDurationToReadable, getArtistsSpotify, getDisplayTitle, getLocale, getYTVidId, goToSpotifyConnectUrl, isEmpty, isProdEnv, isVarExist, isVarExistNotEmpty } from '../../../services/utils';
+import { cleanMediaTitle, delay, enablersDurationToReadable, getArtistsSpotify, getDisplayTitle, getYTVidId, goToSpotifyConnectUrl, isEmpty, isProdEnv, isVarExist, isVarExistNotEmpty } from '../../../services/utils';
 import { withTranslation } from 'react-i18next';
-import { Button, Dialog, Icon, SwipeableDrawer, Typography } from '@mui/material';
+import { Button, SwipeableDrawer, Typography } from '@mui/material';
 import SoundWave from "../../../services/SoundWave";
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { searchTextArray, spotifyApiPlaylistTracksObject, spotifyApiSearchObject, spotifyApiTopTracksObject, youtubeApiSearchObject, youtubeApiVideoInfoParams } from '../../../services/utilsArray';
 import { KeyboardArrowDown } from '@mui/icons-material';
-import  NewContentslider  from '../../../services/YoutubeVideoSlider';
 import SearchResultItem from '../SearchResultItem';
-import { mockYoutubeSearchResoltForVald, mockYoutubeSearchResultForVald, mockYoutubeTrendResult } from '../../../services/mockedArray';
+import { mockYoutubeSearchResultForVald } from '../../../services/mockedArray';
 import YoutubeVideoSlider from '../../../services/YoutubeVideoSlider';
 import { returnAnimateReplace } from '../../../services/animateReplace';
 import { checkCurrentUserSpotifyTokenExpiration, checkRoomSpotifyTokenExpiration } from '../../../services/utilsRoom';
 import SpotifyConnectButton from '../../generalsTemplates/buttons/SpotifyConnectButton';
-const RoomModalAddMedia = ({ t, open,youtubeLocaleTrends,playlistId,enablerSpotify,playlistEmpty, room, changeOpen, roomIsPlaying, currentUser, validatedObjectToAdd, DeezerTokenProps }) => {
+const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, room, changeOpen, roomIsPlaying, currentUser, validatedObjectToAdd, DeezerTokenProps }) => {
     const [mediaSearchResultYoutube, setMediaSearchResultYoutube] = useState([]);
     const [mediaSearchResultSpotify, setMediaSearchResultSpotify] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');

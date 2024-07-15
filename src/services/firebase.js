@@ -1,11 +1,10 @@
-import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
 import "firebase/compat/storage";
 
 import { initializeApp } from 'firebase/app';
 import { getDatabase } from 'firebase/database';
-import  { EmailAuthProvider, getAuth, GoogleAuthProvider, signInWithPhoneNumber  } from 'firebase/auth';
+import  { EmailAuthProvider, getAuth, GoogleAuthProvider  } from 'firebase/auth';
 import { getStorage } from 'firebase/storage';
 import { getFirestore } from "firebase/firestore";
 import { getLocale } from "./utils";

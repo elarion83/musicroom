@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {  db } from "../services/firebase";
 import { doc, getDoc, onSnapshot, setDoc, } from 'firebase/firestore';
 import { useIdleTimer } from 'react-idle-timer'
@@ -14,7 +14,7 @@ import axios from "axios";
 import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
-import {isFromSpotify,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingFirstInList,playingLastInList,isTokenInvalid, createDefaultRoomObject, formatNumberToMinAndSec, delay, isVarExist,  isDevEnv, secondsSinceEventFromNow, autoAddYTObject, randomInt, isVarExistNotEmpty, setPageTitle, envAppNameUrl, isEmpty, lastItemInObj, userSpotifyTokenObject, getTimeStampOfMoment, roomSpotifyTokenObject, spotifyConnectUrl, goToSpotifyConnectUrl} from '../services/utils';
+import {isFromSpotify,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingLastInList, createDefaultRoomObject, formatNumberToMinAndSec, delay, isVarExist,  isDevEnv, secondsSinceEventFromNow, autoAddYTObject, randomInt, isVarExistNotEmpty, setPageTitle, envAppNameUrl, isEmpty, roomSpotifyTokenObject, spotifyConnectUrl, goToSpotifyConnectUrl} from '../services/utils';
 import RoomPlaylistDrawer from "./rooms/playlistSection/drawer/RoomPlaylistDrawer";
 
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
@@ -38,7 +38,7 @@ import { withTranslation } from 'react-i18next';
 import ModalEnterRoomPassword from "./rooms/modalsOrDialogs/ModalEnterRoomPassword";
 import EmptyPlaylist from "./rooms/playlistSection/EmptyPlaylist";
 import { emptyToken, interactionObject, playerRefObject, youtubeApiSearchObject, youtubeApiVideosParams } from "../services/utilsArray";
-import { checkCurrentUserSpotifyTokenExpiration, checkRoomSpotifyTokenExpiration, playedSeconds, playerNotSync, playerSpotifyNotSync, updateFirebaseRoom, updateFirebaseUser } from "../services/utilsRoom";
+import { checkCurrentUserSpotifyTokenExpiration, playedSeconds, playerNotSync, updateFirebaseRoom } from "../services/utilsRoom";
 import ModalChangeRoomAdmin from "./rooms/modalsOrDialogs/ModalChangeRoomAdmin";
 import RoomTutorial from "./rooms/RoomTutorial";
 import { mockYoutubeGamingResult, mockYoutubeMusicResult, mockYoutubeTrendResult } from "../services/mockedArray";

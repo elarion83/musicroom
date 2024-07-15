@@ -1,9 +1,6 @@
 import * as React from 'react';
 import AddIcon from '@mui/icons-material/Add';
-import { Icon } from "@iconify/react";
-import { Alert, AlertTitle, Card, CardContent, CardMedia, Dialog, DialogActions, DialogContent, DialogContentText, Divider, Grid, Typography } from "@mui/material";
-import useDigitInput from 'react-digit-input';
-import { Box } from '@mui/system';
+import { Alert, Dialog, DialogContent, Grid } from "@mui/material";
 import NotListedLocationOutlinedIcon from '@mui/icons-material/WhereToVoteOutlined';
 
 import { LoadingButton } from '@mui/lab';
@@ -11,13 +8,11 @@ import { withTranslation } from 'react-i18next';
 import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 import ModalsHeader from './ModalsHeader';
-import { getCleanRoomId } from '../../../services/utilsRoom';
 import ModalsFooter from './ModalsFooter';
 import { useState , useEffect } from 'react';
-import { getTimeStampOfMoment, haversineDistance, isEmpty, isVarNull } from '../../../services/utils';
+import { getTimeStampOfMoment, haversineDistance, isEmpty } from '../../../services/utils';
 import { db } from '../../../services/firebase';
 import RoomListItem from '../../rooms/RoomListItem';
-import { DateRange, LocationOn, PlaylistPlay } from '@mui/icons-material';
 import FindReplaceIcon from '@mui/icons-material/FindReplace';
 
 const JoinRoomCloseToMeModal = ({ t, open, close, handleJoinRoom, userPosition}) => {

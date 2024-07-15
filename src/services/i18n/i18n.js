@@ -329,7 +329,7 @@ const resources = {
         "ModalParamsRoomAutoPlayingTitle": "Lecture automatique",
         "ModalParamsRoomAutoPlayingText": "Le lecteur ajoutera automatiquement des médias à la playlist.",
         "ModalParamsRoomAutoSyncTitle": "Synchronisés par défaut",
-        "ModalParamsRoomAutoSyncText": "Synchronise automatiquement les utilisateurs a l\'hôte de la playlist.",
+        "ModalParamsRoomAutoSyncText": "Synchronise automatiquement les utilisateurs a l'hôte de la playlist.",
 
         "ModalRoomForceSpotifyDisconnectTitle":"Forcer la deconnexion de Spotify ?",
         "ModalRoomForceSpotifyDisconnectText":"La lecture et la recherche via Spotify ne sera plus disponible.",

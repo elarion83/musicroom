@@ -1,4 +1,4 @@
-import { Box, Grid, Icon, IconButton, LinearProgress } from "@mui/material";
+import { IconButton, LinearProgress } from "@mui/material";
 import { playingFirstInList } from "../../../services/utils";
 import { playedSeconds } from "../../../services/utilsRoom";
 import { Replay10,Forward10, SkipPrevious, Replay } from "@mui/icons-material";
@@ -8,11 +8,10 @@ import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
-import SoundWave from "../../../services/SoundWave";
 
 const PlayerButtons = ({room,playerControlsShown,playerType,spotifyControlsShown, roomPlayedActuallyPlayed, playerRef,playingLastInListInComp, localVolume,playerIdPlayed,roomIsPlaying, setLocalVolume,setIsPlaying,setIdPlaying, setLayoutdisplay,isLayoutFullScreen,layoutDisplay, goToSecond}) => {
    
-    var button = (playerType == 'spotify') ? spotifyControlsShown ? 'full' : 'limited' : 'full';
+    var button = (playerType === 'spotify') ? spotifyControlsShown ? 'full' : 'limited' : 'full';
     return(
         <>
             <LinearProgress className="mediaPlayingBar"  variant="determinate" value={roomPlayedActuallyPlayed} />
@@ -23,16 +22,16 @@ const PlayerButtons = ({room,playerControlsShown,playerType,spotifyControlsShown
                     <SkipPrevious fontSize="medium" sx={{color:(playingFirstInList(playerIdPlayed)) ? '#f0f1f0': '#303134'}} />
                 </IconButton>
 
-                {button == 'full' && <IconButton onClick={e => (room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds > 10) ? goToSecond(playedSeconds(playerRef, playerType) - 10) : ''}>
+                {button === 'full' && <IconButton onClick={e => (room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds > 10) ? goToSecond(playedSeconds(playerRef, playerType) - 10) : ''}>
                     <Replay10 fontSize="medium" sx={{ color : room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds > 10 ? '#f0f1f0': '#303134'}} />
                 </IconButton>}
 
-                {button == 'full' && <IconButton variant="contained" onClick={e => setIsPlaying(!roomIsPlaying)} sx={{ color:'#f0f1f0', position:'sticky', top:0, zIndex:2500}} >
+                {button === 'full' && <IconButton variant="contained" onClick={e => setIsPlaying(!roomIsPlaying)} sx={{ color:'#f0f1f0', position:'sticky', top:0, zIndex:2500}} >
                     { roomIsPlaying && <PauseCircleOutlineIcon fontSize="large" />}
                     { !roomIsPlaying && <PlayCircleOutlineIcon fontSize="large" />}
                 </IconButton>}
                 
-                {button == 'full' && <IconButton onClick={e => goToSecond(playedSeconds(playerRef, playerType) + 10)}>
+                {button === 'full' && <IconButton onClick={e => goToSecond(playedSeconds(playerRef, playerType) + 10)}>
                     <Forward10 fontSize="medium" sx={{color:'#f0f1f0'}} />
                 </IconButton>}
 
@@ -40,7 +39,7 @@ const PlayerButtons = ({room,playerControlsShown,playerType,spotifyControlsShown
                     <SkipNextIcon fontSize="medium" sx={{color: !playingLastInListInComp(room.playlistUrls.length,playerIdPlayed) ? '#f0f1f0' : '#303134'}} />
                 </IconButton>
                 
-                {button == 'full' && <IconButton onClick={e => (room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds > 10) ? goToSecond(0) : ''} >
+                {button === 'full' && <IconButton onClick={e => (room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds > 10) ? goToSecond(0) : ''} >
                     <Replay sx={{ color : room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds > 10 ? '#f0f1f0': '#303134'}}/>
                 </IconButton>}
             </>}

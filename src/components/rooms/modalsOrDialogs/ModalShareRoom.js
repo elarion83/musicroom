@@ -1,13 +1,11 @@
 import Alert from '@mui/material/Alert';
-import Button from '@mui/material/Button';
 import React, { useState } from "react";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { shareArray } from '../../../services/utilsArray';
 
 import DoneIcon from '@mui/icons-material/Done';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import ShareIcon from '@mui/icons-material/Share';
-import { AlertTitle, Dialog, DialogContent, Grid, Typography } from "@mui/material";
+import { AlertTitle, Dialog, DialogContent, Typography } from "@mui/material";
 
 import { withTranslation } from 'react-i18next';
 import { SlideUp } from '../../../services/materialSlideTransition/Slide';

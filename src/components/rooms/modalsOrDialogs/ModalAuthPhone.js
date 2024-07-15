@@ -1,10 +1,10 @@
 // App.js
 import React, { useState, useEffect } from 'react';
-import { getAuth, signInWithPhoneNumber, RecaptchaVerifier } from 'firebase/auth';
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Icon, Alert, Typography, Stack } from '@mui/material';
+import { signInWithPhoneNumber, RecaptchaVerifier } from 'firebase/auth';
+import { TextField, Dialog, DialogContent, Grid, Icon, Alert, Typography } from '@mui/material';
 import { auth } from '../../../services/firebase';
 import ModalsHeader from '../../generalsTemplates/modals/ModalsHeader';
-import { isEmpty, isVarExistNotEmpty } from '../../../services/utils';
+import { isVarExistNotEmpty } from '../../../services/utils';
 import { LoadingButton } from '@mui/lab';
 import { withTranslation } from 'react-i18next';
 import MuiPhoneNumber from "mui-phone-number";

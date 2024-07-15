@@ -1,21 +1,18 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { Alert, AlertTitle, Box, Button, Dialog, DialogContent, FormGroup, Grid, Icon, IconButton, InputAdornment, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Typography } from "@mui/material";
+import { Alert, AlertTitle, Box, Dialog, DialogContent, FormGroup, Grid, Icon, IconButton, InputAdornment, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
-import { LoadingButton } from "@mui/lab";
 import { timestampToDateoptions, timestampToHoursAndMinOptions } from "../../../services/utilsArray";
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 
 import { withTranslation } from 'react-i18next';
 import ModalsHeader from "./ModalsHeader";
 import { ReactSVG } from "react-svg";
-import { AccountCircle, CancelOutlined , Save } from "@mui/icons-material";
-import { cleanPseudoEntered, delay, goToSpotifyConnectUrl, isPseudoEnteredValid, isUserAnon, isVarExist, userSpotifyTokenObject } from "../../../services/utils";
-import CachedIcon from '@mui/icons-material/Cached';
+import { CancelOutlined , Save } from "@mui/icons-material";
+import { cleanPseudoEntered, delay, goToSpotifyConnectUrl, isPseudoEnteredValid, isVarExist, userSpotifyTokenObject } from "../../../services/utils";
 import UserAvatarComponent from "../../../services/utilsComponents";
-import { checkCurrentUserSpotifyTokenExpiration } from "../../../services/utilsRoom";
 import SpotifyConnectButton from "../buttons/SpotifyConnectButton";
 const UserParamModal = ({ t, open, changeOpen, user = null, setUserInfo = null, ownProfile = true}) => {
 
@@ -24,7 +21,6 @@ const UserParamModal = ({ t, open, changeOpen, user = null, setUserInfo = null, 
     const [isEditingUserLoading, setIsEditingUserLoading ] = useState(false);
     
     var userSpotify = user.customDatas.spotifyConnect;
-    console.log(userSpotify, user.customDatas.spotifyConnect);
 
     async function updateUser() {
         setIsEditingUserLoading(true);

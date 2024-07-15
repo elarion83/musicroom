@@ -4,7 +4,7 @@ import CelebrationIcon from '@mui/icons-material/Celebration';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, InstapaperIcon, InstapaperShareButton, RedditIcon, RedditShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
-import { UserIsFromApp, formatNumberToMinAndSec, getLocale, getRandomHexColor, hexColorToRgb, randomInt } from './utils';
+import { UserIsFromApp, getLocale, getRandomHexColor, hexColorToRgb, randomInt } from './utils';
 import { v4 as uuid } from 'uuid';
 
 export const notifsTextArray = {

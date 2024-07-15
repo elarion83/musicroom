@@ -1,19 +1,14 @@
 import React, { useState } from "react";
 
-import { Icon } from '@iconify/react';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import TuneIcon from '@mui/icons-material/Tune';
 import { AlertTitle, Button, Dialog, DialogContent, FormGroup, IconButton, InputAdornment, Switch, TextField, Typography } from "@mui/material";
 import Alert from '@mui/material/Alert';
-import Tooltip from '@mui/material/Tooltip';
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import SaveIcon from '@mui/icons-material/Save';
 import { withTranslation } from 'react-i18next';
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 import ModalsHeader from "../../generalsTemplates/modals/ModalsHeader";
-import { timestampToHoursAndMinOptions } from "../../../services/utilsArray";
-import { goToSpotifyConnectUrl } from "../../../services/utils";
 
 const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDisconnectFromSpotifyModal, handleDisconnectFromDeezerModal, handleChangeGeoloc, handleChangeRoomParams }) => {
 

@@ -23,12 +23,12 @@ import { Snackbar, Typography } from "@mui/material";
 import { PseudoGenerated } from './services/pseudoGenerator';
 
 import { CreateGoogleAnalyticsEvent } from './services/googleAnalytics';
-import { GFontIcon, UserIsFromApp, appApkFileUrl, checkStorageRoomId, envAppNameHum, isEmpty, isVarExist, isVarExistNotEmpty, saveSpotifyToken, setPageTitle, setUserSpotifyToken, userSpotifyTokenObject } from "./services/utils";
+import { GFontIcon, UserIsFromApp, appApkFileUrl, checkStorageRoomId, envAppNameHum, isVarExist, isVarExistNotEmpty, saveSpotifyToken, setPageTitle,  userSpotifyTokenObject } from "./services/utils";
 
 import { withTranslation } from 'react-i18next';
 import { createUserDataObject } from "./services/utilsArray";
-import { browserLocalPersistence, createUserWithEmailAndPassword, getAdditionalUserInfo, onAuthStateChanged, setPersistence, signInAnonymously, signInWithEmailAndPassword, signInWithPhoneNumber, signInWithPopup, signOut } from "firebase/auth";
-import {  Timestamp, doc, getDoc, onSnapshot, setDoc, updateDoc } from "firebase/firestore";
+import {  createUserWithEmailAndPassword, getAdditionalUserInfo, onAuthStateChanged,  signInAnonymously, signInWithEmailAndPassword,  signInWithPopup, signOut } from "firebase/auth";
+import {  doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { getCleanRoomId, updateFirebaseUser } from "./services/utilsRoom";
 import { useNavigate, useParams } from 'react-router-dom';
 import ModalAuthPhone from "./components/rooms/modalsOrDialogs/ModalAuthPhone";

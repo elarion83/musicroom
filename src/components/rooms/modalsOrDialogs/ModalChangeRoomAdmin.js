@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Alert, AlertTitle, Box, Button, Dialog, DialogActions, DialogContent, Grid, Typography } from "@mui/material";
+import { Alert, AlertTitle, Box, Dialog, DialogContent, Typography } from "@mui/material";
 import SwitchAccountIcon from '@mui/icons-material/SwitchAccount';
 import { withTranslation } from 'react-i18next';
 import { SlideUp } from '../../../services/materialSlideTransition/Slide';
@@ -22,7 +22,7 @@ const ModalChangePlaylistAdmin = ({ t,open,playlistAdminPass,changeOpen,adminVie
     React.useEffect(() => {   
         setWrongPass(false);
         if(digits[0].value !== '' && digits[1].value !== '' && digits[2].value !== '' && digits[3].value !== '') {
-            if(value.toLowerCase() == playlistAdminPass.toLowerCase()) {
+            if(value.toLowerCase() === playlistAdminPass.toLowerCase()) {
                 changeAdmin();
                 changeOpen(false);
                 onChange('');

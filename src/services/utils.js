@@ -4,7 +4,6 @@ import dateFormat from "dateformat";
 
 import { v4 as uuid } from 'uuid';
 import SearchResultItem from '../components/rooms/SearchResultItem';
-import { Timestamp } from 'firebase/firestore';
 import { getCleanRoomId, updateFirebaseUser } from './utilsRoom';
 
 export const envAppNameUrl = process.env.REACT_APP_NAME_URL;
@@ -157,7 +156,6 @@ export function isLayoutCompact(actualLayout) {
 }
 
 export function lastItemInObj(object) {
-    console.log(object.reverse().splice(0,1));
     return object.reverse().splice(0,1);
 }
 
@@ -190,7 +188,7 @@ export function isUndefined(val) {
 }
 
 export function isEmpty(val) {
-    return val.length == 0;
+    return val.length === 0;
 }
 
 export function getRandomHexColor() {
@@ -239,12 +237,11 @@ export function enablersDurationToReadable(duration, enabler = 'youtube') {
             var seconds = (parseInt(match[2]) || 0);
             return hours * 3600 + minutes * 60 + seconds;
 
-        break;
         case 'spotify':
             // spotify send millisecond
             return Math.floor(duration / 1000);
-        break;
         default:
+        break;
     }
  
 }
@@ -402,24 +399,24 @@ export function getTimeStampOfMoment(moment) {
 
 export function userSpotifyTokenObject(token = null, connectOrReset = 'connect') {
     return {
-        token: (connectOrReset == 'connect') ? token : '',
+        token: (connectOrReset === 'connect') ? token : '',
         refreshtoken:null,
-        expiration: (connectOrReset == 'connect') ? getTimeStampOfMoment('+1') : '',
+        expiration: (connectOrReset === 'connect') ? getTimeStampOfMoment('+1') : '',
         alreadyConnected:true,
-        connected:(connectOrReset == 'connect') ? true : false,
-        lastConnexionTimestamp: (connectOrReset == 'connect') ? Date.now() : '',
+        connected:(connectOrReset === 'connect') ? true : false,
+        lastConnexionTimestamp: (connectOrReset === 'connect') ? Date.now() : '',
     }
 }
 
 export function roomSpotifyTokenObject(userToken = null, userUid = null, connectOrReset = 'reset') {
     return {
-        isLinked: (connectOrReset == 'connect') ? true : false,
+        isLinked: (connectOrReset === 'connect') ? true : false,
         isLinkable:true,
-        token:(connectOrReset == 'connect') ? userToken.token : '',
-        expirationTokenTimestamp: (connectOrReset == 'connect') ? userToken.expiration : '',
+        token:(connectOrReset === 'connect') ? userToken.token : '',
+        expirationTokenTimestamp: (connectOrReset === 'connect') ? userToken.expiration : '',
         alreadyHaveBeenLinked:true,
-        userConnected:(connectOrReset == 'connect') ? userUid : '',
-        tokenTimestamp: (connectOrReset == 'connect') ? userToken.lastConnexionTimestamp : '',
+        userConnected:(connectOrReset === 'connect') ? userUid : '',
+        tokenTimestamp: (connectOrReset === 'connect') ? userToken.lastConnexionTimestamp : '',
     }
 }
 
@@ -450,7 +447,7 @@ export function getArtistsSpotify(artistsArray) {
     var returnString = '';
     var i = 0;
     artistsArray.forEach(artist => {
-        returnString = (i == 0) ? artist.name : returnString+ ' & ' +artist.name;
+        returnString = (i === 0) ? artist.name : returnString+ ' & ' +artist.name;
         i++;
     });
     return returnString;

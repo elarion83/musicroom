@@ -6,9 +6,7 @@ import { useState } from "react";
 import WhereToVoteOutlinedIcon from '@mui/icons-material/WhereToVoteOutlined';
 
 const EmptyPlaylist = ({t,isAdminView, setOpenInvitePeopleToRoomModal, setOpenAddToPlaylistModal, roomRef, roomParams, updateFirebaseRoom }) => {
-    
-    const REDIRECT_URI = window.location.protocol+'//'+window.location.hostname+(window.location.port ? ":" + window.location.port : '');
-    
+       
     const [localisationLoading, setLocalisationLoading] = useState(false);
     async function localizeRoom() {
         setLocalisationLoading(true);
