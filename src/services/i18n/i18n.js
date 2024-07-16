@@ -243,7 +243,7 @@ const resources = {
         
         "GeneralNearBy" : 'a proximité',
 
-        "HomePageSlide1Title":"Youtube et Spotify au même endroit, mais à plusieurs !",
+        "HomePageSlide1Title":"Youtube et Spotify au même endroit ET à plusieurs !",
         "HomePageSlide1Text1" : "Ajoute des médias depuis Spotify et Youtube à une playlist avec tes potes !",
         "HomePageSlide1Text2":"Créez, vibrez et réagissez ensemble au rythme de votre playlist. Entre potes, en soirée, en voiture, au travail, Play-it est indispensable !",
         "HomePageSlide2Title" :"En étant tous au même endroit ..",
