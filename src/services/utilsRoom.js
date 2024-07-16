@@ -1,5 +1,5 @@
-import { doc, updateDoc } from "firebase/firestore";
-import { isDevEnv, roomSpotifyTokenObject, userSpotifyTokenObject } from "./utils"; 
+import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { isDevEnv, isEmpty, roomSpotifyTokenObject, userSpotifyTokenObject } from "./utils"; 
 import { v4 as uuid } from 'uuid';
 import { db } from "./firebase";
 
@@ -41,6 +41,19 @@ export async function updateFirebaseUser(userRef, newUserData, merge=true) {
     await updateDoc(userRef, newUserData);
 }
 
+export async function addPlaylistNotif(title, message, type, duration = 5000, userUid, roomRef) {
+    var notifObject = {
+        title:title,
+        message:message,
+        type:type,
+        duration:duration,
+        timestamp:Date.now(), 
+        createdByUid: userUid
+    }
+    await updateDoc(roomRef, {
+      notifsArray: arrayUnion(notifObject)
+    });
+}
 
 export function roomIdLocallyStored() {
     return localStorage.getItem("Play-It_RoomId");
@@ -55,8 +68,11 @@ export function checkCurrentUserSpotifyTokenExpiration(userSpotifyDatas, userUid
 
 
 export function checkRoomSpotifyTokenExpiration(room) {
-    if(room.enablerSpotify.expirationTokenTimestamp < Date.now()) {
+    if(!isEmpty(room.enablerSpotify.expirationTokenTimestamp) && room.enablerSpotify.expirationTokenTimestamp < Date.now()) {
         let roomRef = doc(db, process.env.REACT_APP_ROOM_COLLECTION, room.id);
-        updateFirebaseRoom(roomRef,{enablerSpotify:roomSpotifyTokenObject(null,null, 'reset')});
+        if(room.enablerSpotify.alreadyHaveBeenLinked) {
+            addPlaylistNotif('Recherche Spotify', 'La connexion a expirée.', 'warning', 3500, '000', roomRef);
+            updateFirebaseRoom(roomRef,{enablerSpotify:roomSpotifyTokenObject(null,null, 'reset')});
+        }
     }
 }

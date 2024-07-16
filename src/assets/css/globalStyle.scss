@@ -5,7 +5,7 @@
     background-size: cover;
     background-position: 50% 50%;
     padding-top: 0vw;
-    > div {
+    > div:not(.rnc__base) {
       border-radius: 0;
       min-height: 100vh;
       overflow-x: hidden;
@@ -222,4 +222,54 @@ b, * {
   text-align: center;
   font-size: 3em;
   border: 3px dashed var(--main-color-darker);
+}
+
+// NOTIFS
+.rnc__base {
+  min-width: 190px !important;
+
+  >div {   
+    min-width: 190px !important;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+
+    .rnc__notification {
+      width: auto !important;
+      cursor: pointer;
+      max-width: 50vw;
+    }
+
+    .rnc__notification-content {
+      padding: 3px 5px !important;  
+      
+      .rnc__notification-title {
+        margin: 0;  
+        margin-right: 15px;
+        font-size: 12px;
+        font-family: var( --title-typo-alt);
+      }
+
+      p {
+        margin: 0;    
+        font-size: 10px;
+        line-height: 10px;
+        font-family: var( --title-text-nunito);
+      }
+
+      .rnc__notification-timer {
+        margin-top: 5px;
+      }
+
+      .rnc__notification-close-mark {
+        background: transparent;
+        &::after {
+          font-size: 15px;
+          right: -50%;
+          top:-5%;
+          left: auto;
+        }
+      }
+    }
+  }
 }

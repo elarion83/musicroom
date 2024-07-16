@@ -36,7 +36,7 @@ import { withTranslation } from 'react-i18next';
 import ModalEnterRoomPassword from "./rooms/modalsOrDialogs/ModalEnterRoomPassword";
 import EmptyPlaylist from "./rooms/playlistSection/EmptyPlaylist";
 import { emptyToken, interactionObject, playerRefObject, youtubeApiSearchObject, youtubeApiVideosParams } from "../services/utilsArray";
-import { checkCurrentUserSpotifyTokenExpiration, playedSeconds, playerNotSync, updateFirebaseRoom } from "../services/utilsRoom";
+import { addPlaylistNotif, checkCurrentUserSpotifyTokenExpiration, playedSeconds, playerNotSync, updateFirebaseRoom } from "../services/utilsRoom";
 import ModalChangeRoomAdmin from "./rooms/modalsOrDialogs/ModalChangeRoomAdmin";
 import RoomTutorial from "./rooms/RoomTutorial";
 import { mockYoutubeGamingResult, mockYoutubeMusicResult, mockYoutubeTrendResult } from "../services/mockedArray";
@@ -44,6 +44,7 @@ import SoundWave from "../services/SoundWave";
 import { returnAnimateReplace } from "../services/animateReplace";
 import PlayerButtons from "./rooms/playerSection/PlayerButtons";
 import { AlertTitle } from "@mui/material";
+import Notifications from "./rooms/Notifications";
 
 const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
@@ -54,6 +55,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 	const [room, setRoom] = useState({});
     const [isActuallyAdmin, setIsActuallyAdmin] = useState(false);
     const [userCanMakeInteraction, setUserCanMakeInteraction]= useState(true);	
+    const [roomNotifsArray, setRoomNotifsArray] = useState([]);
     const [roomInteractionsArray, setRoomInteractionsArray] = useState([]);
     const [interactionsDisplayedIdArray, setInteractionsDisplayedIdArray] = useState([]);
     const [loaded, setLoaded] = useState(false);
@@ -201,8 +203,10 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     async function initRoom(roomDatas, roomId = '', create = true, currentUser, docRef = null) {
         if(create) {
             await setDoc(docRef, roomDatas);
+            await addPlaylistNotif(currentUser.displayName, 'a crée la playlist.', 'success', 2500, currentUser.uid, roomRef);
             initRoomAsync(roomDatas, currentUser);
         } else {
+            await addPlaylistNotif(currentUser.displayName, 'est arrivé !', 'info', 2500, currentUser.uid, roomRef);
             initRoomAsync(roomDatas, currentUser)
         }
     }
@@ -223,7 +227,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         if(loaded) {
             if(guestSynchroOrNot) {
                 setPlayerControlsShown(isActuallyAdmin);
-                unsubscribe = onSnapshot(roomRef, (doc) => {
+                unsubscribe = onSnapshot(roomRef, async (doc) => {
                     var roomDataInFb = doc.data();
                     if(isVarExist(roomDataInFb)) {
                         var actualMessagesLength = room.messagesArray.length;
@@ -236,6 +240,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         }
 
                         if(!isActuallyAdmin) {
+
                             setPlayerIdPlayed(roomDataInFb.playing); 
                             setRoomIsPlaying(roomDataInFb.actuallyPlaying); 
                         }
@@ -246,10 +251,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         
                         setRoom(roomDataInFb);
                     }
-                });
+                });                            
+                addPlaylistNotif(currentUser.displayName, 'est synchronisé.', 'info', 2500, currentUser.uid, roomRef);
             } else {
                 if(!isActuallyAdmin) {
-                    unsubscribe();
+                    unsubscribe();                            
+                    addPlaylistNotif(currentUser.displayName, 'est désynchronisé.', 'info', 2500, currentUser.uid, roomRef);
                     setPlayerControlsShown(true);
                     setRoomIsPlaying(false);
                     goToSecond(0);
@@ -319,6 +326,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 if(!room.enablerSpotify.isLinked) {
                     var userSpotifyToken = currentUser.customDatas.spotifyConnect;
                     var playlistSpotifyTokenObject = roomSpotifyTokenObject(userSpotifyToken, currentUser.customDatas.uid, 'connect');
+                    addPlaylistNotif(currentUser.customDatas.displayName, 'a activé la recherche Spotify', 'success', 3500, currentUser.uid, roomRef);
                     updateFirebaseRoom( roomRef , {enablerSpotify: playlistSpotifyTokenObject});
                 }
             }
@@ -392,14 +400,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
             }
         }
     }
-
-    async function goToPercentage(percentage) {
-        console.log(percentage);
-//        playerRef.current.seekTo(seconds, 'seconds'); 
-    }
-
-    
-
     
     useEffect(() => {
         let pageTitle = (roomIsPlaying && isVarExistNotEmpty(room.playlistUrls)) ? room.playlistUrls[playerIdPlayed].title : 'Playlist '+roomId;
@@ -458,9 +458,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }
   
 
-    function handleQuitRoomInComp() {
-        room.notifsArray.push({type: 'userLeaved', timestamp: Date.now(), createdBy: currentUser.displayName});
-        updateFirebaseRoom( roomRef , {notifsArray: room.notifsArray});
+    async function handleQuitRoomInComp() {
+        await addPlaylistNotif(currentUser.displayName, 'est parti', 'danger', 2500, currentUser.uid, roomRef);
         handleQuitRoom();
     }
 
@@ -468,8 +467,10 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     async function handleAddValidatedObjectToPlaylist(validatedObjectToAdd) {
         validatedObjectToAdd.timestamp = Date.now();
         room.playlistUrls.push(validatedObjectToAdd);
+        
         updateFirebaseRoom( roomRef , {playlistUrls: room.playlistUrls, playlistEmpty: false});        
         room.playlistEmpty = false;
+        await addPlaylistNotif(validatedObjectToAdd.addedBy +' a ajouté', validatedObjectToAdd.title, 'info', 4500, currentUser.uid, roomRef);
     }
 
     function handleChangeIdShownInDrawer(idToShow) {
@@ -497,22 +498,24 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         updateFirebaseRoom( roomRef , {roomParams: newParams});
     }
 
-    function handleUpdateRoomGeoloc() {
+    async function handleUpdateRoomGeoloc() {
         let posObject = {lat:0,long:0};
         let tempParams = room.roomParams;
 
         if(!tempParams.isLocalisable) {
-            navigator.geolocation.getCurrentPosition(function(position) {
+            navigator.geolocation.getCurrentPosition(async function(position) {
                 posObject = {
                     lat:position.coords.latitude,
                     long:position.coords.longitude,
                 }
                 tempParams.isLocalisable = true;
-                updateFirebaseRoom( roomRef , {localisation: posObject, roomParams:tempParams});
+                updateFirebaseRoom( roomRef , {localisation: posObject, roomParams:tempParams});        
+                await addPlaylistNotif(currentUser.displayName, 'a géolocalisé la playlist.', 'info', 2500, currentUser.uid, roomRef);
             });
         } else {
             tempParams.isLocalisable = false;
             updateFirebaseRoom( roomRef , {localisation: posObject, roomParams:tempParams});
+            await addPlaylistNotif(currentUser.displayName, 'a désactivé la géolocalisation.', 'info', 2500, currentUser.uid, roomRef);
         }  
     }
 
@@ -901,9 +904,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     <ModalChangeRoomAdmin open={openRoomChangeAdminModal} changeAdmin={changeAdmin} playlistAdminPass={room.adminPass} changeOpen={setOpenRoomChangeAdminModal} adminView={isActuallyAdmin} />
                     <ModalShareRoom open={openInvitePeopleToRoomModal} changeOpen={setOpenInvitePeopleToRoomModal} />
                     <ModalLeaveRoom open={openLeaveRoomModal} changeOpen={setOpenLeaveRoomModal} handleQuitRoom={handleQuitRoomInComp} />
-=                        {isTutorialShown && <RoomTutorial 
-                            layout={isPlaylistExistNotEmpty(room.playlistUrls) ? room.playlistUrls.length > 6 ? 'small': 'classic' : 'classic'}
-                        />}
+                        
+                    <Notifications roomRef={roomRef} initialCount={room.notifsArray.length} />
+
+                    {isTutorialShown && <RoomTutorial 
+                        layout={isPlaylistExistNotEmpty(room.playlistUrls) ? room.playlistUrls.length > 6 ? 'small': 'classic' : 'classic'}
+                    />}
                 </> 
             </>}
             {!loaded && <Box className="loadingRoomInfo"> <SoundWave waveNumber={450} isPlayingOrNo={true} /><Typography  className="fontFamilyNunito"> Loading ..</Typography></Box>}

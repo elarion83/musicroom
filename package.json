@@ -34,6 +34,7 @@
     "react-i18next": "^13.0.1",
     "react-idle-timer": "^5.7.2",
     "react-linkify": "^1.0.0-alpha",
+    "react-notifications-component": "^4.0.1",
     "react-player": "^2.12.0",
     "react-router-dom": "^6.24.0",
     "react-scripts": "^4.0.3",

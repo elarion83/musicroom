@@ -30,8 +30,6 @@ const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, ro
     const [mediaSearchResultYoutube, setMediaSearchResultYoutube] = useState([]);
     const [mediaSearchResultSpotify, setMediaSearchResultSpotify] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
-    const [recentlyAdded, setRecentlyAdded] = useState(false);
-    const [recentlyAddedTitle, setRecentlyAddedTitle] = useState('');
     const [showYoutubeTrends, setShowYoutubeTrends] = useState(true);
     const [spotifyTrendsTracks, setSpotifyTrendsTracks] = useState([]);
     const [spotifyTopTracks, setSpotifyTopTracks] = useState([]);
@@ -92,16 +90,10 @@ const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, ro
     async function handleCheckAndAddObjectToPlaylistFromObject(objectFormatted) {
         validatedObjectToAdd(objectFormatted);
 
-        setRecentlyAdded(false);
-        await delay(100);
-        setRecentlyAddedTitle(objectFormatted.title);
         addingObject.title = '';
         addingObject.source = '';
         addingObject.url = '';
         addingObject.platformId = '';
-        setRecentlyAdded(true);
-        await delay(6000);
-        setRecentlyAdded(false);
     }
 
     async function getYoutubeVideoInfosFromId(videoId, addingObject) {
@@ -309,12 +301,6 @@ const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, ro
                         )}
                     </Box> 
                 </Grid>
-                <Snackbar
-                    open={recentlyAdded}
-                    autoHideDuration={4000}
-                    sx={{ borderRadius: '2px', zIndex:2501, mb:4, bottom:'45px' }}
-                    message={recentlyAddedTitle +" "+ t('GeneralAdded')+" !"}
-                />
             </Container>
 
                 <Grid container onClick={(e) => changeOpenInComp(false)} ref={el => animatedElementsRef.push(el)} className='closeAddMediaModal animate__animated animate__fadeInUpBig animate__delay-1s animate__fast' >

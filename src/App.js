@@ -32,6 +32,7 @@ import {  doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { getCleanRoomId, updateFirebaseUser } from "./services/utilsRoom";
 import { useNavigate, useParams } from 'react-router-dom';
 import ModalAuthPhone from "./components/rooms/modalsOrDialogs/ModalAuthPhone";
+import { ReactNotifications } from "react-notifications-component";
 function App( {t} ) {
   // general app statuts
   const [isAppLoading, setIsAppLoading] = useState(true);
@@ -96,7 +97,6 @@ function App( {t} ) {
     var cleanRoomId = getCleanRoomId(idRoom);
     setRoomId(cleanRoomId);
     
-   // replaceCurrentUrlWithRoomUrl(getCleanRoomId(idRoom));
     localStorage.setItem("Play-It_RoomId", idRoom);
 
     if(!isAfterCreation) {
