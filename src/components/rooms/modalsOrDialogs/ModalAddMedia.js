@@ -26,7 +26,7 @@ import YoutubeVideoSlider from '../../../services/YoutubeVideoSlider';
 import { returnAnimateReplace } from '../../../services/animateReplace';
 import { checkCurrentUserSpotifyTokenExpiration, checkRoomSpotifyTokenExpiration } from '../../../services/utilsRoom';
 import SpotifyTab from './addMediaTabs/SpotifyTab';
-const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, room, changeOpen, roomIsPlaying, currentUser, validatedObjectToAdd, DeezerTokenProps }) => {
+const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, room, changeOpen, roomIsPlaying, currentUser, validatedObjectToAdd }) => {
     const [mediaSearchResultYoutube, setMediaSearchResultYoutube] = useState([]);
     const [mediaSearchResultSpotify, setMediaSearchResultSpotify] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');

@@ -109,31 +109,6 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleCha
             <DialogContent dividers sx={{ pt: 2 }}>
                 <FormGroup>
 
-                    {/*!roomParams.deezer.IsLinked &&
-                        <Button
-                            sx={{ mb: 1, bgcolor: '#b560ff' }}
-                            startIcon={<Icon style={{ display: 'inline', color: 'white', marginRight: '0.5em' }} icon="jam:deezer" />}
-                            variant="contained"
-                            color="success"
-                            onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_DEEZER_AUTH_ENDPOINT}?app_id=${process.env.REACT_APP_ROOM_DEEZER_APP_ID}&redirect_uri=${REDIRECT_URI}&perms=basic_access,email`}>
-                            {t('ModalParamsRoomConnectToDeezerText')}
-                        </Button>
-                    }
-                    {roomParams.deezer.IsLinked &&
-                        <Alert
-                            sx={{ mb: 1 }}
-                            action={
-                                <Tooltip title="Forcer la déconnexion">
-                                    <Button onClick={e => handleDisconnectFromDeezerModal(true)}>
-                                        <ExitToAppIcon fontSize="small" />
-                                    </Button>
-                                </Tooltip>
-                            }
-                        >
-                            {t('ModalParamsRoomConnectedToDeezerText')}
-                        </Alert>
-                    */}
-
                     {Object.entries(paramsArray).map(([key, param]) => {
                         return(
                         <Alert key={key} sx={{ pl: 0, mb: 2, alignItems: 'center' }}  icon={<Switch checked={param.checked} onChange={param.change}

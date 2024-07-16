@@ -814,7 +814,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                 setOpenInvitePeopleToRoomModal={setOpenInvitePeopleToRoomModal}
                                 setOpenAddToPlaylistModal={setOpenAddToPlaylistModal}
                                 spotifyIsLinked={room.enablerSpotify.IsLinked}
-                                deezerIsLinked={true}
                                 roomParams={room.roomParams}
                                 roomRef={roomRef}
                                 updateFirebaseRoom={updateFirebaseRoom}
@@ -846,7 +845,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                     handleRemoveMediaFromPlaylist={handleRemoveMediaFromPlaylist}
                                     userVoteArray={localData.currentUserVotes} 
                                     roomPlaylist={room.playlistUrls} 
-                                    isSpotifyAvailable={room.enablerSpotify.IsLinked} 
                                     room={room}
                                     roomRef={roomRef}
                                 />
@@ -885,15 +883,10 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         roomMessages={room.messagesArray ?? ''}
                         roomNotifs={room.notifsArray ?? ''}
                         userCanMakeInteraction={userCanMakeInteraction}
-                        OpenAddToPlaylistModal={OpenAddToPlaylistModal}
                         setOpenAddToPlaylistModal={setOpenAddToPlaylistModal}
                         createNewRoomInteraction={createNewRoomInteraction}
                         paramDrawerIsOpen={openRoomDrawer}
                         handleOpenDrawerParam={setOpenRoomDrawer}
-                        handleOpenShareModal={handleOpenShareModal}
-                        handleOpenLeaveRoomModal={handleOpenLeaveRoomModal}
-                        checkRoomExist={(room && room.playlistEmpty) ? true:false}
-                        checkInterractionLength={(room.roomParams.interactionsArray && room.roomParams.interactionsArray.length > 0) ? true:false}
                         checkNotificationsLength={(room.notifsArray && room.notifsArray.length > 0) ? true:false}
                         layoutDisplay={layoutDisplay}
                         setLayoutdisplay={setLayoutdisplay}
