@@ -61,10 +61,8 @@ export function roomIdLocallyStored() {
 
 export function checkCurrentUserSpotifyTokenExpiration() {
     var userSpotifyDatas = auth.currentUser.customDatas;
-    console.log(userSpotifyDatas);
     if(userSpotifyDatas.spotifyConnect.expiration < Date.now()) {
         let userRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, userSpotifyDatas.uid);
-        showLocalNotification('Lecteur spotify', 'Connexion expirée', 'info', 2500 );
         updateFirebaseUser(userRef,{spotifyConnect:userSpotifyTokenObject(null, 'reset')});
     }
 }
