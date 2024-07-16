@@ -314,53 +314,6 @@ const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, ro
                                 />
                             </Box>
                         )}
-                   {/*     {tabIndex === 2 && (
-                            <Box>
-                                {mediaSearchResultDeezer.length > 1 &&
-                                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ mt: 0 }}>
-                                        {mediaSearchResultDeezer.map(function (media, idde) {
-                                            return (
-                                                <SearchResultItem
-                                                    key={idde}
-                                                    image={'https://e-cdn-images.dzcdn.net/images/cover/' + media.md5_image + '/345x345-000000-80-0-0.jpg'}
-                                                    title={media.artist.name + ' - ' + media.title}
-                                                    source='deezer'
-                                                    uid={uuid().slice(0, 10).toLowerCase()}
-                                                    platformId={media.id}
-                                                    addedBy={addingObject.addedBy}
-                                                    url={media.preview}
-                                                    channelOrArtist={media.artist.name}
-                                                    album={media.album.title}
-                                                    addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject}
-                                                />)
-                                        })}
-                                    </Grid>}
-                            </Box>
-                        )}
-                        {tabIndex === 3 && (
-                            <Box>
-                                {mediaSearchResultDailyMotion.length > 1 && <Grid item xs={12}>
-                                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} sx={{ mt: 0 }}>
-                                        {mediaSearchResultDailyMotion.map(function (media, iddm) {
-                                            return (
-                                                <SearchResultItem
-                                                    key={iddm}
-                                                    image={media.thumbnail_url}
-                                                    title={media.title}
-                                                    duration={media.duration}
-                                                    source='dailymotion'
-                                                    uid={uuid().slice(0, 10).toLowerCase()}
-                                                    platformId={media.id}
-                                                    channelOrArtist={media['owner.screenname']}
-                                                    addedBy={addingObject.addedBy}
-                                                    url={'https://www.dailymotion.com/video/' + media.id}
-                                                    addItemToPlaylist={handleCheckAndAddObjectToPlaylistFromObject}
-                                                />)
-                                        })}
-                                    </Grid>
-                                </Grid>}
-                            </Box>
-                        )}  */}
                     </Box> 
                 </Grid>
                 <Snackbar
