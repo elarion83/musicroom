@@ -403,13 +403,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         setPageTitle(pageTitle+' | '+envAppNameUrl);
     }, [roomIsPlaying]);
             
-
-    useKeypress([' '], () => {
-        if((room && !OpenAddToPlaylistModal) && (isActuallyAdmin || !guestSynchroOrNot)) {
-            setIsPlaying(!roomIsPlaying);
-        }
-    });
-
     useKeypress(['Escape'], () => {
         if(isLayoutFullScreen(layoutDisplay) || isLayoutInteractive(layoutDisplay)) {
             setLayoutdisplay('default');
