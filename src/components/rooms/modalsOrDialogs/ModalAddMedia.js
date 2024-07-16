@@ -13,9 +13,9 @@ import Snackbar from '@mui/material/Snackbar';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import validator from 'validator';
-import { cleanMediaTitle, delay, enablersDurationToReadable, getArtistsSpotify, getDisplayTitle, getYTVidId, goToSpotifyConnectUrl, isEmpty, isProdEnv, isVarExist, isVarExistNotEmpty } from '../../../services/utils';
+import { cleanMediaTitle, delay, getDisplayTitle, getYTVidId, isEmpty, isProdEnv, isVarExist } from '../../../services/utils';
 import { withTranslation } from 'react-i18next';
-import { Alert, AlertTitle, Button, SwipeableDrawer, Typography } from '@mui/material';
+import {  Button, SwipeableDrawer, Typography } from '@mui/material';
 import SoundWave from "../../../services/SoundWave";
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 import { searchTextArray, spotifyApiPlaylistTracksObject, spotifyApiSearchObject, spotifyApiTopTracksObject, youtubeApiSearchObject, youtubeApiVideoInfoParams } from '../../../services/utilsArray';
@@ -25,13 +25,11 @@ import { mockYoutubeSearchResultForVald } from '../../../services/mockedArray';
 import YoutubeVideoSlider from '../../../services/YoutubeVideoSlider';
 import { returnAnimateReplace } from '../../../services/animateReplace';
 import { checkCurrentUserSpotifyTokenExpiration, checkRoomSpotifyTokenExpiration } from '../../../services/utilsRoom';
-import SpotifyConnectButton from '../../generalsTemplates/buttons/SpotifyConnectButton';
 import SpotifyTab from './addMediaTabs/SpotifyTab';
 const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, room, changeOpen, roomIsPlaying, currentUser, validatedObjectToAdd, DeezerTokenProps }) => {
     const [mediaSearchResultYoutube, setMediaSearchResultYoutube] = useState([]);
     const [mediaSearchResultSpotify, setMediaSearchResultSpotify] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
-    const [searchedTerm, setSearchedTerm] = useState('');
     const [recentlyAdded, setRecentlyAdded] = useState(false);
     const [recentlyAddedTitle, setRecentlyAddedTitle] = useState('');
     const [showYoutubeTrends, setShowYoutubeTrends] = useState(true);
@@ -141,10 +139,6 @@ const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, ro
         setSearchTerm('');
     }
 
-    async function mockEndYoutubeResults() {
-        
-    }
-
     async function handleSearchForMedia() {
 
         let spotifyEnabler = enablerSpotify;
@@ -190,7 +184,6 @@ const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, ro
                     setShowResult(true);
                 }
             }
-            setSearchedTerm(searchTerm);
         } else {
             setIsSearching(false);
         }

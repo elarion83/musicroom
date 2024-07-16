@@ -7,14 +7,12 @@ import * as React from 'react';
 import { useState } from 'react';
 
 import AirplayIcon from '@mui/icons-material/Airplay';
-import ChatIcon from '@mui/icons-material/Chat';
-import DvrIcon from '@mui/icons-material/Dvr';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import { useEffect } from 'react';
 
 import { Box, Divider } from '@mui/material';
 import { withTranslation } from 'react-i18next';
-import { isLayoutCompact, isLayoutFullScreen, isLayoutDefault, isLayoutInteractive } from '../../services/utils';
+import { isLayoutFullScreen, isLayoutDefault } from '../../services/utils';
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -82,8 +80,7 @@ const DisplayMenu = ({t, layoutDisplay, setLayoutdisplay}) => {
         onClick={handleClick}
         sx={{pt:0.8}}
       >
-        {!isLayoutCompact(layoutDisplay) && <FullscreenIcon sx={{ml:0,mr:0}} />}
-        {isLayoutCompact(layoutDisplay) && <DvrIcon sx={{fontSize:'1.4em', ml:0,mr:0}} />}
+        <FullscreenIcon sx={{ml:0,mr:0}} />
         {open ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}
       </Box>
       <StyledMenu
@@ -99,14 +96,6 @@ const DisplayMenu = ({t, layoutDisplay, setLayoutdisplay}) => {
           <FullscreenIcon />
           {t('RoomBottomDisplayFullScreen')}
         </MenuItem>
-       {/* <MenuItem selected={isLayoutCompact(layoutDisplay)} onClick={(e) => setLayoutdisplay('compact')} disableRipple>
-          <DvrIcon />
-          Compact
-        </MenuItem>
-        <MenuItem selected={isLayoutInteractive(layoutDisplay)} onClick={(e) => setLayoutdisplay('interactive')} disableRipple>
-          <ChatIcon />
-          {t('RoomBottomDisplayInteractive')}
-        </MenuItem> */}
         <Divider />
         <MenuItem selected={isLayoutDefault(layoutDisplay)} sx={{mt:'-8px', mb:'-3px'}} onClick={(e) => setLayoutdisplay('default')} disableRipple>
           <AirplayIcon />

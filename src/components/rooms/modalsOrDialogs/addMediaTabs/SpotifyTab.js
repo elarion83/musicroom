@@ -1,12 +1,9 @@
 
 import React from "react";
-import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
-
 import { v4 as uuid } from 'uuid';
 import dateFormat from "dateformat";
 import { Box } from "@mui/system";
-import { Alert, AlertTitle, Container, Grid, ListItemIcon, Typography } from "@mui/material";
-import SoundWave from "../../../../services/SoundWave";
+import { Alert, AlertTitle, Container, Grid, Typography } from "@mui/material";
 import { enablersDurationToReadable, getArtistsSpotify, goToSpotifyConnectUrl, isEmpty } from "../../../../services/utils";
 import SpotifyConnectButton from "../../../generalsTemplates/buttons/SpotifyConnectButton";
 import SearchResultItem from "../../SearchResultItem";

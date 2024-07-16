@@ -1,7 +1,7 @@
 import React from "react";
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { Alert, AlertTitle, Box, Dialog, DialogContent, FormGroup, Grid, Icon, IconButton, InputAdornment, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Typography } from "@mui/material";
+import { Alert, AlertTitle, Box, Dialog, DialogContent, FormGroup, Grid, IconButton, InputAdornment, List, ListItem, ListItemText, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import EditIcon from '@mui/icons-material/Edit';
 import { timestampToDateoptions, timestampToHoursAndMinOptions } from "../../../services/utilsArray";
@@ -108,7 +108,7 @@ const UserParamModal = ({ t, open, changeOpen, user = null, setUserInfo = null, 
                             {user.isAnonymous && 
                                 <Alert sx={{mb:2, alignItems: 'center'}}  severity='warning'>
                                     <AlertTitle sx={{fontWeight:'bold'}}>{t('ModalUserSettingsEditNotAllowedTitle')}</AlertTitle>
-                                    <Typography fontSize='small' component='p'>{t('ModalUserSettingsEditNotAllowedText')}</Typography>
+                                    <Typography fontSize='small'>{t('ModalUserSettingsEditNotAllowedText')}</Typography>
                                 </Alert>
                             }
                             

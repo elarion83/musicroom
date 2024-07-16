@@ -4,7 +4,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 import { Accordion, AccordionDetails, AccordionSummary, Divider, Drawer, List, ListItem, ListItemText, Typography } from "@mui/material";
 import React, { useState } from "react";
-import {cleanMediaTitle, delay, isFromSpotify, isVarExistNotEmpty} from '../../../../services/utils';
+import {cleanMediaTitle, delay, isVarExistNotEmpty} from '../../../../services/utils';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -13,7 +13,7 @@ import { Box } from "@mui/system";
 import { withTranslation } from 'react-i18next';
 import DrawerPlayPauseButton from './DrawerPlayPauseButton';
 
-const RoomPlaylistDrawer = ({t,isSpotifyAvailable, room,roomRef,open, changeOpen, isAdminView, userVoteArray, roomPlaylist, setIdPlaying, handleVoteChange,handleRemoveMediaFromPlaylist, setIsPlaying,  data, roomIsActuallyPlaying, roomIdActuallyPlaying, roomIdActuallyDisplaying }) => {
+const RoomPlaylistDrawer = ({t,room,roomRef,open, changeOpen, isAdminView, userVoteArray, roomPlaylist, setIdPlaying, handleVoteChange,handleRemoveMediaFromPlaylist, setIsPlaying,  data, roomIsActuallyPlaying, roomIdActuallyPlaying, roomIdActuallyDisplaying }) => {
     
     const [descriptionOpen, setDescriptionOpen] = useState(false);
     
@@ -53,7 +53,6 @@ const RoomPlaylistDrawer = ({t,isSpotifyAvailable, room,roomRef,open, changeOpen
                 <Box className="DrawerGradient" sx={{backgroundImage:'url('+roomPlaylist[roomIdActuallyDisplaying].visuel+')'}}>
                 </Box>
                     
-               {/* <img className="DrawerImg" src={roomPlaylist[roomIdActuallyDisplaying].visuel} alt={roomPlaylist[roomIdActuallyDisplaying].title} /> */}
                 <List sx={{ width: '100%', mb:'15em', p:0}}>
                     <ListItem sx={{pt:0, mt:0}}>
                         <DrawerPlayPauseButton 

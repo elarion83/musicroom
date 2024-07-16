@@ -10,7 +10,7 @@ import { Icon } from '@iconify/react';
 import { useState } from 'react';
 
 import {returnAnimateReplace } from '../../../services/animateReplace';
-import { waitingTextReaction, GFontIcon, isVarExist, isEmpty } from '../../../services/utils';
+import { waitingTextReaction, GFontIcon, isEmpty } from '../../../services/utils';
 import { notifsTextArray , reactsArray} from '../../../services/utilsArray';
 import {CreateGoogleAnalyticsEvent} from '../../../services/googleAnalytics';
 

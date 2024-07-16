@@ -7,7 +7,6 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { Icon } from '@iconify/react';
 
-import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import { LoadingButton } from "@mui/lab";
 import { db } from '../../../services/firebase';
 

@@ -1,6 +1,5 @@
 
 import React from "react";
-import { randomInt } from "./utils";
 
 const SoundWave = ({ waveNumber, isPlayingOrNo }) => {
 

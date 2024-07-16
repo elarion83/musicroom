@@ -14,14 +14,13 @@ const DrawerPlayPauseButton = ({ isAdminView,isPlayable = true, isPlaying, setIs
                     <>
                         {idActuallyPlaying === idActuallyDisplaying && 
                             <>
-                                {isPlaying &&
+                                {isPlaying ? (
                                     <Box sx={{pl:2}} onClick={e => setIsPlaying(false)}>
                                         <SoundWave waveNumber={7} isPlayingOrNo={isPlaying}  />
                                     </Box>
-                                }
-                                {!isPlaying &&
+                                ) : (
                                     <PlayCircleOutlineIcon sx={{ml:1}} fontSize="large" onClick={e => setIsPlaying(true)}  />
-                                }
+                                )}
                             </>
                         }
                     {idActuallyPlaying !== idActuallyDisplaying && isPlayable &&

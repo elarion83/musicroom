@@ -3,7 +3,6 @@ import { Box, Typography } from '@mui/material';
 import { withTranslation } from "react-i18next";
 import SwipeUpIcon from '@mui/icons-material/SwipeUp';
 import { useEffect } from 'react';
-import { delay } from '../../services/utils';
 import { returnAnimateReplace } from '../../services/animateReplace';
 const RoomTutorial = ({t, layout, customClass}) => {
 

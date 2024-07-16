@@ -1,17 +1,15 @@
 import React, { useEffect } from "react";
 
-import { Alert, Button, Dialog, DialogActions, DialogContent, Grid, Typography } from "@mui/material";
-import QueueMusicIcon from '@mui/icons-material/QueueMusic';
+import { Alert, Dialog, DialogContent, Grid, Typography } from "@mui/material";
 import { db } from '../../../services/firebase'; 
 import { useState } from "react";
-import { Box } from "@mui/system";
+
 import AppsIcon from '@mui/icons-material/Apps';
 
 import { withTranslation } from 'react-i18next';
 import ModalsHeader from "./ModalsHeader";
 import { timestampToDateoptions } from "../../../services/utilsArray";
 import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
-import { getCleanRoomId } from "../../../services/utilsRoom";
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 import ModalsFooter from "./ModalsFooter";
 import RoomListItem from "../../rooms/RoomListItem";

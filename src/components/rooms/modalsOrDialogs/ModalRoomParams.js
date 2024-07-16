@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import TuneIcon from '@mui/icons-material/Tune';
-import { AlertTitle, Button, Dialog, DialogContent, FormGroup, IconButton, InputAdornment, Switch, TextField, Typography } from "@mui/material";
+import { AlertTitle, Dialog, DialogContent, FormGroup, IconButton, InputAdornment, Switch, TextField, Typography } from "@mui/material";
 import Alert from '@mui/material/Alert';
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -10,7 +10,7 @@ import { withTranslation } from 'react-i18next';
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 import ModalsHeader from "../../generalsTemplates/modals/ModalsHeader";
 
-const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleDisconnectFromSpotifyModal, handleDisconnectFromDeezerModal, handleChangeGeoloc, handleChangeRoomParams }) => {
+const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleChangeGeoloc, handleChangeRoomParams }) => {
 
     const [showPassword, setShowPassword] = useState(false);
 

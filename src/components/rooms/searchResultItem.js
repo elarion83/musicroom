@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
+import { Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
 import { formatNumberToMinAndSec } from "../../services/utils";
 
 const SearchResultItem = ({ duration = null,image, title,description = '', source, platformId, album = null, addedBy, uid, url, date = null, channelOrArtist = null, addItemToPlaylist }) => {

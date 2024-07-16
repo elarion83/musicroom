@@ -1,5 +1,4 @@
 
-import { Icon } from '@iconify/react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import InfoIcon from '@mui/icons-material/Info';
@@ -11,7 +10,6 @@ import SkipPrevious from '@mui/icons-material/SkipPrevious';
 import TuneIcon from '@mui/icons-material/Tune';
 import { Divider, SwipeableDrawer, Grid, List, ListItem, ListItemButton, Switch, Typography } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
-import Badge from '@mui/material/Badge';
 import IconButton from '@mui/material/IconButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Toolbar from '@mui/material/Toolbar';
@@ -72,23 +70,7 @@ const RoomTopBar = ({
                             <Typography className='varelaFontTitle'>{isAdminView ? t('RoomLeftMenuHost') : t('RoomLeftMenuHostedBy')} {!isAdminView ? <b>{room.admin}</b> : '' }</Typography>
                         </ListItemButton>
                     </ListItem>
-                    
-                   {/* <ListItem key='roomDrawSpotifyStatus' disablePadding>
-                        <ListItemButton onClick={e => handleOpenRoomParamModal(true)}>
-                            <ListItemIcon>
-                                <Badge invisible={isLinkedToSpotify} variant="dot" 
-                                    sx={{'& .MuiBadge-badge': {
-                                            right:'0px',
-                                            bgcolor:'var(--red-2)'
-                                        }, ml:'-2px'}} >
-                                        <Icon icon="mdi:spotify" width="27"  />
-                                </Badge>
-                            </ListItemIcon>
-                            <Typography>Spotify {isLinkedToSpotify ? t('GeneralLinked') : t('GeneralNotLinked')}</Typography>
-                        </ListItemButton>
-                    </ListItem>
-                    */}
-                    
+                                        
                     {!isAdminView && <ListItem key='roomDrawSync' disablePadding onClick={(e) => setGuestSynchroOrNot(!guestSynchroOrNot)}>
                         <ListItemButton>
                             <ListItemIcon>
@@ -103,21 +85,7 @@ const RoomTopBar = ({
                             <Typography className='varelaFontTitle'>{guestSynchroOrNot ? t('RoomLeftMenuSync') : t('RoomLeftMenuNotSync')}</Typography>
                         </ListItemButton>
                     </ListItem>}
-               {/*     <ListItem key='roomDrawDeezerStatus' disablePadding>
-                        <ListItemButton onClick={e => handleOpenRoomParamModal(true)}>
-                            <ListItemIcon>
-                                <Badge invisible={isLinkedToDeezer} variant="dot" 
-                                    sx={{'& .MuiBadge-badge': {
-                                            right:'0px',
-                                            bgcolor:'var(--red-2)'
-                                        }, ml:'-2px'}} >
-                                        <Icon icon="jam:deezer" width="27"  />
-                                </Badge>
-                            </ListItemIcon>
-                            <Typography>Deezer {isLinkedToDeezer ? t('GeneralLinked') : t('GeneralNotLinked')}</Typography>
-                        </ListItemButton>
-                    </ListItem>
-                */}
+
                     <Divider sx={{mb:1, mt:1}}/>
                     
                     <ListItem key='roomDrawRoomParams' disablePadding>

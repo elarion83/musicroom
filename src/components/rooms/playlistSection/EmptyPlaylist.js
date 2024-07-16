@@ -74,27 +74,6 @@ const EmptyPlaylist = ({t,isAdminView, setOpenInvitePeopleToRoomModal, setOpenAd
             <AlertTitle className='varelaFontTitle'>{t('RoomEmptyAlertPlaylist')}</AlertTitle>
             <Typography fontSize='small' className="fontFamilyNunito colorWhite">{t('RoomEmptyAlertPlaylistClickHere')}</Typography>
         </Alert>
-        
-        
-       {/* {!deezerIsLinked && 
-            <Alert severity="warning" variant="filled" 
-            icon={<Icon icon="jam:deezer" width="30" />} 
-            sx={{m:2, border:'2px solid #febc21',cursor:'pointer'}} 
-            className='animate__animated animate__delay-1s animate__fadeInUp animate__slow'
-                onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_DEEZER_AUTH_ENDPOINT}?app_id=${process.env.REACT_APP_ROOM_DEEZER_APP_ID}&redirect_uri=${REDIRECT_URI}&perms=basic_access,email`}>
-            <AlertTitle className='varelaFontTitle' sx={{margin:'3px 0 0 0'}}>{t('RoomEmptyAlertDeezer')}</AlertTitle>
-        </Alert>}
-
-        }
-
-        {!spotifyIsLinked && 
-            <Alert severity="warning" variant="filled" 
-            icon={<Icon icon="mdi:spotify" width="30" />} 
-            sx={{m:2, border:'2px solid #febc21',cursor:'pointer'}} 
-            className='animate__animated animate__delay-1s animate__fadeInUp animate__slow emptyPlaylistAlert'
-            onClick={e => window.location.href = `${process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOINT}?client_id=${process.env.REACT_APP_ROOM_SPOTIFY_CLIENT_ID}&scope=user-read-playback-state%20streaming%20user-read-email%20user-modify-playback-state%20user-read-private&redirect_uri=${REDIRECT_URI}&response_type=${process.env.REACT_APP_ROOM_SPOTIFY_RESPONSE_TYPE}`}>
-            <AlertTitle className='varelaFontTitle' sx={{margin:'3px 0 0 0'}}>{t('RoomEmptyAlertSpotify')}</AlertTitle>
-        </Alert>*/}
     </>
     )
 };

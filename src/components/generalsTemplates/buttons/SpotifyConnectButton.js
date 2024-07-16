@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Icon } from '@iconify/react';
 
-import { Alert, AlertTitle, Button, Typography } from '@mui/material';
-import { formatNumberToMinAndSec, goToSpotifyConnectUrl, isEmpty, isVarExist, isVarExistNotEmpty, isVarNull } from '../../../services/utils';
+import { Alert, AlertTitle, Typography } from '@mui/material';
+import { formatNumberToMinAndSec, isEmpty, isVarExist, isVarNull } from '../../../services/utils';
 import { withTranslation } from "react-i18next";
 import { LoadingButton } from "@mui/lab";
 import { checkCurrentUserSpotifyTokenExpiration } from "../../../services/utilsRoom";

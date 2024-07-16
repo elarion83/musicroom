@@ -1,7 +1,6 @@
 import Box from '@mui/material/Box';
 import React, { useState } from "react";
 
-import TuneIcon from '@mui/icons-material/Tune';
 import LoginIcon from '@mui/icons-material/Login';
 import Logout from '@mui/icons-material/Logout';
 import Divider from '@mui/material/Divider';
@@ -11,11 +10,9 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import { Button } from '@mui/material';
 import AppsIcon from '@mui/icons-material/Apps';
 import UserParamModal from './modals/UserParamModal';
 import UserRoomListModal from './modals/UserRoomListModal';
-import { ReactSVG } from "react-svg";
 import { withTranslation } from 'react-i18next';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 

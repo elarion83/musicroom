@@ -22,8 +22,6 @@ import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import Typography from '@mui/material/Typography';
 
 import RoomModalAddMedia from './rooms/modalsOrDialogs/ModalAddMedia';
-import ModalForceDeezerDisconnect from "./rooms/modalsOrDialogs/ModalForceDeezerDisconnect";
-import ModalForceSpotifyDisconnect from "./rooms/modalsOrDialogs/ModalForceSpotifyDisconnect";
 import ModalLeaveRoom from './rooms/modalsOrDialogs/ModalLeaveRoom';
 import ModalRoomParams from './rooms/modalsOrDialogs/ModalRoomParams';
 import ModalShareRoom from './rooms/modalsOrDialogs/ModalShareRoom';
@@ -99,8 +97,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     const [openRoomParamModal, setOpenRoomParamModal] = useState(false);
     const [openRoomChangeAdminModal, setOpenRoomChangeAdminModal] = useState(false);
     const [openLeaveRoomModal, setOpenLeaveRoomModal] = useState(false);
-    const [openForceDisconnectSpotifyModal, setOpenForceDisconnectSpotifyModal] = useState(false);
-    const [openForceDisconnectDeezerModal, setOpenForceDisconnectDeezerModal] = useState(false);
 
     // drawer
     const [openRoomDrawer, setOpenRoomDrawer] = useState(false);
@@ -423,16 +419,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         }
     });
     
-    async function disconnectSpotify() {
-        updateFirebaseRoom( roomRef , {roomParams:{spotify:emptyToken}});
-        setOpenForceDisconnectSpotifyModal(false);
-    }
-
-    async function disconnectDeezer() {
-        updateFirebaseRoom( roomRef , {roomParams:{deezer:emptyToken}});
-        setOpenForceDisconnectDeezerModal(false);
-    }
-
     async function createNewRoomInteraction(type) {
         
         CreateGoogleAnalyticsEvent('Actions','Playlist Interaction','Playlist '+roomId+' - '+type);
@@ -666,8 +652,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                             <Grid item className='playerContainer' sm={4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
                                                 {playingJustChanged && 
                                                     <Box className="iconOverPlayer">
-                                                        { !roomIsPlaying && <PauseCircleOutlineIcon className='colorWhite' />}
-                                                        { roomIsPlaying && <PlayCircleOutlineIcon className='colorWhite' />}
+                                                        { roomIsPlaying ? (
+                                                                <PlayCircleOutlineIcon className='colorWhite' />
+                                                            ) : (
+                                                                <PauseCircleOutlineIcon className='colorWhite' />
+                                                            )
+                                                        }
                                                     </Box>
                                                 }
                                                 
@@ -884,8 +874,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         open={openRoomParamModal} 
                         changeOpen={setOpenRoomParamModal} 
                         handleChangeRoomParams={handleChangeRoomParams} 
-                        handleDisconnectFromDeezerModal={setOpenForceDisconnectDeezerModal} 
-                        handleDisconnectFromSpotifyModal={setOpenForceDisconnectSpotifyModal} 
                         roomParams={room.roomParams}
                         handleChangeGeoloc={handleUpdateRoomGeoloc} 
                     />
@@ -920,9 +908,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     <ModalChangeRoomAdmin open={openRoomChangeAdminModal} changeAdmin={changeAdmin} playlistAdminPass={room.adminPass} changeOpen={setOpenRoomChangeAdminModal} adminView={isActuallyAdmin} />
                     <ModalShareRoom open={openInvitePeopleToRoomModal} changeOpen={setOpenInvitePeopleToRoomModal} />
                     <ModalLeaveRoom open={openLeaveRoomModal} changeOpen={setOpenLeaveRoomModal} handleQuitRoom={handleQuitRoomInComp} />
-                    <ModalForceSpotifyDisconnect open={openForceDisconnectSpotifyModal} changeOpen={setOpenForceDisconnectSpotifyModal} handleDisconnectSpotify={disconnectSpotify} />
-                    <ModalForceDeezerDisconnect open={openForceDisconnectDeezerModal} changeOpen={setOpenForceDisconnectDeezerModal} handleDisconnectDeezer={disconnectDeezer} />
-                        {isTutorialShown && <RoomTutorial 
+=                        {isTutorialShown && <RoomTutorial 
                             layout={isPlaylistExistNotEmpty(room.playlistUrls) ? room.playlistUrls.length > 6 ? 'small': 'classic' : 'classic'}
                         />}
                 </> 

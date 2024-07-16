@@ -1,8 +1,7 @@
-import { Box, Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
+import { Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
 import { getCleanRoomId } from "../../services/utilsRoom";
 import { withTranslation } from "react-i18next";
 import { timestampToDateoptions } from "../../services/utilsArray";
-import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import { getReadeableDistance } from "../../services/utils";
 import { DateRange, LocationOn, PlaylistPlay } from "@mui/icons-material";
 
@@ -27,7 +26,7 @@ animate__fast">
                         className="colorWhite varelaFontTitle textCapitalize animate__animated animate__fadeInDown texturaBgButton animate__delay-1s animate__fast">
                         {room.id}
                     </Typography>
-                    {layout == 'userList' &&  
+                    {layout === 'userList' &&  
                         <>
                             <Grid sx={{display:'flex', flexDirection:'column', alignItems:'center'}}>
                                 <DateRange className='colorWhite' fontSize="medium" />
@@ -43,7 +42,7 @@ animate__fast">
                             </Grid>
                         </>
                     }
-                    {layout == 'nearbyList' &&  <Grid sx={{display:'flex', width:'100%', flexDirection:'column', alignItems:'center'}}>
+                    {layout === 'nearbyList' &&  <Grid sx={{display:'flex', width:'100%', flexDirection:'column', alignItems:'center'}}>
                             <LocationOn className='colorWhite' fontSize="medium" sx={{mb:0.5}} />
                             <Typography className='colorWhite fontFamilyNunito' sx={{textAlign:'center', pl:1, pr:1}} fontSize='small'>
                                 à <span>{getReadeableDistance(room.distance)}</span> de vous.
