@@ -28,9 +28,9 @@ const PlayerButtons = ({room,playerControlsShown,playerType,spotifyControlsShown
 
                 {button === 'full' && <IconButton variant="contained" onClick={e => setIsPlaying(!roomIsPlaying)} sx={{ color:'#f0f1f0', position:'sticky', top:0, zIndex:2500}} >
                     { roomIsPlaying ? (
-                            <PlayCircleOutlineIcon className='colorWhite' fontSize="large"  />
-                        ) : (
                             <PauseCircleOutlineIcon className='colorWhite' fontSize="large"  />
+                        ) : (
+                            <PlayCircleOutlineIcon className='colorWhite' fontSize="large"  />
                         )
                     }
                 </IconButton>}
