@@ -203,22 +203,21 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     async function initRoom(roomDatas, roomId = '', create = true, currentUser, docRef = null) {
         if(create) {
             await setDoc(docRef, roomDatas);
-            await addPlaylistNotif(currentUser.displayName, 'a crée la playlist.', 'success', 2500, currentUser.uid, roomRef);
-            initRoomAsync(roomDatas, currentUser);
+            initRoomAsync(roomDatas, currentUser, create);
         } else {
-            await addPlaylistNotif(currentUser.displayName, 'est arrivé !', 'info', 2500, currentUser.uid, roomRef);
-            initRoomAsync(roomDatas, currentUser)
+            initRoomAsync(roomDatas, currentUser, create)
         }
     }
 
     /* create local room object, set player, admin, controls, ... then loaded */
-    async function initRoomAsync(roomDatas, currentUser) {
+    async function initRoomAsync(roomDatas, currentUser, create) {
         setRoom(roomDatas);
         setPlayerIdPlayed(roomDatas.playing);
         setIsActuallyAdmin(currentUser.uid === roomDatas.adminUid);
         setPlayerControlsShown(currentUser.uid === roomDatas.adminUid);
         setRoomIsPlaying(roomDatas.actuallyPlaying);
         setLoaded(true);
+        addPlaylistNotif(currentUser.displayName, create ? 'a crée la playlist.' : 'est arrivé !', create ? 'success' : 'info', 4500, roomRef);
     }
 
     // AUTO UPDATE DOCUMENT ON USER IS SYNC
@@ -252,11 +251,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         setRoom(roomDataInFb);
                     }
                 });                            
-                addPlaylistNotif(currentUser.displayName, ' synchronisé.', 'info', 2500, currentUser.uid, roomRef);
             } else {
                 if(!isActuallyAdmin) {
                     unsubscribe();                            
-                    addPlaylistNotif(currentUser.displayName, ' désynchronisé.', 'warning', 2500, currentUser.uid, roomRef);
                     setPlayerControlsShown(true);
                     setRoomIsPlaying(false);
                     goToSecond(0);
@@ -326,7 +323,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 if(!room.enablerSpotify.isLinked) {
                     var userSpotifyToken = currentUser.customDatas.spotifyConnect;
                     var playlistSpotifyTokenObject = roomSpotifyTokenObject(userSpotifyToken, currentUser.customDatas.uid, 'connect');
-                    addPlaylistNotif(currentUser.customDatas.displayName, 'a activé la recherche Spotify', 'success', 3500, currentUser.uid, roomRef);
+                    addPlaylistNotif('Recherche Spotify', 'activée par '+currentUser.customDatas.displayName, 'success', 3500, roomRef);
                     updateFirebaseRoom( roomRef , {enablerSpotify: playlistSpotifyTokenObject});
                 }
             }
@@ -390,13 +387,15 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }
 
     async function goToSecond(seconds) {
-        if(isFromSpotify(room.playlistUrls[playerIdPlayed])) {
-            if(spotifyPlayerRef.current && spotifyPlayerRef.current.player) {
-                spotifyPlayerRef.current.player.seek(seconds*1000);
-            }
-        } else {
-            if(playerRef.current) {
-                playerRef.current.seekTo(seconds, 'seconds'); 
+        if(!room.playlistEmpty) {
+            if(isFromSpotify(room.playlistUrls[playerIdPlayed])) {
+                if(spotifyPlayerRef.current && spotifyPlayerRef.current.player) {
+                    spotifyPlayerRef.current.player.seek(seconds*1000);
+                }
+            } else {
+                if(playerRef.current) {
+                    playerRef.current.seekTo(seconds, 'seconds'); 
+                }
             }
         }
     }
@@ -459,7 +458,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
   
 
     async function handleQuitRoomInComp() {
-        await addPlaylistNotif(currentUser.displayName, 'est parti', 'danger', 2500, currentUser.uid, roomRef);
+        await addPlaylistNotif(currentUser.displayName, 'est parti', 'danger', 2500, roomRef);
         handleQuitRoom();
     }
 
@@ -470,7 +469,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         
         updateFirebaseRoom( roomRef , {playlistUrls: room.playlistUrls, playlistEmpty: false});        
         room.playlistEmpty = false;
-        await addPlaylistNotif(validatedObjectToAdd.addedBy +' a ajouté', validatedObjectToAdd.title, 'info', 4500, currentUser.uid, roomRef);
+        await addPlaylistNotif(validatedObjectToAdd.addedBy +' a ajouté', validatedObjectToAdd.title, 'info', 4500, roomRef);
     }
 
     function handleChangeIdShownInDrawer(idToShow) {
@@ -510,12 +509,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 }
                 tempParams.isLocalisable = true;
                 updateFirebaseRoom( roomRef , {localisation: posObject, roomParams:tempParams});        
-                await addPlaylistNotif(currentUser.displayName, 'a géolocalisé la playlist.', 'info', 2500, currentUser.uid, roomRef);
+                await addPlaylistNotif(currentUser.displayName, 'a géolocalisé la playlist.', 'info', 2500, roomRef);
             });
         } else {
             tempParams.isLocalisable = false;
             updateFirebaseRoom( roomRef , {localisation: posObject, roomParams:tempParams});
-            await addPlaylistNotif(currentUser.displayName, 'a désactivé la géolocalisation.', 'warning', 2500, currentUser.uid, roomRef);
+            await addPlaylistNotif(currentUser.displayName, 'a désactivé la géolocalisation.', 'warning', 2500, roomRef);
         }  
     }
 
@@ -610,7 +609,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }
 
     async function changeAdmin() {
-        addPlaylistNotif(currentUser.displayName, ' est désormais hôte !', 'info', 2500, currentUser.uid, roomRef);
+        addPlaylistNotif(currentUser.displayName, ' est désormais hôte !', 'info', 2500,  roomRef);
         setOpenRoomDrawer(false);
     }
     return (

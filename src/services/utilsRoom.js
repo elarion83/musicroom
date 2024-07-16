@@ -1,7 +1,7 @@
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { isDevEnv, isEmpty, roomSpotifyTokenObject, userSpotifyTokenObject } from "./utils"; 
 import { v4 as uuid } from 'uuid';
-import { db } from "./firebase";
+import { auth, db } from "./firebase";
 
 export function getLastNotif(roomNotifs = []) {
     return roomNotifs[roomNotifs.length - 1];
@@ -41,14 +41,14 @@ export async function updateFirebaseUser(userRef, newUserData, merge=true) {
     await updateDoc(userRef, newUserData);
 }
 
-export async function addPlaylistNotif(title, message, type, duration = 5000, userUid, roomRef) {
+export async function addPlaylistNotif(title, message, type, duration = 5000, roomRef) {
     var notifObject = {
         title:title,
         message:message,
         type:type,
         duration:duration,
         timestamp:Date.now(), 
-        createdByUid: userUid
+        createdByUid: auth.currentUser.uid
     }
     await updateDoc(roomRef, {
       notifsArray: arrayUnion(notifObject)
@@ -71,7 +71,7 @@ export function checkRoomSpotifyTokenExpiration(room) {
     if(!isEmpty(room.enablerSpotify.expirationTokenTimestamp) && room.enablerSpotify.expirationTokenTimestamp < Date.now()) {
         let roomRef = doc(db, process.env.REACT_APP_ROOM_COLLECTION, room.id);
         if(room.enablerSpotify.alreadyHaveBeenLinked) {
-            addPlaylistNotif('Recherche Spotify', 'La connexion a expirée.', 'warning', 3500, '000', roomRef);
+            addPlaylistNotif('Recherche Spotify', 'Connexion expirée.', 'warning', 3500, roomRef);
             updateFirebaseRoom(roomRef,{enablerSpotify:roomSpotifyTokenObject(null,null, 'reset')});
         }
     }

@@ -20,6 +20,8 @@ import Groups3Icon from '@mui/icons-material/Groups3';
 import { withTranslation } from 'react-i18next';
 import VolumeButton from "./playerSection/VolumeButton";
 import { GFontIcon, UserIsFromApp, appApkFileUrl, playingFirstInList, playingLastInList } from '../../services/utils';
+import { auth } from '../../services/firebase';
+import { addPlaylistNotif } from '../../services/utilsRoom';
 
 const RoomTopBar = ({
                 t,
@@ -37,8 +39,12 @@ const RoomTopBar = ({
                 setGuestSynchroOrNot,
                 volume,
                 setVolume,
-                paramDrawerIsOpen, handleOpenDrawerParam, isLinkedToSpotify,isLinkedToDeezer, handleOpenRoomParamModal,handleOpenShareModal,handleOpenLeaveRoomModal, }) => {
-
+                paramDrawerIsOpen, handleOpenDrawerParam, handleOpenRoomParamModal,handleOpenShareModal,handleOpenLeaveRoomModal, }) => {
+    
+    function setGuestSynchroOrNotInComp(syncOrNot) {
+        setGuestSynchroOrNot(syncOrNot);
+        addPlaylistNotif(auth.currentUser.displayName, syncOrNot ? ' synchronisé.': ' désynchronisé.', syncOrNot ? 'info' : 'warning', 2500, roomRef);
+    }
   return (
     <AppBar sx={{position: (isShowSticky) ? "fixed": 'initial', top:0, bgcolor: 'var(--grey-dark)',borderBottom: '2px solid var(--border-color)'}} >
         
@@ -71,14 +77,14 @@ const RoomTopBar = ({
                         </ListItemButton>
                     </ListItem>
                                         
-                    {!isAdminView && <ListItem key='roomDrawSync' disablePadding onClick={(e) => setGuestSynchroOrNot(!guestSynchroOrNot)}>
+                    {!isAdminView && <ListItem key='roomDrawSync' disablePadding onClick={(e) => setGuestSynchroOrNotInComp(!guestSynchroOrNot)}>
                         <ListItemButton>
                             <ListItemIcon>
                                 <Switch
                                     size='small'
                                     sx={{ml:-1}}
                                     checked={guestSynchroOrNot}
-                                    onChange={(e) => setGuestSynchroOrNot(!guestSynchroOrNot)}
+                                    onChange={(e) => setGuestSynchroOrNotInComp(!guestSynchroOrNot)}
                                     inputProps={{ 'aria-label': 'controlled' }}
                                 />
                             </ListItemIcon>

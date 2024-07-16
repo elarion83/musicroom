@@ -73,7 +73,7 @@ const ModalRoomParams = ({ t, roomRef,currentUser,adminView, open, changeOpen, r
     function createParamChangeNotif(activated, paramText) {
         var enabledOrNotText = activated ? 'activé par' : 'désactivé par';
         var type = activated ? 'success' : 'warning';
-        addPlaylistNotif(paramText, enabledOrNotText+' '+currentUser.displayName, type, 2500, currentUser.uid, roomRef);
+        addPlaylistNotif(paramText, enabledOrNotText+' '+currentUser.displayName, type, 2500, roomRef);
     }
 
     var paramsArray = {
