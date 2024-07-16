@@ -23,13 +23,13 @@ import { Snackbar, Typography } from "@mui/material";
 import { PseudoGenerated } from './services/pseudoGenerator';
 
 import { CreateGoogleAnalyticsEvent } from './services/googleAnalytics';
-import { GFontIcon, UserIsFromApp, appApkFileUrl, checkStorageRoomId, envAppNameHum, isVarExist, isVarExistNotEmpty, saveSpotifyToken, setPageTitle,  userSpotifyTokenObject } from "./services/utils";
+import { GFontIcon, UserIsFromApp, appApkFileUrl, checkStorageRoomId, envAppNameHum, isVarExist, isVarExistNotEmpty, saveSpotifyToken, setPageTitle,  showLocalNotification,  userSpotifyTokenObject } from "./services/utils";
 
 import { withTranslation } from 'react-i18next';
 import { createUserDataObject } from "./services/utilsArray";
 import {  createUserWithEmailAndPassword, getAdditionalUserInfo, onAuthStateChanged,  signInAnonymously, signInWithEmailAndPassword,  signInWithPopup, signOut } from "firebase/auth";
 import {  doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import { getCleanRoomId, updateFirebaseUser } from "./services/utilsRoom";
+import { addPlaylistNotif, getCleanRoomId, updateFirebaseUser } from "./services/utilsRoom";
 import { useNavigate, useParams } from 'react-router-dom';
 import ModalAuthPhone from "./components/rooms/modalsOrDialogs/ModalAuthPhone";
 import { ReactNotifications } from "react-notifications-component";
@@ -190,8 +190,9 @@ function App( {t} ) {
     setUserInfo(globalDatas);
     setIsSignedIn(true);
 
-    if('newAuth' === actionType) {
-      handleLoginSnack(newUser);
+    if('newAuth' === actionType) { // new login action, not a refresh of page
+      showLocalNotification('Connexion réussie !', 'Bienvenue '+auth.currentUser.customDatas.displayName+' :)', 'success', 2500 )
+
       CreateGoogleAnalyticsEvent('Actions',globalDatas.providerId+' login',globalDatas.providerId+' login');
     }
 
@@ -267,7 +268,7 @@ useEffect(() => {
     signOut(auth).then(() => {
       setUserInfo({});
       localStorage.removeItem("Play-It_RoomId");
-      setLogoutOkSnackBarOpen(true);   
+      showLocalNotification('A bientôt !', 'On vous aime <3', 'info', 2500 );
       CreateGoogleAnalyticsEvent('Actions','Logout','Logout');
     });
   }
@@ -381,32 +382,6 @@ useEffect(() => {
           roomId={roomId}
         />
         
-        {isSignedIn && 
-          <>
-            <Snackbar
-              open={loginOkSnackBarOpen}
-              autoHideDuration={3000}
-              onClose={() => setLoginOkSnackBarOpen(false)}
-              sx={{borderRadius:'2px'}}
-              message={t('GeneralSnackWelcome', {who:userInfos.displayName})}
-            />
-            <Snackbar
-              open={loginNewUserOkSnackBarOpen}
-              autoHideDuration={3000}
-              onClose={() => setLoginNewUserOkSnackBarOpen(false)}
-              sx={{borderRadius:'2px'}}
-              message={t('GeneralSnackWelcome', {who:userInfos.displayName})+" 1e "+ t('GeneralLogin').toLowerCase()}
-            />
-          </>
-        }
-        <Snackbar
-          open={logoutOkSnackBarOpen}
-          autoHideDuration={3000}
-          onClose={() => setLogoutOkSnackBarOpen(false)}
-          sx={{borderRadius:'2px'}}
-          message={t('GeneralSnackSeeYouSoon')}
-        />
-
         {!roomId && false && <Footer />}
       </Container>
     </>

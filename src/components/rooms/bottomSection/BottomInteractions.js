@@ -17,7 +17,7 @@ import {CreateGoogleAnalyticsEvent} from '../../../services/googleAnalytics';
 import { withTranslation } from 'react-i18next';
 import { getLastNotif } from '../../../services/utilsRoom';
 
-const BottomInteractions = ({ t,roomRef, layoutDisplay, setLayoutdisplay, paramDrawerIsOpen, handleOpenDrawerParam, currentUser, roomId, roomParams, roomNotifs,roomMessages, userCanMakeInteraction, createNewRoomInteraction, setOpenAddToPlaylistModal,handleOpenShareModal,handleOpenLeaveRoomModal, OpenAddToPlaylistModal, checkRoomExist, checkInterractionLength,checkNotificationsLength }) => {
+const BottomInteractions = ({ t,roomRef, layoutDisplay, setLayoutdisplay, paramDrawerIsOpen, handleOpenDrawerParam, currentUser, roomId, roomParams, roomNotifs,roomMessages, userCanMakeInteraction, createNewRoomInteraction, setOpenAddToPlaylistModal,checkNotificationsLength }) => {
 
     const [isChatExpanded, setIsChatExpanded] = useState(false);
     const [newMessages,setNewMessages] = useState(false);

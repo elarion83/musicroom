@@ -55,7 +55,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 	const [room, setRoom] = useState({});
     const [isActuallyAdmin, setIsActuallyAdmin] = useState(false);
     const [userCanMakeInteraction, setUserCanMakeInteraction]= useState(true);	
-    const [roomNotifsArray, setRoomNotifsArray] = useState([]);
     const [roomInteractionsArray, setRoomInteractionsArray] = useState([]);
     const [interactionsDisplayedIdArray, setInteractionsDisplayedIdArray] = useState([]);
     const [loaded, setLoaded] = useState(false);
@@ -108,7 +107,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     // layout and display elements
     const [layoutDisplay, setLayoutdisplay] = useState('default');
     const [layoutDisplayClass, setLayoutDisplayClass] = useState('defaultLayout');
-    const [newMessages, setNewMessages] = useState(false);
     const [barPercentage, setBarPercentage] = useState(0);
 
     // animated elements
@@ -589,7 +587,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }, [localVolume,loaded]);
 
     async function addMediaForAutoPlayByYoutubeId(lastMediaTitle) {
-        var params = youtubeApiSearchObject(lastMediaTitle.split('-')[0],5);
+        var params = youtubeApiSearchObject(lastMediaTitle.split('-')[0],6 );
 
         await axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, { params: params })
         .then(async function(response) {

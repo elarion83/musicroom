@@ -5,6 +5,8 @@ import dateFormat from "dateformat";
 import { v4 as uuid } from 'uuid';
 import SearchResultItem from '../components/rooms/SearchResultItem';
 import { getCleanRoomId, updateFirebaseUser } from './utilsRoom';
+import { Store } from 'react-notifications-component';
+import { Typography } from '@mui/material';
 
 export const envAppNameUrl = process.env.REACT_APP_NAME_URL;
 export const envAppNameHum = process.env.REACT_APP_NAME;
@@ -115,6 +117,13 @@ export function isVarNull(varTested) {
 export function isVarExist(varTested) {
     return typeof(varTested) !== 'undefined' && varTested;
 }
+export function isVarExistNotNull(varTested) {
+    return typeof(varTested) !== 'undefined' && varTested !== null;
+}
+export function isVarExistNotNullNotempty(varTested) {
+    return typeof(varTested) !== 'undefined' && varTested !== null && !isEmpty(varTested);
+}
+
 export function isVarExistNotEmpty(varTested) {
     return typeof(varTested) !== 'undefined' && varTested && (varTested.length > 0);
 }
@@ -438,6 +447,7 @@ export function checkStorageRoomId(roomId = '', joinRoomByRoomId ) { // handle r
 export async function saveSpotifyToken(userRef,SpotifyTokenObject,userInfos, setUserInfo, joinRoomByRoomId) {
     await updateFirebaseUser(userRef,{spotifyConnect:SpotifyTokenObject});
 
+    showLocalNotification('Lecteur Spotify', 'Connexion établie !', 'success', 2500 );
     userInfos.customDatas.spotifyConnect = SpotifyTokenObject;
     setUserInfo(userInfos);
     joinRoomByRoomId(localStorage.getItem("Play-It_RoomId"));
@@ -457,4 +467,37 @@ export const spotifyConnectUrl = process.env.REACT_APP_ROOM_SPOTIFY_AUTH_ENDPOIN
 
 export function goToSpotifyConnectUrl() {
     window.location.href = spotifyConnectUrl;
+}
+
+// add local only  notifs
+export function showLocalNotification(title,message,type,duration) {
+    Store.addNotification({
+                title: title,
+                message: <Typography>{message}</Typography>,
+                type: type,
+                insert: "bottom",
+                container: "bottom-right",
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                    duration: duration,
+                    onScreen: true,
+                    pauseOnHover: true,
+                    showIcon: true,
+                    click: true,
+                    touch: true
+                },
+                touchSlidingExit: {
+                    swipe: {
+                        duration: 400,
+                        timingFunction: 'ease-out',
+                        delay: 0,
+                    },
+                    fade: {
+                        duration: 400,
+                        timingFunction: 'ease-out',
+                        delay: 0
+                    }
+                }
+            });
 }

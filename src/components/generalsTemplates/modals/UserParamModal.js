@@ -11,17 +11,16 @@ import { withTranslation } from 'react-i18next';
 import ModalsHeader from "./ModalsHeader";
 import { ReactSVG } from "react-svg";
 import { CancelOutlined , Save } from "@mui/icons-material";
-import { cleanPseudoEntered, delay, goToSpotifyConnectUrl, isPseudoEnteredValid, isVarExist, isVarNull, userSpotifyTokenObject } from "../../../services/utils";
+import { cleanPseudoEntered, delay, goToSpotifyConnectUrl, isPseudoEnteredValid, isVarExist, isVarNull, showLocalNotification, userSpotifyTokenObject } from "../../../services/utils";
 import UserAvatarComponent from "../../../services/utilsComponents";
 import SpotifyConnectButton from "../buttons/SpotifyConnectButton";
+import { auth } from "../../../services/firebase";
 const UserParamModal = ({ t, open, changeOpen, user = null, setUserInfo = null, ownProfile = true}) => {
 
     const [pseudo, setPseudo] = useState('');
     const [isEditingPseudo, setIsEditingPseudo] = useState(false);
     const [isEditingUserLoading, setIsEditingUserLoading ] = useState(false);
     
-    var userSpotify = isVarNull(user) ? null : user.customDatas.spotifyConnect;
-
     async function updateUser() {
         setIsEditingUserLoading(true);
         if(isPseudoEnteredValid(pseudo)) {
@@ -35,6 +34,7 @@ const UserParamModal = ({ t, open, changeOpen, user = null, setUserInfo = null, 
     }
 
     async function resetSpotifyToken() {
+        showLocalNotification('Lecteur spotify', 'Connexion désactivée.', 'warning', 2500 );
         user.customDatas.spotifyConnect = userSpotifyTokenObject(null, 'reset');
         setUserInfo(user);
         changeOpen(false);
@@ -94,12 +94,11 @@ const UserParamModal = ({ t, open, changeOpen, user = null, setUserInfo = null, 
                                 </ListItem>
                             </List>
                             
-                            {ownProfile && !isVarNull(userSpotify) && 
+                            {ownProfile && 
                                 <SpotifyConnectButton 
-                                    text={userSpotify.connected ? 'Connecté à Spotify' : 'Me connecter a spotify'} 
-                                    clickFunc={userSpotify.connected ? resetSpotifyToken : goToSpotifyConnectUrl}
-                                    expiration={userSpotify.expiration}
-                                    user={user}
+                                    text={auth.currentUser.customDatas.spotifyConnect.connected ? 'Déconnexion de Spotify' : 'Connexion à Spotify'} 
+                                    clickFunc={auth.currentUser.customDatas.spotifyConnect.connected ? resetSpotifyToken : goToSpotifyConnectUrl}
+                                    expiration={auth.currentUser.customDatas.spotifyConnect.expiration}
                                 />
                             }
                         </Box>

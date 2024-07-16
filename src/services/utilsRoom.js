@@ -1,5 +1,5 @@
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
-import { isDevEnv, isEmpty, roomSpotifyTokenObject, userSpotifyTokenObject } from "./utils"; 
+import { isDevEnv, isEmpty, roomSpotifyTokenObject, showLocalNotification, userSpotifyTokenObject } from "./utils"; 
 import { v4 as uuid } from 'uuid';
 import { auth, db } from "./firebase";
 
@@ -64,6 +64,7 @@ export function checkCurrentUserSpotifyTokenExpiration() {
     console.log(userSpotifyDatas);
     if(userSpotifyDatas.spotifyConnect.expiration < Date.now()) {
         let userRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, userSpotifyDatas.uid);
+        showLocalNotification('Lecteur spotify', 'Connexion expirée', 'info', 2500 );
         updateFirebaseUser(userRef,{spotifyConnect:userSpotifyTokenObject(null, 'reset')});
     }
 }
