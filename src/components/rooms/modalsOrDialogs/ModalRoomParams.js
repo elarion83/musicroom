@@ -9,8 +9,9 @@ import SaveIcon from '@mui/icons-material/Save';
 import { withTranslation } from 'react-i18next';
 import { SlideUp } from "../../../services/materialSlideTransition/Slide";
 import ModalsHeader from "../../generalsTemplates/modals/ModalsHeader";
+import { addPlaylistNotif } from "../../../services/utilsRoom";
 
-const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleChangeGeoloc, handleChangeRoomParams }) => {
+const ModalRoomParams = ({ t, roomRef,currentUser,adminView, open, changeOpen, roomParams, handleChangeGeoloc, handleChangeRoomParams }) => {
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -19,23 +20,27 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleCha
     async function savePassword() {
         roomParams.password = password;
         handleChangeRoomParams(roomParams);
+        createParamChangeNotif(roomParams.isPasswordNeeded, 'Mot de passe');
         setShowPassword(false);
     }
 
     async function handleChangeIsPlayingLooping() {
         roomParams.isPlayingLooping = !roomParams.isPlayingLooping;
         handleChangeRoomParams(roomParams);
+        createParamChangeNotif(roomParams.isPlayingLooping, 'Lecture en boucle');
     }
 
     async function handleChangeIsInterractionsAllowed() {
         roomParams.interactionsAllowed = !roomParams.interactionsAllowed;
         handleChangeRoomParams(roomParams);
+        createParamChangeNotif(roomParams.interactionsAllowed, 'Interactions');
     }
 
     async function handleChangeIsPasswordNeeded() {
         roomParams.isPasswordNeeded = !roomParams.isPasswordNeeded;
         if (!roomParams.isPasswordNeeded) {
             roomParams.password = '';
+            createParamChangeNotif(roomParams.isPasswordNeeded, 'Mot de passe');
         }
         handleChangeRoomParams(roomParams);
     }
@@ -43,16 +48,19 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleCha
     async function handleChangeIsAutoPlayActivated() {
         roomParams.isAutoPlayActivated = !roomParams.isAutoPlayActivated;
         handleChangeRoomParams(roomParams);
+        createParamChangeNotif(roomParams.isAutoPlayActivated, 'Lecture Automatique');
     }
 
     async function handleChangeSyncPeopleByDefault() {
         roomParams.syncPeopleByDefault = !roomParams.syncPeopleByDefault;
         handleChangeRoomParams(roomParams);
+        createParamChangeNotif(roomParams.syncPeopleByDefault, 'Synchronisation Automatique');
     }
 
     async function handleChangeIsChatActivated() {
         roomParams.isChatActivated = !roomParams.isChatActivated;
         handleChangeRoomParams(roomParams);
+        createParamChangeNotif(roomParams.isChatActivated, 'Accès au tchat');
     }
 
     async function changeOpenInComp() {
@@ -61,6 +69,12 @@ const ModalRoomParams = ({ t, adminView, open, changeOpen, roomParams, handleCha
             handleChangeRoomParams(roomParams);
         }
         changeOpen(false);
+    }
+
+    function createParamChangeNotif(activated, paramText) {
+        var enabledOrNotText = activated ? 'activé par' : 'désactivé par';
+        var type = activated ? 'success' : 'warning';
+        addPlaylistNotif(paramText, enabledOrNotText+' '+currentUser.displayName, type, 2500, currentUser.uid, roomRef);
     }
 
     var paramsArray = {

@@ -256,7 +256,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
             } else {
                 if(!isActuallyAdmin) {
                     unsubscribe();                            
-                    addPlaylistNotif(currentUser.displayName, 'est désynchronisé.', 'info', 2500, currentUser.uid, roomRef);
+                    addPlaylistNotif(currentUser.displayName, 'est désynchronisé.', 'warning', 2500, currentUser.uid, roomRef);
                     setPlayerControlsShown(true);
                     setRoomIsPlaying(false);
                     goToSecond(0);
@@ -515,7 +515,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         } else {
             tempParams.isLocalisable = false;
             updateFirebaseRoom( roomRef , {localisation: posObject, roomParams:tempParams});
-            await addPlaylistNotif(currentUser.displayName, 'a désactivé la géolocalisation.', 'info', 2500, currentUser.uid, roomRef);
+            await addPlaylistNotif(currentUser.displayName, 'a désactivé la géolocalisation.', 'warning', 2500, currentUser.uid, roomRef);
         }  
     }
 
@@ -877,6 +877,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         handleChangeRoomParams={handleChangeRoomParams} 
                         roomParams={room.roomParams}
                         handleChangeGeoloc={handleUpdateRoomGeoloc} 
+                        roomRef={roomRef}
+                        currentUser={currentUser}
                     />
                     <BottomInteractions 
                         currentUser={currentUser}
