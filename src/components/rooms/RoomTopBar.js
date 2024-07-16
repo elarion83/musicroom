@@ -84,7 +84,6 @@ const RoomTopBar = ({
                                     size='small'
                                     sx={{ml:-1}}
                                     checked={guestSynchroOrNot}
-                                    onChange={(e) => setGuestSynchroOrNotInComp(!guestSynchroOrNot)}
                                     inputProps={{ 'aria-label': 'controlled' }}
                                 />
                             </ListItemIcon>

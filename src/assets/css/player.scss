@@ -1,8 +1,3 @@
-/* START TRICK FOR YOUTUBE HIDE TITLE AND INFO FROM EMBED */
-
-
-/* END TRICK FOR YOUTBE */ 
-
 .playerSection {
 
     /*
@@ -137,9 +132,12 @@
                     }
                 }
             }
-            .volumeButtonContainer>label,
-            .volumeButtonContainer>label>span {
-                margin: 0;
+            .volumeButtonContainer {
+                background: transparent;
+                >label,
+                >label>span {
+                    margin: 0;
+                }
             }
         }
     }
@@ -172,5 +170,13 @@
                 height: calc(100% - 45px);
             }
         }
+    }
+}
+
+
+.guestView {
+    .playerSection .player_right_side_container .player_button_container .playerButtons {
+        justify-content: start;
+        gap:20px;
     }
 }

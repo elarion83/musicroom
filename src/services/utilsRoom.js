@@ -1,5 +1,5 @@
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
-import { isDevEnv, isEmpty, roomSpotifyTokenObject, showLocalNotification, userSpotifyTokenObject } from "./utils"; 
+import { isDevEnv, isEmpty, isFromSpotify, isVarExist, roomSpotifyTokenObject, showLocalNotification, userSpotifyTokenObject } from "./utils"; 
 import { v4 as uuid } from 'uuid';
 import { auth, db } from "./firebase";
 
@@ -17,11 +17,13 @@ export function getCleanRoomId(id = null) {
 
 /* PLAYER HELPERS */
 export function playedSeconds(player, origin = 'youtube') {
-    if('spotify' === origin) {
-        return Math.floor(player.current.state.progressMs/1000);
-    }
-    else {
-        return Math.floor(player.current.getCurrentTime());
+    if(isVarExist(player.current)) {
+        if('spotify' === origin) {
+            return Math.floor(player.current.state.progressMs/1000);
+        }
+        else {
+            return Math.floor(player.current.getCurrentTime());
+        }
     }
 }
 
@@ -76,4 +78,9 @@ export function checkRoomSpotifyTokenExpiration(room) {
             updateFirebaseRoom(roomRef,{enablerSpotify:roomSpotifyTokenObject(null,null, 'reset')});
         }
     }
+}
+
+
+export function actuallyPlayingFromSpotify(room) {
+    return isFromSpotify(room.playlistUrls[room.playing]);
 }
