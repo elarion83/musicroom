@@ -27,7 +27,7 @@ const ModalRoomParams = ({ t, roomRef,currentUser,adminView, open, changeOpen, r
     async function handleChangeIsPlayingLooping() {
         roomParams.isPlayingLooping = !roomParams.isPlayingLooping;
         handleChangeRoomParams(roomParams);
-        createParamChangeNotif(roomParams.isPlayingLooping, 'Lecture en boucle');
+        createParamChangeNotif(roomParams.isPlayingLooping, t('ModalParamsRoomLoopPlayingTitle'));
     }
 
     async function handleChangeIsInterractionsAllowed() {
@@ -40,7 +40,7 @@ const ModalRoomParams = ({ t, roomRef,currentUser,adminView, open, changeOpen, r
         roomParams.isPasswordNeeded = !roomParams.isPasswordNeeded;
         if (!roomParams.isPasswordNeeded) {
             roomParams.password = '';
-            createParamChangeNotif(roomParams.isPasswordNeeded, 'Mot de passe');
+            createParamChangeNotif(roomParams.isPasswordNeeded, t('ModalLoginFormPlaceholderPassword'));
         }
         handleChangeRoomParams(roomParams);
     }
@@ -48,13 +48,12 @@ const ModalRoomParams = ({ t, roomRef,currentUser,adminView, open, changeOpen, r
     async function handleChangeIsAutoPlayActivated() {
         roomParams.isAutoPlayActivated = !roomParams.isAutoPlayActivated;
         handleChangeRoomParams(roomParams);
-        createParamChangeNotif(roomParams.isAutoPlayActivated, 'Lecture Automatique');
+        createParamChangeNotif(roomParams.isAutoPlayActivated, t('ModalParamsRoomAutoPlayingTitle'));
     }
 
     async function handleChangeSyncPeopleByDefault() {
         roomParams.syncPeopleByDefault = !roomParams.syncPeopleByDefault;
         handleChangeRoomParams(roomParams);
-        createParamChangeNotif(roomParams.syncPeopleByDefault, 'Synchronisation Automatique');
     }
 
     async function handleChangeIsChatActivated() {
@@ -137,7 +136,7 @@ const ModalRoomParams = ({ t, roomRef,currentUser,adminView, open, changeOpen, r
                     <Alert sx={{ pl: 0, mb: 2, alignItems: 'center' }}  icon={<Switch checked={roomParams.isPasswordNeeded} onChange={handleChangeIsPasswordNeeded}
                         disabled={!adminView} 
                         name="switchInteractionsAllowed" />} severity={roomParams.isPasswordNeeded ? 'success' : 'warning'}>
-                        <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>Mot de passe requis</AlertTitle>
+                        <AlertTitle sx={{ fontWeight: 'bold' }} className='fontFamilyOpenSans'>{t('ModalLoginFormPlaceholderPassword')}</AlertTitle>
                         {!adminView && 
                             <Typography fontSize='small'>{t('ModalParamsRoomNotAllowedText')}</Typography>
                         }
@@ -150,7 +149,7 @@ const ModalRoomParams = ({ t, roomRef,currentUser,adminView, open, changeOpen, r
                                 sx={{ bgcolor: 'var(--white)', mt: 1 }}
                                 size="small"
                                 id="outlined-basic"
-                                label="Mot de passe"
+                                label={t('ModalLoginFormPlaceholderPassword')}
                                 variant="outlined"
                                 InputProps={{
                                     startAdornment: (

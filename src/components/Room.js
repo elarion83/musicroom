@@ -252,11 +252,11 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         setRoom(roomDataInFb);
                     }
                 });                            
-                addPlaylistNotif(currentUser.displayName, 'est synchronisé.', 'info', 2500, currentUser.uid, roomRef);
+                addPlaylistNotif(currentUser.displayName, ' synchronisé.', 'info', 2500, currentUser.uid, roomRef);
             } else {
                 if(!isActuallyAdmin) {
                     unsubscribe();                            
-                    addPlaylistNotif(currentUser.displayName, 'est désynchronisé.', 'warning', 2500, currentUser.uid, roomRef);
+                    addPlaylistNotif(currentUser.displayName, ' désynchronisé.', 'warning', 2500, currentUser.uid, roomRef);
                     setPlayerControlsShown(true);
                     setRoomIsPlaying(false);
                     goToSecond(0);
@@ -610,8 +610,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }
 
     async function changeAdmin() {
-        room.notifsArray.push({type: 'changeAdmin', timestamp: Date.now(), createdBy: currentUser.displayName});
-        updateFirebaseRoom( roomRef , {notifsArray: room.notifsArray, admin: currentUser.displayName, adminUid: currentUser.uid}); 
+        addPlaylistNotif(currentUser.displayName, ' est désormais hôte !', 'info', 2500, currentUser.uid, roomRef);
         setOpenRoomDrawer(false);
     }
     return (

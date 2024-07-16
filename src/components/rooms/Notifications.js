@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { doc, getDoc, onSnapshot, setDoc, } from 'firebase/firestore';
 import { Store } from 'react-notifications-component';
 import { isEmpty } from '../../services/utils';
+import { Typography } from "@mui/material";
 const Notifications = ({roomRef, initialCount}) => { // USED TO SHOW THE NOTIFICATIONS, NOT SAVING THEM
     
     const [notifications, setNotifications] = useState([]);
@@ -13,9 +14,7 @@ const Notifications = ({roomRef, initialCount}) => { // USED TO SHOW THE NOTIFIC
                 const data = docSnapshot.data();
                 const notifsArray = data.notifsArray || [];
                 setNotifications(notifsArray);
-            } else {
-            console.log("Le document n'existe pas !");
-            }
+            } 
         });
     };
 
@@ -31,7 +30,7 @@ const Notifications = ({roomRef, initialCount}) => { // USED TO SHOW THE NOTIFIC
             var notifToShow= notifications[notifications.length-1];
             Store.addNotification({
                 title: notifToShow.title,
-                message: <p>{notifToShow.message}</p>,
+                message: <Typography>{notifToShow.message}</Typography>,
                 type: notifToShow.type,
                 insert: "bottom",
                 container: "top-right",
