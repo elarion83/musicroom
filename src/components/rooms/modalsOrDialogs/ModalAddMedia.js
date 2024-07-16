@@ -63,7 +63,7 @@ const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, ro
         }
 
         if(open) {
-            checkCurrentUserSpotifyTokenExpiration(currentUser.customDatas.spotifyConnect, currentUser.uid);
+            checkCurrentUserSpotifyTokenExpiration();
             checkRoomSpotifyTokenExpiration(room);
         }
         if(open && currentUser.customDatas.spotifyConnect.connected && isEmpty(spotifyTopTracks)) {

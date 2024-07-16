@@ -4,6 +4,8 @@ import NotListedLocationOutlinedIcon from '@mui/icons-material/NotListedLocation
 import { withTranslation } from "react-i18next";
 import { useState } from "react";
 import WhereToVoteOutlinedIcon from '@mui/icons-material/WhereToVoteOutlined';
+import { addPlaylistNotif } from "../../../services/utilsRoom";
+import { auth } from "../../../services/firebase";
 
 const EmptyPlaylist = ({t,isAdminView, setOpenInvitePeopleToRoomModal, setOpenAddToPlaylistModal, roomRef, roomParams, updateFirebaseRoom }) => {
        
@@ -20,11 +22,13 @@ const EmptyPlaylist = ({t,isAdminView, setOpenInvitePeopleToRoomModal, setOpenAd
                         long:position.coords.longitude,
                     }
                     tempParams.isLocalisable = true;
-                    setLocalisationLoading(false);
+                    addPlaylistNotif(auth.currentUser.displayName, 'a géolocalisé la playlist.', 'info', 2500, roomRef);
                     updateFirebaseRoom( roomRef , {localisation: posObject, roomParams:tempParams});
+                    setLocalisationLoading(false);
                 });
         } else {
             tempParams.isLocalisable = false;
+            addPlaylistNotif(auth.currentUser.displayName, 'a désactivé la géolocalisation.', 'warning', 2500, roomRef);
             updateFirebaseRoom( roomRef , {localisation: posObject, roomParams:tempParams});
             setLocalisationLoading(false);
         }      

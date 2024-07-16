@@ -337,7 +337,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     async function setIsPlaying(PlayingOrNot) {
         setRoomIsPlaying(PlayingOrNot);
-        checkCurrentUserSpotifyTokenExpiration(currentUser.customDatas.spotifyConnect, currentUser.uid);
+        checkCurrentUserSpotifyTokenExpiration();
         if(isActuallyAdmin) {
            updateFirebaseRoom( roomRef , {actuallyPlaying: PlayingOrNot})
         }
@@ -610,6 +610,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     async function changeAdmin() {
         addPlaylistNotif(currentUser.displayName, ' est désormais hôte !', 'info', 2500,  roomRef);
+        updateFirebaseRoom( roomRef , {admin: currentUser.displayName, adminUid: currentUser.uid}); 
         setOpenRoomDrawer(false);
     }
     return (

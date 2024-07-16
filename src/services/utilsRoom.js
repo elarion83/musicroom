@@ -59,9 +59,11 @@ export function roomIdLocallyStored() {
     return localStorage.getItem("Play-It_RoomId");
 }
 
-export function checkCurrentUserSpotifyTokenExpiration(userSpotifyDatas, userUid) {
-    if(userSpotifyDatas.expiration < Date.now()) {
-        let userRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, userUid);
+export function checkCurrentUserSpotifyTokenExpiration() {
+    var userSpotifyDatas = auth.currentUser.customDatas;
+    console.log(userSpotifyDatas);
+    if(userSpotifyDatas.spotifyConnect.expiration < Date.now()) {
+        let userRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, userSpotifyDatas.uid);
         updateFirebaseUser(userRef,{spotifyConnect:userSpotifyTokenObject(null, 'reset')});
     }
 }

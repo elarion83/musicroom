@@ -25,7 +25,7 @@ const SpotifyConnectButton = ({t, text, clickFunc, expiration = null, user}) => 
 
                 const interval = setInterval(() => {
                     if(secondsLeft == 0) {
-                        checkCurrentUserSpotifyTokenExpiration(user.customDatas.spotifyConnect, user.uid);
+                        checkCurrentUserSpotifyTokenExpiration();
                     }
                     setSecondsLeft(calculateTimeLeft());
                 }, 1000);
