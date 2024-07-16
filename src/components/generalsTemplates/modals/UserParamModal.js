@@ -11,7 +11,7 @@ import { withTranslation } from 'react-i18next';
 import ModalsHeader from "./ModalsHeader";
 import { ReactSVG } from "react-svg";
 import { CancelOutlined , Save } from "@mui/icons-material";
-import { cleanPseudoEntered, delay, goToSpotifyConnectUrl, isPseudoEnteredValid, isVarExist, userSpotifyTokenObject } from "../../../services/utils";
+import { cleanPseudoEntered, delay, goToSpotifyConnectUrl, isPseudoEnteredValid, isVarExist, isVarNull, userSpotifyTokenObject } from "../../../services/utils";
 import UserAvatarComponent from "../../../services/utilsComponents";
 import SpotifyConnectButton from "../buttons/SpotifyConnectButton";
 const UserParamModal = ({ t, open, changeOpen, user = null, setUserInfo = null, ownProfile = true}) => {
@@ -20,7 +20,7 @@ const UserParamModal = ({ t, open, changeOpen, user = null, setUserInfo = null, 
     const [isEditingPseudo, setIsEditingPseudo] = useState(false);
     const [isEditingUserLoading, setIsEditingUserLoading ] = useState(false);
     
-    var userSpotify = user.customDatas.spotifyConnect;
+    var userSpotify = isVarNull(user) ? null : user.customDatas.spotifyConnect;
 
     async function updateUser() {
         setIsEditingUserLoading(true);
@@ -94,7 +94,7 @@ const UserParamModal = ({ t, open, changeOpen, user = null, setUserInfo = null, 
                                 </ListItem>
                             </List>
                             
-                            {ownProfile && 
+                            {ownProfile && !isVarNull(userSpotify) && 
                                 <SpotifyConnectButton 
                                     text={userSpotify.connected ? 'Connecté à Spotify' : 'Me connecter a spotify'} 
                                     clickFunc={userSpotify.connected ? resetSpotifyToken : goToSpotifyConnectUrl}
