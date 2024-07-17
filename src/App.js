@@ -293,8 +293,8 @@ function App( {t} ) {
   }
 
     const [metaData, setMetaData] = useState({
-        title: 'Play-It - Playlists à plusieurs en temps réel',
-        description: 'Youtube et Spotify au même endroit entre potes !',
+        title: 'Play-It - Playlists à plusieurs',
+        description: 'Youtube et Spotify au même endroit et entre potes !',
         image: shareImage,
     });
 
@@ -308,8 +308,8 @@ function App( {t} ) {
             });
         } else {
             setMetaData({
-              title: 'Play-It - Playlists à plusieurs en temps réel',
-              description: 'Youtube et Spotify au même endroit entre potes !',
+              title: 'Play-It - Playlists à plusieurs',
+              description: 'Youtube et Spotify au même endroit et entre potes !',
               image: shareImage,
           });
         }
