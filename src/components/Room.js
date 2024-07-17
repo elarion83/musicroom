@@ -362,7 +362,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         setPageTitle(pageTitle+ ' | '+envAppNameUrl);
         if(isActuallyAdmin) {
            updateFirebaseRoom( roomRef , {
-                playing: idPlaying,
+                playing: idPlaying, 
                 mediaActuallyPlayingAlreadyPlayedData:{
                     playedSeconds:0
                 }
@@ -593,10 +593,10 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
    
     // use state change to change spotify volume
     useEffect(() => {
-        if(loaded && isVarExist(spotifyPlayerRef.current)) { 
+        if(loaded && playerReady && isVarExist(spotifyPlayerRef.current)) { 
             spotifyPlayerRef.current.setVolume(localVolume);
         }
-    }, [localVolume,loaded]);
+    }, [localVolume,loaded, playerReady]);
 
     async function addMediaForAutoPlayByYoutubeId() {
         var searchTerm = actuallyPlayingMedia().channelOrArtist;
