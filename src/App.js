@@ -32,7 +32,6 @@ import {  doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { getCleanRoomId, updateFirebaseUser } from "./services/utilsRoom";
 import { useNavigate, useParams } from 'react-router-dom';
 import ModalAuthPhone from "./components/rooms/modalsOrDialogs/ModalAuthPhone";
-import { Helmet } from "react-helmet";
 
 import shareImage from './assets/img/share_img.jpg';
 import MetaTags from "./components/generalsTemplates/MetaTags";
@@ -218,6 +217,8 @@ function App( {t} ) {
   /* LOGIN-FAILED-HELPER */
   async function setLoginFailed(error) {
     setLoginErrorMessage(error);
+    showLocalNotification('Connexion échouée !', error, 'error', 4500 )
+
     setIsLoginLoading(false);
   }
 
@@ -298,26 +299,28 @@ function App( {t} ) {
     });
 
     useEffect(() => {
-      if (roomId) {
-          setMetaData({
-              title: 'Playlist ' +roomId+' - '+process.env.REACT_APP_NAME_URL,
-              description: `${auth.currentUser.displayName} vous invite dans une playlist !`,
+      if(!isAppLoading) {
+        if (roomId) {
+            setMetaData({
+                title: 'Playlist ' +roomId+' - '+process.env.REACT_APP_NAME_URL,
+                description: `${auth.currentUser.displayName} vous invite dans une playlist !`,
+                image: shareImage,
+            });
+        } else {
+            setMetaData({
+              title: 'Play-It - Playlists à plusieurs en temps réel',
+              description: 'Youtube et Spotify au même endroit entre potes !',
               image: shareImage,
           });
-      } else {
-          setMetaData({
-            title: 'Play-It - Playlists à plusieurs en temps réel',
-            description: 'Youtube et Spotify au même endroit entre potes !',
-            image: shareImage,
-        });
+        }
       }
-    }, [roomId]);
+    }, [roomId, isAppLoading]);
 
 
   // META DATAS OG ET TWITTER
   return (
     <>
-        {!isAppLoading && <MetaTags metaData={metaData} />}
+        <MetaTags metaData={metaData} />
         <CssBaseline />
         <Container maxWidth={false} className={isVarExistNotEmpty(roomId) ? 'main_container' : 'main_container homecontainer'} sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
           <AppBar className={(isVarExistNotEmpty(roomId) && isSignedIn) ? stickyDisplay ? '' : 'topBarIsInRoom appBar' : 'topBarClassic appBar'} position="static" sx={{bgcolor: '#202124'}}>

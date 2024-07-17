@@ -5,8 +5,7 @@ import React, { useEffect, useState } from "react";
 import { withTranslation } from "react-i18next";
 import { auth } from "../../services/firebase";
 import { Helmet } from "react-helmet-async";
-const MetaTags = ({metaData, isAppLoading}) => {
-    console.log(isAppLoading);
+const MetaTags = ({metaData}) => {
     return(
       <Helmet>
             <meta property="og:title" content={metaData.title} />
