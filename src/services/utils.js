@@ -103,7 +103,11 @@ export function isFromSource(itemSource, sourceCheck) {
 }
 
 export function isFromSpotify(media = null) {
-    return media.source === 'spotify';
+    if(isVarNull(media)) {
+        return 'false';
+    } else {
+        return media.source === 'spotify';
+    }
 }
 
 export function isFromDeezer(media) {

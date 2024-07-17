@@ -1,7 +1,7 @@
 import { Button, IconButton, LinearProgress, Typography } from "@mui/material";
 import { delay, isVarExist, isVarExistNotEmpty, playingFirstInList } from "../../../services/utils";
 import { actuallyPlayingFromSpotify, playedSeconds, playerNotSync } from "../../../services/utilsRoom";
-import { Replay10,Forward10, SkipPrevious, Replay } from "@mui/icons-material";
+import { Replay10,Forward30, SkipPrevious, Replay } from "@mui/icons-material";
 import VolumeButton from "./VolumeButton";
 import SyncIcon from '@mui/icons-material/Sync';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
@@ -20,7 +20,6 @@ const PlayerButtons = ({room,playerControlsShown,reSyncUserFunc, playerType,spot
         await reSyncUserFunc(false);
         await reSyncUserFunc(true);
     }
-    
     return(
         <>
             <LinearProgress className="mediaPlayingBar"  variant="determinate" value={roomPlayedActuallyPlayed} />
@@ -36,7 +35,7 @@ const PlayerButtons = ({room,playerControlsShown,reSyncUserFunc, playerType,spot
                 </IconButton>}
 
                 {button === 'full' && <IconButton variant="contained" onClick={e => setIsPlaying(!roomIsPlaying)} sx={{ color:'#f0f1f0', position:'sticky', top:0, zIndex:2500}} >
-                    { roomIsPlaying ? (
+                    { playerIsPlaying ? (
                             <PauseCircleOutlineIcon className='colorWhite' fontSize="large"  />
                         ) : (
                             <PlayCircleOutlineIcon className='colorWhite' fontSize="large"  />
@@ -44,8 +43,8 @@ const PlayerButtons = ({room,playerControlsShown,reSyncUserFunc, playerType,spot
                     }
                 </IconButton>}
                 
-                {button === 'full' && <IconButton onClick={e => goToSecond(playedSeconds(playerRef, playerType) + 10)}>
-                    <Forward10 fontSize="medium" sx={{color:'#f0f1f0'}} />
+                {button === 'full' && <IconButton onClick={e => goToSecond(playedSeconds(playerRef, playerType) + 30)}>
+                    <Forward30 fontSize="medium" sx={{color:'#f0f1f0'}} />
                 </IconButton>}
 
                 <IconButton onClick={e => !playingLastInListInComp(room.playlistUrls.length,playerIdPlayed) ? setIdPlaying(playerIdPlayed+1) : ''}>
@@ -64,7 +63,7 @@ const PlayerButtons = ({room,playerControlsShown,reSyncUserFunc, playerType,spot
                     </Button>
                 ) : ( 
                     <Button  onClick={e => desyncUnsyncUser()} variant="text" size="small" startIcon={<SyncProblemIcon className={(playerIdPlayed === room.playing) ? "colorOrange" : "colorRed"} /> }>
-                        <Typography className={(playerIdPlayed === room.playing) ? "colorOrange firstLetterCapitalize" : "colorRed firstLetterCapitalize"} fontSize='small' >{(playerIdPlayed === room.playing) ? "Synchro. moyenne" : "Echec de synchro."}</Typography>
+                        <Typography className={(playerIdPlayed === room.playing) ? "colorOrange firstLetterCapitalize" : "colorRed firstLetterCapitalize"} fontSize='small' >{(playerIdPlayed === room.playing) ? "Retenter synchro ?" : "Echec de synchro."}</Typography>
                     </Button>
                 )}
                 </>
