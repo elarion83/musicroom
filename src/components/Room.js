@@ -654,8 +654,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     return (
         <div className="flex flex-col w-full gap-0 relative " style={{height:'auto'}}> 
+            <MetaTags metaData={metaData} />
             {loaded && <>    
-                <MetaTags metaData={metaData} />
                 <RoomTopBar     
                     room={room}
                     roomRef={roomRef}
