@@ -45,6 +45,8 @@ import { returnAnimateReplace } from "../services/animateReplace";
 import PlayerButtons from "./rooms/playerSection/PlayerButtons";
 import { AlertTitle } from "@mui/material";
 import Notifications from "./rooms/Notifications";
+import MetaTags from "./generalsTemplates/MetaTags";
+import shareImage from './../assets/img/share_img.jpg';
 
 const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
@@ -275,6 +277,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     createInteractionAnimation(roomInteractionsArray[roomInteractionsArray.length-1], layoutDisplay);
                 }
             } 
+
         }
 	}, [loaded,roomInteractionsArray]); 
 
@@ -406,6 +409,12 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         }
     }
     
+    const [metaData, setMetaData] = useState({
+        title: 'Playlist ' +roomId+' - '+process.env.REACT_APP_NAME_URL,
+        description: `${auth.currentUser.displayName} vous invite dans une playlist !`,
+        image:shareImage,
+    });
+
     useEffect(() => {
         let pageTitle = (roomIsPlaying && isVarExistNotEmpty(room.playlistUrls)) ? room.playlistUrls[playerIdPlayed].title : 'Playlist '+roomId;
         setPageTitle(pageTitle+' | '+envAppNameUrl);
@@ -645,7 +654,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     return (
         <div className="flex flex-col w-full gap-0 relative " style={{height:'auto'}}> 
-            {loaded && <>
+            {loaded && <>    
+                <MetaTags metaData={metaData} />
                 <RoomTopBar     
                     room={room}
                     roomRef={roomRef}

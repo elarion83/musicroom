@@ -11,7 +11,7 @@ ReactDOM.render(
   <React.StrictMode>
     <HelmetProvider> 
       <ReactNotifications />
-    <AppRoutes />
+      <AppRoutes />
     </HelmetProvider> 
   </React.StrictMode>,
   document.getElementById("root")

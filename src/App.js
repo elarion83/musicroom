@@ -298,29 +298,11 @@ function App( {t} ) {
         image: shareImage,
     });
 
-    useEffect(() => {
-      if(!isAppLoading) {
-        if (roomId) {
-            setMetaData({
-                title: 'Playlist ' +roomId+' - '+process.env.REACT_APP_NAME_URL,
-                description: `${auth.currentUser.displayName} vous invite dans une playlist !`,
-                image: shareImage,
-            });
-        } else {
-            setMetaData({
-              title: 'Play-It - Playlists à plusieurs',
-              description: 'Youtube et Spotify au même endroit et entre potes !',
-              image: shareImage,
-          });
-        }
-      }
-    }, [roomId, isAppLoading]);
-
 
   // META DATAS OG ET TWITTER
   return (
-    <>
-        <MetaTags metaData={metaData} />
+    <>                
+      <MetaTags metaData={metaData} />
         <CssBaseline />
         <Container maxWidth={false} className={isVarExistNotEmpty(roomId) ? 'main_container' : 'main_container homecontainer'} sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
           <AppBar className={(isVarExistNotEmpty(roomId) && isSignedIn) ? stickyDisplay ? '' : 'topBarIsInRoom appBar' : 'topBarClassic appBar'} position="static" sx={{bgcolor: '#202124'}}>
