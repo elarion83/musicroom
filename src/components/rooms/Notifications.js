@@ -34,8 +34,8 @@ const Notifications = ({roomRef, initialCount}) => { // USED TO SHOW THE NOTIFIC
                 type: notifToShow.type,
                 insert: "bottom",
                 container: "top-right",
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
+                animationIn: ["animate__animated", "animate__fadeInRight"],
+                animationOut: ["animate__animated", "animate__fadeOutRight"],
                 dismiss: {
                     duration: notifToShow.duration,
                     onScreen: true,

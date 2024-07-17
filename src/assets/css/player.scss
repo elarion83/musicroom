@@ -48,17 +48,23 @@
 
     .iconOverPlayer { // icon when playing change
         position: absolute;
-        top: 45%;
+        top: 43%;
         z-index: 1;
         width: 100%;
         text-align: center;
         svg {
-            transform: scale(4);
-            opacity: 0;
-            animation: typedjsBlinkReverse 1s;
-            -webkit-animation: typedjsBlinkReverse 1s;
-            animation: typedjsBlinkReverse 1s;
+            transform: scale(3.2);
+            background:rgba(var(--grey-dark-rgb),0.9);
+            border-radius: 50%;
+
+            &.blinked_animate {
+                opacity: 0;
+                animation: typedjsBlinkReverse 1s;
+                -webkit-animation: typedjsBlinkReverse 1s;
+                animation: typedjsBlinkReverse 1s;
+            }
         }
+
     }
     /*
     *

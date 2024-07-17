@@ -691,11 +691,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                             <Grid item className='playerContainer' sm={4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
                                                 {playingJustChanged && 
                                                     <Box className="iconOverPlayer">
-                                                        { roomIsPlaying ? (
-                                                                <PlayCircleOutlineIcon className='colorWhite' />
-                                                            ) : (
-                                                                <PauseCircleOutlineIcon className='colorWhite' />
-                                                            )
+                                                        { !roomIsPlaying &&
+                                                                <PlayCircleOutlineIcon className='colorWhite'/>
                                                         }
                                                     </Box>
                                                 }

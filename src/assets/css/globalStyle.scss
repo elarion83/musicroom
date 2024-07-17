@@ -254,11 +254,15 @@ b, * {
     display: flex;
     flex-direction: column;
     align-items: end;
-
     .rnc__notification {
       width: auto !important;
       cursor: pointer;
       max-width: 50vw;
+    }
+
+    .rnc__notification-item {
+      background-image:url('../img/textura.png');
+      background-size: 200%;
     }
 
     .rnc__notification-content {
