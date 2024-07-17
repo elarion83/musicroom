@@ -167,8 +167,12 @@ const RoomTopBar = ({
                             </IconButton>
 
                             <IconButton variant="contained" onClick={e => setIsPlaying(!roomIsPlaying)} sx={{position:'sticky', top:0, zIndex:2500}} >
-                                { room.actuallyPlaying && <PauseCircleOutlineIcon  sx={{color:'#f0f1f0'}} />}
-                                { !room.actuallyPlaying && <PlayCircleOutlineIcon sx={{color:'#f0f1f0'}} />}
+                                    {!roomIsPlaying ? (
+                                            <PlayCircleOutlineIcon sx={{color:'#f0f1f0'}} />
+                                        ) : (
+                                            <PauseCircleOutlineIcon sx={{color:'#f0f1f0'}} />
+                                        )
+                                    }
                             </IconButton>
 
                             <IconButton onClick={e => !playingLastInList(room.playlistUrls.length,playerIdPlayed) ? setPlayerIdPlayed(playerIdPlayed + 1) : ''}>

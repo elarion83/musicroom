@@ -656,7 +656,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 <RoomTopBar     
                     room={room}
                     roomRef={roomRef}
-                    roomIsPlaying={roomIsPlaying}
+                    roomIsPlaying={(isFromSpotify(actuallyPlayingMedia()) ? spotifyPlayerReady : youtubePlayerReady) && actualPlayerRefIsPlaying(room)}
                     setRoomIsPlaying={setRoomIsPlaying}
                     playerControlsShown={playerControlsShown}
                     playerIdPlayed={playerIdPlayed}
