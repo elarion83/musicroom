@@ -113,24 +113,7 @@
                         background: var(--main-color);    
                     }
                 }
-                .mediaPlayingBarSoundWave {
-                    transform: scale(1);
-                    position: absolute;
-                    top: -13px;
-                    left: 0;
-                    height: 10px;
-                    overflow: hidden;
-
-                    .soundWaveContainer {
-                        position: absolute;
-                        transform: scaleY(0.5);
-                        opacity: 0.7;
-
-                        .box {
-                            background: var(--main-color);
-                        }
-                    }
-                }
+                
             }
             .volumeButtonContainer {
                 background: transparent;
@@ -139,6 +122,7 @@
                     margin: 0;
                 }
             }
+            
         }
     }
 }
@@ -176,7 +160,7 @@
 
 .guestView {
     .playerSection .player_right_side_container .player_button_container .playerButtons {
-        justify-content: start;
+        justify-content: space-between;
         gap:20px;
     }
 }

@@ -57,23 +57,6 @@
     overflow: hidden;
 }
 
-
-.compactLayout {
-    .player_button_container {
-        .volumeButton {
-            margin-top: 0;
-        }
-
-        .player_button_container>div,  .MuiButtonBase-root  {
-            padding-top: 0;
-        }
-
-        .playlist_bloc>div {
-            padding-bottom: 3px;
-        }
-    }
-}
-
 /*
 *
 * 600 PX IS THE BREAKPOINT WHERE MEDIA PASS ON TOP OF TITLE
@@ -110,9 +93,6 @@
                 .player_button_container {
                     >div {
                         top: -44px;
-                        .playerButtons .volumeButtonContainer  {
-                                margin-left: auto !important; 
-                        }
                     }
                 }
             }

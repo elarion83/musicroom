@@ -14,7 +14,7 @@ import axios from "axios";
 import ReactPlayer from 'react-player';
 import SpotifyPlayer from 'react-spotify-web-playback';
 import useKeypress from 'react-use-keypress';
-import {isFromSpotify,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingLastInList, createDefaultRoomObject, formatNumberToMinAndSec, delay, isVarExist,  isDevEnv, secondsSinceEventFromNow, autoAddYTObject, randomInt, isVarExistNotEmpty, setPageTitle, envAppNameUrl, isEmpty, roomSpotifyTokenObject, spotifyConnectUrl, goToSpotifyConnectUrl} from '../services/utils';
+import {isFromSpotify,getDisplayTitle,createInteractionAnimation, isPlaylistExistNotEmpty,mediaIndexExist,isLayoutDefault,isLayoutInteractive,isLayoutCompact, isLayoutFullScreen, playingLastInList, createDefaultRoomObject, formatNumberToMinAndSec, delay, isVarExist,  isDevEnv, secondsSinceEventFromNow, autoAddYTObject, randomInt, isVarExistNotEmpty, setPageTitle, envAppNameUrl, isEmpty, roomSpotifyTokenObject, spotifyConnectUrl, goToSpotifyConnectUrl, isVarExistNotNullNotempty} from '../services/utils';
 import RoomPlaylistDrawer from "./rooms/playlistSection/drawer/RoomPlaylistDrawer";
 
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
@@ -35,7 +35,7 @@ import { CreateGoogleAnalyticsEvent } from '../services/googleAnalytics';
 import { withTranslation } from 'react-i18next';
 import ModalEnterRoomPassword from "./rooms/modalsOrDialogs/ModalEnterRoomPassword";
 import EmptyPlaylist from "./rooms/playlistSection/EmptyPlaylist";
-import { emptyToken, interactionObject, playerRefObject, youtubeApiSearchObject, youtubeApiVideosParams } from "../services/utilsArray";
+import { interactionObject, joinRoomNotifTextArray, playerRefObject, youtubeApiSearchObject, youtubeApiVideosParams } from "../services/utilsArray";
 import { actuallyPlayingFromSpotify, addPlaylistNotif, checkCurrentUserSpotifyTokenExpiration, playedSeconds, playerNotSync, updateFirebaseRoom } from "../services/utilsRoom";
 import ModalChangeRoomAdmin from "./rooms/modalsOrDialogs/ModalChangeRoomAdmin";
 import RoomTutorial from "./rooms/RoomTutorial";
@@ -184,13 +184,19 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         }
     }, [OpenAddToPlaylistModal]) ;
 
+
+    useEffect(() => {    
+            setPlayingJustChanged(true);
+    }, [roomIsPlaying]) ;
+    
+
     // GET DOCUMENT ON INIT (get firebase room datas)
 	useEffect(() => {
         if(isVarExistNotEmpty(roomId)) {
             const initRoomFetchFirebase = async () => {
                 const firebaseRoom = await getDoc(roomRef);
                 var roomDatas = firebaseRoom.exists() ? firebaseRoom.data() : createDefaultRoomObject(roomId.toLowerCase(), currentUser);
-                initRoom(roomDatas, roomId.toLowerCase(), !firebaseRoom.exists(), roomRef);
+                initRoom(roomDatas, !firebaseRoom.exists(), roomRef);
             };
             initRoomFetchFirebase();
             setPageTitle('Playlist '+roomId+ ' | '+envAppNameUrl);
@@ -198,7 +204,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 	}, [roomId]);
 
     /* Init room : if new room, create it then next function */
-    async function initRoom(roomDatas, roomId = '', create = true, docRef = null) {
+    async function initRoom(roomDatas, create = true, docRef = null) {
         if(create) {
             await setDoc(docRef, roomDatas);
             initRoomAsync(roomDatas, create);
@@ -216,7 +222,10 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         setRoomIsPlaying(roomDatas.actuallyPlaying);        
 
         setLoaded(true);
-        addPlaylistNotif(auth.currentUser.displayName, create ? 'a crée la playlist.' : 'est arrivé !', create ? 'success' : 'info', 4500, roomRef);
+        console.log(joinRoomNotifTextArray[randomInt(0,4)]);
+        console.log(joinRoomNotifTextArray[randomInt(0,4)]);
+        console.log(joinRoomNotifTextArray[randomInt(0,4)]);
+        addPlaylistNotif(auth.currentUser.displayName, create ? 'a crée la playlist.' : joinRoomNotifTextArray[randomInt(0,4)], create ? 'success' : 'info', 4500, roomRef);
     }
 
     // AUTO UPDATE DOCUMENT ON USER IS SYNC
@@ -230,8 +239,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     if(isVarExist(roomDataInFb)) {
                         var actualMessagesLength = room.messagesArray.length;
                         
-                        if(!roomDataInFb.playlistEmpty) {
-                            var playerRefObject = isFromSpotify(roomDataInFb.playlistUrls[roomDataInFb.playing]) ? spotifyPlayerRef : playerRef;
+                        if((!roomDataInFb.playlistEmpty) && playerReady) {
+                            var playerRefObject = isFromSpotify(actuallyPlayingMedia()) ? spotifyPlayerRef : playerRef;
                             if(isVarExist(playerRefObject.current) && !isActuallyAdmin && playerNotSync(roomDataInFb, playerRefObject)) {
                                 goToSecond(Math.floor(roomDataInFb.mediaActuallyPlayingAlreadyPlayedData.playedSeconds));
                             } 
@@ -341,20 +350,16 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         if(isActuallyAdmin) {
            updateFirebaseRoom( roomRef , {actuallyPlaying: PlayingOrNot})
         }
-        setPlayingJustChanged(true);
-        await delay(100000);
-        setPlayingJustChanged(false);
     }
     
     async function setIdPlaying(idPlaying) {        
         setRoomIsPlaying(false);
         await delay(150);  
-        goToSecond(0);
-        setPlayedPercents(0);
-        setBarPercentage(0);
-        await delay(150);  
-        setPlayerIdPlayed(idPlaying);   
-        let pageTitle = (roomIsPlaying && isVarExistNotEmpty(room.playlistUrls)) ? room.playlistUrls[idPlaying].title : 'Playlist '+roomId;
+        setPlayerIdPlayed(idPlaying);
+        await delay(150);   
+        goToSecond(0);   
+        setRoomIsPlaying(false);
+        let pageTitle = (roomIsPlaying && isVarExistNotEmpty(room.playlistUrls)) ? actuallyPlayingMedia().title : 'Playlist '+roomId;
         setPageTitle(pageTitle+ ' | '+envAppNameUrl);
         if(isActuallyAdmin) {
            updateFirebaseRoom( roomRef , {
@@ -368,6 +373,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     const [isLookingAutoAdd, setIsLookingAutoAdd] = useState(false);
     async function handleProgress(event, playerObjectRef, setBar = true) {
+        setPlayerBuffering(true)
         if(setBar) {
             setBarPercentage(Math.floor(event.played*100));
         }
@@ -388,9 +394,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }
 
     async function goToSecond(seconds) {
-        if(!room.playlistEmpty) {
-            if(isFromSpotify(room.playlistUrls[playerIdPlayed])) {
-                if(spotifyPlayerRef.current && spotifyPlayerRef.current.player) {
+        if(!room.playlistEmpty && playerReady) {
+            if(isFromSpotify(actuallyPlayingMedia())) {
+                if(isVarExistNotNullNotempty(spotifyPlayerRef.current) && isVarExistNotNullNotempty(spotifyPlayerRef.current.player)) {
                     spotifyPlayerRef.current.player.seek(seconds*1000);
                 }
             } else {
@@ -398,6 +404,10 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     playerRef.current.seekTo(seconds, 'seconds'); 
                 }
             }
+            if(seconds === 0) {
+                setPlayedPercents(0);
+                setBarPercentage(0);
+            }  
         }
     }
     
@@ -439,6 +449,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
             }
         } else {
             await goToSecond(0);
+            await setPlayerReady(false);
             setIdPlaying(playerIdPlayed+1);
         }
     }
@@ -595,7 +606,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
             if(!isEmpty(response.data.items)) {
                 var addedItemIndex = randomInt(0,response.data.items.length-1);
                 var suggestMedia = autoAddYTObject(response.data.items[addedItemIndex]);
-                if(suggestMedia.platformId === room.playlistUrls[playerIdPlayed].platformId) {
+                if(suggestMedia.platformId === actuallyPlayingMedia().platformId) {
                     response.data.items.splice(addedItemIndex, 1);
                     addedItemIndex = randomInt(0,response.data.items.length-1);
                     suggestMedia = autoAddYTObject(response.data.items[addedItemIndex]);
@@ -613,8 +624,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         setOpenRoomDrawer(false);
     }
 
-    function isSyncGuest() {
-        return (!isActuallyAdmin && guestSynchroOrNot);
+    async function isSyncGuest() {
+        return !isActuallyAdmin && guestSynchroOrNot;
     }
 
     function actualPlayerRef(room) {
@@ -622,7 +633,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }
 
     function actualPlayerRefIsPlaying(room) {
-        return actuallyPlayingFromSpotify(room) ? spotifyPlayerIsPlaying : playerRef.current.player.isPlaying;
+        return actuallyPlayingFromSpotify(room) ? spotifyPlayerIsPlaying : isVarExist(playerRef.current) ? playerRef.current.player.isPlaying : false;
     }
 
     function actuallyPlayingMedia() {
@@ -682,9 +693,9 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                     </Box>
                                                 }
                                                 
-                                                {room.playlistUrls[playerIdPlayed] && 
+                                                {isVarExist(actuallyPlayingMedia()) && 
                                                     <>
-                                                        {!isFromSpotify(room.playlistUrls[playerIdPlayed]) ? 
+                                                        {!isFromSpotify(actuallyPlayingMedia()) ? 
                                                             (
                                                                 <>
                                                                     <ReactPlayer 
@@ -723,7 +734,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                                         </Alert>
                                                                     }
                                                                     <Grid className="react-player" >
-                                                                        <img style={{marginLeft:'auto', display:'block',marginRight:'auto',maxHeight:'240px'}} src={room.playlistUrls[room.playing].visuel} />
+                                                                        <img style={{marginLeft:'auto', display:'block',marginRight:'auto',maxHeight:'240px'}} src={actuallyPlayingMedia().visuel} />
                                                                         {currentUser.customDatas.spotifyConnect.connected ? 
                                                                             (
                                                                                 <SpotifyPlayer
@@ -766,10 +777,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                     </Typography> 
 
                                                     <Grid item sm={12} md={12} >
-                                                        <Typography sx={{ display:'block', width:'100%',ml:0, mb: 0, fontSize: '10px', color:'var(--grey-inspired)' }} className='textCapialize fontFamilyNunito'>
-                                                            {/*roomIsPlaying ? t('GeneralPlaying') : t('GeneralPause') */}
-                                                            {playerBuffering ? ' Loading' : ''}
-                                                        </Typography> 
                                                         {(playerReady && playerRef.current !== null && !isFromSpotify(actuallyPlayingMedia())) && 
                                                             <Typography sx={{ fontSize: '10px', ml:0, mb: 1, color:'var(--grey-inspired)'}} className='fontFamilyNunito'>
                                                                 {formatNumberToMinAndSec(playedSeconds(playerRef, 'youtube')) +' / ' + formatNumberToMinAndSec(playerRef.current.getDuration())}
@@ -791,10 +798,10 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                                 item sm={6} className='playerButtons' xs={12} 
                                                                 sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:0, mb: 1.5 }}>
                                                                     
-                                                                        <PlayerButtons 
+                                                                        {playerReady && <PlayerButtons 
                                                                             playerControlsShown={playerControlsShown}
                                                                             room={room}
-                                                                            reSyncButtonShown={isSyncGuest() && playerReady}
+                                                                            reSyncButtonShown={!(isActuallyAdmin) && (guestSynchroOrNot && playerReady)}
                                                                             reSyncUserFunc={setGuestSynchroOrNot}
                                                                             playerRef={actualPlayerRef(room)}
                                                                             localVolume={localVolume}
@@ -813,7 +820,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                                             roomPlayedActuallyPlayed={barPercentage} 
                                                                             playerType={actuallyPlayingMedia().source}
                                                                             spotifyControlsShown={currentUser.customDatas.spotifyConnect.connected}
-                                                                        />
+                                                                        />}
                                                                 </Grid>
                                                             </Box>
                                                         }

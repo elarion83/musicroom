@@ -19,7 +19,7 @@ import Footer from './components/generalsTemplates/Footer';
 
 import { auth, db, googleProvider } from "./services/firebase";
 
-import { Snackbar, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { PseudoGenerated } from './services/pseudoGenerator';
 
 import { CreateGoogleAnalyticsEvent } from './services/googleAnalytics';
@@ -29,10 +29,9 @@ import { withTranslation } from 'react-i18next';
 import { createUserDataObject } from "./services/utilsArray";
 import {  createUserWithEmailAndPassword, getAdditionalUserInfo, onAuthStateChanged,  signInAnonymously, signInWithEmailAndPassword,  signInWithPopup, signOut } from "firebase/auth";
 import {  doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import { addPlaylistNotif, getCleanRoomId, updateFirebaseUser } from "./services/utilsRoom";
+import { getCleanRoomId, updateFirebaseUser } from "./services/utilsRoom";
 import { useNavigate, useParams } from 'react-router-dom';
 import ModalAuthPhone from "./components/rooms/modalsOrDialogs/ModalAuthPhone";
-import { ReactNotifications } from "react-notifications-component";
 function App( {t} ) {
   // general app statuts
   const [isAppLoading, setIsAppLoading] = useState(true);
@@ -48,9 +47,6 @@ function App( {t} ) {
   var testRoomIdGetter = isVarExist(routeParams.roomId) ? routeParams.roomId : (window.location.pathname.substring(1).length === 5) ? window.location.pathname.substring(1) : '';
   const [roomId, setRoomId] = useState(testRoomIdGetter);
 
-  // temp token infos
-  const [spotifyToken, setSpotifyToken] = useState(null);
-
   // user infos
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [userInfos, setUserInfo] = useState({});
@@ -62,17 +58,13 @@ function App( {t} ) {
   // phone auth
   const [phoneAuthModalOpen, setPhoneAuthModalOpen] = useState(false);
 
-  // snackbar statuts
-  const [loginNewUserOkSnackBarOpen, setLoginNewUserOkSnackBarOpen] = useState(false);
-  const [loginOkSnackBarOpen, setLoginOkSnackBarOpen] = useState(false);
-  const [logoutOkSnackBarOpen, setLogoutOkSnackBarOpen] = useState(false);
-
   const urlHash = window.location.hash; 
   const haveSpotifyTokenInUrl = urlHash.includes("access_token"); // spotify hash
   useEffect(() => {
     if(haveSpotifyTokenInUrl && !isAppLoading && userInfos) {
       let SpotifyToken = urlHash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1];
       let userRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, userInfos.uid);
+      showLocalNotification('Lecteur Spotify', 'Connexion établie !', 'success', 2500 );
       saveSpotifyToken(userRef,userSpotifyTokenObject(SpotifyToken),userInfos, setUserInfo, joinRoomByRoomId);
     } 
     if(!haveSpotifyTokenInUrl && !isAppLoading && userInfos) { 
@@ -197,6 +189,8 @@ function App( {t} ) {
     }
 
     setPhoneAuthModalOpen(false);
+    setLoginErrorMessage();
+    setIsLoginLoading(false);
     setLoginModalOpen(false);
     setIsAppLoading(false);
     doActionAfterLogin();
@@ -240,35 +234,13 @@ function App( {t} ) {
     return () => unsubscribe();
   }, []);
 
-/*
-useEffect(() => {
-        let unsubscribe = () => {};
-        if(!isAppLoading && isVarExistNotEmpty(userInfos)) {        
-          console.log('app');
-          const userDocRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, userInfos.uid);
-          unsubscribe = onSnapshot(userDocRef, (doc) => {
-              var userDataInFb = doc.data();
-              var tempUserDataGlobalDatas = userInfos;
-              tempUserDataGlobalDatas.displayName = userDataInFb.displayName;
-              tempUserDataGlobalDatas.customDatas = userDataInFb;
-              console.log(tempUserDataGlobalDatas);
-              setUserInfo(tempUserDataGlobalDatas);
-          });
-        } else {
-          unsubscribe();
-        }
-
-        return () => unsubscribe();
-	}, [isAppLoading]); 
-*/
-
   /* LOGOUT FUNCTION */
   function logOut() {
     setIsSignedIn(false);
     signOut(auth).then(() => {
       setUserInfo({});
       localStorage.removeItem("Play-It_RoomId");
-      showLocalNotification('A bientôt !', 'On vous aime <3', 'info', 2500 );
+      showLocalNotification('A très bientôt !', 'Vous nous manquez déjà <3', 'info', 2500 );
       CreateGoogleAnalyticsEvent('Actions','Logout','Logout');
     });
   }
@@ -292,12 +264,6 @@ useEffect(() => {
           setLoginFailed(error.message);
         }
       })
-  }
-
-  function handleLoginSnack(newUser = false) {
-    setLoginErrorMessage();
-    setIsLoginLoading(false);
-    newUser ? setLoginNewUserOkSnackBarOpen(true) : setLoginOkSnackBarOpen(true);
   }
 
   function handleQuitRoomMain() {

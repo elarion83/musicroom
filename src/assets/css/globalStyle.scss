@@ -18,6 +18,24 @@ body,html {
   padding: 0 !important;
 }
 
+.colorOrange {
+  color: var(--orange) !important;
+}
+
+.colorGreen {
+  color: var(--green-light) !important;
+}
+.colorGreen2 {
+  color: var(--green-2) !important;
+}
+
+.colorRed {
+  color: var(--red) !important;
+}
+.colorRed2 {
+  color: var(--red-2) !important;
+}
+
 .colorBlue {
   color: var(--blue-light) !important;
 }
@@ -32,8 +50,11 @@ body,html {
   text-transform: uppercase;
 }
 
-.firstLetterCapitalize::first-letter {
-  text-transform: uppercase;
+.firstLetterCapitalize {
+  text-transform: lowercase;
+  &::first-letter {
+    text-transform: uppercase;
+  }
 }
 
 .scroll  {

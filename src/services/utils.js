@@ -447,7 +447,6 @@ export function checkStorageRoomId(roomId = '', joinRoomByRoomId ) { // handle r
 export async function saveSpotifyToken(userRef,SpotifyTokenObject,userInfos, setUserInfo, joinRoomByRoomId) {
     await updateFirebaseUser(userRef,{spotifyConnect:SpotifyTokenObject});
 
-    showLocalNotification('Lecteur Spotify', 'Connexion établie !', 'success', 2500 );
     userInfos.customDatas.spotifyConnect = SpotifyTokenObject;
     setUserInfo(userInfos);
     joinRoomByRoomId(localStorage.getItem("Play-It_RoomId"));

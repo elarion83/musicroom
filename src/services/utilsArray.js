@@ -73,6 +73,8 @@ export const searchTextArray = [i18n.t('GeneralSearchFor') + i18n.t('GeneralMusi
         i18n.t('GeneralSearchFor') + i18n.t('GeneralMovieTrailers'),
     ];
 
+export const joinRoomNotifTextArray = ['est arrivé !', 'est dans la place !', 'viens de débarquer !', 'arrive sur le dancefloor !', 'viens d\'atterrir ici !'];
+
 export const playerRefObject = {
     url: null,
     pip: false,

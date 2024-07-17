@@ -6,7 +6,6 @@ import { formatNumberToMinAndSec, isEmpty, isVarExist, isVarExistNotEmpty, isVar
 import { withTranslation } from "react-i18next";
 import { LoadingButton } from "@mui/lab";
 import { checkCurrentUserSpotifyTokenExpiration } from "../../../services/utilsRoom";
-
 const SpotifyConnectButton = ({t, text, clickFunc, expiration = null}) => {
 
 
@@ -26,7 +25,6 @@ const SpotifyConnectButton = ({t, text, clickFunc, expiration = null}) => {
                 const interval = setInterval(() => {
                     if(calculateTimeLeft() == 0) {
                         checkCurrentUserSpotifyTokenExpiration();
-                        showLocalNotification('Lecteur spotify', 'Connexion expirée', 'info', 2500 );
                     }
                     setSecondsLeft(calculateTimeLeft());
                 }, 1000);
@@ -49,9 +47,9 @@ const SpotifyConnectButton = ({t, text, clickFunc, expiration = null}) => {
                 onClick={e => clickFunc()}>
                     <Typography fontSize="small">{text}</Typography>
             </LoadingButton>
-            {isVarExistNotNullNotempty(expiration) && !isEmpty(secondsLeft) &&
+            {isVarExistNotNullNotempty(expiration) && expiration !== 0 && !isEmpty(secondsLeft) &&
                 <Alert  severity="info" sx={{zIndex:1}} className="animate__animated animate__slideInDown">
-                    <AlertTitle fontSize='small' >Expire dans <Typography component='span'>{formatNumberToMinAndSec(secondsLeft)}</Typography></AlertTitle>
+                    <AlertTitle fontSize='small' >Expiration dans <Typography component='span'>{formatNumberToMinAndSec(secondsLeft)}</Typography></AlertTitle>
                 </Alert>
             }
         </>

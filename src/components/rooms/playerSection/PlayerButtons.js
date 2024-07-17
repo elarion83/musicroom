@@ -1,5 +1,5 @@
-import { IconButton, LinearProgress } from "@mui/material";
-import { isVarExist, isVarExistNotEmpty, playingFirstInList } from "../../../services/utils";
+import { Button, IconButton, LinearProgress, Typography } from "@mui/material";
+import { delay, isVarExist, isVarExistNotEmpty, playingFirstInList } from "../../../services/utils";
 import { actuallyPlayingFromSpotify, playedSeconds, playerNotSync } from "../../../services/utilsRoom";
 import { Replay10,Forward10, SkipPrevious, Replay } from "@mui/icons-material";
 import VolumeButton from "./VolumeButton";
@@ -9,24 +9,23 @@ import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SyncProblemIcon from '@mui/icons-material/SyncProblem';
+import { useState } from "react";
+import SyncDisabledIcon from '@mui/icons-material/SyncDisabled';
 
-const PlayerButtons = ({room,playerControlsShown,reSyncButtonShown,reSyncUserFunc, playerType,spotifyControlsShown, roomPlayedActuallyPlayed, playerRef,playingLastInListInComp, localVolume,playerIdPlayed,roomIsPlaying,playerIsPlaying, setLocalVolume,setIsPlaying,setIdPlaying, setLayoutdisplay,isLayoutFullScreen,layoutDisplay, goToSecond}) => {
+const PlayerButtons = ({room,playerControlsShown,reSyncUserFunc, playerType,spotifyControlsShown, roomPlayedActuallyPlayed, playerRef,playingLastInListInComp, localVolume,playerIdPlayed,roomIsPlaying,playerIsPlaying, setLocalVolume,setIsPlaying,setIdPlaying, setLayoutdisplay,isLayoutFullScreen,layoutDisplay, goToSecond}) => {
     
     var button = (playerType === 'spotify') ? spotifyControlsShown ? 'full' : 'limited' : 'full';
-    var isSyncLoading = false;
 
     async function desyncUnsyncUser() {
-        isSyncLoading = true;
         await reSyncUserFunc(false);
-        reSyncUserFunc(true);
-        isSyncLoading = false;
+        await reSyncUserFunc(true);
     }
     
     return(
         <>
             <LinearProgress className="mediaPlayingBar"  variant="determinate" value={roomPlayedActuallyPlayed} />
             
-            {playerControlsShown  &&
+            {playerControlsShown  && 
             <>
                 <IconButton onClick={e => (playingFirstInList(playerIdPlayed)) ? setIdPlaying(playerIdPlayed-1) : ''}>
                     <SkipPrevious fontSize="medium" sx={{color:(playingFirstInList(playerIdPlayed)) ? '#f0f1f0': '#303134'}} />
@@ -58,16 +57,19 @@ const PlayerButtons = ({room,playerControlsShown,reSyncButtonShown,reSyncUserFun
                 </IconButton>}
             </>}
             <VolumeButton volume={localVolume} setVolume={setLocalVolume}/>
-
-            {reSyncButtonShown &&
-                <IconButton  onClick={e => desyncUnsyncUser()}>
-                    {isSyncLoading ? (
-                        <SyncIcon sx={{color: '#f0f1f0' }}/>
-                    ) : (
-                        <SyncProblemIcon sx={{color: (roomIsPlaying === playerIsPlaying) ? '#f0f1f0' : 'var(--red)'}} /> 
-                    )}            
-                </IconButton>
-            }
+            {!playerControlsShown && 
+                <> {(roomIsPlaying === playerIsPlaying) && !playerNotSync(room, playerRef) ? (
+                    <Button variant="text" size="small" startIcon={<SyncIcon className="colorGreen2" /> }>
+                        <Typography className="colorGreen2 firstLetterCapitalize" fontSize='small' >Synchronisé</Typography>
+                    </Button>
+                ) : ( 
+                    <Button  onClick={e => desyncUnsyncUser()} variant="text" size="small" startIcon={<SyncProblemIcon className={(playerIdPlayed === room.playing) ? "colorOrange" : "colorRed"} /> }>
+                        <Typography className={(playerIdPlayed === room.playing) ? "colorOrange firstLetterCapitalize" : "colorRed firstLetterCapitalize"} fontSize='small' >{(playerIdPlayed === room.playing) ? "Synchro. moyenne" : "Echec de synchro."}</Typography>
+                    </Button>
+                )}
+                </>
+            }         
+            
             
             {isLayoutFullScreen(layoutDisplay) && 
                 <IconButton onClick={e => setLayoutdisplay('default')} >
