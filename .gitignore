@@ -34,3 +34,4 @@ yarn-error.log*
 src/components/not_used/
 HOW TO DEPLOY.txt
 src/assets/img/favicon.psd
+*.psd

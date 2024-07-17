@@ -32,6 +32,10 @@ import {  doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { getCleanRoomId, updateFirebaseUser } from "./services/utilsRoom";
 import { useNavigate, useParams } from 'react-router-dom';
 import ModalAuthPhone from "./components/rooms/modalsOrDialogs/ModalAuthPhone";
+import { Helmet } from "react-helmet";
+
+import shareImage from './assets/img/share_img.jpg';
+import MetaTags from "./components/generalsTemplates/MetaTags";
 function App( {t} ) {
   // general app statuts
   const [isAppLoading, setIsAppLoading] = useState(true);
@@ -287,69 +291,94 @@ function App( {t} ) {
       setPageTitle(envAppNameHum+' - '+t('GeneralSlogan'));
   }
 
+    const [metaData, setMetaData] = useState({
+        title: 'Play-It - Playlists à plusieurs en temps réel',
+        description: 'Youtube et Spotify au même endroit entre potes !',
+        image: shareImage,
+    });
+
+    useEffect(() => {
+      if (roomId) {
+          setMetaData({
+              title: 'Playlist ' +roomId+' - '+process.env.REACT_APP_NAME_URL,
+              description: `${auth.currentUser.displayName} vous invite dans une playlist !`,
+              image: shareImage,
+          });
+      } else {
+          setMetaData({
+            title: 'Play-It - Playlists à plusieurs en temps réel',
+            description: 'Youtube et Spotify au même endroit entre potes !',
+            image: shareImage,
+        });
+      }
+    }, [roomId]);
+
+
+  // META DATAS OG ET TWITTER
   return (
     <>
-      <CssBaseline />
-      <Container maxWidth={false} className={isVarExistNotEmpty(roomId) ? 'main_container' : 'main_container homecontainer'} sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
-         <AppBar className={(isVarExistNotEmpty(roomId) && isSignedIn) ? stickyDisplay ? '' : 'topBarIsInRoom appBar' : 'topBarClassic appBar'} position="static" sx={{bgcolor: '#202124'}}>
-            <Toolbar>
-                {!(isVarExistNotEmpty(roomId) && isSignedIn) && <img className="appLogo" src="img/logo__new.png" alt={envAppNameHum+" logo"} />}
-                <UserTopBar loginLoading={loginModalOpen} loggedIn={isSignedIn} user={userInfos} setUserInfo={setUserInfoEdit} joinRoomByRoomId={joinRoomByRoomId} handleOpenLoginModal={setLoginModalOpen} handleLogout={logOut} />
-            </Toolbar>
-          </AppBar>
-          {!isVarExistNotEmpty(roomId) && 
-            <Box sx={{  paddingBottom:'10px !important', bgcolor:'rgba(48, 48, 48, 0)',height: 'auto', pl:2, pr:2}} >
-              <Container maxWidth="sm" sx={{pt:3}}>
-                <Contentslider />
-                <Button variant="filled" className='main_bg_color  varelaFontTitle texturaBgButton' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em'}} 
-                  onClick={(e) => isSignedIn ? createNewRoom() : handleLoginAndRoom('createRoom')}>
-                    <Icon icon="carbon:intent-request-create" width="30" style={{marginRight:'20px'}}/> 
-                    <Typography variant="button" sx={{pt:'3px'}}>{t('HomePageButtonsCreateRoom')} </Typography>
-                </Button> 
-                <Button variant="filled" className='main_bg_color varelaFontTitle texturaBgButton' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em'}} 
-                  onClick={(e) => isSignedIn ? setJoinRoomModalOpen(true) : handleLoginAndRoom('joinRoom')}> 
-                    <Icon icon="icon-park-outline:connect"  width="30" style={{marginRight:'20px'}}/>
-                    <Typography variant="button" sx={{pt:'3px'}}>{t('HomePageButtonsJoinRoom')} </Typography>
-                </Button> 
+        {!isAppLoading && <MetaTags metaData={metaData} />}
+        <CssBaseline />
+        <Container maxWidth={false} className={isVarExistNotEmpty(roomId) ? 'main_container' : 'main_container homecontainer'} sx={{  paddingLeft: '0px !important', paddingRight: '0px !important', bgcolor:'rgba(79, 79, 79, 0.3) !important', borderRadius:'15px' }}>
+          <AppBar className={(isVarExistNotEmpty(roomId) && isSignedIn) ? stickyDisplay ? '' : 'topBarIsInRoom appBar' : 'topBarClassic appBar'} position="static" sx={{bgcolor: '#202124'}}>
+              <Toolbar>
+                  {!(isVarExistNotEmpty(roomId) && isSignedIn) && <img className="appLogo" src="img/logo__new.png" alt={envAppNameHum+" logo"} />}
+                  <UserTopBar loginLoading={loginModalOpen} loggedIn={isSignedIn} user={userInfos} setUserInfo={setUserInfoEdit} joinRoomByRoomId={joinRoomByRoomId} handleOpenLoginModal={setLoginModalOpen} handleLogout={logOut} />
+              </Toolbar>
+            </AppBar>
+            {!isVarExistNotEmpty(roomId) && 
+              <Box sx={{  paddingBottom:'10px !important', bgcolor:'rgba(48, 48, 48, 0)',height: 'auto', pl:2, pr:2}} >
+                <Container maxWidth="sm" sx={{pt:3}}>
+                  <Contentslider />
+                  <Button variant="filled" className='main_bg_color  varelaFontTitle texturaBgButton' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em'}} 
+                    onClick={(e) => isSignedIn ? createNewRoom() : handleLoginAndRoom('createRoom')}>
+                      <Icon icon="carbon:intent-request-create" width="30" style={{marginRight:'20px'}}/> 
+                      <Typography variant="button" sx={{pt:'3px'}}>{t('HomePageButtonsCreateRoom')} </Typography>
+                  </Button> 
+                  <Button variant="filled" className='main_bg_color varelaFontTitle texturaBgButton' sx={{width:'100%',color:'var(--white)', height:'50px', mt:'2em'}} 
+                    onClick={(e) => isSignedIn ? setJoinRoomModalOpen(true) : handleLoginAndRoom('joinRoom')}> 
+                      <Icon icon="icon-park-outline:connect"  width="30" style={{marginRight:'20px'}}/>
+                      <Typography variant="button" sx={{pt:'3px'}}>{t('HomePageButtonsJoinRoom')} </Typography>
+                  </Button> 
 
-                {!UserIsFromApp && 
-                <Button size="small" target="_blank" href={appApkFileUrl} className='varelaFontTitle buttonBorder' sx={{width:'100%',transform:'scale(0.8)',color:'var(--white)',bgcolor:'var(--grey-dark)', height:'50px', mt:'2em', mb:'2em'}} > 
-                  <GFontIcon icon="install_mobile"/>
-                  <Typography variant="button" sx={{pl:2, textTransform:'uppercase'}}> {t('GeneralDownloadAPK')} </Typography>
-                </Button> }
+                  {!UserIsFromApp && 
+                  <Button size="small" target="_blank" href={appApkFileUrl} className='varelaFontTitle buttonBorder' sx={{width:'100%',transform:'scale(0.8)',color:'var(--white)',bgcolor:'var(--grey-dark)', height:'50px', mt:'2em', mb:'2em'}} > 
+                    <GFontIcon icon="install_mobile"/>
+                    <Typography variant="button" sx={{pl:2, textTransform:'uppercase'}}> {t('GeneralDownloadAPK')} </Typography>
+                  </Button> }
+                  
+                  <JoinRoomModal open={joinRoomModalOpen} changeOpen={setJoinRoomModalOpen} handleJoinRoom={joinRoomByRoomId} />
                 
-                <JoinRoomModal open={joinRoomModalOpen} changeOpen={setJoinRoomModalOpen} handleJoinRoom={joinRoomByRoomId} />
-              
-              </Container>
-            </Box>
+                </Container>
+              </Box>
+            }
+          {isVarExistNotEmpty(roomId) && isSignedIn && 
+            <Room currentUser={userInfos} className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain} setStickyDisplay={setStickyDisplay}></Room>     
           }
-        {isVarExistNotEmpty(roomId) && isSignedIn && 
-          <Room currentUser={userInfos} className='room_bloc' roomId={roomId} handleQuitRoom={handleQuitRoomMain} setStickyDisplay={setStickyDisplay}></Room>     
-        }
 
-        {(!isSignedIn && phoneAuthModalOpen) &&<><div id="recaptcha-container"></div>
-        <ModalAuthPhone
-          close={(e) => setPhoneAuthModalOpen(false)}
-          open={(phoneAuthModalOpen && !isSignedIn)}
-          loginLoading={isVarExistNotEmpty(roomId) ? isAppLoading : isLoginLoading}
-          doActionAfterAuth={doActionAfterAuth}
-        />
-        </>}
-        <LoginModal 
-          open={!isSignedIn && (isVarExistNotEmpty(roomId) || loginModalOpen)} 
-          changeOpen={(e) => setLoginModalOpen(false)}
-          handleAnonymousLogin={anonymousLogin}
-          handleGoogleLogin={handleGoogleLogin}
-          handlePhoneLogin={(e) => setPhoneAuthModalOpen(true)}
-          handlePasswordAndMailLogin={handlePasswordAndMailLogin}
-          loginErrorMessage={loginErrorMessage}
-          loginLoading={isVarExistNotEmpty(roomId) ? isAppLoading : isLoginLoading}
-          redirectToHome={handleQuitRoomMain}
-          roomId={roomId}
-        />
-        
-        {!roomId && false && <Footer />}
-      </Container>
+          {(!isSignedIn && phoneAuthModalOpen) &&<><div id="recaptcha-container"></div>
+          <ModalAuthPhone
+            close={(e) => setPhoneAuthModalOpen(false)}
+            open={(phoneAuthModalOpen && !isSignedIn)}
+            loginLoading={isVarExistNotEmpty(roomId) ? isAppLoading : isLoginLoading}
+            doActionAfterAuth={doActionAfterAuth}
+          />
+          </>}
+          <LoginModal 
+            open={!isSignedIn && (isVarExistNotEmpty(roomId) || loginModalOpen)} 
+            changeOpen={(e) => setLoginModalOpen(false)}
+            handleAnonymousLogin={anonymousLogin}
+            handleGoogleLogin={handleGoogleLogin}
+            handlePhoneLogin={(e) => setPhoneAuthModalOpen(true)}
+            handlePasswordAndMailLogin={handlePasswordAndMailLogin}
+            loginErrorMessage={loginErrorMessage}
+            loginLoading={isVarExistNotEmpty(roomId) ? isAppLoading : isLoginLoading}
+            redirectToHome={handleQuitRoomMain}
+            roomId={roomId}
+          />
+          
+          {!roomId && false && <Footer />}
+        </Container>
     </>
   );
 }

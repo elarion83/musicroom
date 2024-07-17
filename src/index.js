@@ -6,11 +6,13 @@ import AppRoutes from "./AppRoute";
 import './assets/css/style.scss';
 import { ReactNotifications } from "react-notifications-component";
 import 'react-notifications-component/dist/theme.css'
+import { HelmetProvider } from "react-helmet-async";
 ReactDOM.render(
   <React.StrictMode>
-    
+    <HelmetProvider> 
       <ReactNotifications />
     <AppRoutes />
+    </HelmetProvider> 
   </React.StrictMode>,
   document.getElementById("root")
 );

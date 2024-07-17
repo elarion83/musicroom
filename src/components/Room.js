@@ -82,7 +82,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 	const [playerIdPlayed, setPlayerIdPlayed] = useState(0);
     const [playerControlsShown, setPlayerControlsShown] = useState(false);
 	const [roomIsPlaying, setRoomIsPlaying] = useState(true);
-    const [playingJustChanged, setPlayingJustChanged] = useState(false);
     const [localVolume, setLocalVolume] = useState(1);
     const [pip] = useState(true);
     const [guestSynchroOrNot, setGuestSynchroOrNot] = useState(true);
@@ -184,12 +183,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
             setIsTutorialShown(false);
         }
     }, [OpenAddToPlaylistModal]) ;
-
-
-    useEffect(() => {    
-            setPlayingJustChanged(true);
-    }, [roomIsPlaying]) ;
-    
 
     // GET DOCUMENT ON INIT (get firebase room datas)
 	useEffect(() => {
@@ -689,13 +682,11 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                         <Grid container spacing={0} sx={{ bgcolor:'var(--grey-dark)'}} className={ isLayoutCompact(layoutDisplay) ? 'playerHide playerSection' : 'playerShow playerSection'}>
                                             
                                             <Grid item className='playerContainer' sm={4} xs={12} sx={{ pl:0,ml:0, pt: 0, position:'relative'}}>
-                                                {playingJustChanged && 
-                                                    <Box className="iconOverPlayer">
-                                                        { !roomIsPlaying &&
-                                                                <PlayCircleOutlineIcon className='colorWhite'/>
-                                                        }
-                                                    </Box>
-                                                }
+                                                <Box className="iconOverPlayer">
+                                                    { !roomIsPlaying &&
+                                                            <PlayCircleOutlineIcon className='colorWhite'/>
+                                                    }
+                                                </Box>
                                                 
                                                 {isVarExist(actuallyPlayingMedia()) && 
                                                     <>
