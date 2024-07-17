@@ -58,12 +58,12 @@ const PlayerButtons = ({room,playerControlsShown,reSyncUserFunc, playerType,spot
             <VolumeButton volume={localVolume} setVolume={setLocalVolume}/>
             {!playerControlsShown && 
                 <> {(roomIsPlaying === playerIsPlaying) && !playerNotSync(room, playerRef) ? (
-                    <Button variant="text" size="small" startIcon={<SyncIcon className="colorGreen2" /> }>
+                    <Button variant="text" sx={{marginRight:'-10px !important'}} size="small" startIcon={<SyncIcon className="colorGreen2" sx={{marginRight:'-5px !important'}}/> }>
                         <Typography className="colorGreen2 firstLetterCapitalize" fontSize='small' >Synchronisé</Typography>
                     </Button>
                 ) : ( 
-                    <Button  onClick={e => desyncUnsyncUser()} variant="text" size="small" startIcon={<SyncProblemIcon className={(playerIdPlayed === room.playing) ? "colorOrange" : "colorRed"} /> }>
-                        <Typography className={(playerIdPlayed === room.playing) ? "colorOrange firstLetterCapitalize" : "colorRed firstLetterCapitalize"} fontSize='small' >{(playerIdPlayed === room.playing) ? "Retenter synchro ?" : "Echec de synchro."}</Typography>
+                    <Button sx={{marginRight:'-10px !important'}} onClick={e => desyncUnsyncUser()} variant="text" size="small" startIcon={<SyncProblemIcon sx={{marginRight:'-5px !important'}} className={(playerIdPlayed === room.playing) ? "colorOrange" : "colorRed"} /> }>
+                        <Typography className={(playerIdPlayed === room.playing) ? "colorOrange firstLetterCapitalize" : "colorRed firstLetterCapitalize"} fontSize='small' >{(playerIdPlayed === room.playing) ? "Relancer synchro" : "Echec de synchro."}</Typography>
                     </Button>
                 )}
                 </>
