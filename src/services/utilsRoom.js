@@ -22,11 +22,7 @@ export function playedSeconds(player, origin = 'youtube') {
             return Math.floor(player.current.state.progressMs/1000);
         }
         else {
-            console.log(player.current);
-            console.log(player.current.getCurrentTime());
-            if(isVarExist(player.current.getCurrentTime())){
-                return Math.floor(player.current.getCurrentTime());
-            }
+            return Math.floor(player.current.getCurrentTime());
         }
     }
 }

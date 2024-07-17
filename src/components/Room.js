@@ -87,7 +87,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     const [pip] = useState(true);
     const [guestSynchroOrNot, setGuestSynchroOrNot] = useState(true);
     const [youtubePlayerReady, setYoutubePlayerReady] = useState(false);
-    const [playerReady, setPlayerReady] = useState(false);
+    const [spotifyPlayerReady, setSpotifyPlayerReady] = useState(false);
 	const [playerBuffering, setPlayerBuffering] = useState(false);
     const [spotifyPlayerIsPlaying, setSpotifyPlayerIsPlaying] = useState(false);
 	const [playedPercents, setPlayedPercents] = useState(0);
@@ -237,7 +237,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     if(isVarExist(roomDataInFb)) {
                         var actualMessagesLength = room.messagesArray.length;
                         
-                        if((!roomDataInFb.playlistEmpty) && (isFromSpotify(actuallyPlayingMedia()) ? playerReady : youtubePlayerReady)) {
+                        if((!roomDataInFb.playlistEmpty) && (isFromSpotify(actuallyPlayingMedia()) ? spotifyPlayerReady : youtubePlayerReady)) {
                             var playerRefObject = isFromSpotify(actuallyPlayingMedia()) ? spotifyPlayerRef : playerRef;
                             if(isVarExist(playerRefObject.current) && !isActuallyAdmin && playerNotSync(roomDataInFb, playerRefObject)) {
                                 goToSecond(Math.floor(roomDataInFb.mediaActuallyPlayingAlreadyPlayedData.playedSeconds));
@@ -352,11 +352,8 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     
     async function setIdPlaying(idPlaying) {     
         setRoomIsPlaying(false);
-        await delay(150);  
+        await delay(250);   
         setPlayerIdPlayed(idPlaying);
-        await delay(150);    
-        await goToSecond(0);     
-        setRoomIsPlaying(true);
 
         let pageTitle = (roomIsPlaying && isVarExistNotEmpty(room.playlistUrls)) ? actuallyPlayingMedia().title : 'Playlist '+roomId;
         setPageTitle(pageTitle+ ' | '+envAppNameUrl);
@@ -368,6 +365,10 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 }
             })
         }
+        await delay(250);  
+        await goToSecond(0);  
+        await delay(250);      
+        setRoomIsPlaying(true);
     }
 
     const [isLookingAutoAdd, setIsLookingAutoAdd] = useState(false);
@@ -393,14 +394,18 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }
 
     async function goToSecond(seconds) {
-        if(!room.playlistEmpty && (isFromSpotify(actuallyPlayingMedia()) ? playerReady : youtubePlayerReady)) {
+        console.log(actuallyPlayingMedia());
+        console.log(isFromSpotify(actuallyPlayingMedia()));
+        if(!room.playlistEmpty && (isFromSpotify(actuallyPlayingMedia()) ? spotifyPlayerReady : youtubePlayerReady)) {
             if(isFromSpotify(actuallyPlayingMedia())) {
                 if(isVarExistNotNullNotempty(spotifyPlayerRef.current) && isVarExistNotNullNotempty(spotifyPlayerRef.current.player)) {
                     spotifyPlayerRef.current.player.seek(seconds*1000);
                 }
             } else {
                 if(playerRef.current) {
+                    console.log('seek');
                     playerRef.current.seekTo(seconds, 'seconds'); 
+                    console.log('seekdone');
                 }
             }
             if(seconds === 0) {
@@ -447,7 +452,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 await setIdPlaying(0);
             }
         } else {
-            setIdPlaying(playerIdPlayed+1);
+            await setIdPlaying(playerIdPlayed+1);
         }
     }
 
@@ -583,20 +588,20 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         }
         if(e.type === 'status_update') {
             if(e.status == 'READY') {
-                setPlayerReady(true);
+                setSpotifyPlayerReady(true);
             }
             if(e.status == 'INITIALIZING') {
-                setPlayerReady(false);
+                setSpotifyPlayerReady(false);
             }
         }
     }
    
     // use state change to change spotify volume
     useEffect(() => {
-        if(loaded && playerReady && isVarExist(spotifyPlayerRef.current)) { 
+        if(loaded && spotifyPlayerReady && isVarExist(spotifyPlayerRef.current)) { 
             spotifyPlayerRef.current.setVolume(localVolume);
         }
-    }, [localVolume,loaded, playerReady]);
+    }, [localVolume,loaded, spotifyPlayerReady]);
 
     async function addMediaForAutoPlayByYoutubeId() {
         var searchTerm = actuallyPlayingMedia().channelOrArtist;
@@ -787,7 +792,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                                 {formatNumberToMinAndSec(playedSeconds(playerRef, 'youtube')) +' / ' + formatNumberToMinAndSec(playerRef.current.getDuration())}
                                                             </Typography>
                                                         }
-                                                        {isVarExist(spotifyPlayerRef.current) && isFromSpotify(actuallyPlayingMedia()) && 
+                                                        {(spotifyPlayerReady && isVarExist(spotifyPlayerRef.current) && isFromSpotify(actuallyPlayingMedia())) && 
                                                             <Typography sx={{ fontSize: '10px', ml:0, mb: 1, color:'var(--grey-inspired)'}} className='fontFamilyNunito'>
                                                                 {formatNumberToMinAndSec(playedSeconds(spotifyPlayerRef, 'spotify'))} / {actuallyPlayingMedia().duration}
                                                             </Typography>
@@ -803,17 +808,17 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                                                                 item sm={6} className='playerButtons' xs={12} 
                                                                 sx={{ display:'flex',justifyContent: 'space-between', padding:0,pt:1,ml:0,mr:1,pr:0, mb: 1.5 }}>
                                                                     
-                                                                        {((isFromSpotify(actuallyPlayingMedia()) ? playerReady : youtubePlayerReady)) && <PlayerButtons 
+                                                                        {((isFromSpotify(actuallyPlayingMedia()) ? spotifyPlayerReady : youtubePlayerReady)) && <PlayerButtons 
                                                                             playerControlsShown={playerControlsShown}
                                                                             room={room}
-                                                                            reSyncButtonShown={!(isActuallyAdmin) && (guestSynchroOrNot && (isFromSpotify(actuallyPlayingMedia()) ? playerReady : youtubePlayerReady))}
+                                                                            reSyncButtonShown={!(isActuallyAdmin) && (guestSynchroOrNot && (isFromSpotify(actuallyPlayingMedia()) ? spotifyPlayerReady : youtubePlayerReady))}
                                                                             reSyncUserFunc={setGuestSynchroOrNot}
                                                                             playerRef={actualPlayerRef(room)}
                                                                             localVolume={localVolume}
                                                                             setLocalVolume={setLocalVolume}
                                                                             playerIdPlayed={playerIdPlayed}
                                                                             roomIsPlaying={roomIsPlaying}
-                                                                            playerIsPlaying={(isFromSpotify(actuallyPlayingMedia()) ? playerReady : youtubePlayerReady) && actualPlayerRefIsPlaying(room)}
+                                                                            playerIsPlaying={(isFromSpotify(actuallyPlayingMedia()) ? spotifyPlayerReady : youtubePlayerReady) && actualPlayerRefIsPlaying(room)}
                                                                             setIsPlaying={setIsPlaying}
                                                                             setIdPlaying={setIdPlaying}
                                                                             setLayoutdisplay={setLayoutdisplay}
