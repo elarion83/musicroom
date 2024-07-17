@@ -388,8 +388,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
     }
 
     async function goToSecond(seconds) {
-        console.log(actuallyPlayingMedia());
-        console.log(isFromSpotify(actuallyPlayingMedia()));
         if(!room.playlistEmpty && (isFromSpotify(actuallyPlayingMedia()) ? spotifyPlayerReady : youtubePlayerReady)) {
             if(isFromSpotify(actuallyPlayingMedia())) {
                 if(isVarExistNotNullNotempty(spotifyPlayerRef.current) && isVarExistNotNullNotempty(spotifyPlayerRef.current.player)) {
@@ -397,9 +395,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                 }
             } else {
                 if(playerRef.current) {
-                    console.log('seek');
                     playerRef.current.seekTo(seconds, 'seconds'); 
-                    console.log('seekdone');
                 }
             }
             if(seconds === 0) {
