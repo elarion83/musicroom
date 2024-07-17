@@ -63,6 +63,20 @@ export function roomIdLocallyStored() {
 
 export function checkCurrentUserSpotifyTokenExpiration() {
     var userSpotifyDatas = auth.currentUser.customDatas;
+    var secondsUntilExpiration = (Date.now() - userSpotifyDatas.spotifyConnect.expiration);
+    if(secondsUntilExpiration === 900 ) {
+        showLocalNotification('Lecteur Spotify', 'Connexion expire dans 15 min.', 'warning', 2500 );
+    }
+    if(secondsUntilExpiration === 600 ) {
+        showLocalNotification('Lecteur Spotify', 'Connexion expire dans 10 min.', 'warning', 2500 );
+    }
+    if(secondsUntilExpiration === 300 ) {
+        showLocalNotification('Lecteur Spotify', 'Connexion expire dans 5 min.', 'warning', 2500 );
+    }
+    if(secondsUntilExpiration === 180 ) {
+        showLocalNotification('Lecteur Spotify', 'Connexion expire dans 3 min.', 'error', 2500 );
+    }
+
     if(userSpotifyDatas.spotifyConnect.expiration < Date.now()) {
         let userRef = doc(db, process.env.REACT_APP_USERS_COLLECTION, userSpotifyDatas.uid);
         updateFirebaseUser(userRef,{spotifyConnect:userSpotifyTokenObject(null, 'reset')});
