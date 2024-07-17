@@ -26,7 +26,7 @@ import YoutubeVideoSlider from '../../../services/YoutubeVideoSlider';
 import { returnAnimateReplace } from '../../../services/animateReplace';
 import { checkCurrentUserSpotifyTokenExpiration, checkRoomSpotifyTokenExpiration } from '../../../services/utilsRoom';
 import SpotifyTab from './addMediaTabs/SpotifyTab';
-const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, room, changeOpen, roomIsPlaying, currentUser, validatedObjectToAdd }) => {
+const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, room, changeOpen, roomIsPlaying,playerIdPlayed, currentUser, validatedObjectToAdd }) => {
     const [mediaSearchResultYoutube, setMediaSearchResultYoutube] = useState([]);
     const [mediaSearchResultSpotify, setMediaSearchResultSpotify] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -325,8 +325,8 @@ const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, ro
                              ref={el => animatedElementsRef.push(el)} className='animate__animated animate__fadeInUpBig animate__delay-0s animate__slow colorWhite'
                                 sx={{display: 'flex', gap: '10px', flexDirection: 'row', alignItems: 'center', width: '100%', ml: 1, mt: 1, fontSize: '10px' }} >
                                     <SoundWave waveNumber={7} isPlayingOrNo={roomIsPlaying} />
-                                    <Typography fontSize="small" component={'span'} className='varelaFontTitle max-lined max-line-2 firstLetterCapitalize' >
-                                        {getDisplayTitle(room.playlistUrls[room.playing])}
+                                    <Typography fontSize="small" component={'span'} className='varelaFontTitle max-lined max-line-2' >
+                                        {getDisplayTitle(room.playlistUrls[playerIdPlayed])}
                                     </Typography>
                             </Box>
                         </Box>

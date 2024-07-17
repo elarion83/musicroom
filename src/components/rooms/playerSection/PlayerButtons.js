@@ -1,16 +1,14 @@
 import { Button, IconButton, LinearProgress, Typography } from "@mui/material";
-import { delay, isVarExist, isVarExistNotEmpty, playingFirstInList } from "../../../services/utils";
-import { actuallyPlayingFromSpotify, playedSeconds, playerNotSync } from "../../../services/utilsRoom";
+import { playingFirstInList } from "../../../services/utils";
+import { playedSeconds, playerNotSync } from "../../../services/utilsRoom";
 import { Replay10,Forward30, SkipPrevious, Replay } from "@mui/icons-material";
 import VolumeButton from "./VolumeButton";
-import SyncIcon from '@mui/icons-material/Sync';
+import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SyncProblemIcon from '@mui/icons-material/SyncProblem';
-import { useState } from "react";
-import SyncDisabledIcon from '@mui/icons-material/SyncDisabled';
 
 const PlayerButtons = ({room,playerControlsShown,reSyncUserFunc, playerType,spotifyControlsShown, roomPlayedActuallyPlayed, playerRef,playingLastInListInComp, localVolume,playerIdPlayed,roomIsPlaying,playerIsPlaying, setLocalVolume,setIsPlaying,setIdPlaying, setLayoutdisplay,isLayoutFullScreen,layoutDisplay, goToSecond}) => {
     
@@ -19,6 +17,10 @@ const PlayerButtons = ({room,playerControlsShown,reSyncUserFunc, playerType,spot
     async function manuallyResync() {
         await reSyncUserFunc(false);
         await reSyncUserFunc(true);
+    }
+
+    function playedMoreThan10Sec() {
+        return (room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds > 10);
     }
     return(
         <>
@@ -30,8 +32,8 @@ const PlayerButtons = ({room,playerControlsShown,reSyncUserFunc, playerType,spot
                     <SkipPrevious fontSize="medium" sx={{color:(playingFirstInList(playerIdPlayed)) ? '#f0f1f0': '#303134'}} />
                 </IconButton>
 
-                {button === 'full' && <IconButton onClick={e => (room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds > 10) ? goToSecond(playedSeconds(playerRef, playerType) - 10) : ''}>
-                    <Replay10 fontSize="medium" sx={{ color : room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds > 10 ? '#f0f1f0': '#303134'}} />
+                {button === 'full' && <IconButton onClick={e => playedMoreThan10Sec() ? goToSecond(playedSeconds(playerRef, playerType) - 10) : ''}>
+                    <Replay10 fontSize="medium" sx={{ color : playedMoreThan10Sec() ? '#f0f1f0': '#303134'}} />
                 </IconButton>}
 
                 {button === 'full' && <IconButton variant="contained" onClick={e => setIsPlaying(!roomIsPlaying)} sx={{ color:'#f0f1f0', position:'sticky', top:0, zIndex:2500}} >
@@ -58,12 +60,12 @@ const PlayerButtons = ({room,playerControlsShown,reSyncUserFunc, playerType,spot
             <VolumeButton volume={localVolume} setVolume={setLocalVolume}/>
             {!playerControlsShown && 
                 <> {(roomIsPlaying === playerIsPlaying) && !playerNotSync(room, playerRef) ? (
-                    <Button variant="text" sx={{marginRight:'-10px !important'}} size="small" startIcon={<SyncIcon className="colorGreen2" sx={{marginRight:'-5px !important'}}/> }>
+                    <Button variant="text" sx={{marginRight:'-10px !important'}} size="small" startIcon={<PublishedWithChangesIcon className="colorGreen2" sx={{marginRight:'-5px !important'}}/> }>
                         <Typography className="colorGreen2 firstLetterCapitalize" fontSize='small' >Synchronisé</Typography>
                     </Button>
                 ) : ( 
                     <Button sx={{marginRight:'-10px !important'}} onClick={e => manuallyResync()} variant="text" size="small" startIcon={<SyncProblemIcon sx={{marginRight:'-5px !important'}} className={(playerIdPlayed === room.playing) ? "colorOrange" : "colorRed"} /> }>
-                        <Typography className={(playerIdPlayed === room.playing) ? "colorOrange firstLetterCapitalize" : "colorRed firstLetterCapitalize"} fontSize='small' >{(playerIdPlayed === room.playing) ? "Relancer synchro" : "Echec de synchro."}</Typography>
+                        <Typography className={(playerIdPlayed === room.playing) ? "colorOrange firstLetterCapitalize" : "colorRed firstLetterCapitalize"} fontSize='small' >{(playerIdPlayed === room.playing) ? "Synchro partielle" : "Echec de synchro."}</Typography>
                     </Button>
                 )}
                 </>

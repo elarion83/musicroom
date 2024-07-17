@@ -474,7 +474,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         
         updateFirebaseRoom( roomRef , {playlistUrls: room.playlistUrls, playlistEmpty: false});        
         room.playlistEmpty = false;
-        await addPlaylistNotif(validatedObjectToAdd.addedBy +' a ajouté', validatedObjectToAdd.title, 'info', 4500, roomRef);
+        await addPlaylistNotif(validatedObjectToAdd.addedBy +' a ajouté', validatedObjectToAdd.title.substring(0,65), 'info', 4500, roomRef);
     }
 
     function handleChangeIdShownInDrawer(idToShow) {
@@ -893,6 +893,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         enablerSpotify={room.enablerSpotify}
                         playlistEmpty={room.playlistEmpty}
                         roomIsPlaying={roomIsPlaying}
+                        playerIdPlayed={playerIdPlayed}
                         open={OpenAddToPlaylistModal} 
                         changeOpen={setOpenAddToPlaylistModal}
                         currentUser={currentUser} 
