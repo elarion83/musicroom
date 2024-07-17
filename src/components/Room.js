@@ -239,7 +239,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         
                         if((!roomDataInFb.playlistEmpty) && (isFromSpotify(actuallyPlayingMedia()) ? spotifyPlayerReady : youtubePlayerReady)) {
                             var playerRefObject = isFromSpotify(actuallyPlayingMedia()) ? spotifyPlayerRef : playerRef;
-                            if(isVarExist(playerRefObject.current) && !isActuallyAdmin && playerNotSync(roomDataInFb, playerRefObject)) {
+                            if(!isActuallyAdmin && guestSynchroOrNot && playerNotSync(roomDataInFb, playerRefObject)) {
                                 goToSecond(Math.floor(roomDataInFb.mediaActuallyPlayingAlreadyPlayedData.playedSeconds));
                             } 
                         }
@@ -252,7 +252,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                         setRoom(roomDataInFb);
 
                         if(!isActuallyAdmin) {
-
                             setPlayerIdPlayed(roomDataInFb.playing); 
                             setRoomIsPlaying(roomDataInFb.actuallyPlaying); 
                         }
@@ -373,7 +372,6 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
 
     const [isLookingAutoAdd, setIsLookingAutoAdd] = useState(false);
     async function handleProgress(event, playerObjectRef, setBar = true) {
-        setPlayerBuffering(true)
         if(setBar) {
             setBarPercentage(Math.floor(event.played*100));
         }

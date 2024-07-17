@@ -16,7 +16,7 @@ const PlayerButtons = ({room,playerControlsShown,reSyncUserFunc, playerType,spot
     
     var button = (playerType === 'spotify') ? spotifyControlsShown ? 'full' : 'limited' : 'full';
 
-    async function desyncUnsyncUser() {
+    async function manuallyResync() {
         await reSyncUserFunc(false);
         await reSyncUserFunc(true);
     }
@@ -62,7 +62,7 @@ const PlayerButtons = ({room,playerControlsShown,reSyncUserFunc, playerType,spot
                         <Typography className="colorGreen2 firstLetterCapitalize" fontSize='small' >Synchronisé</Typography>
                     </Button>
                 ) : ( 
-                    <Button sx={{marginRight:'-10px !important'}} onClick={e => desyncUnsyncUser()} variant="text" size="small" startIcon={<SyncProblemIcon sx={{marginRight:'-5px !important'}} className={(playerIdPlayed === room.playing) ? "colorOrange" : "colorRed"} /> }>
+                    <Button sx={{marginRight:'-10px !important'}} onClick={e => manuallyResync()} variant="text" size="small" startIcon={<SyncProblemIcon sx={{marginRight:'-5px !important'}} className={(playerIdPlayed === room.playing) ? "colorOrange" : "colorRed"} /> }>
                         <Typography className={(playerIdPlayed === room.playing) ? "colorOrange firstLetterCapitalize" : "colorRed firstLetterCapitalize"} fontSize='small' >{(playerIdPlayed === room.playing) ? "Relancer synchro" : "Echec de synchro."}</Typography>
                     </Button>
                 )}
