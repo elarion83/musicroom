@@ -1,10 +1,10 @@
 // App.js
 import React, { useState, useEffect } from 'react';
 import { signInWithPhoneNumber, RecaptchaVerifier } from 'firebase/auth';
-import { TextField, Dialog, DialogContent, Grid, Icon, Alert, Typography } from '@mui/material';
+import { TextField, Dialog, DialogContent, Grid, Icon, Alert, Typography, AlertTitle } from '@mui/material';
 import { auth } from '../../../services/firebase';
 import ModalsHeader from '../../generalsTemplates/modals/ModalsHeader';
-import { isVarExistNotEmpty } from '../../../services/utils';
+import { getLocale, isVarExistNotEmpty } from '../../../services/utils';
 import { LoadingButton } from '@mui/lab';
 import { withTranslation } from 'react-i18next';
 import MuiPhoneNumber from "mui-phone-number";
@@ -50,6 +50,7 @@ const ModalAuthPhone = ({t, open,close, doActionAfterAuth, loginLoading}) => {
       const confirmation = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
       setConfirmationResult(confirmation);
       setIsMessageSent(true);
+      setPhoneLoginError('');
     } catch (error) {
       setPhoneLoginError('Error sending code:'+ error.message);
     } finally {
@@ -79,15 +80,22 @@ const ModalAuthPhone = ({t, open,close, doActionAfterAuth, loginLoading}) => {
     <>
       <Dialog open={open}  className="loginPhoneModal"
                 TransitionComponent={SlideUp}
-                onClose={(e) => close(false)}>            
-        <ModalsHeader icon={() => <Icon icon='mdi:phone' style={{overflow:'visible',marginRight:'10px'}} />} title={'Par SMS'} />
+                onClose={(e) => close(false)} sx={{
+            "& .MuiDialog-container": {
+                "& .MuiPaper-root": {
+                width: "100%",
+                maxWidth: "350px",  // Set your width here
+                },
+            },
+        }}>            
+        <ModalsHeader icon={() => <Icon icon='mdi:phone' style={{overflow:'visible',marginRight:'10px'}} />} title={t('ModalLoginButtonSMSBy')} />
 
         <DialogContent dividers sx={{pt:2,minHeight:'150px !important'}}>
             <Grid container direction="column" >
               {!isMessageSent && 
                 <>
                     
-                    <MuiPhoneNumber placeholder="0 00 00 00 00" className="phoneField" defaultCountry="fr" onlyCountries={['fr','gf','pf','la','th','be','dz','ma']} onChange={onPhoneNumberChanged} />
+                    <MuiPhoneNumber placeholder="0 00 00 00 00" className="phoneField" defaultCountry={getLocale()} onlyCountries={['fr','gf','pf','th','be']} onChange={onPhoneNumberChanged} />
                     
                     <LoadingButton 
                         loading={loadingBeforeCode}
@@ -97,15 +105,22 @@ const ModalAuthPhone = ({t, open,close, doActionAfterAuth, loginLoading}) => {
                         variant="contained"
                         startIcon={<Icon icon="mdi:phone" />}
                         onClick={handleSignIn}>
-                        <Typography fontSize="small">{loadingBeforeCode ? t('GeneralLoading') : 'Envoyer SMS'} </Typography>
-                    </LoadingButton>
+                        <Typography fontSize="small">{loadingBeforeCode ? t('GeneralLoading') : t('ModalLoginButtonSMSSend')} </Typography>
+                    </LoadingButton> 
+                    
+                    <Alert severity='info' sx={{mt:1}}>
+                        <AlertTitle sx={{fontWeight:"bold"}}>Informations</AlertTitle>
+                        <Typography fontSize="small" component="p">
+                            {t('ModalLoginButtonSMSTuto1')}
+                        </Typography>
+                    </Alert>
                 </>
               }
                 
               {isMessageSent && 
                   <>
                     <TextField
-                        label="Verification Code"
+                        label={t('ModalLoginButtonSMSCode')}
                         variant="outlined"
                         value={verificationCode}
                         onChange={(e) => setVerificationCode(e.target.value)}
@@ -119,7 +134,7 @@ const ModalAuthPhone = ({t, open,close, doActionAfterAuth, loginLoading}) => {
                         variant="contained"
                         startIcon={<Icon icon="mdi:phone" />}
                         onClick={handleVerifyCode}>
-                        <Typography fontSize="small">{loadingAfterCode ? t('GeneralLoading') : 'Verify'} </Typography>
+                        <Typography fontSize="small">{loadingAfterCode ? t('GeneralLoading') : t('GeneralContinue')} </Typography>
                     </LoadingButton>
                   </>
               }

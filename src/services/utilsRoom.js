@@ -29,7 +29,7 @@ export function playedSeconds(player, origin = 'youtube') {
 
 export function playerNotSync(room, player) { // check if user is not sync with the datas
     var source = room.playlistUrls[room.playing].source;
-    var delay = ('spotify' === source) ? 5 : isDevEnv() ? 3 : 2;
+    var delay = ('spotify' === source) ? 5 : 4;
     var firebasePlayedSeconds = Math.abs(room.mediaActuallyPlayingAlreadyPlayedData.playedSeconds);
     return((firebasePlayedSeconds - playedSeconds(player, source) > delay) || (firebasePlayedSeconds - playedSeconds(player, source) < -delay));
 }

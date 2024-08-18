@@ -2,7 +2,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
-import { Accordion, AccordionDetails, AccordionSummary, Divider, Drawer, List, ListItem, ListItemText, Typography } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Divider, Drawer, Link, List, ListItem, ListItemText, Typography } from "@mui/material";
 import React, { useState } from "react";
 import {cleanMediaTitle, delay, isVarExistNotEmpty} from '../../../../services/utils';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import { Box } from "@mui/system";
 import { withTranslation } from 'react-i18next';
 import DrawerPlayPauseButton from './DrawerPlayPauseButton';
+import LaunchIcon from '@mui/icons-material/Launch';
 
 const RoomPlaylistDrawer = ({t,room,roomRef,open, changeOpen, isAdminView, userVoteArray, roomPlaylist, setIdPlaying, handleVoteChange,handleRemoveMediaFromPlaylist, setIsPlaying,  data, roomIsActuallyPlaying, roomIdActuallyPlaying, roomIdActuallyDisplaying }) => {
     
@@ -29,7 +30,7 @@ const RoomPlaylistDrawer = ({t,room,roomRef,open, changeOpen, isAdminView, userV
     
     async function removeMediaFromPlaylist(indexToRemove) {
         changeOpen(false);
-        await delay(500);
+        await delay(200);
         handleRemoveMediaFromPlaylist(indexToRemove);
     }
 
@@ -68,18 +69,18 @@ const RoomPlaylistDrawer = ({t,room,roomRef,open, changeOpen, isAdminView, userV
                         <ListItemText 
                              
                             primary={
-                                <React.Fragment>
                                     <Typography component="h6" className="varelaFontTitle" fontWeight='bold' sx={{color:'var(--grey-dark)', textShadow:'1px 1px 1px var(--white)'}}  >
                                         {cleanMediaTitle(data.title)} 
                                     </Typography>
-                                </React.Fragment>
                             }
                             secondary={
-                                <React.Fragment>
-                                    <Typography component="span" fontSize='small' className="fontFamilyNunito">
-                                        {t('GeneralOn')} <b>{data.source}</b> {t('GeneralBy')} <b>{data.addedBy}</b>
-                                    </Typography>
-                                </React.Fragment>
+                                        <Typography component="p" fontSize='small' className="fontFamilyNunito">
+                                            {t('GeneralOn')} <span><b>{data.source}</b></span> {t('GeneralBy')} <span><b>{data.addedBy}</b></span>
+                                            
+                                            <Link href={data.url} target="_blank" rel="noopener">
+                                                <LaunchIcon fontSize='small' sx={{ml:1, mb:'-5px'}} />
+                                            </Link>
+                                        </Typography>
                             }
                         />
                        

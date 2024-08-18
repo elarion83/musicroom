@@ -48,8 +48,8 @@ const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, ro
     const addingObject = { title: '', deleted: false, source: '', url: '', addedBy: currentUser.displayName };
 
     async function changeOpenInComp(openOrNot) {
-        returnAnimateReplace(animatedElementsRef, {In:"Out", Up:"Down", animate__delay:'animate__delay-1s'}, /In|Up|animate__delay/gi);
-        returnAnimateReplace(animatedDownElementsRef, {Out:"In", Down:"Up", animate__delay:'animate__delay-1s'}, /Out|Down|animate__delay/gi);
+        returnAnimateReplace(animatedElementsRef, {In:"Out", Up:"Down"}, /In|Up/gi);
+        returnAnimateReplace(animatedDownElementsRef, {Out:"In", Down:"Up"}, /Out|Down/gi);
         await delay(200);
         setNeedAnimationReplace(true);
         changeOpen(openOrNot);
@@ -58,8 +58,8 @@ const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, ro
 
 	useEffect(() => {
         if(open && needAnimationReplace) {
-            returnAnimateReplace(animatedDownElementsRef, {Out:"In", Up:"Down", animate__delay:'animate__delay-1s'}, /Out|Up|animate__delay/gi);
-            returnAnimateReplace(animatedElementsRef, {Out:"In", Down:"Up", animate__delay:'animate__delay-1s'}, /Out|Down|animate__delay/gi);
+            returnAnimateReplace(animatedDownElementsRef, {Out:"In", Up:"Down"}, /Out|Up/gi);
+            returnAnimateReplace(animatedElementsRef, {Out:"In", Down:"Up"}, /Out|Down/gi);
         }
 
         if(open) {
@@ -303,7 +303,7 @@ const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, ro
                 </Grid>
             </Container>
 
-                <Grid container onClick={(e) => changeOpenInComp(false)} ref={el => animatedElementsRef.push(el)} className='closeAddMediaModal animate__animated animate__fadeInUpBig animate__delay-1s animate__fast' >
+                <Grid container onClick={(e) => changeOpenInComp(false)} ref={el => animatedElementsRef.push(el)} className='closeAddMediaModal animate__animated animate__fadeInUpBig animate__fast' >
                     <Button
                         className='modal_full_screen_close_left'
                         aria-label="close"

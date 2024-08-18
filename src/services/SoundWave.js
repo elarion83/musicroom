@@ -1,7 +1,7 @@
 
 import React from "react";
 
-const SoundWave = ({ waveNumber, isPlayingOrNo }) => {
+const SoundWave = ({ waveNumber, isPlayingOrNo = true}) => {
 
     var animations = ['boxNormal', 'boxQuiet', 'boxLoud'];
     var selectedAnimation = 0;

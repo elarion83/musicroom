@@ -61,6 +61,8 @@ const resources = {
         "GeneralSendItToFriends" : "Send it to your friends",
         "GeneralSeeMore":'See more',
         "GeneralSeeLess":'See less',
+        "GeneralSync":'Synchronized',
+        "GeneralSyncRestart":'Retry synchro',
 
         "GeneralNearBy" : 'Nearby',
         
@@ -125,6 +127,10 @@ const resources = {
         "ModalLoginButtonAnon": "Continue as anonym",
         "ModalLoginButtonGoogle": "Continue with Google",
         "ModalLoginButtonSMS": "Continue by SMS",
+        "ModalLoginButtonSMSSend": "Send SMS",
+        "ModalLoginButtonSMSBy": "By SMS",
+        "ModalLoginButtonSMSCode": "Verification code",
+        "ModalLoginButtonSMSTuto1": "A code will be sent to this number, which you will be asked to enter in the next step",
         "ModalLoginTermsSentence": "By using this service you agree to our",
         "ModalLoginTermsPrivacyPolicy": "privacy policy",
         "ModalLoginTermsYoutubeTerms": "Youtube terms of use.",
@@ -240,6 +246,8 @@ const resources = {
         "GeneralSendItToFriends" : "Envoyez la à vos amis",
         "GeneralSeeMore":'Voir plus',
         "GeneralSeeLess":'Voir moins',
+        "GeneralSync":'Synchronisé',
+        "GeneralSyncRestart":'Relancer la synchro',
         
         "GeneralNearBy" : 'a proximité',
 
@@ -303,6 +311,10 @@ const resources = {
         "ModalLoginButtonAnon": "Continuer en anonyme",
         "ModalLoginButtonGoogle": "Continuer avec Google",
         "ModalLoginButtonSMS": "Continuer par SMS",
+        "ModalLoginButtonSMSSend": "Envoyer SMS",
+        "ModalLoginButtonSMSBy": "Par SMS",
+        "ModalLoginButtonSMSCode": "Code de vérification",
+        "ModalLoginButtonSMSTuto1" : "Un code vous sera envoyé à ce numéro, il vous sera demandé à l'étape suivante.",
         "ModalLoginTermsSentence": "En utilisant ce service vous acceptez nos",
         "ModalLoginTermsPrivacyPolicy": "Politique de confidentialité",
         "ModalLoginTermsYoutubeTerms": "les conditions d'utilisation de Youtube.",

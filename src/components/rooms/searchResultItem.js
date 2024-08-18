@@ -1,5 +1,5 @@
 import { Card, CardContent, CardMedia, Grid, Typography } from "@mui/material";
-import { formatNumberToMinAndSec } from "../../services/utils";
+import { cleanMediaTitle, formatNumberToMinAndSec } from "../../services/utils";
 
 const SearchResultItem = ({ duration = null,image, title,description = '', source, platformId, album = null, addedBy, uid, url, date = null, channelOrArtist = null, addItemToPlaylist }) => {
    
@@ -16,7 +16,7 @@ const SearchResultItem = ({ duration = null,image, title,description = '', sourc
                 <Typography className="fontFamilyNunito" sx={{ ml:0, mb: 0, fontSize: '9px', fontWeight:'lighter'}}><b>{channelOrArtist} </b></Typography>
 
                 <Typography gutterBottom component="div" fontSize='12px' sx={{p:0}} className="resulttitle max-lined max-line-3 varelaFontTitle">
-                {title}
+                {cleanMediaTitle(title)}
                 </Typography>                           
                 {duration != null && <Typography sx={{ padding:'0px 5px', fontSize: '10px',background:'var(--white)', position:'absolute', top:'-15px', right:'0px' }}><b>{formatNumberToMinAndSec(duration)} </b></Typography>}
 

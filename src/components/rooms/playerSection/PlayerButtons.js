@@ -9,8 +9,10 @@ import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SyncProblemIcon from '@mui/icons-material/SyncProblem';
+import { withTranslation } from "react-i18next";
+import { useState } from "react";
 
-const PlayerButtons = ({room,playerControlsShown,reSyncUserFunc, playerType,spotifyControlsShown, roomPlayedActuallyPlayed, playerRef,playingLastInListInComp, localVolume,playerIdPlayed,roomIsPlaying,playerIsPlaying, setLocalVolume,setIsPlaying,setIdPlaying, setLayoutdisplay,isLayoutFullScreen,layoutDisplay, goToSecond}) => {
+const PlayerButtons = ({t,room,playerControlsShown,reSyncUserFunc, playerType,spotifyControlsShown, roomPlayedActuallyPlayed, playerRef,playingLastInListInComp, localVolume,playerIdPlayed,roomIsPlaying,playerIsPlaying, setLocalVolume,setIsPlaying,setIdPlaying, setLayoutdisplay,isLayoutFullScreen,layoutDisplay, goToSecond}) => {
     
     var controlsType = (playerType === 'spotify') ? spotifyControlsShown ? 'full' : 'limited' : 'full';
 
@@ -61,19 +63,19 @@ const PlayerButtons = ({room,playerControlsShown,reSyncUserFunc, playerType,spot
                     <Replay sx={{ color : playedMoreThan10Sec() ? '#f0f1f0': '#303134'}}/>
                 </IconButton>}
             </>}
+            
             <VolumeButton volume={localVolume} setVolume={setLocalVolume}/>
             {!playerControlsShown && 
-                <> {(roomIsPlaying === playerIsPlaying) && !playerNotSync(room, playerRef) ? (
-                    <Button variant="text" sx={{marginRight:'-10px !important'}} size="small" startIcon={<PublishedWithChangesIcon className="colorGreen" sx={{marginRight:'-5px !important'}}/> }>
-                        <Typography className="colorGreen firstLetterCapitalize" fontSize='small' >Synchronisé</Typography>
-                    </Button>
-                ) : ( 
-                    <Box className='animate__flash animate__animated animate__slower animate__delay-5s animate__infinite'>
-                        <Button sx={{marginRight:'-10px !important'}} onClick={e => manuallyResync()} variant="text" size="small" startIcon={<SyncProblemIcon sx={{marginRight:'-5px !important'}} className={(playerIdPlayed === room.playing) ? "colorOrange" : "colorRed "} /> }>
-                            <Typography className={(playerIdPlayed === room.playing) ? "colorOrange firstLetterCapitalize" : "colorRed firstLetterCapitalize"} fontSize='small' >{(playerIdPlayed === room.playing) ? "Synchro partielle" : "Echec de synchro."}</Typography>
+                <>
+                    {(roomIsPlaying === playerIsPlaying) && !playerNotSync(room, playerRef) ? (
+                        <Button variant="text" size="small" startIcon={<PublishedWithChangesIcon className="colorGreen" sx={{marginRight:'-5px !important'}}/> }>
+                            <Typography className="colorGreen firstLetterCapitalize" fontSize='small' >{t('GeneralSync')}</Typography>
                         </Button>
-                    </Box>
-                )}
+                    ) : ( 
+                        <Button sx={{ pl:1,pr:1}} onClick={e => manuallyResync()} variant="text" size="small" startIcon={<SyncProblemIcon sx={{marginRight:'-5px !important'}} className={(playerIdPlayed === room.playing) ? "colorOrange" : "colorRed "} /> }>
+                            <Typography className={(playerIdPlayed === room.playing) ? "colorOrange firstLetterCapitalize" : "colorRed firstLetterCapitalize"} fontSize='small' >{t('GeneralSyncRestart')}</Typography>
+                        </Button>
+                    )}
                 </>
             }         
             
@@ -87,4 +89,4 @@ const PlayerButtons = ({room,playerControlsShown,reSyncUserFunc, playerType,spot
     )
 };
 
-export default PlayerButtons;
+export default  withTranslation()(PlayerButtons);
