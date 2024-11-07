@@ -604,7 +604,7 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
         if(actuallyPlayingMediaTitle().includes('-')) {
             searchTerm = actuallyPlayingMediaTitle().split('-')[0];
         }
-        var params = youtubeApiSearchObject(searchTerm,6 );
+        var params = youtubeApiSearchObject(searchTerm,4 );
 
         await axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, { params: params })
         .then(async function(response) {
