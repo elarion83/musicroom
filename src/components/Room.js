@@ -298,19 +298,19 @@ const Room = ({ t, currentUser, roomId, handleQuitRoom, setStickyDisplay }) => {
                     return
                 } else {
                     axios.get(process.env.REACT_APP_YOUTUBE_VIDEOS_URL, { 
-                        params: youtubeApiVideosParams('24', 32, 'snippet,contentDetails') 
+                        params: youtubeApiVideosParams('24', 8, 'snippet,contentDetails') 
                     })
                     .then(function (response) {
                         updateFirebaseRoom( roomRef , {localeYoutubeEntertainmentTrends: response.data.items});
                         
                         axios.get(process.env.REACT_APP_YOUTUBE_VIDEOS_URL, { 
-                            params: youtubeApiVideosParams('10', 32, 'snippet,contentDetails')
+                            params: youtubeApiVideosParams('10', 8, 'snippet,contentDetails')
                             })
                         .then(function (musicResponse) {
                             updateFirebaseRoom( roomRef , {localeYoutubeMusicTrends: musicResponse.data.items});
                             
                             axios.get(process.env.REACT_APP_YOUTUBE_VIDEOS_URL, { 
-                                params: youtubeApiVideosParams('20', 32, 'snippet,contentDetails')
+                                params: youtubeApiVideosParams('20', 8, 'snippet,contentDetails')
                             })
                             .then(function (gamingResponse) {
                                 updateFirebaseRoom( roomRef , {localeYoutubeGamingTrends: gamingResponse.data.items});

@@ -142,7 +142,7 @@ const RoomModalAddMedia = ({ t, open,playlistId,enablerSpotify,playlistEmpty, ro
 
                 if(isProdEnv()) {
                     axios.get(process.env.REACT_APP_YOUTUBE_SEARCH_URL, {
-                        params: youtubeApiSearchObject(searchTerm,24, 'relevance')
+                        params: youtubeApiSearchObject(searchTerm,18, 'relevance')
                     })
                     .then(async function (response) {
                         if (spotifyEnabler.isLinked) {
