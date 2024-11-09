@@ -1,5 +1,5 @@
 
-@import 'mixins';
+@use 'mixins';
 
 .topBarIsInRoom {
     background: none !important;
@@ -31,7 +31,7 @@
         max-height:40px;
         margin-top:2px;
 
-        @include respond-to(xs) {
+        @include mixins.respond-to(xs) {
             max-height:35px;
         }
 
