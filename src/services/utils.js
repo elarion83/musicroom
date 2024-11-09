@@ -233,6 +233,14 @@ export function getLocale() {
     return lang;
 }
 
+export function getLocaleYoutube() {
+    var lang = 'GB';
+    if(navigator.language === 'fr' || navigator.language === 'fr-FR') {
+        lang = 'FR';
+    }
+    return lang;
+}
+
 export function enablersDurationToReadable(duration, enabler = 'youtube') {
     switch(enabler) {
         case 'youtube': 

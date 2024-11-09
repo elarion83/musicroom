@@ -4,7 +4,7 @@ import CelebrationIcon from '@mui/icons-material/Celebration';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { EmailIcon, EmailShareButton, FacebookIcon, FacebookShareButton, InstapaperIcon, InstapaperShareButton, RedditIcon, RedditShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from 'react-share';
-import { UserIsFromApp, getLocale, getRandomHexColor, hexColorToRgb, randomInt } from './utils';
+import { UserIsFromApp, getLocale, getLocaleYoutube, getRandomHexColor, hexColorToRgb, randomInt } from './utils';
 import { v4 as uuid } from 'uuid';
 
 export const notifsTextArray = {
@@ -128,7 +128,7 @@ export function youtubeApiSearchObject(search, maxResults, order = 'viewCount') 
         key: process.env.REACT_APP_YOUTUBE_API_KEY,
         q: search,
         relevanceLanguage:getLocale(),
-        regionCode:getLocale(),
+        regionCode:getLocaleYoutube(),
         order:order,
         maxResults: maxResults,
         videoEmbeddable:true,
@@ -144,7 +144,7 @@ export function youtubeApiVideosParams(categoryId = '0', number, parts) {
         chart: 'mostPopular',
         maxResults: number,
         videoCategoryId:categoryId, 
-        regionCode: getLocale(),
+        regionCode: getLocaleYoutube(),
     }
 }
 
